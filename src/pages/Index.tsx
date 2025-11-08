@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Shield, FileCheck, Leaf, Lock, Database, Zap } from "lucide-react"
+import { Shield, FileCheck, Leaf, Lock, Database, Zap, Twitter, Linkedin, Github, Mail } from "lucide-react"
 import { useEffect } from "react"
 
 const Index = () => {
@@ -112,6 +112,123 @@ const Index = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Footer */}
+      <footer className="border-t border-border bg-muted/50">
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid gap-8 md:grid-cols-4">
+            {/* Company Info */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Shield className="h-6 w-6 text-primary" />
+                <span className="font-bold text-lg">RegTech Copilot</span>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                AI-powered compliance solutions for modern enterprises. Streamline your regulatory processes with cutting-edge technology.
+              </p>
+              <div className="flex gap-3">
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Twitter className="h-5 w-5" />
+                </a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Linkedin className="h-5 w-5" />
+                </a>
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Github className="h-5 w-5" />
+                </a>
+                <a href="mailto:contact@regtechcopilot.com" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Mail className="h-5 w-5" />
+                </a>
+              </div>
+            </div>
+
+            {/* Products */}
+            <div>
+              <h3 className="font-semibold mb-4">Products</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>
+                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                    AI Act Compliance
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                    GDPR Checker
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                    ESG Reporting
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                    Audit Trail
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div>
+              <h3 className="font-semibold mb-4">Company</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>
+                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                    About Us
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                    Careers
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                    Blog
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                    Contact
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h3 className="font-semibold mb-4">Legal</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>
+                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                    Privacy Policy
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                    Terms of Service
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                    Cookie Policy
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                    Security
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
+            <p>© {new Date().getFullYear()} RegTech Copilot. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
