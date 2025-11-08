@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { AnimatedOctopus } from "@/components/AnimatedOctopus"
+import { FloatingBubbles } from "@/components/FloatingBubbles"
 
 const Login = () => {
   const { user } = useAuth()
@@ -53,6 +54,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+      <FloatingBubbles count={15} />
       <Card className="w-full max-w-md underwater-glow">
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">

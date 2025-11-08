@@ -10,6 +10,7 @@ import { HapticButton } from "@/components/ui/haptic-button"
 import { InteractiveCard } from "@/components/ui/interactive-card"
 import { useHaptic } from "@/hooks/useHaptic"
 import { AnimatedOctopus } from "@/components/AnimatedOctopus"
+import { FloatingBubbles } from "@/components/FloatingBubbles"
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -96,6 +97,7 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-8">
+      <FloatingBubbles count={20} />
       {/* Welcome Section */}
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-2">

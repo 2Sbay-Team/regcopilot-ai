@@ -6,6 +6,7 @@ import { Shield, FileCheck, Leaf, Lock, Database, Zap, Twitter, Linkedin, Github
 import { useEffect } from "react"
 import { AnimatedOctopus } from "@/components/AnimatedOctopus"
 import octopusLogo from "@/assets/octopus-logo.png"
+import { FloatingBubbles } from "@/components/FloatingBubbles"
 
 const Index = () => {
   const navigate = useNavigate()
@@ -19,6 +20,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
+      <FloatingBubbles count={25} />
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
