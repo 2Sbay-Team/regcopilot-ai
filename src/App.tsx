@@ -10,6 +10,8 @@ import Dashboard from "./pages/Dashboard";
 import AIActCopilot from "./pages/AIActCopilot";
 import GDPRCopilot from "./pages/GDPRCopilot";
 import ESGCopilot from "./pages/ESGCopilot";
+import AuditTrail from "./pages/AuditTrail";
+import ModelRegistry from "./pages/ModelRegistry";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +30,8 @@ const App = () => (
           <Route path="/ai-act" element={<AIActCopilot />} />
           <Route path="/gdpr" element={<GDPRCopilot />} />
           <Route path="/esg" element={<ESGCopilot />} />
+          <Route path="/audit" element={<AuditTrail />} />
+          <Route path="/models" element={<ModelRegistry />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -212,7 +212,7 @@ const Dashboard = () => {
             <CardDescription>Common compliance tasks</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/audit-trail")}>
+            <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/audit")}>
               <Database className="h-4 w-4 mr-2" />
               View Audit Trail
             </Button>
