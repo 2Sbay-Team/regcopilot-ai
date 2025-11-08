@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Shield, FileCheck, Leaf, Lock, Database, Zap, Twitter, Linkedin, Github, Mail } from "lucide-react"
 import { useEffect } from "react"
+import owlLogo from "@/assets/owl-logo.png"
 
 const Index = () => {
   const navigate = useNavigate()
@@ -20,11 +21,14 @@ const Index = () => {
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
-          <Shield className="h-20 w-20 text-primary mx-auto mb-6" />
-          <h1 className="text-5xl font-bold mb-4">RegTech Copilot</h1>
+          <div className="inline-block p-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl mb-6">
+            <img src={owlLogo} alt="CompliWise Owl" className="h-24 w-24 object-contain animate-bounce-subtle" />
+          </div>
+          <h1 className="text-5xl font-bold mb-2">CompliWise</h1>
+          <p className="text-lg text-primary font-medium mb-4">Wise Compliance Intelligence</p>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             AI-powered compliance for EU AI Act, GDPR & ESG reporting. 
-            Your complete regulatory technology solution.
+            Your wise companion for regulatory excellence.
           </p>
           <div className="flex gap-4 justify-center">
             <Button size="lg" onClick={() => navigate("/signup")}>
@@ -102,9 +106,9 @@ const Index = () => {
         {/* CTA */}
         <Card className="bg-primary text-primary-foreground">
           <CardContent className="py-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to automate your compliance?</h2>
+            <h2 className="text-3xl font-bold mb-4">Ready to make wise compliance decisions?</h2>
             <p className="text-lg mb-6 opacity-90">
-              Join organizations using RegTech Copilot for smarter regulatory management
+              Join organizations using CompliWise for smarter regulatory management
             </p>
             <Button size="lg" variant="secondary" onClick={() => navigate("/signup")}>
               Start Free Trial
@@ -119,12 +123,15 @@ const Index = () => {
           <div className="grid gap-8 md:grid-cols-4">
             {/* Company Info */}
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Shield className="h-6 w-6 text-primary" />
-                <span className="font-bold text-lg">RegTech Copilot</span>
+              <div className="flex items-center gap-3 mb-4">
+                <img src={owlLogo} alt="CompliWise Owl" className="h-8 w-8 object-contain" />
+                <div>
+                  <span className="font-bold text-lg block leading-tight">CompliWise</span>
+                  <span className="text-xs text-muted-foreground">Wise Compliance Intelligence</span>
+                </div>
               </div>
               <p className="text-sm text-muted-foreground mb-4">
-                AI-powered compliance solutions for modern enterprises. Streamline your regulatory processes with cutting-edge technology.
+                AI-powered compliance solutions for modern enterprises. Your wise companion for regulatory excellence.
               </p>
               <div className="flex gap-3">
                 <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
@@ -136,7 +143,7 @@ const Index = () => {
                 <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                   <Github className="h-5 w-5" />
                 </a>
-                <a href="mailto:contact@regtechcopilot.com" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="mailto:hello@compliwise.ai" className="text-muted-foreground hover:text-primary transition-colors">
                   <Mail className="h-5 w-5" />
                 </a>
               </div>
@@ -225,7 +232,7 @@ const Index = () => {
           </div>
 
           <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>© {new Date().getFullYear()} RegTech Copilot. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} CompliWise. All rights reserved. Built with wisdom for compliance excellence.</p>
           </div>
         </div>
       </footer>

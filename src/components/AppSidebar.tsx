@@ -11,6 +11,7 @@ import {
   Eye
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
+import owlLogo from "@/assets/owl-logo.png"
 
 import {
   Sidebar,
@@ -51,9 +52,12 @@ export function AppSidebar() {
         <SidebarGroup>
           <div className="px-3 mb-2">
             <div className="flex items-center gap-2">
-              <Shield className="h-6 w-6 text-primary" />
+              <img src={owlLogo} alt="CompliWise Owl" className="h-8 w-8 object-contain" />
               {!isCollapsed && (
-                <span className="font-semibold text-lg">RegTech Copilot</span>
+                <div>
+                  <span className="font-bold text-lg block leading-tight">CompliWise</span>
+                  <span className="text-[10px] text-muted-foreground leading-none">Wise Compliance Intelligence</span>
+                </div>
               )}
             </div>
           </div>

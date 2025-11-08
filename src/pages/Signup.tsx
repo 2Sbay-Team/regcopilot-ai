@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { Shield } from "lucide-react"
+import owlLogo from "@/assets/owl-logo.png"
 
 const Signup = () => {
   const { user } = useAuth()
@@ -43,7 +43,7 @@ const Signup = () => {
 
       toast({
         title: "Account created!",
-        description: "Welcome to RegTech Copilot",
+        description: "Welcome to CompliWise",
       })
       navigate("/dashboard")
     } catch (error: any) {
@@ -62,11 +62,13 @@ const Signup = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">
-            <Shield className="h-12 w-12 text-primary" />
+            <div className="p-3 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl">
+              <img src={owlLogo} alt="CompliWise Owl" className="h-16 w-16 object-contain" />
+            </div>
           </div>
-          <CardTitle className="text-2xl">Create Account</CardTitle>
+          <CardTitle className="text-2xl">Join CompliWise</CardTitle>
           <CardDescription>
-            Start your compliance journey today
+            Start your wise compliance journey today
           </CardDescription>
         </CardHeader>
         <CardContent>

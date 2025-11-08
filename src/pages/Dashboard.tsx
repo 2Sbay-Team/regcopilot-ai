@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast"
 import { HapticButton } from "@/components/ui/haptic-button"
 import { InteractiveCard } from "@/components/ui/interactive-card"
 import { useHaptic } from "@/hooks/useHaptic"
+import owlLogo from "@/assets/owl-logo.png"
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -98,12 +99,12 @@ const Dashboard = () => {
       {/* Welcome Section */}
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-2">
-          <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Shield className="h-6 w-6 text-primary" />
+          <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center p-2">
+            <img src={owlLogo} alt="CompliWise Owl" className="h-full w-full object-contain" />
           </div>
           <div>
             <h1 className="text-3xl font-bold">Welcome back, {profile?.full_name?.split(' ')[0] || 'there'}</h1>
-            <p className="text-muted-foreground">{profile?.organizations?.name || "Your compliance management hub"}</p>
+            <p className="text-muted-foreground">{profile?.organizations?.name || "Your wise compliance companion"}</p>
           </div>
         </div>
       </div>
