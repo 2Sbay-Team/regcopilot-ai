@@ -17,6 +17,7 @@ import ModelRegistry from "./pages/ModelRegistry";
 import Explainability from "./pages/Explainability";
 import Admin from "./pages/Admin";
 import Analytics from "./pages/Analytics";
+import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,8 +41,9 @@ const App = () => (
             <Route path="/models" element={<ProtectedRoute><ModelRegistry /></ProtectedRoute>} />
             <Route path="/explainability" element={<ProtectedRoute><Explainability /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-            <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-            <Route path="*" element={<NotFound />} />
+          <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+          <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+          <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

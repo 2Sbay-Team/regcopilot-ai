@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, FileCheck, Leaf, Database, LogOut } from "lucide-react"
+import { Shield, FileCheck, Leaf, Database, LogOut, FileText } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 const Dashboard = () => {
@@ -211,6 +211,10 @@ const Dashboard = () => {
             <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/analytics")}>
               <Database className="h-4 w-4 mr-2" />
               View Analytics
+            </Button>
+            <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/reports")}>
+              <FileText className="h-4 w-4 mr-2" />
+              Compliance Reports
             </Button>
             <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/audit")}>
               <Database className="h-4 w-4 mr-2" />

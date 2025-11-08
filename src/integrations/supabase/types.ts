@@ -330,6 +330,59 @@ export type Database = {
           },
         ]
       }
+      compliance_reports: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          generated_at: string | null
+          generated_by: string | null
+          id: string
+          organization_id: string
+          pdf_url: string | null
+          report_data: Json
+          report_period_end: string
+          report_period_start: string
+          report_type: string
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          generated_at?: string | null
+          generated_by?: string | null
+          id?: string
+          organization_id: string
+          pdf_url?: string | null
+          report_data: Json
+          report_period_end: string
+          report_period_start: string
+          report_type: string
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          generated_at?: string | null
+          generated_by?: string | null
+          id?: string
+          organization_id?: string
+          pdf_url?: string | null
+          report_data?: Json
+          report_period_end?: string
+          report_period_start?: string
+          report_type?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_reports_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       data_processing_activities: {
         Row: {
           activity_name: string
