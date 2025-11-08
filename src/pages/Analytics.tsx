@@ -5,9 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
-import { ArrowLeft, TrendingUp, BarChart3, PieChart as PieChartIcon, Sparkles } from "lucide-react"
+import { ArrowLeft, TrendingUp, BarChart3, PieChart as PieChartIcon, Sparkles, Settings, AlertTriangle } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
   LineChart,
   Line,
@@ -36,11 +39,16 @@ const Analytics = () => {
   const [predictions, setPredictions] = useState<any[]>([])
   const [predictedWorkload, setPredictedWorkload] = useState<number>(0)
   const [heatmapData, setHeatmapData] = useState<any[]>([])
+  const [thresholds, setThresholds] = useState<any[]>([])
+  const [alertsTriggered, setAlertsTriggered] = useState<any[]>([])
+  const [thresholdDialogOpen, setThresholdDialogOpen] = useState(false)
+  const [editingThreshold, setEditingThreshold] = useState<any>(null)
   const navigate = useNavigate()
   const { toast } = useToast()
 
   useEffect(() => {
     loadAnalytics()
+    loadThresholds()
   }, [timeRange])
 
   useEffect(() => {
@@ -50,6 +58,81 @@ const Analytics = () => {
       setPredictions([])
     }
   }, [assessmentTrends, forecastDays, showPredictions])
+
+  useEffect(() => {
+    if (heatmapData.length > 0 && thresholds.length > 0) {
+      checkAlerts()
+    }
+  }, [heatmapData, thresholds])
+
+  const loadThresholds = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("alert_thresholds")
+        .select("*")
+        .eq("time_period", "week")
+        .order("metric_type")
+
+      if (error) throw error
+      setThresholds(data || [])
+    } catch (error: any) {
+      console.error("Failed to load thresholds:", error)
+    }
+  }
+
+  const checkAlerts = () => {
+    const alerts: any[] = []
+    const thresholdMap = new Map(thresholds.map(t => [t.metric_type, t]))
+
+    heatmapData.forEach((row) => {
+      const aiActThreshold = thresholdMap.get('ai_act_risk')
+      const gdprThreshold = thresholdMap.get('gdpr_violations')
+      const esgThreshold = thresholdMap.get('esg_issues')
+
+      if (aiActThreshold?.notification_enabled && row.aiActRisk > aiActThreshold.threshold_value) {
+        alerts.push({
+          week: row.week,
+          type: 'AI Act High Risk',
+          value: row.aiActRisk,
+          threshold: aiActThreshold.threshold_value,
+        })
+      }
+      if (gdprThreshold?.notification_enabled && row.gdprViolations > gdprThreshold.threshold_value) {
+        alerts.push({
+          week: row.week,
+          type: 'GDPR Violations',
+          value: row.gdprViolations,
+          threshold: gdprThreshold.threshold_value,
+        })
+      }
+      if (esgThreshold?.notification_enabled && row.esgIssues > esgThreshold.threshold_value) {
+        alerts.push({
+          week: row.week,
+          type: 'ESG Issues',
+          value: row.esgIssues,
+          threshold: esgThreshold.threshold_value,
+        })
+      }
+    })
+
+    setAlertsTriggered(alerts)
+  }
+
+  const updateThreshold = async (id: string, value: number, enabled: boolean) => {
+    try {
+      const { error } = await supabase
+        .from("alert_thresholds")
+        .update({ threshold_value: value, notification_enabled: enabled })
+        .eq("id", id)
+
+      if (error) throw error
+
+      await loadThresholds()
+      toast({ title: "Threshold updated successfully" })
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Failed to update threshold", description: error.message })
+    }
+  }
 
   const linearRegression = (data: number[]) => {
     const n = data.length
@@ -325,6 +408,54 @@ const Analytics = () => {
                 <SelectItem value="365">Last year</SelectItem>
               </SelectContent>
             </Select>
+            <Dialog open={thresholdDialogOpen} onOpenChange={setThresholdDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Alert Threshold Settings</DialogTitle>
+                  <DialogDescription>
+                    Configure when to receive alerts for high risk concentration
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                  {thresholds.map((threshold) => (
+                    <div key={threshold.id} className="space-y-3 p-4 border rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <Label className="font-medium">
+                          {threshold.metric_type === 'ai_act_risk' && 'AI Act High Risk'}
+                          {threshold.metric_type === 'gdpr_violations' && 'GDPR Violations'}
+                          {threshold.metric_type === 'esg_issues' && 'ESG Issues'}
+                        </Label>
+                        <Switch
+                          checked={threshold.notification_enabled}
+                          onCheckedChange={(checked) =>
+                            updateThreshold(threshold.id, threshold.threshold_value, checked)
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm text-muted-foreground">
+                          Alert when exceeds (per {threshold.time_period})
+                        </Label>
+                        <Input
+                          type="number"
+                          min="0"
+                          value={threshold.threshold_value}
+                          onChange={(e) =>
+                            updateThreshold(threshold.id, parseInt(e.target.value) || 0, threshold.notification_enabled)
+                          }
+                          disabled={!threshold.notification_enabled}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </header>
@@ -336,6 +467,28 @@ const Analytics = () => {
           </div>
         ) : (
           <div className="grid gap-6">
+            {/* Alerts Banner */}
+            {alertsTriggered.length > 0 && (
+              <Alert variant="destructive">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Risk Threshold Alerts ({alertsTriggered.length})</AlertTitle>
+                <AlertDescription>
+                  <div className="mt-2 space-y-1">
+                    {alertsTriggered.slice(0, 3).map((alert, idx) => (
+                      <div key={idx} className="text-sm">
+                        <strong>{alert.week}:</strong> {alert.type} exceeded threshold ({alert.value} &gt; {alert.threshold})
+                      </div>
+                    ))}
+                    {alertsTriggered.length > 3 && (
+                      <div className="text-sm font-medium mt-2">
+                        +{alertsTriggered.length - 3} more alerts
+                      </div>
+                    )}
+                  </div>
+                </AlertDescription>
+              </Alert>
+            )}
+
             {/* Predictive Controls */}
             <Card>
               <CardHeader>
@@ -607,36 +760,58 @@ const Analytics = () => {
                         const maxValue = Math.max(
                           ...heatmapData.flatMap(r => [r.aiActRisk, r.gdprViolations, r.esgIssues])
                         )
+                        const aiActThreshold = thresholds.find(t => t.metric_type === 'ai_act_risk')
+                        const gdprThreshold = thresholds.find(t => t.metric_type === 'gdpr_violations')
+                        const esgThreshold = thresholds.find(t => t.metric_type === 'esg_issues')
+                        
                         return (
                           <div key={row.week} className="grid grid-cols-[120px_1fr] gap-2">
                             <div className="text-sm py-2 truncate">{row.week}</div>
                             <div className="grid grid-cols-3 gap-2">
                               <div
-                                className="rounded p-2 text-center text-sm font-medium transition-colors"
+                                className="rounded p-2 text-center text-sm font-medium transition-colors relative"
                                 style={{
                                   backgroundColor: getHeatmapColor(row.aiActRisk, maxValue),
                                   color: row.aiActRisk > maxValue * 0.3 ? "hsl(var(--background))" : "hsl(var(--foreground))",
+                                  border: aiActThreshold?.notification_enabled && row.aiActRisk > aiActThreshold.threshold_value
+                                    ? "2px solid hsl(0 84% 60%)"
+                                    : "none",
                                 }}
                               >
                                 {row.aiActRisk}
+                                {aiActThreshold?.notification_enabled && row.aiActRisk > aiActThreshold.threshold_value && (
+                                  <AlertTriangle className="h-3 w-3 absolute top-1 right-1" />
+                                )}
                               </div>
                               <div
-                                className="rounded p-2 text-center text-sm font-medium transition-colors"
+                                className="rounded p-2 text-center text-sm font-medium transition-colors relative"
                                 style={{
                                   backgroundColor: getHeatmapColor(row.gdprViolations, maxValue),
                                   color: row.gdprViolations > maxValue * 0.3 ? "hsl(var(--background))" : "hsl(var(--foreground))",
+                                  border: gdprThreshold?.notification_enabled && row.gdprViolations > gdprThreshold.threshold_value
+                                    ? "2px solid hsl(0 84% 60%)"
+                                    : "none",
                                 }}
                               >
                                 {row.gdprViolations}
+                                {gdprThreshold?.notification_enabled && row.gdprViolations > gdprThreshold.threshold_value && (
+                                  <AlertTriangle className="h-3 w-3 absolute top-1 right-1" />
+                                )}
                               </div>
                               <div
-                                className="rounded p-2 text-center text-sm font-medium transition-colors"
+                                className="rounded p-2 text-center text-sm font-medium transition-colors relative"
                                 style={{
                                   backgroundColor: getHeatmapColor(row.esgIssues, maxValue),
                                   color: row.esgIssues > maxValue * 0.3 ? "hsl(var(--background))" : "hsl(var(--foreground))",
+                                  border: esgThreshold?.notification_enabled && row.esgIssues > esgThreshold.threshold_value
+                                    ? "2px solid hsl(0 84% 60%)"
+                                    : "none",
                                 }}
                               >
                                 {row.esgIssues}
+                                {esgThreshold?.notification_enabled && row.esgIssues > esgThreshold.threshold_value && (
+                                  <AlertTriangle className="h-3 w-3 absolute top-1 right-1" />
+                                )}
                               </div>
                             </div>
                           </div>

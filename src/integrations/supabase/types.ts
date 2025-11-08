@@ -164,6 +164,47 @@ export type Database = {
           },
         ]
       }
+      alert_thresholds: {
+        Row: {
+          created_at: string | null
+          id: string
+          metric_type: string
+          notification_enabled: boolean | null
+          organization_id: string
+          threshold_value: number
+          time_period: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          metric_type: string
+          notification_enabled?: boolean | null
+          organization_id: string
+          threshold_value: number
+          time_period?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          metric_type?: string
+          notification_enabled?: boolean | null
+          organization_id?: string
+          threshold_value?: number
+          time_period?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_thresholds_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string
