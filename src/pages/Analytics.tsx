@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
-import { ArrowLeft, TrendingUp, BarChart3, PieChart as PieChartIcon } from "lucide-react"
+import { ArrowLeft, TrendingUp, BarChart3, PieChart as PieChartIcon, Sparkles } from "lucide-react"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 import {
   LineChart,
   Line,
@@ -25,16 +27,76 @@ import {
 const Analytics = () => {
   const [loading, setLoading] = useState(true)
   const [timeRange, setTimeRange] = useState("30")
+  const [showPredictions, setShowPredictions] = useState(true)
+  const [forecastDays, setForecastDays] = useState("7")
   const [assessmentTrends, setAssessmentTrends] = useState<any[]>([])
   const [violationCounts, setViolationCounts] = useState<any[]>([])
   const [riskDistribution, setRiskDistribution] = useState<any[]>([])
   const [moduleActivity, setModuleActivity] = useState<any[]>([])
+  const [predictions, setPredictions] = useState<any[]>([])
+  const [predictedWorkload, setPredictedWorkload] = useState<number>(0)
   const navigate = useNavigate()
   const { toast } = useToast()
 
   useEffect(() => {
     loadAnalytics()
   }, [timeRange])
+
+  useEffect(() => {
+    if (assessmentTrends.length > 0 && showPredictions) {
+      calculatePredictions()
+    } else {
+      setPredictions([])
+    }
+  }, [assessmentTrends, forecastDays, showPredictions])
+
+  const linearRegression = (data: number[]) => {
+    const n = data.length
+    const sumX = data.reduce((sum, _, i) => sum + i, 0)
+    const sumY = data.reduce((sum, val) => sum + val, 0)
+    const sumXY = data.reduce((sum, val, i) => sum + i * val, 0)
+    const sumXX = data.reduce((sum, _, i) => sum + i * i, 0)
+
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX)
+    const intercept = (sumY - slope * sumX) / n
+
+    return { slope, intercept }
+  }
+
+  const calculatePredictions = () => {
+    const days = parseInt(forecastDays)
+    const aiActData = assessmentTrends.map(t => t.aiAct)
+    const gdprData = assessmentTrends.map(t => t.gdpr)
+    const esgData = assessmentTrends.map(t => t.esg)
+
+    const aiActModel = linearRegression(aiActData)
+    const gdprModel = linearRegression(gdprData)
+    const esgModel = linearRegression(esgData)
+
+    const futurePredictions = []
+    const lastDate = new Date(assessmentTrends[assessmentTrends.length - 1]?.date || new Date())
+    
+    for (let i = 1; i <= days; i++) {
+      const futureDate = new Date(lastDate)
+      futureDate.setDate(futureDate.getDate() + i)
+      const x = assessmentTrends.length + i - 1
+
+      futurePredictions.push({
+        date: futureDate.toLocaleDateString(),
+        aiAct: Math.max(0, Math.round(aiActModel.slope * x + aiActModel.intercept)),
+        gdpr: Math.max(0, Math.round(gdprModel.slope * x + gdprModel.intercept)),
+        esg: Math.max(0, Math.round(esgModel.slope * x + esgModel.intercept)),
+        isPrediction: true,
+      })
+    }
+
+    const totalWorkload = futurePredictions.reduce(
+      (sum, p) => sum + p.aiAct + p.gdpr + p.esg,
+      0
+    )
+    setPredictedWorkload(totalWorkload)
+    setPredictions(futurePredictions)
+  }
 
   const loadAnalytics = async () => {
     setLoading(true)
@@ -159,20 +221,22 @@ const Analytics = () => {
             <TrendingUp className="h-8 w-8 text-primary" />
             <div>
               <h1 className="text-xl font-bold">Compliance Analytics</h1>
-              <p className="text-sm text-muted-foreground">Trends and insights</p>
+              <p className="text-sm text-muted-foreground">Trends and insights with AI forecasting</p>
             </div>
           </div>
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-40">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7">Last 7 days</SelectItem>
-              <SelectItem value="30">Last 30 days</SelectItem>
-              <SelectItem value="90">Last 90 days</SelectItem>
-              <SelectItem value="365">Last year</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-4">
+            <Select value={timeRange} onValueChange={setTimeRange}>
+              <SelectTrigger className="w-40">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="7">Last 7 days</SelectItem>
+                <SelectItem value="30">Last 30 days</SelectItem>
+                <SelectItem value="90">Last 90 days</SelectItem>
+                <SelectItem value="365">Last year</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </header>
 
@@ -183,6 +247,53 @@ const Analytics = () => {
           </div>
         ) : (
           <div className="grid gap-6">
+            {/* Predictive Controls */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                  Predictive Analytics
+                </CardTitle>
+                <CardDescription>
+                  AI-powered forecasting for compliance workload
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <Switch
+                        id="predictions"
+                        checked={showPredictions}
+                        onCheckedChange={setShowPredictions}
+                      />
+                      <Label htmlFor="predictions">Show Predictions</Label>
+                    </div>
+                    {showPredictions && (
+                      <Select value={forecastDays} onValueChange={setForecastDays}>
+                        <SelectTrigger className="w-40">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="7">7 days ahead</SelectItem>
+                          <SelectItem value="14">14 days ahead</SelectItem>
+                          <SelectItem value="30">30 days ahead</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  </div>
+                  {showPredictions && predictedWorkload > 0 && (
+                    <div className="text-right">
+                      <p className="text-sm text-muted-foreground">Predicted Workload</p>
+                      <p className="text-2xl font-bold text-primary">
+                        {predictedWorkload} assessments
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Assessment Trends */}
             <Card>
               <CardHeader>
@@ -196,7 +307,7 @@ const Analytics = () => {
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={assessmentTrends}>
+                  <LineChart data={[...assessmentTrends, ...predictions]}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" />
                     <YAxis stroke="hsl(var(--muted-foreground))" />
@@ -205,6 +316,10 @@ const Analytics = () => {
                         backgroundColor: "hsl(var(--card))",
                         border: "1px solid hsl(var(--border))",
                       }}
+                      formatter={(value: any, name: string, props: any) => [
+                        value,
+                        props.payload.isPrediction ? `${name} (predicted)` : name,
+                      ]}
                     />
                     <Legend />
                     <Line
@@ -213,6 +328,7 @@ const Analytics = () => {
                       stroke="hsl(var(--chart-1))"
                       name="AI Act"
                       strokeWidth={2}
+                      connectNulls
                     />
                     <Line
                       type="monotone"
@@ -220,6 +336,7 @@ const Analytics = () => {
                       stroke="hsl(var(--chart-2))"
                       name="GDPR"
                       strokeWidth={2}
+                      connectNulls
                     />
                     <Line
                       type="monotone"
@@ -227,7 +344,42 @@ const Analytics = () => {
                       stroke="hsl(var(--chart-3))"
                       name="ESG"
                       strokeWidth={2}
+                      connectNulls
                     />
+                    {showPredictions && predictions.length > 0 && (
+                      <>
+                        <Line
+                          type="monotone"
+                          dataKey="aiAct"
+                          stroke="hsl(var(--chart-1))"
+                          strokeWidth={2}
+                          strokeDasharray="5 5"
+                          data={predictions}
+                          name="AI Act (predicted)"
+                          dot={false}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="gdpr"
+                          stroke="hsl(var(--chart-2))"
+                          strokeWidth={2}
+                          strokeDasharray="5 5"
+                          data={predictions}
+                          name="GDPR (predicted)"
+                          dot={false}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="esg"
+                          stroke="hsl(var(--chart-3))"
+                          strokeWidth={2}
+                          strokeDasharray="5 5"
+                          data={predictions}
+                          name="ESG (predicted)"
+                          dot={false}
+                        />
+                      </>
+                    )}
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
