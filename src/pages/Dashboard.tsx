@@ -96,48 +96,41 @@ const Dashboard = () => {
   return (
     <div className="space-y-6 p-6">
       {/* Command Header */}
-      <div className="flex items-center justify-between p-4 rounded-lg cockpit-panel">
+      <div className="flex items-center justify-between p-6 rounded-2xl cockpit-panel">
         <div>
-          <div className="flex items-center gap-3 mb-1">
-            <div className="h-2 w-2 rounded-full bg-accent animate-pulse glow-accent" />
-            <h1 className="text-2xl font-bold tracking-tight">COMPLIANCE COMMAND CENTER</h1>
-          </div>
-          <p className="text-sm text-muted-foreground font-mono">Real-time regulatory monitoring • {profile?.organizations?.name || "System Active"}</p>
+          <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
+            Compliance Dashboard
+          </h1>
+          <p className="text-sm text-muted-foreground font-medium">{profile?.organizations?.name || "Welcome back"}</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex flex-col items-end px-4 py-2 rounded-lg bg-accent/10 border border-accent/20">
-            <div className="flex items-center gap-2">
-              <Activity className="h-3 w-3 text-accent animate-pulse" />
-              <span className="text-xs font-mono text-accent">OPERATIONAL</span>
-            </div>
-            <span className="text-[10px] text-muted-foreground font-mono">All systems nominal</span>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20">
+            <div className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+            <span className="text-sm font-semibold text-accent">All Systems Active</span>
           </div>
         </div>
       </div>
 
       {/* Stats Dashboard */}
-      <div className="grid gap-3 md:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-4">
         <InteractiveCard 
           onClick={() => {
             vibrate("selection")
             navigate("/ai-act")
           }}
-          className="cockpit-panel group cursor-pointer hover:glow-primary transition-all scan-line"
+          className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
         >
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <div className="flex flex-col gap-1">
-              <CardTitle className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">AI Systems</CardTitle>
-              <div className="text-3xl font-bold data-display">{stats.ai_systems}</div>
+          <CardHeader className="flex flex-row items-center justify-between pb-3 space-y-0">
+            <div className="flex flex-col gap-2">
+              <CardTitle className="text-sm font-semibold text-muted-foreground">AI Systems</CardTitle>
+              <div className="text-4xl font-bold text-foreground">{stats.ai_systems}</div>
             </div>
-            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
-              <Shield className="h-6 w-6 text-primary" />
+            <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Shield className="h-7 w-7 text-primary" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="flex items-center gap-1 text-[10px] text-primary font-mono uppercase">
-              <div className="h-1 w-1 rounded-full bg-primary animate-pulse" />
-              <span>Active Monitoring</span>
-            </div>
+            <p className="text-xs text-muted-foreground font-medium">Active assessments</p>
           </CardContent>
         </InteractiveCard>
 
@@ -146,22 +139,19 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/gdpr")
           }}
-          className="cockpit-panel group cursor-pointer hover:glow-primary transition-all scan-line"
+          className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
         >
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <div className="flex flex-col gap-1">
-              <CardTitle className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">GDPR Checks</CardTitle>
-              <div className="text-3xl font-bold data-display">{stats.gdpr_assessments}</div>
+          <CardHeader className="flex flex-row items-center justify-between pb-3 space-y-0">
+            <div className="flex flex-col gap-2">
+              <CardTitle className="text-sm font-semibold text-muted-foreground">GDPR Checks</CardTitle>
+              <div className="text-4xl font-bold text-foreground">{stats.gdpr_assessments}</div>
             </div>
-            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
-              <FileCheck className="h-6 w-6 text-primary" />
+            <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center">
+              <FileCheck className="h-7 w-7 text-primary" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="flex items-center gap-1 text-[10px] text-primary font-mono uppercase">
-              <div className="h-1 w-1 rounded-full bg-primary animate-pulse" />
-              <span>Compliance Verified</span>
-            </div>
+            <p className="text-xs text-muted-foreground font-medium">Compliance verified</p>
           </CardContent>
         </InteractiveCard>
 
@@ -170,22 +160,19 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/esg")
           }}
-          className="cockpit-panel group cursor-pointer hover:glow-accent transition-all scan-line"
+          className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
         >
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <div className="flex flex-col gap-1">
-              <CardTitle className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">ESG Reports</CardTitle>
-              <div className="text-3xl font-bold data-display">{stats.esg_reports}</div>
+          <CardHeader className="flex flex-row items-center justify-between pb-3 space-y-0">
+            <div className="flex flex-col gap-2">
+              <CardTitle className="text-sm font-semibold text-muted-foreground">ESG Reports</CardTitle>
+              <div className="text-4xl font-bold text-foreground">{stats.esg_reports}</div>
             </div>
-            <div className="h-12 w-12 rounded-lg bg-accent/10 flex items-center justify-center border border-accent/20">
-              <Leaf className="h-6 w-6 text-accent" />
+            <div className="h-14 w-14 rounded-xl bg-accent/10 flex items-center justify-center">
+              <Leaf className="h-7 w-7 text-accent" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="flex items-center gap-1 text-[10px] text-accent font-mono uppercase">
-              <div className="h-1 w-1 rounded-full bg-accent animate-pulse" />
-              <span>Generated</span>
-            </div>
+            <p className="text-xs text-muted-foreground font-medium">Reports generated</p>
           </CardContent>
         </InteractiveCard>
 
@@ -194,22 +181,19 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/audit")
           }}
-          className="cockpit-panel group cursor-pointer hover:glow-primary transition-all scan-line"
+          className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
         >
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <div className="flex flex-col gap-1">
-              <CardTitle className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">Audit Logs</CardTitle>
-              <div className="text-3xl font-bold data-display">{stats.audit_logs}</div>
+          <CardHeader className="flex flex-row items-center justify-between pb-3 space-y-0">
+            <div className="flex flex-col gap-2">
+              <CardTitle className="text-sm font-semibold text-muted-foreground">Audit Logs</CardTitle>
+              <div className="text-4xl font-bold text-foreground">{stats.audit_logs}</div>
             </div>
-            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
-              <Database className="h-6 w-6 text-primary" />
+            <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Database className="h-7 w-7 text-primary" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="flex items-center gap-1 text-[10px] text-primary font-mono uppercase">
-              <Activity className="h-3 w-3 animate-pulse" />
-              <span>Live Tracking</span>
-            </div>
+            <p className="text-xs text-muted-foreground font-medium">Events tracked</p>
           </CardContent>
         </InteractiveCard>
       </div>
@@ -221,25 +205,27 @@ const Dashboard = () => {
             vibrate("medium")
             navigate("/ai-act")
           }}
-          className="cockpit-panel group cursor-pointer hover:border-primary/50 hover:shadow-lg transition-all"
+          className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <CardHeader className="relative">
-            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-              <Shield className="h-6 w-6 text-primary" />
+          <CardHeader>
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <Shield className="h-8 w-8 text-primary" />
             </div>
-            <CardTitle className="text-lg">AI Act Auditor</CardTitle>
-            <CardDescription className="text-sm">
-              Risk assessment & compliance documentation
+            <CardTitle className="text-2xl font-bold mb-2">AI Act Auditor</CardTitle>
+            <CardDescription className="text-base">
+              Comprehensive risk assessment and compliance documentation
             </CardDescription>
           </CardHeader>
-          <CardContent className="relative">
-            <Badge variant="secondary" className="mb-3 bg-primary/10 text-primary border-0">EU AI Act</Badge>
-            <HapticButton className="w-full" onClick={(e) => {
-              e.stopPropagation()
-              vibrate("medium")
-              navigate("/ai-act")
-            }}>
+          <CardContent>
+            <HapticButton 
+              size="lg" 
+              className="w-full" 
+              onClick={(e) => {
+                e.stopPropagation()
+                vibrate("medium")
+                navigate("/ai-act")
+              }}
+            >
               Start Assessment
             </HapticButton>
           </CardContent>
@@ -250,25 +236,27 @@ const Dashboard = () => {
             vibrate("medium")
             navigate("/gdpr")
           }}
-          className="cockpit-panel group cursor-pointer hover:border-primary/50 hover:shadow-lg transition-all"
+          className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <CardHeader className="relative">
-            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-              <FileCheck className="h-6 w-6 text-primary" />
+          <CardHeader>
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <FileCheck className="h-8 w-8 text-primary" />
             </div>
-            <CardTitle className="text-lg">GDPR Checker</CardTitle>
-            <CardDescription className="text-sm">
-              Privacy compliance & data protection
+            <CardTitle className="text-2xl font-bold mb-2">GDPR Checker</CardTitle>
+            <CardDescription className="text-base">
+              Privacy compliance verification and data protection
             </CardDescription>
           </CardHeader>
-          <CardContent className="relative">
-            <Badge variant="secondary" className="mb-3 bg-primary/10 text-primary border-0">GDPR</Badge>
-            <HapticButton className="w-full" onClick={(e) => {
-              e.stopPropagation()
-              vibrate("medium")
-              navigate("/gdpr")
-            }}>
+          <CardContent>
+            <HapticButton 
+              size="lg" 
+              className="w-full" 
+              onClick={(e) => {
+                e.stopPropagation()
+                vibrate("medium")
+                navigate("/gdpr")
+              }}
+            >
               Run Check
             </HapticButton>
           </CardContent>
@@ -279,25 +267,27 @@ const Dashboard = () => {
             vibrate("medium")
             navigate("/esg")
           }}
-          className="cockpit-panel group cursor-pointer hover:border-primary/50 hover:shadow-lg transition-all"
+          className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <CardHeader className="relative">
-            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-              <Leaf className="h-6 w-6 text-primary" />
+          <CardHeader>
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <Leaf className="h-8 w-8 text-accent" />
             </div>
-            <CardTitle className="text-lg">ESG Reporter</CardTitle>
-            <CardDescription className="text-sm">
-              Sustainability metrics & CSRD reporting
+            <CardTitle className="text-2xl font-bold mb-2">ESG Reporter</CardTitle>
+            <CardDescription className="text-base">
+              Sustainability metrics and CSRD compliance reporting
             </CardDescription>
           </CardHeader>
-          <CardContent className="relative">
-            <Badge variant="secondary" className="mb-3 bg-primary/10 text-primary border-0">ESG/CSRD</Badge>
-            <HapticButton className="w-full" onClick={(e) => {
-              e.stopPropagation()
-              vibrate("medium")
-              navigate("/esg")
-            }}>
+          <CardContent>
+            <HapticButton 
+              size="lg" 
+              className="w-full" 
+              onClick={(e) => {
+                e.stopPropagation()
+                vibrate("medium")
+                navigate("/esg")
+              }}
+            >
               Create Report
             </HapticButton>
           </CardContent>
@@ -307,80 +297,80 @@ const Dashboard = () => {
       {/* Quick Actions */}
       <Card className="cockpit-panel">
         <CardHeader>
-          <CardTitle className="text-xl">Quick Actions</CardTitle>
-          <CardDescription>Common compliance tasks</CardDescription>
+          <CardTitle className="text-2xl font-bold">Quick Actions</CardTitle>
+          <CardDescription className="text-base">Access common compliance tools and resources</CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+        <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <HapticButton 
             variant="outline" 
-            className="justify-start h-auto py-4 hover:bg-accent/50 hover:border-primary/30 transition-all group" 
+            className="justify-start h-auto py-5 hover:scale-[1.02] hover:border-primary/40 transition-all group" 
             onClick={() => navigate("/analytics")}
           >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <Database className="h-5 w-5 text-primary" />
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                <TrendingUp className="h-6 w-6 text-primary" />
               </div>
-              <span className="font-medium">View Analytics</span>
+              <span className="font-semibold text-base">View Analytics</span>
             </div>
           </HapticButton>
           <HapticButton 
             variant="outline" 
-            className="justify-start h-auto py-4 hover:bg-accent/50 hover:border-primary/30 transition-all group" 
+            className="justify-start h-auto py-5 hover:scale-[1.02] hover:border-primary/40 transition-all group" 
             onClick={() => navigate("/reports")}
           >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <FileText className="h-5 w-5 text-primary" />
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                <FileText className="h-6 w-6 text-primary" />
               </div>
-              <span className="font-medium">Compliance Reports</span>
+              <span className="font-semibold text-base">Compliance Reports</span>
             </div>
           </HapticButton>
           <HapticButton 
             variant="outline" 
-            className="justify-start h-auto py-4 hover:bg-accent/50 hover:border-primary/30 transition-all group" 
+            className="justify-start h-auto py-5 hover:scale-[1.02] hover:border-primary/40 transition-all group" 
             onClick={() => navigate("/rag-search")}
           >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <BookOpen className="h-5 w-5 text-primary" />
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                <BookOpen className="h-6 w-6 text-primary" />
               </div>
-              <span className="font-medium">Search Regulations</span>
+              <span className="font-semibold text-base">Search Regulations</span>
             </div>
           </HapticButton>
           <HapticButton 
             variant="outline" 
-            className="justify-start h-auto py-4 hover:bg-accent/50 hover:border-primary/30 transition-all group" 
+            className="justify-start h-auto py-5 hover:scale-[1.02] hover:border-primary/40 transition-all group" 
             onClick={() => navigate("/audit")}
           >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <Database className="h-5 w-5 text-primary" />
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                <Database className="h-6 w-6 text-primary" />
               </div>
-              <span className="font-medium">View Audit Trail</span>
+              <span className="font-semibold text-base">View Audit Trail</span>
             </div>
           </HapticButton>
           <HapticButton 
             variant="outline" 
-            className="justify-start h-auto py-4 hover:bg-accent/50 hover:border-primary/30 transition-all group" 
+            className="justify-start h-auto py-5 hover:scale-[1.02] hover:border-primary/40 transition-all group" 
             onClick={() => navigate("/models")}
           >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <Shield className="h-5 w-5 text-primary" />
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                <Shield className="h-6 w-6 text-primary" />
               </div>
-              <span className="font-medium">Model Registry</span>
+              <span className="font-semibold text-base">Model Registry</span>
             </div>
           </HapticButton>
           <HapticButton 
             variant="outline" 
-            className="justify-start h-auto py-4 hover:bg-accent/50 hover:border-primary/30 transition-all group" 
+            className="justify-start h-auto py-5 hover:scale-[1.02] hover:border-primary/40 transition-all group" 
             onClick={() => navigate("/admin")}
           >
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <Shield className="h-5 w-5 text-primary" />
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                <Shield className="h-6 w-6 text-primary" />
               </div>
-              <span className="font-medium">Admin Panel</span>
+              <span className="font-semibold text-base">Admin Panel</span>
             </div>
           </HapticButton>
         </CardContent>
