@@ -116,7 +116,7 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/ai-act")
           }}
-          className="border-border/50 hover:border-primary/30 group"
+          className="border-border/50 hover:border-primary/30 group underwater-glow"
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">AI Systems</CardTitle>
@@ -138,7 +138,7 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/gdpr")
           }}
-          className="border-border/50 hover:border-accent/30 group"
+          className="border-border/50 hover:border-accent/30 group underwater-glow"
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">GDPR Checks</CardTitle>
@@ -160,7 +160,7 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/esg")
           }}
-          className="border-border/50 hover:border-accent/30 group"
+          className="border-border/50 hover:border-accent/30 group underwater-glow"
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">ESG Reports</CardTitle>
@@ -182,7 +182,7 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/audit")
           }}
-          className="border-border/50 hover:border-primary/30 group"
+          className="border-border/50 hover:border-primary/30 group underwater-glow"
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Audit Trail</CardTitle>
@@ -207,7 +207,7 @@ const Dashboard = () => {
             vibrate("medium")
             navigate("/ai-act")
           }}
-          className="group hover:shadow-xl hover:border-primary/50 overflow-hidden"
+          className="group hover:shadow-xl hover:border-primary/50 overflow-hidden underwater-glow"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <CardHeader className="relative">
@@ -236,7 +236,7 @@ const Dashboard = () => {
             vibrate("medium")
             navigate("/gdpr")
           }}
-          className="group hover:shadow-xl hover:border-accent/50 overflow-hidden"
+          className="group hover:shadow-xl hover:border-accent/50 overflow-hidden underwater-glow"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <CardHeader className="relative">
@@ -265,7 +265,7 @@ const Dashboard = () => {
             vibrate("medium")
             navigate("/esg")
           }}
-          className="group hover:shadow-xl hover:border-accent/50 overflow-hidden"
+          className="group hover:shadow-xl hover:border-accent/50 overflow-hidden underwater-glow"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <CardHeader className="relative">
@@ -291,7 +291,7 @@ const Dashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <Card className="border-border/50">
+      <Card className="border-border/50 underwater-glow">
         <CardHeader>
           <CardTitle className="text-xl">Quick Actions</CardTitle>
           <CardDescription>Common compliance tasks</CardDescription>

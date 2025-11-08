@@ -50,7 +50,7 @@ const Index = () => {
 
         {/* Features Grid */}
         <div className="grid gap-6 md:grid-cols-3 mb-16">
-          <Card>
+          <Card className="underwater-glow">
             <CardHeader>
               <Shield className="h-10 w-10 text-primary mb-2" />
               <CardTitle>AI Act Compliance</CardTitle>
@@ -60,7 +60,7 @@ const Index = () => {
             </CardHeader>
           </Card>
 
-          <Card>
+          <Card className="underwater-glow">
             <CardHeader>
               <FileCheck className="h-10 w-10 text-primary mb-2" />
               <CardTitle>GDPR Checker</CardTitle>
@@ -70,7 +70,7 @@ const Index = () => {
             </CardHeader>
           </Card>
 
-          <Card>
+          <Card className="underwater-glow">
             <CardHeader>
               <Leaf className="h-10 w-10 text-primary mb-2" />
               <CardTitle>ESG Reporting</CardTitle>
