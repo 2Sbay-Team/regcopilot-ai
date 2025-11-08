@@ -94,39 +94,49 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Welcome Header */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 p-6">
+      {/* Command Header */}
+      <div className="flex items-center justify-between p-4 rounded-lg cockpit-panel">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Command Center</h1>
-          <p className="text-muted-foreground">Real-time compliance monitoring and insights</p>
+          <div className="flex items-center gap-3 mb-1">
+            <div className="h-2 w-2 rounded-full bg-accent animate-pulse glow-accent" />
+            <h1 className="text-2xl font-bold tracking-tight">COMPLIANCE COMMAND CENTER</h1>
+          </div>
+          <p className="text-sm text-muted-foreground font-mono">Real-time regulatory monitoring • {profile?.organizations?.name || "System Active"}</p>
         </div>
-        <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/20">
-          <Activity className="h-4 w-4 text-primary animate-pulse" />
-          <span className="text-sm font-medium">All Systems Operational</span>
+        <div className="flex items-center gap-3">
+          <div className="flex flex-col items-end px-4 py-2 rounded-lg bg-accent/10 border border-accent/20">
+            <div className="flex items-center gap-2">
+              <Activity className="h-3 w-3 text-accent animate-pulse" />
+              <span className="text-xs font-mono text-accent">OPERATIONAL</span>
+            </div>
+            <span className="text-[10px] text-muted-foreground font-mono">All systems nominal</span>
+          </div>
         </div>
       </div>
 
       {/* Stats Dashboard */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-3 md:grid-cols-4">
         <InteractiveCard 
           onClick={() => {
             vibrate("selection")
             navigate("/ai-act")
           }}
-          className="cockpit-panel group cursor-pointer hover:border-primary/50 transition-all"
+          className="cockpit-panel group cursor-pointer hover:glow-primary transition-all scan-line"
         >
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">AI Systems</CardTitle>
-            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Shield className="h-5 w-5 text-primary" />
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <div className="flex flex-col gap-1">
+              <CardTitle className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">AI Systems</CardTitle>
+              <div className="text-3xl font-bold data-display">{stats.ai_systems}</div>
+            </div>
+            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+              <Shield className="h-6 w-6 text-primary" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{stats.ai_systems}</div>
-            <div className="flex items-center gap-1 text-xs text-primary mt-1">
-              <TrendingUp className="h-3 w-3" />
-              <span>Active monitoring</span>
+          <CardContent className="pt-0">
+            <div className="flex items-center gap-1 text-[10px] text-primary font-mono uppercase">
+              <div className="h-1 w-1 rounded-full bg-primary animate-pulse" />
+              <span>Active Monitoring</span>
             </div>
           </CardContent>
         </InteractiveCard>
@@ -136,19 +146,21 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/gdpr")
           }}
-          className="cockpit-panel group cursor-pointer hover:border-primary/50 transition-all"
+          className="cockpit-panel group cursor-pointer hover:glow-primary transition-all scan-line"
         >
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">GDPR Checks</CardTitle>
-            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <FileCheck className="h-5 w-5 text-primary" />
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <div className="flex flex-col gap-1">
+              <CardTitle className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">GDPR Checks</CardTitle>
+              <div className="text-3xl font-bold data-display">{stats.gdpr_assessments}</div>
+            </div>
+            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+              <FileCheck className="h-6 w-6 text-primary" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{stats.gdpr_assessments}</div>
-            <div className="flex items-center gap-1 text-xs text-primary mt-1">
-              <TrendingUp className="h-3 w-3" />
-              <span>Compliance checks</span>
+          <CardContent className="pt-0">
+            <div className="flex items-center gap-1 text-[10px] text-primary font-mono uppercase">
+              <div className="h-1 w-1 rounded-full bg-primary animate-pulse" />
+              <span>Compliance Verified</span>
             </div>
           </CardContent>
         </InteractiveCard>
@@ -158,18 +170,20 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/esg")
           }}
-          className="cockpit-panel group cursor-pointer hover:border-primary/50 transition-all"
+          className="cockpit-panel group cursor-pointer hover:glow-accent transition-all scan-line"
         >
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">ESG Reports</CardTitle>
-            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Leaf className="h-5 w-5 text-primary" />
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <div className="flex flex-col gap-1">
+              <CardTitle className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">ESG Reports</CardTitle>
+              <div className="text-3xl font-bold data-display">{stats.esg_reports}</div>
+            </div>
+            <div className="h-12 w-12 rounded-lg bg-accent/10 flex items-center justify-center border border-accent/20">
+              <Leaf className="h-6 w-6 text-accent" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{stats.esg_reports}</div>
-            <div className="flex items-center gap-1 text-xs text-primary mt-1">
-              <TrendingUp className="h-3 w-3" />
+          <CardContent className="pt-0">
+            <div className="flex items-center gap-1 text-[10px] text-accent font-mono uppercase">
+              <div className="h-1 w-1 rounded-full bg-accent animate-pulse" />
               <span>Generated</span>
             </div>
           </CardContent>
@@ -180,19 +194,21 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/audit")
           }}
-          className="cockpit-panel group cursor-pointer hover:border-primary/50 transition-all"
+          className="cockpit-panel group cursor-pointer hover:glow-primary transition-all scan-line"
         >
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Audit Trail</CardTitle>
-            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Database className="h-5 w-5 text-primary" />
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <div className="flex flex-col gap-1">
+              <CardTitle className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">Audit Logs</CardTitle>
+              <div className="text-3xl font-bold data-display">{stats.audit_logs}</div>
+            </div>
+            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+              <Database className="h-6 w-6 text-primary" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{stats.audit_logs}</div>
-            <div className="flex items-center gap-1 text-xs text-primary mt-1">
+          <CardContent className="pt-0">
+            <div className="flex items-center gap-1 text-[10px] text-primary font-mono uppercase">
               <Activity className="h-3 w-3 animate-pulse" />
-              <span>Total logs</span>
+              <span>Live Tracking</span>
             </div>
           </CardContent>
         </InteractiveCard>
