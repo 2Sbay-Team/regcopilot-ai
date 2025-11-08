@@ -11,6 +11,7 @@ import {
   Eye
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
+import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
 
 import {
   Sidebar,
@@ -51,9 +52,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <div className="px-3 mb-2">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Shield className="h-5 w-5 text-primary" />
-              </div>
+              <RoboticShieldLogo size={32} />
               {!isCollapsed && (
                 <div>
                   <span className="font-bold text-lg block leading-tight">Regulix</span>

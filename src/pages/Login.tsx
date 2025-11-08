@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { Shield } from "lucide-react"
+import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
 
 const Login = () => {
   const { user } = useAuth()
@@ -56,8 +56,8 @@ const Login = () => {
       <Card className="w-full max-w-md cockpit-panel">
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl hover:shadow-lg transition-all">
-              <Shield className="h-16 w-16 text-primary" />
+            <div className="p-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl hover:shadow-lg transition-all">
+              <RoboticShieldLogo size={64} />
             </div>
           </div>
           <CardTitle className="text-2xl">Regulix</CardTitle>
