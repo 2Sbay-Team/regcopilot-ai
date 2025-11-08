@@ -1,5 +1,20 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 import { corsHeaders } from '../_shared/cors.ts'
+import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
+
+// Zod validation schema
+const ESGRequestSchema = z.object({
+  org_id: z.string().uuid('Invalid organization ID'),
+  data: z.object({
+    period: z.string().regex(/^\d{4}(-Q[1-4])?$/, 'Period must be YYYY or YYYY-QX format'),
+    co2_scope1: z.number().nonnegative('Scope 1 emissions cannot be negative').max(1e9, 'Value unrealistically high').optional(),
+    co2_scope2: z.number().nonnegative('Scope 2 emissions cannot be negative').max(1e9, 'Value unrealistically high').optional(),
+    co2_scope3: z.number().nonnegative('Scope 3 emissions cannot be negative').max(1e9, 'Value unrealistically high').optional(),
+    energy_mwh: z.number().nonnegative('Energy consumption cannot be negative').max(1e12, 'Value unrealistically high').optional(),
+    water_m3: z.number().nonnegative('Water usage cannot be negative').max(1e12, 'Value unrealistically high').optional(),
+    diversity: z.record(z.any()).optional()
+  })
+})
 
 interface ESGRequest {
   org_id: string
@@ -42,7 +57,25 @@ Deno.serve(async (req) => {
       })
     }
 
-    const body = await req.json() as ESGRequest
+    // Parse and validate request body
+    const rawBody = await req.json()
+    const validationResult = ESGRequestSchema.safeParse(rawBody)
+    
+    if (!validationResult.success) {
+      console.error('Validation error:', validationResult.error)
+      return new Response(JSON.stringify({ 
+        error: 'Invalid request data', 
+        details: validationResult.error.errors.map(e => ({
+          path: e.path.join('.'),
+          message: e.message
+        }))
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    const body = validationResult.data as ESGRequest
 
     // Calculate metrics and map to ESRS codes
     const totalCO2 = (body.data.co2_scope1 || 0) + (body.data.co2_scope2 || 0) + (body.data.co2_scope3 || 0)

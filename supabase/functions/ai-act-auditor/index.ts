@@ -1,5 +1,18 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 import { corsHeaders } from '../_shared/cors.ts'
+import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
+
+// Zod validation schema
+const AIActRequestSchema = z.object({
+  org_id: z.string().uuid('Invalid organization ID'),
+  system: z.object({
+    id: z.string().uuid().optional(),
+    name: z.string().min(1, 'System name is required').max(200, 'System name too long'),
+    purpose: z.string().min(1, 'Purpose is required').max(2000, 'Purpose description too long'),
+    sector: z.string().min(1, 'Sector is required').max(100, 'Sector too long'),
+    model_type: z.string().max(100).optional()
+  })
+})
 
 interface AIActRequest {
   org_id: string
@@ -39,7 +52,25 @@ Deno.serve(async (req) => {
       })
     }
 
-    const body = await req.json() as AIActRequest
+    // Parse and validate request body
+    const rawBody = await req.json()
+    const validationResult = AIActRequestSchema.safeParse(rawBody)
+    
+    if (!validationResult.success) {
+      console.error('Validation error:', validationResult.error)
+      return new Response(JSON.stringify({ 
+        error: 'Invalid request data', 
+        details: validationResult.error.errors.map(e => ({
+          path: e.path.join('.'),
+          message: e.message
+        }))
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    const body = validationResult.data as AIActRequest
 
     // Deterministic risk classification based on sector (EU AI Act Annex III)
     const highRiskSectors = [

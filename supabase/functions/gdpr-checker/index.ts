@@ -1,5 +1,16 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 import { corsHeaders } from '../_shared/cors.ts'
+import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
+
+// Zod validation schema
+const GDPRRequestSchema = z.object({
+  org_id: z.string().uuid('Invalid organization ID'),
+  payload: z.object({
+    documents: z.array(z.string().max(100000, 'Document exceeds 100KB limit')).max(50, 'Too many documents (max 50)').optional(),
+    vendor_agreements: z.array(z.string().max(50000, 'Vendor agreement exceeds 50KB limit')).max(50, 'Too many agreements (max 50)').optional(),
+    systems: z.array(z.record(z.any())).max(100, 'Too many systems (max 100)').optional()
+  })
+})
 
 interface GDPRRequest {
   org_id: string
@@ -52,7 +63,25 @@ Deno.serve(async (req) => {
       })
     }
 
-    const body = await req.json() as GDPRRequest
+    // Parse and validate request body
+    const rawBody = await req.json()
+    const validationResult = GDPRRequestSchema.safeParse(rawBody)
+    
+    if (!validationResult.success) {
+      console.error('Validation error:', validationResult.error)
+      return new Response(JSON.stringify({ 
+        error: 'Invalid request data', 
+        details: validationResult.error.errors.map(e => ({
+          path: e.path.join('.'),
+          message: e.message
+        }))
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    const body = validationResult.data as GDPRRequest
 
     // Analyze documents for PII
     const allText = [
