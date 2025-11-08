@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { AnimatedElephant } from "@/components/AnimatedElephant"
+import { AnimatedOctopus } from "@/components/AnimatedOctopus"
 
 const Signup = () => {
   const { user } = useAuth()
@@ -43,7 +43,7 @@ const Signup = () => {
 
       toast({
         title: "Account created!",
-        description: "Welcome to HannibalAI - Strategic compliance that never forgets",
+        description: "Welcome to Regulix - Modern regulatory intelligence",
       })
       navigate("/dashboard")
     } catch (error: any) {
@@ -63,12 +63,12 @@ const Signup = () => {
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">
             <div className="p-3 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl hover:shadow-lg transition-all">
-              <AnimatedElephant size="lg" enableBlink={true} enableTilt={true} />
+              <AnimatedOctopus size="lg" enableBlink={true} enableWave={true} />
             </div>
           </div>
-          <CardTitle className="text-2xl">Join HannibalAI</CardTitle>
+          <CardTitle className="text-2xl">Join Regulix</CardTitle>
           <CardDescription>
-            Strategic compliance that never forgets
+            Modern regulatory intelligence for your organization
           </CardDescription>
         </CardHeader>
         <CardContent>

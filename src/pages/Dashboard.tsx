@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast"
 import { HapticButton } from "@/components/ui/haptic-button"
 import { InteractiveCard } from "@/components/ui/interactive-card"
 import { useHaptic } from "@/hooks/useHaptic"
-import { AnimatedElephant } from "@/components/AnimatedElephant"
+import { AnimatedOctopus } from "@/components/AnimatedOctopus"
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -100,11 +100,11 @@ const Dashboard = () => {
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-2">
           <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center p-2 hover:shadow-lg transition-shadow">
-            <AnimatedElephant size="md" enableBlink={true} enableTilt={true} />
+            <AnimatedOctopus size="md" enableBlink={true} enableWave={true} />
           </div>
           <div>
             <h1 className="text-3xl font-bold">Welcome back, {profile?.full_name?.split(' ')[0] || 'there'}</h1>
-            <p className="text-muted-foreground">{profile?.organizations?.name || "Strategic compliance that never forgets"}</p>
+            <p className="text-muted-foreground">{profile?.organizations?.name || "Modern regulatory intelligence at your fingertips"}</p>
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { AnimatedElephant } from "@/components/AnimatedElephant"
+import { AnimatedOctopus } from "@/components/AnimatedOctopus"
 
 const Login = () => {
   const { user } = useAuth()
@@ -57,12 +57,12 @@ const Login = () => {
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">
             <div className="p-3 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl hover:shadow-lg transition-all">
-              <AnimatedElephant size="lg" enableBlink={true} enableTilt={true} />
+              <AnimatedOctopus size="lg" enableBlink={true} enableWave={true} />
             </div>
           </div>
-          <CardTitle className="text-2xl">HannibalAI</CardTitle>
+          <CardTitle className="text-2xl">Regulix</CardTitle>
           <CardDescription>
-            Strategic Compliance Intelligence - AI-powered for EU AI Act, GDPR & ESG
+            Modern Regulatory Intelligence - AI-powered for EU AI Act, GDPR & ESG
           </CardDescription>
         </CardHeader>
         <CardContent>

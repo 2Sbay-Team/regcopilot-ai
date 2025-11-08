@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react"
-import elephantLogo from "@/assets/elephant-logo.png"
+import octopusLogo from "@/assets/octopus-logo.png"
 import { cn } from "@/lib/utils"
 
-interface AnimatedElephantProps {
+interface AnimatedOctopusProps {
   size?: "sm" | "md" | "lg" | "xl"
   className?: string
   enableBlink?: boolean
-  enableTilt?: boolean
   enableFloat?: boolean
+  enableWave?: boolean
   followCursor?: boolean
 }
 
@@ -18,17 +18,17 @@ const sizeClasses = {
   xl: "h-24 w-24",
 }
 
-export function AnimatedElephant({ 
+export function AnimatedOctopus({ 
   size = "lg", 
   className,
   enableBlink = true,
-  enableTilt = true,
   enableFloat = false,
+  enableWave = true,
   followCursor = false
-}: AnimatedElephantProps) {
+}: AnimatedOctopusProps) {
   const [isBlinking, setIsBlinking] = useState(false)
   const [rotation, setRotation] = useState({ x: 0, y: 0 })
-  const elephantRef = useRef<HTMLDivElement>(null)
+  const octopusRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!enableBlink) return
@@ -36,26 +36,26 @@ export function AnimatedElephant({
     const blinkInterval = setInterval(() => {
       setIsBlinking(true)
       setTimeout(() => setIsBlinking(false), 150)
-    }, 4000)
+    }, 3500)
 
     return () => clearInterval(blinkInterval)
   }, [enableBlink])
 
   useEffect(() => {
-    if (!followCursor || !elephantRef.current) return
+    if (!followCursor || !octopusRef.current) return
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = elephantRef.current?.getBoundingClientRect()
+      const rect = octopusRef.current?.getBoundingClientRect()
       if (!rect) return
 
-      const elephantCenterX = rect.left + rect.width / 2
-      const elephantCenterY = rect.top + rect.height / 2
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
       
-      const deltaX = e.clientX - elephantCenterX
-      const deltaY = e.clientY - elephantCenterY
+      const deltaX = e.clientX - centerX
+      const deltaY = e.clientY - centerY
       
-      // Calculate rotation angles (limited range for natural look)
-      const maxRotation = 15
+      // Calculate rotation angles
+      const maxRotation = 20
       const rotateY = (deltaX / rect.width) * maxRotation
       const rotateX = -(deltaY / rect.height) * maxRotation
       
@@ -66,7 +66,7 @@ export function AnimatedElephant({
       setRotation({ x: 0, y: 0 })
     }
 
-    const element = elephantRef.current
+    const element = octopusRef.current
     element.addEventListener('mousemove', handleMouseMove)
     element.addEventListener('mouseleave', handleMouseLeave)
 
@@ -78,22 +78,22 @@ export function AnimatedElephant({
 
   return (
     <div 
-      ref={elephantRef}
+      ref={octopusRef}
       className={cn("relative inline-block", className)}
     >
-      {/* Main elephant image */}
+      {/* Main octopus image */}
       <img
-        src={elephantLogo}
-        alt="HannibalAI Elephant"
+        src={octopusLogo}
+        alt="Regulix Octopus"
         className={cn(
           "object-contain transition-all duration-300",
           sizeClasses[size],
-          enableTilt && !followCursor && "animate-owl-tilt",
+          enableWave && !followCursor && "animate-owl-tilt",
           enableFloat && "animate-owl-float"
         )}
         style={followCursor ? {
           transform: `perspective(1000px) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
-          transition: 'transform 0.15s ease-out'
+          transition: 'transform 0.2s ease-out'
         } : undefined}
       />
       
@@ -106,7 +106,7 @@ export function AnimatedElephant({
             isBlinking ? "opacity-100" : "opacity-0"
           )}
           style={{
-            background: "radial-gradient(circle at 35% 30%, rgba(139,69,19,0.8) 6%, transparent 6%), radial-gradient(circle at 65% 30%, rgba(139,69,19,0.8) 6%, transparent 6%)",
+            background: "radial-gradient(circle at 45% 38%, rgba(138,43,226,0.9) 4%, transparent 4%), radial-gradient(circle at 55% 38%, rgba(138,43,226,0.9) 4%, transparent 4%)",
             pointerEvents: "none"
           }}
         />
