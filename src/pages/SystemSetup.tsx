@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import { Button } from "@/components/ui/button"
@@ -7,11 +7,21 @@ import { useToast } from "@/hooks/use-toast"
 import { ArrowLeft, Database, CheckCircle2, Loader2, BookOpen, Settings } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Progress } from "@/components/ui/progress"
+
+interface SeedingProgress {
+  status: string
+  current_step: string
+  total_chunks: number
+  processed_chunks: number
+  progress_percentage: number
+}
 
 const SystemSetup = () => {
   const [seeding, setSeeding] = useState(false)
   const [seedComplete, setSeedComplete] = useState(false)
   const [chunkCount, setChunkCount] = useState(0)
+  const [seedingProgress, setSeedingProgress] = useState<SeedingProgress | null>(null)
   const navigate = useNavigate()
   const { toast } = useToast()
 
@@ -28,12 +38,46 @@ const SystemSetup = () => {
     }
   }
 
-  useState(() => {
+  useEffect(() => {
     checkKnowledgeBase()
-  })
+
+    // Set up realtime listener for seeding progress
+    const channel = supabase
+      .channel('seeding-progress')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'seeding_progress'
+        },
+        (payload) => {
+          if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+            const progress = payload.new as SeedingProgress
+            setSeedingProgress(progress)
+
+            if (progress.status === 'completed') {
+              setSeeding(false)
+              setSeedingProgress(null)
+              checkKnowledgeBase()
+            } else if (progress.status === 'failed') {
+              setSeeding(false)
+              setSeedingProgress(null)
+            }
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [])
 
   const seedKnowledgeBase = async () => {
     setSeeding(true)
+    setSeedingProgress(null)
+    
     try {
       const { data, error } = await supabase.functions.invoke("seed-regulations", {})
 
@@ -52,8 +96,8 @@ const SystemSetup = () => {
         title: "Seeding Failed",
         description: error.message,
       })
-    } finally {
       setSeeding(false)
+      setSeedingProgress(null)
     }
   }
 
@@ -112,6 +156,20 @@ const SystemSetup = () => {
                     )}
                   </div>
                 </div>
+
+                {seeding && seedingProgress && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">{seedingProgress.current_step}</span>
+                      <span className="font-medium">{Math.round(seedingProgress.progress_percentage)}%</span>
+                    </div>
+                    <Progress value={seedingProgress.progress_percentage} className="h-2" />
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span>{seedingProgress.processed_chunks} / {seedingProgress.total_chunks} chunks</span>
+                      <span>{seedingProgress.status}</span>
+                    </div>
+                  </div>
+                )}
 
                 <Button 
                   onClick={seedKnowledgeBase} 

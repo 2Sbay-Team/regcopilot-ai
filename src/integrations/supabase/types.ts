@@ -955,6 +955,42 @@ export type Database = {
         }
         Relationships: []
       }
+      seeding_progress: {
+        Row: {
+          created_at: string | null
+          current_step: string | null
+          id: string
+          processed_chunks: number | null
+          progress_percentage: number | null
+          session_id: string
+          status: string
+          total_chunks: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_step?: string | null
+          id?: string
+          processed_chunks?: number | null
+          progress_percentage?: number | null
+          session_id: string
+          status: string
+          total_chunks?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_step?: string | null
+          id?: string
+          processed_chunks?: number | null
+          progress_percentage?: number | null
+          session_id?: string
+          status?: string
+          total_chunks?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string

@@ -26,6 +26,25 @@ Deno.serve(async (req) => {
 
     console.log('Starting regulatory document seeding...')
 
+    // Generate unique session ID for this seeding operation
+    const sessionId = crypto.randomUUID()
+
+    // Helper function to update progress
+    const updateProgress = async (status: string, currentStep: string, processedChunks: number, totalChunks: number) => {
+      const progressPercentage = totalChunks > 0 ? (processedChunks / totalChunks) * 100 : 0
+      await supabase
+        .from('seeding_progress')
+        .upsert({
+          session_id: sessionId,
+          status,
+          current_step: currentStep,
+          total_chunks: totalChunks,
+          processed_chunks: processedChunks,
+          progress_percentage: progressPercentage,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'session_id' })
+    }
+
     // Sample EU AI Act chunks
     const aiActChunks: RegulationChunk[] = [
       {
@@ -99,6 +118,10 @@ Deno.serve(async (req) => {
     ]
 
     const allChunks = [...aiActChunks, ...gdprChunks, ...esrsChunks]
+    const totalChunks = allChunks.length
+
+    // Initialize progress
+    await updateProgress('in_progress', 'Preparing chunks...', 0, totalChunks)
 
     // Insert chunks with placeholder embeddings
     const chunksToInsert = allChunks.map((chunk, index) => ({
@@ -113,22 +136,45 @@ Deno.serve(async (req) => {
       }
     }))
 
-    const { data, error } = await supabase
-      .from('document_chunks')
-      .insert(chunksToInsert)
-      .select()
+    // Update progress - processing chunks
+    await updateProgress('in_progress', 'Inserting regulatory documents...', 0, totalChunks)
 
-    if (error) {
-      console.error('Seeding error:', error)
-      throw error
+    // Insert in batches for better progress tracking
+    const batchSize = 3
+    let processedCount = 0
+
+    for (let i = 0; i < chunksToInsert.length; i += batchSize) {
+      const batch = chunksToInsert.slice(i, i + batchSize)
+      
+      const { error } = await supabase
+        .from('document_chunks')
+        .insert(batch)
+        .select()
+
+      if (error) {
+        console.error('Seeding error:', error)
+        await updateProgress('failed', `Error: ${error.message}`, processedCount, totalChunks)
+        throw error
+      }
+
+      processedCount += batch.length
+      const currentDoc = batch[0].metadata.document_type
+      await updateProgress('in_progress', `Processing ${currentDoc}...`, processedCount, totalChunks)
+      
+      // Small delay to make progress visible
+      await new Promise(resolve => setTimeout(resolve, 500))
     }
+
+    // Final progress update
+    await updateProgress('completed', 'Knowledge base initialized!', totalChunks, totalChunks)
 
     console.log(`Successfully seeded ${allChunks.length} regulatory chunks`)
 
     return new Response(
       JSON.stringify({
         success: true,
-        chunks_seeded: allChunks.length,
+        chunks_seeded: totalChunks,
+        session_id: sessionId,
         message: 'Regulatory knowledge base seeded successfully'
       }),
       {
