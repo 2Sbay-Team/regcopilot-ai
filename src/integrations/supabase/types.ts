@@ -986,6 +986,20 @@ export type Database = {
         }
         Returns: boolean
       }
+      match_regulatory_chunks: {
+        Args: {
+          match_count?: number
+          match_threshold?: number
+          query_embedding: string
+        }
+        Returns: {
+          content: string
+          id: string
+          section: string
+          similarity: number
+          source: string
+        }[]
+      }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
     }

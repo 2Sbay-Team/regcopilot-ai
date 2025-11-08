@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, FileCheck, Leaf, Database, LogOut, FileText } from "lucide-react"
+import { Shield, FileCheck, Leaf, Database, LogOut, FileText, BookOpen } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 const Dashboard = () => {
@@ -24,8 +24,23 @@ const Dashboard = () => {
   useEffect(() => {
     if (user) {
       loadUserData()
+      checkSystemSetup()
     }
   }, [user])
+
+  const checkSystemSetup = async () => {
+    const { count } = await supabase
+      .from("document_chunks")
+      .select("*", { count: "exact", head: true })
+
+    if (count === 0) {
+      toast({
+        title: "System Setup Required",
+        description: "Initialize the regulatory knowledge base to use AI copilots",
+      })
+      setTimeout(() => navigate("/setup"), 2000)
+    }
+  }
 
   const loadUserData = async () => {
     if (!user) return
@@ -215,6 +230,10 @@ const Dashboard = () => {
             <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/reports")}>
               <FileText className="h-4 w-4 mr-2" />
               Compliance Reports
+            </Button>
+            <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/rag-search")}>
+              <BookOpen className="h-4 w-4 mr-2" />
+              Search Regulations (RAG)
             </Button>
             <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/audit")}>
               <Database className="h-4 w-4 mr-2" />

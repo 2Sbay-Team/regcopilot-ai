@@ -1,73 +1,61 @@
-# Welcome to your Lovable project
+# Compliance & ESG Copilot
 
-## Project info
+**Production-ready PWA SaaS for RegTech compliance management**
 
-**URL**: https://lovable.dev/projects/c5617a47-c2c5-465b-bd4c-76b0d4d4efe5
+AI-powered platform unifying EU AI Act, GDPR, and CSRD/ESRS compliance with RAG-enhanced analysis, predictive analytics, and automated reporting.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 🚀 Quick Start
 
-**Use Lovable**
+### 1. Sign Up & Login
+- Visit `/signup` to create an account
+- Auto-assigned to new organization
+- Login at `/login`
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c5617a47-c2c5-465b-bd4c-76b0d4d4efe5) and start prompting.
+### 2. Initialize System (Required First Step)
+- Navigate to `/setup`
+- Click "Initialize Knowledge Base"
+- Seeds EU AI Act, GDPR, CSRD/ESRS regulatory chunks
 
-Changes made via Lovable will be committed automatically to this repo.
+### 3. Run Compliance Assessments
+- **AI Act**: `/ai-act` - Risk classification + Annex IV
+- **GDPR**: `/gdpr` - Privacy scanning + violations
+- **ESG**: `/esg` - Sustainability reporting
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🧠 Core Features
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+✅ **AI-Powered Copilots** - Automated compliance analysis  
+✅ **RAG Knowledge Base** - Vector search with pgvector  
+✅ **Explainability** - Reasoning traces + evidence  
+✅ **Audit Trail** - SHA-256 hash-chained logs  
+✅ **Predictive Analytics** - Trend forecasting  
+✅ **Risk Heatmap** - Weekly concentration visualization  
+✅ **Alert System** - Configurable thresholds + notifications  
+✅ **Automated Reports** - Weekly/monthly PDF summaries  
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🏗️ Tech Stack
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- React 18 + TypeScript + Vite + Tailwind + shadcn-ui
+- Lovable Cloud (Supabase PostgreSQL + pgvector)
+- Deno Edge Functions (auto-scaling)
+- Lovable AI Gateway (Gemini 2.5 Flash)
+- PWA-ready (offline capable)
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## 📖 Full Documentation
 
-**Edit a file directly in GitHub**
+See `ARCHITECTURE.md` for complete technical details.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🚢 Deployment
 
-**Use GitHub Codespaces**
+Click **Publish** in Lovable to deploy instantly.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/c5617a47-c2c5-465b-bd4c-76b0d4d4efe5) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Built with [Lovable](https://lovable.dev) 💜

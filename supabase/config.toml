@@ -1,1 +1,22 @@
 project_id = "usaygwvfanqlpruyzmhl"
+
+[functions.ai-act-auditor]
+verify_jwt = true
+
+[functions.gdpr-checker]
+verify_jwt = true
+
+[functions.esg-reporter]
+verify_jwt = true
+
+[functions.generate-compliance-report]
+verify_jwt = false
+
+[functions.rag-search]
+verify_jwt = false
+
+[functions.explainability]
+verify_jwt = true
+
+[functions.seed-regulations]
+verify_jwt = false
