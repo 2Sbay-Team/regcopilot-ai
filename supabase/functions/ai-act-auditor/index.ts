@@ -1,0 +1,184 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
+import { corsHeaders } from '../_shared/cors.ts'
+
+interface AIActRequest {
+  org_id: string
+  system: {
+    id?: string
+    name: string
+    purpose: string
+    sector: string
+    model_type?: string
+  }
+}
+
+interface AIActResponse {
+  risk_class: string
+  report: string
+  citations: Array<{ source: string; content: string }>
+  assessment_id?: string
+}
+
+Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders })
+  }
+
+  try {
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
+    )
+
+    const { data: { user } } = await supabaseClient.auth.getUser()
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    const body = await req.json() as AIActRequest
+
+    // Deterministic risk classification based on sector (EU AI Act Annex III)
+    const highRiskSectors = [
+      'biometric', 'employment', 'law_enforcement', 'education', 
+      'critical_infrastructure', 'essential_services', 'migration', 'justice'
+    ]
+    
+    let riskClass = 'minimal'
+    const sector = body.system.sector?.toLowerCase() || ''
+    
+    if (highRiskSectors.some(s => sector.includes(s))) {
+      riskClass = 'high'
+    } else if (sector.includes('health') || sector.includes('safety')) {
+      riskClass = 'limited'
+    }
+
+    // RAG: Retrieve relevant chunks from regulatory documents
+    const { data: chunks } = await supabaseClient
+      .from('document_chunks')
+      .select('content, metadata')
+      .textSearch('content', body.system.purpose, { type: 'websearch' })
+      .limit(3)
+
+    const ragContext = chunks?.map(c => c.content).join('\n\n') || ''
+
+    // LLM reasoning with Lovable AI
+    const prompt = `You are an EU AI Act compliance expert. Analyze this AI system:
+
+System Name: ${body.system.name}
+Purpose: ${body.system.purpose}
+Sector: ${body.system.sector}
+Detected Risk Class: ${riskClass}
+
+Regulatory Context:
+${ragContext}
+
+Generate a concise Annex IV-style compliance summary (max 300 words). Include:
+1. Risk classification justification
+2. Key compliance requirements
+3. Recommended next steps`
+
+    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${Deno.env.get('LOVABLE_API_KEY')}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-2.5-flash',
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    })
+
+    if (!aiResponse.ok) {
+      const errorText = await aiResponse.text()
+      console.error('AI Gateway error:', aiResponse.status, errorText)
+      throw new Error(`AI Gateway error: ${aiResponse.status}`)
+    }
+
+    const aiData = await aiResponse.json()
+    const report = aiData.choices?.[0]?.message?.content || 'Unable to generate report'
+
+    // Store assessment
+    const { data: assessment, error: insertError } = await supabaseClient
+      .from('ai_act_assessments')
+      .insert({
+        ai_system_id: body.system.id || null,
+        assessor_id: user.id,
+        risk_category: riskClass,
+        annex_iv_summary: report,
+        findings: { deterministic_risk: riskClass, sectors_matched: highRiskSectors.filter(s => sector.includes(s)) },
+        status: 'completed'
+      })
+      .select()
+      .single()
+
+    if (insertError) {
+      console.error('Failed to store assessment:', insertError)
+    }
+
+    // Create audit log entry with hash chain
+    const inputHash = await crypto.subtle.digest(
+      'SHA-256',
+      new TextEncoder().encode(JSON.stringify(body))
+    )
+    const outputHash = await crypto.subtle.digest(
+      'SHA-256',
+      new TextEncoder().encode(report)
+    )
+
+    // Get previous hash
+    const { data: prevLog } = await supabaseClient
+      .from('audit_logs')
+      .select('output_hash')
+      .eq('organization_id', body.org_id)
+      .order('timestamp', { ascending: false })
+      .limit(1)
+      .single()
+
+    const prevHash = prevLog?.output_hash || '0'.repeat(64)
+
+    await supabaseClient.from('audit_logs').insert({
+      organization_id: body.org_id,
+      agent: 'ai_act_checker',
+      event_type: 'assessment',
+      event_category: 'compliance',
+      actor_id: user.id,
+      action: 'classify_ai_system',
+      status: 'success',
+      request_payload: body,
+      response_summary: { risk_class: riskClass, assessment_id: assessment?.id },
+      reasoning_chain: { deterministic: riskClass, llm_prompt: prompt.substring(0, 500) },
+      input_hash: Array.from(new Uint8Array(inputHash)).map(b => b.toString(16).padStart(2, '0')).join(''),
+      output_hash: Array.from(new Uint8Array(outputHash)).map(b => b.toString(16).padStart(2, '0')).join(''),
+      prev_hash: prevHash
+    })
+
+    const citations = chunks?.map(c => ({
+      source: c.metadata?.source || 'EU AI Act',
+      content: c.content.substring(0, 200) + '...'
+    })) || []
+
+    const response: AIActResponse = {
+      risk_class: riskClass,
+      report,
+      citations,
+      assessment_id: assessment?.id
+    }
+
+    return new Response(JSON.stringify(response), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+
+  } catch (error) {
+    console.error('Error in ai-act-auditor:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  }
+})

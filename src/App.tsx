@@ -4,6 +4,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
+import AIActCopilot from "./pages/AIActCopilot";
+import GDPRCopilot from "./pages/GDPRCopilot";
+import ESGCopilot from "./pages/ESGCopilot";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -16,7 +22,12 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/ai-act" element={<AIActCopilot />} />
+          <Route path="/gdpr" element={<GDPRCopilot />} />
+          <Route path="/esg" element={<ESGCopilot />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
