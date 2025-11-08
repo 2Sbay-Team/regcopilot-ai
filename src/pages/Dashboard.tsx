@@ -216,6 +216,10 @@ const Dashboard = () => {
               <Shield className="h-4 w-4 mr-2" />
               Model Registry
             </Button>
+            <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/admin")}>
+              <Shield className="h-4 w-4 mr-2" />
+              Admin Panel
+            </Button>
           </CardContent>
         </Card>
       </div>

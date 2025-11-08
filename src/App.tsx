@@ -14,6 +14,8 @@ import GDPRCopilot from "./pages/GDPRCopilot";
 import ESGCopilot from "./pages/ESGCopilot";
 import AuditTrail from "./pages/AuditTrail";
 import ModelRegistry from "./pages/ModelRegistry";
+import Explainability from "./pages/Explainability";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +37,8 @@ const App = () => (
             <Route path="/esg" element={<ProtectedRoute><ESGCopilot /></ProtectedRoute>} />
             <Route path="/audit" element={<ProtectedRoute><AuditTrail /></ProtectedRoute>} />
             <Route path="/models" element={<ProtectedRoute><ModelRegistry /></ProtectedRoute>} />
+            <Route path="/explainability" element={<ProtectedRoute><Explainability /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

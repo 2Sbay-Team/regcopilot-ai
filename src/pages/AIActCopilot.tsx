@@ -184,6 +184,15 @@ const AIActCopilot = () => {
                     <div className="prose prose-sm max-w-none">
                       <p className="whitespace-pre-wrap">{result.report}</p>
                     </div>
+                    {result.assessment_id && (
+                      <Button 
+                        variant="outline" 
+                        className="w-full mt-4"
+                        onClick={() => navigate(`/explainability?id=${result.assessment_id}&type=ai_act`)}
+                      >
+                        View Explainability
+                      </Button>
+                    )}
                   </CardContent>
                 </Card>
 
