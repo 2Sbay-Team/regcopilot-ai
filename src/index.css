@@ -8,95 +8,97 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 220 18% 97%;
-    --foreground: 220 18% 12%;
+    --background: 220 25% 96%;
+    --foreground: 220 20% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 18% 12%;
+    --card-foreground: 220 20% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 18% 12%;
+    --popover-foreground: 220 20% 12%;
 
-    --primary: 221 83% 53%;
+    --primary: 262 83% 58%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 18% 12%;
+    --secondary: 220 17% 94%;
+    --secondary-foreground: 220 20% 12%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 220 17% 94%;
+    --muted-foreground: 220 12% 46%;
 
-    --accent: 142 76% 36%;
+    --accent: 189 85% 42%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 221 83% 53%;
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 262 83% 58%;
 
     --radius: 0.75rem;
     
-    --chart-1: 217 91% 60%;
-    --chart-2: 142 76% 36%;
-    --chart-3: 38 92% 50%;
-    --chart-4: 280 87% 65%;
+    --chart-1: 262 83% 58%;
+    --chart-2: 189 85% 42%;
+    --chart-3: 280 87% 65%;
+    --chart-4: 217 91% 60%;
     --chart-5: 340 82% 52%;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 220 20% 97%;
+    --sidebar-foreground: 220 15% 30%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 220 17% 94%;
+    --sidebar-accent-foreground: 220 20% 12%;
+    --sidebar-border: 220 15% 88%;
+    --sidebar-ring: 262 83% 58%;
+    
+    /* Ocean theme gradients */
+    --ocean-gradient: linear-gradient(135deg, hsl(262 83% 58% / 0.1), hsl(189 85% 42% / 0.1));
+    --wave-gradient: linear-gradient(180deg, transparent, hsl(189 85% 42% / 0.05));
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 230 35% 7%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 230 30% 10%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 230 30% 10%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 262 83% 65%;
+    --primary-foreground: 230 35% 7%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 230 25% 15%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 230 25% 15%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 189 85% 50%;
+    --accent-foreground: 230 35% 7%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 230 25% 18%;
+    --input: 230 25% 18%;
+    --ring: 262 83% 65%;
+    
+    --sidebar-background: 230 30% 10%;
+    --sidebar-foreground: 210 40% 95%;
+    --sidebar-primary: 262 83% 65%;
+    --sidebar-primary-foreground: 230 35% 7%;
+    --sidebar-accent: 230 25% 15%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 230 25% 18%;
+    --sidebar-ring: 262 83% 65%;
+    
+    /* Ocean theme gradients - dark mode */
+    --ocean-gradient: linear-gradient(135deg, hsl(262 83% 65% / 0.15), hsl(189 85% 50% / 0.15));
+    --wave-gradient: linear-gradient(180deg, transparent, hsl(189 85% 50% / 0.1));
   }
 }
 
@@ -171,12 +173,12 @@ All colors MUST be HSL.
     }
   }
 
-  /* Owl Logo Animations */
+  /* Octopus Logo Animations */
   .animate-owl-blink {
-    animation: owl-blink 4s ease-in-out infinite;
+    animation: octopus-blink 3.5s ease-in-out infinite;
   }
 
-  @keyframes owl-blink {
+  @keyframes octopus-blink {
     0%, 48%, 52%, 100% {
       opacity: 1;
     }
@@ -186,49 +188,86 @@ All colors MUST be HSL.
   }
 
   .animate-owl-tilt {
-    animation: owl-tilt 3s ease-in-out infinite;
+    animation: octopus-wave 4s ease-in-out infinite;
   }
 
-  @keyframes owl-tilt {
+  @keyframes octopus-wave {
     0%, 100% {
       transform: rotate(0deg);
     }
     25% {
-      transform: rotate(-3deg);
+      transform: rotate(-5deg);
     }
     75% {
-      transform: rotate(3deg);
+      transform: rotate(5deg);
     }
   }
 
   .animate-owl-breathe {
-    animation: owl-breathe 4s ease-in-out infinite;
+    animation: octopus-breathe 5s ease-in-out infinite;
   }
 
-  @keyframes owl-breathe {
+  @keyframes octopus-breathe {
     0%, 100% {
       transform: scale(1);
     }
     50% {
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
   }
 
   .animate-owl-float {
-    animation: owl-float 6s ease-in-out infinite;
+    animation: octopus-swim 8s ease-in-out infinite;
   }
 
-  @keyframes owl-float {
+  @keyframes octopus-swim {
     0%, 100% {
-      transform: translateY(0px);
+      transform: translateY(0px) translateX(0px);
+    }
+    25% {
+      transform: translateY(-8px) translateX(4px);
     }
     50% {
-      transform: translateY(-10px);
+      transform: translateY(-12px) translateX(0px);
+    }
+    75% {
+      transform: translateY(-8px) translateX(-4px);
     }
   }
 
   .animate-owl-wise {
-    animation: owl-tilt 3s ease-in-out infinite, owl-breathe 4s ease-in-out infinite;
+    animation: octopus-wave 4s ease-in-out infinite, octopus-breathe 5s ease-in-out infinite;
+  }
+
+  /* Ocean Wave Animation */
+  .animate-wave {
+    animation: wave 3s ease-in-out infinite;
+  }
+
+  @keyframes wave {
+    0%, 100% {
+      transform: translateX(0%);
+    }
+    50% {
+      transform: translateX(5%);
+    }
+  }
+
+  /* Tentacle Wiggle */
+  .animate-tentacle {
+    animation: tentacle-wiggle 2s ease-in-out infinite;
+  }
+
+  @keyframes tentacle-wiggle {
+    0%, 100% {
+      transform: rotate(0deg) scaleX(1);
+    }
+    25% {
+      transform: rotate(2deg) scaleX(0.98);
+    }
+    75% {
+      transform: rotate(-2deg) scaleX(1.02);
+    }
   }
 
   .animate-shimmer {
