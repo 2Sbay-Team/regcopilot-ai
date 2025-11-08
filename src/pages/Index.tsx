@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Shield, FileCheck, Leaf, Lock, Database, Zap, Twitter, Linkedin, Github, Mail } from "lucide-react"
 import { useEffect } from "react"
+import { AnimatedOwl } from "@/components/AnimatedOwl"
 import owlLogo from "@/assets/owl-logo.png"
 
 const Index = () => {
@@ -21,12 +22,18 @@ const Index = () => {
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
-          <div className="inline-block p-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl mb-6">
-            <img src={owlLogo} alt="CompliWise Owl" className="h-24 w-24 object-contain animate-bounce-subtle" />
+          <div className="inline-block p-6 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl mb-6 hover:shadow-2xl transition-all duration-300 cursor-pointer group">
+            <AnimatedOwl 
+              size="xl" 
+              enableBlink={true} 
+              enableTilt={true} 
+              enableFloat={true}
+              className="group-hover:scale-110 transition-transform duration-300"
+            />
           </div>
-          <h1 className="text-5xl font-bold mb-2">CompliWise</h1>
-          <p className="text-lg text-primary font-medium mb-4">Wise Compliance Intelligence</p>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <h1 className="text-5xl font-bold mb-2 animate-in">CompliWise</h1>
+          <p className="text-lg text-primary font-medium mb-4 animate-in" style={{ animationDelay: "0.1s" }}>Wise Compliance Intelligence</p>
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-in" style={{ animationDelay: "0.2s" }}>
             AI-powered compliance for EU AI Act, GDPR & ESG reporting. 
             Your wise companion for regulatory excellence.
           </p>

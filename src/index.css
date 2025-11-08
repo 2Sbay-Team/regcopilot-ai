@@ -171,6 +171,66 @@ All colors MUST be HSL.
     }
   }
 
+  /* Owl Logo Animations */
+  .animate-owl-blink {
+    animation: owl-blink 4s ease-in-out infinite;
+  }
+
+  @keyframes owl-blink {
+    0%, 48%, 52%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  .animate-owl-tilt {
+    animation: owl-tilt 3s ease-in-out infinite;
+  }
+
+  @keyframes owl-tilt {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-3deg);
+    }
+    75% {
+      transform: rotate(3deg);
+    }
+  }
+
+  .animate-owl-breathe {
+    animation: owl-breathe 4s ease-in-out infinite;
+  }
+
+  @keyframes owl-breathe {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  .animate-owl-float {
+    animation: owl-float 6s ease-in-out infinite;
+  }
+
+  @keyframes owl-float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-owl-wise {
+    animation: owl-tilt 3s ease-in-out infinite, owl-breathe 4s ease-in-out infinite;
+  }
+
   .animate-shimmer {
     animation: shimmer 2s infinite;
     background: linear-gradient(

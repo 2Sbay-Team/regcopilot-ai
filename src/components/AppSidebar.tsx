@@ -11,7 +11,7 @@ import {
   Eye
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
-import owlLogo from "@/assets/owl-logo.png"
+import { AnimatedOwl } from "@/components/AnimatedOwl"
 
 import {
   Sidebar,
@@ -52,7 +52,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <div className="px-3 mb-2">
             <div className="flex items-center gap-2">
-              <img src={owlLogo} alt="CompliWise Owl" className="h-8 w-8 object-contain" />
+              <AnimatedOwl size="sm" enableBlink={true} enableTilt={false} />
               {!isCollapsed && (
                 <div>
                   <span className="font-bold text-lg block leading-tight">CompliWise</span>
