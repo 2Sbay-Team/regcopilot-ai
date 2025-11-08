@@ -1,6 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 import { corsHeaders } from '../_shared/cors.ts'
 import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
+import { sanitizeInput, createStructuredMessages } from '../_shared/sanitize.ts'
 
 // Zod validation schema
 const ESGRequestSchema = z.object({
@@ -77,6 +78,9 @@ Deno.serve(async (req) => {
 
     const body = validationResult.data as ESGRequest
 
+    // Sanitize period string to prevent injection
+    const sanitizedPeriod = sanitizeInput(body.data.period, 20)
+
     // Calculate metrics and map to ESRS codes
     const totalCO2 = (body.data.co2_scope1 || 0) + (body.data.co2_scope2 || 0) + (body.data.co2_scope3 || 0)
     const metrics = {
@@ -95,7 +99,7 @@ Deno.serve(async (req) => {
     // Store metrics
     const metricsToInsert = Object.entries(metrics).map(([code, data]) => ({
       organization_id: body.org_id,
-      reporting_period: body.data.period,
+      reporting_period: sanitizedPeriod,
       metric_category: 'environmental',
       metric_name: data.name,
       metric_code: code,
@@ -113,25 +117,34 @@ Deno.serve(async (req) => {
       .textSearch('content', 'ESRS climate emissions', { type: 'websearch' })
       .limit(2)
 
-    const ragContext = chunks?.map(c => c.content).join('\n\n') || ''
+    const ragContext = chunks?.map(c => c.content.substring(0, 500)).join('\n\n') || ''
 
-    // LLM narrative generation
-    const prompt = `You are an ESG reporting expert. Generate a CSRD-compliant narrative for these metrics:
+    // Use structured messages with clear role separation
+    const systemPrompt = `You are an ESG reporting expert specializing in CSRD compliance. Generate a concise narrative (max 300 words) for the provided environmental metrics.
 
-Period: ${body.data.period}
-Total CO2: ${totalCO2.toFixed(2)} tCO2e
-- Scope 1: ${body.data.co2_scope1 || 0} tCO2e
-- Scope 2: ${body.data.co2_scope2 || 0} tCO2e
-- Scope 3: ${body.data.co2_scope3 || 0} tCO2e
-Energy: ${body.data.energy_mwh || 0} MWh
-
-ESRS Context:
-${ragContext}
-
-Generate a concise narrative (max 300 words) covering:
+Cover:
 1. Environmental performance summary
-2. Key trends and insights
-3. Alignment with ESRS E1 requirements`
+2. Key trends and insights from the data
+3. Alignment with ESRS E1 requirements
+
+ESRS Regulatory Context:
+${ragContext}`
+
+    const userContext = {
+      reporting_period: sanitizedPeriod,
+      emissions: {
+        total_co2_tco2e: Number(totalCO2.toFixed(2)),
+        scope_1_tco2e: body.data.co2_scope1 || 0,
+        scope_2_tco2e: body.data.co2_scope2 || 0,
+        scope_3_tco2e: body.data.co2_scope3 || 0
+      },
+      energy_consumption_mwh: body.data.energy_mwh || 0,
+      water_usage_m3: body.data.water_m3 || 0,
+      esrs_metrics: metrics,
+      completeness_percentage: completeness
+    }
+
+    const messages = createStructuredMessages(systemPrompt, userContext)
 
     const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -141,7 +154,7 @@ Generate a concise narrative (max 300 words) covering:
       },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
-        messages: [{ role: 'user', content: prompt }],
+        messages,
       }),
     })
 
@@ -160,7 +173,7 @@ Generate a concise narrative (max 300 words) covering:
       .from('esg_reports')
       .insert({
         organization_id: body.org_id,
-        reporting_period: body.data.period,
+        reporting_period: sanitizedPeriod,
         narrative_sections: { environmental: narrative },
         metrics_summary: metrics,
         anomalies_detected: anomalies,
@@ -196,9 +209,9 @@ Generate a concise narrative (max 300 words) covering:
       actor_id: user.id,
       action: 'generate_esg_report',
       status: 'success',
-      request_payload: { period: body.data.period },
+      request_payload: { period: sanitizedPeriod },
       response_summary: { total_co2: totalCO2, completeness },
-      reasoning_chain: { metrics_calculated: Object.keys(metrics), anomalies },
+      reasoning_chain: { metrics_calculated: Object.keys(metrics), anomalies, sanitized: true },
       input_hash: Array.from(new Uint8Array(inputHash)).map(b => b.toString(16).padStart(2, '0')).join(''),
       output_hash: Array.from(new Uint8Array(outputHash)).map(b => b.toString(16).padStart(2, '0')).join(''),
       prev_hash: prevLog?.output_hash || '0'.repeat(64)

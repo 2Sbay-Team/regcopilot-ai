@@ -1,6 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 import { corsHeaders } from '../_shared/cors.ts'
 import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
+import { sanitizeInput, createStructuredMessages } from '../_shared/sanitize.ts'
 
 // Zod validation schema
 const GDPRRequestSchema = z.object({
@@ -83,11 +84,12 @@ Deno.serve(async (req) => {
 
     const body = validationResult.data as GDPRRequest
 
+    // Sanitize all text inputs before processing
+    const sanitizedDocuments = (body.payload.documents || []).map(doc => sanitizeInput(doc, 50000))
+    const sanitizedAgreements = (body.payload.vendor_agreements || []).map(agr => sanitizeInput(agr, 25000))
+
     // Analyze documents for PII
-    const allText = [
-      ...(body.payload.documents || []),
-      ...(body.payload.vendor_agreements || [])
-    ].join(' ')
+    const allText = [...sanitizedDocuments, ...sanitizedAgreements].join(' ')
 
     const piiDetected = detectPII(allText)
     const violations: GDPRResponse['violations'] = []
@@ -125,21 +127,33 @@ Deno.serve(async (req) => {
       .textSearch('content', 'GDPR personal data retention', { type: 'websearch' })
       .limit(2)
 
-    const ragContext = chunks?.map(c => c.content).join('\n\n') || ''
+    const ragContext = chunks?.map(c => c.content.substring(0, 500)).join('\n\n') || ''
 
-    // LLM analysis
-    const prompt = `You are a GDPR compliance expert. Analyze these findings:
+    // Use structured messages with clear role separation
+    const systemPrompt = `You are a GDPR compliance expert. Analyze the provided compliance findings and provide a concise summary (max 250 words).
 
-Detected PII: ${piiDetected.join(', ') || 'None'}
-Violations: ${violations.map(v => v.article).join(', ') || 'None'}
+Include:
+1. Key privacy risks identified
+2. GDPR article violations and their implications
+3. Specific remediation recommendations
 
-Context from GDPR:
-${ragContext}
+GDPR Regulatory Context:
+${ragContext}`
 
-Provide a concise compliance summary (max 250 words) with:
-1. Key risks identified
-2. Article violations
-3. Remediation recommendations`
+    const userContext = {
+      detected_pii_types: piiDetected,
+      violations_found: violations.map(v => ({
+        article: v.article,
+        description: v.description
+      })),
+      findings_summary: findings.map(f => ({
+        category: f.category,
+        severity: f.severity,
+        description: f.description
+      }))
+    }
+
+    const messages = createStructuredMessages(systemPrompt, userContext)
 
     const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -149,7 +163,7 @@ Provide a concise compliance summary (max 250 words) with:
       },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
-        messages: [{ role: 'user', content: prompt }],
+        messages,
       }),
     })
 
@@ -198,7 +212,7 @@ Provide a concise compliance summary (max 250 words) with:
       status: 'success',
       request_payload: { pii_types: piiDetected },
       response_summary: { violations: violations.length, findings: findings.length },
-      reasoning_chain: { pii_detected: piiDetected, rules_triggered: violations.map(v => v.article) },
+      reasoning_chain: { pii_detected: piiDetected, rules_triggered: violations.map(v => v.article), sanitized: true },
       input_hash: Array.from(new Uint8Array(inputHash)).map(b => b.toString(16).padStart(2, '0')).join(''),
       output_hash: Array.from(new Uint8Array(outputHash)).map(b => b.toString(16).padStart(2, '0')).join(''),
       prev_hash: prevLog?.output_hash || '0'.repeat(64)

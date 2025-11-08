@@ -1,6 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 import { corsHeaders } from '../_shared/cors.ts'
 import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
+import { sanitizeInput, sanitizeObject, createStructuredMessages } from '../_shared/sanitize.ts'
 
 // Zod validation schema
 const AIActRequestSchema = z.object({
@@ -72,6 +73,9 @@ Deno.serve(async (req) => {
 
     const body = validationResult.data as AIActRequest
 
+    // Sanitize user inputs to prevent prompt injection
+    const sanitizedSystem = sanitizeObject(body.system)
+
     // Deterministic risk classification based on sector (EU AI Act Annex III)
     const highRiskSectors = [
       'biometric', 'employment', 'law_enforcement', 'education', 
@@ -79,7 +83,7 @@ Deno.serve(async (req) => {
     ]
     
     let riskClass = 'minimal'
-    const sector = body.system.sector?.toLowerCase() || ''
+    const sector = sanitizedSystem.sector?.toLowerCase() || ''
     
     if (highRiskSectors.some(s => sector.includes(s))) {
       riskClass = 'high'
@@ -88,29 +92,36 @@ Deno.serve(async (req) => {
     }
 
     // RAG: Retrieve relevant chunks from regulatory documents
+    // Use sanitized purpose for search to prevent injection
+    const searchQuery = sanitizeInput(body.system.purpose, 200)
     const { data: chunks } = await supabaseClient
       .from('document_chunks')
       .select('content, metadata')
-      .textSearch('content', body.system.purpose, { type: 'websearch' })
+      .textSearch('content', searchQuery, { type: 'websearch' })
       .limit(3)
 
-    const ragContext = chunks?.map(c => c.content).join('\n\n') || ''
+    const ragContext = chunks?.map(c => c.content.substring(0, 500)).join('\n\n') || ''
 
-    // LLM reasoning with Lovable AI
-    const prompt = `You are an EU AI Act compliance expert. Analyze this AI system:
+    // Use structured messages with clear role separation
+    const systemPrompt = `You are an EU AI Act compliance expert. Analyze the provided AI system data and generate a concise Annex IV-style compliance summary (max 300 words).
 
-System Name: ${body.system.name}
-Purpose: ${body.system.purpose}
-Sector: ${body.system.sector}
-Detected Risk Class: ${riskClass}
+Include:
+1. Risk classification justification
+2. Key compliance requirements under EU AI Act
+3. Recommended next steps for compliance
 
 Regulatory Context:
-${ragContext}
+${ragContext}`
 
-Generate a concise Annex IV-style compliance summary (max 300 words). Include:
-1. Risk classification justification
-2. Key compliance requirements
-3. Recommended next steps`
+    const userContext = {
+      system_name: sanitizedSystem.name,
+      purpose: sanitizedSystem.purpose,
+      sector: sanitizedSystem.sector,
+      detected_risk_class: riskClass,
+      high_risk_sectors_matched: highRiskSectors.filter(s => sector.includes(s))
+    }
+
+    const messages = createStructuredMessages(systemPrompt, userContext)
 
     const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -120,7 +131,7 @@ Generate a concise Annex IV-style compliance summary (max 300 words). Include:
       },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
-        messages: [{ role: 'user', content: prompt }],
+        messages,
       }),
     })
 
@@ -182,7 +193,7 @@ Generate a concise Annex IV-style compliance summary (max 300 words). Include:
       status: 'success',
       request_payload: body,
       response_summary: { risk_class: riskClass, assessment_id: assessment?.id },
-      reasoning_chain: { deterministic: riskClass, llm_prompt: prompt.substring(0, 500) },
+      reasoning_chain: { deterministic: riskClass, llm_messages: messages.length, sanitized: true },
       input_hash: Array.from(new Uint8Array(inputHash)).map(b => b.toString(16).padStart(2, '0')).join(''),
       output_hash: Array.from(new Uint8Array(outputHash)).map(b => b.toString(16).padStart(2, '0')).join(''),
       prev_hash: prevHash
