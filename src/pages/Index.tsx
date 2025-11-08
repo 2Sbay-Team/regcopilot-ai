@@ -4,9 +4,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Shield, FileCheck, Leaf, Lock, Database, Zap, Twitter, Linkedin, Github, Mail } from "lucide-react"
 import { useEffect } from "react"
-import { AnimatedOctopus } from "@/components/AnimatedOctopus"
-import octopusLogo from "@/assets/octopus-logo.png"
-import { FloatingBubbles } from "@/components/FloatingBubbles"
 
 const Index = () => {
   const navigate = useNavigate()
@@ -20,19 +17,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
-      <FloatingBubbles count={25} />
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
-          <div className="inline-block p-6 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl mb-6 hover:shadow-2xl transition-all duration-300 cursor-pointer group">
-            <AnimatedOctopus 
-              size="xl" 
-              enableBlink={true} 
-              enableWave={false} 
-              enableFloat={true}
-              followCursor={true}
-              className="group-hover:scale-110 transition-transform duration-300"
-            />
+          <div className="inline-block p-6 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl mb-6 hover:shadow-2xl transition-all duration-300">
+            <Shield className="h-24 w-24 text-primary" />
           </div>
           <h1 className="text-5xl font-bold mb-2 animate-in">Regulix</h1>
           <p className="text-lg text-primary font-medium mb-4 animate-in" style={{ animationDelay: "0.1s" }}>Modern Regulatory Intelligence</p>
@@ -52,7 +41,7 @@ const Index = () => {
 
         {/* Features Grid */}
         <div className="grid gap-6 md:grid-cols-3 mb-16">
-          <Card className="underwater-glow">
+          <Card className="cockpit-panel">
             <CardHeader>
               <Shield className="h-10 w-10 text-primary mb-2" />
               <CardTitle>AI Act Compliance</CardTitle>
@@ -62,7 +51,7 @@ const Index = () => {
             </CardHeader>
           </Card>
 
-          <Card className="underwater-glow">
+          <Card className="cockpit-panel">
             <CardHeader>
               <FileCheck className="h-10 w-10 text-primary mb-2" />
               <CardTitle>GDPR Checker</CardTitle>
@@ -72,7 +61,7 @@ const Index = () => {
             </CardHeader>
           </Card>
 
-          <Card className="underwater-glow">
+          <Card className="cockpit-panel">
             <CardHeader>
               <Leaf className="h-10 w-10 text-primary mb-2" />
               <CardTitle>ESG Reporting</CardTitle>
@@ -134,7 +123,9 @@ const Index = () => {
             {/* Company Info */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <img src={octopusLogo} alt="Regulix Octopus" className="h-8 w-8 object-contain" />
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Shield className="h-5 w-5 text-primary" />
+                </div>
                 <div>
                   <span className="font-bold text-lg block leading-tight">Regulix</span>
                   <span className="text-xs text-muted-foreground">Regulatory Intelligence</span>

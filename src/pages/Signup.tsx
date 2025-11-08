@@ -7,8 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { AnimatedOctopus } from "@/components/AnimatedOctopus"
-import { FloatingBubbles } from "@/components/FloatingBubbles"
+import { Shield } from "lucide-react"
 
 const Signup = () => {
   const { user } = useAuth()
@@ -60,12 +59,11 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
-      <FloatingBubbles count={15} />
-      <Card className="w-full max-w-md underwater-glow">
+      <Card className="w-full max-w-md cockpit-panel">
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">
             <div className="p-3 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl hover:shadow-lg transition-all">
-              <AnimatedOctopus size="lg" enableBlink={true} enableWave={true} />
+              <Shield className="h-16 w-16 text-primary" />
             </div>
           </div>
           <CardTitle className="text-2xl">Join Regulix</CardTitle>

@@ -11,7 +11,6 @@ import {
   Eye
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
-import { AnimatedOctopus } from "@/components/AnimatedOctopus"
 
 import {
   Sidebar,
@@ -52,7 +51,9 @@ export function AppSidebar() {
         <SidebarGroup>
           <div className="px-3 mb-2">
             <div className="flex items-center gap-2">
-              <AnimatedOctopus size="sm" enableBlink={true} enableWave={false} />
+              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Shield className="h-5 w-5 text-primary" />
+              </div>
               {!isCollapsed && (
                 <div>
                   <span className="font-bold text-lg block leading-tight">Regulix</span>

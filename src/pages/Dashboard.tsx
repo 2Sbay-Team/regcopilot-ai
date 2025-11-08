@@ -4,13 +4,11 @@ import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/contexts/AuthContext"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, FileCheck, Leaf, Database, FileText, BookOpen, TrendingUp } from "lucide-react"
+import { Shield, FileCheck, Leaf, Database, FileText, BookOpen, TrendingUp, Activity } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { HapticButton } from "@/components/ui/haptic-button"
 import { InteractiveCard } from "@/components/ui/interactive-card"
 import { useHaptic } from "@/hooks/useHaptic"
-import { AnimatedOctopus } from "@/components/AnimatedOctopus"
-import { FloatingBubbles } from "@/components/FloatingBubbles"
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -96,42 +94,40 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="space-y-8">
-      <FloatingBubbles count={20} />
-      {/* Welcome Section */}
-      <div className="mb-8">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center p-2 hover:shadow-lg transition-shadow">
-            <AnimatedOctopus size="md" enableBlink={true} enableWave={true} />
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold">Welcome back, {profile?.full_name?.split(' ')[0] || 'there'}</h1>
-            <p className="text-muted-foreground">{profile?.organizations?.name || "Modern regulatory intelligence at your fingertips"}</p>
-          </div>
+    <div className="space-y-6">
+      {/* Welcome Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Command Center</h1>
+          <p className="text-muted-foreground">Real-time compliance monitoring and insights</p>
+        </div>
+        <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/20">
+          <Activity className="h-4 w-4 text-primary animate-pulse" />
+          <span className="text-sm font-medium">All Systems Operational</span>
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid gap-4 md:grid-cols-4 mb-8">
+      {/* Stats Dashboard */}
+      <div className="grid gap-4 md:grid-cols-4">
         <InteractiveCard 
           onClick={() => {
             vibrate("selection")
             navigate("/ai-act")
           }}
-          className="border-border/50 hover:border-primary/30 group underwater-glow"
+          className="cockpit-panel group cursor-pointer hover:border-primary/50 transition-all"
         >
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">AI Systems</CardTitle>
-            <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Shield className="h-4 w-4 text-primary" />
+            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Shield className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold flex items-center gap-2">
-              {stats.ai_systems}
-              <TrendingUp className="h-4 w-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="text-3xl font-bold">{stats.ai_systems}</div>
+            <div className="flex items-center gap-1 text-xs text-primary mt-1">
+              <TrendingUp className="h-3 w-3" />
+              <span>Active monitoring</span>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">Registered systems</p>
           </CardContent>
         </InteractiveCard>
 
@@ -140,20 +136,20 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/gdpr")
           }}
-          className="border-border/50 hover:border-accent/30 group underwater-glow"
+          className="cockpit-panel group cursor-pointer hover:border-primary/50 transition-all"
         >
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">GDPR Checks</CardTitle>
-            <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <FileCheck className="h-4 w-4 text-accent" />
+            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <FileCheck className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold flex items-center gap-2">
-              {stats.gdpr_assessments}
-              <TrendingUp className="h-4 w-4 text-accent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="text-3xl font-bold">{stats.gdpr_assessments}</div>
+            <div className="flex items-center gap-1 text-xs text-primary mt-1">
+              <TrendingUp className="h-3 w-3" />
+              <span>Compliance checks</span>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">Assessments run</p>
           </CardContent>
         </InteractiveCard>
 
@@ -162,20 +158,20 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/esg")
           }}
-          className="border-border/50 hover:border-accent/30 group underwater-glow"
+          className="cockpit-panel group cursor-pointer hover:border-primary/50 transition-all"
         >
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">ESG Reports</CardTitle>
-            <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Leaf className="h-4 w-4 text-accent" />
+            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Leaf className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold flex items-center gap-2">
-              {stats.esg_reports}
-              <TrendingUp className="h-4 w-4 text-accent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="text-3xl font-bold">{stats.esg_reports}</div>
+            <div className="flex items-center gap-1 text-xs text-primary mt-1">
+              <TrendingUp className="h-3 w-3" />
+              <span>Generated</span>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">Generated reports</p>
           </CardContent>
         </InteractiveCard>
 
@@ -184,46 +180,46 @@ const Dashboard = () => {
             vibrate("selection")
             navigate("/audit")
           }}
-          className="border-border/50 hover:border-primary/30 group underwater-glow"
+          className="cockpit-panel group cursor-pointer hover:border-primary/50 transition-all"
         >
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Audit Trail</CardTitle>
-            <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Database className="h-4 w-4 text-primary" />
+            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Database className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold flex items-center gap-2">
-              {stats.audit_logs}
-              <TrendingUp className="h-4 w-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="text-3xl font-bold">{stats.audit_logs}</div>
+            <div className="flex items-center gap-1 text-xs text-primary mt-1">
+              <Activity className="h-3 w-3 animate-pulse" />
+              <span>Total logs</span>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">Log entries</p>
           </CardContent>
         </InteractiveCard>
       </div>
 
-      {/* Copilot Modules */}
-      <div className="grid gap-6 md:grid-cols-3 mb-8">
+      {/* Main Copilot Modules */}
+      <div className="grid gap-6 md:grid-cols-3">
         <InteractiveCard 
           onClick={() => {
             vibrate("medium")
             navigate("/ai-act")
           }}
-          className="group hover:shadow-xl hover:border-primary/50 overflow-hidden underwater-glow"
+          className="cockpit-panel group cursor-pointer hover:border-primary/50 hover:shadow-lg transition-all"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <CardHeader className="relative">
-            <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-              <Shield className="h-7 w-7 text-primary" />
+            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+              <Shield className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle className="text-xl">AI Act Auditor</CardTitle>
+            <CardTitle className="text-lg">AI Act Auditor</CardTitle>
             <CardDescription className="text-sm">
-              Classify AI systems & generate Annex IV compliance reports
+              Risk assessment & compliance documentation
             </CardDescription>
           </CardHeader>
           <CardContent className="relative">
-            <Badge variant="secondary" className="mb-4 bg-primary/10 text-primary border-0 group-hover:animate-bounce-subtle">EU AI Act</Badge>
-            <HapticButton className="w-full group-hover:shadow-lg" onClick={(e) => {
+            <Badge variant="secondary" className="mb-3 bg-primary/10 text-primary border-0">EU AI Act</Badge>
+            <HapticButton className="w-full" onClick={(e) => {
               e.stopPropagation()
               vibrate("medium")
               navigate("/ai-act")
@@ -238,21 +234,21 @@ const Dashboard = () => {
             vibrate("medium")
             navigate("/gdpr")
           }}
-          className="group hover:shadow-xl hover:border-accent/50 overflow-hidden underwater-glow"
+          className="cockpit-panel group cursor-pointer hover:border-primary/50 hover:shadow-lg transition-all"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <CardHeader className="relative">
-            <div className="h-14 w-14 rounded-xl bg-accent/10 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-              <FileCheck className="h-7 w-7 text-accent" />
+            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+              <FileCheck className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle className="text-xl">GDPR Checker</CardTitle>
+            <CardTitle className="text-lg">GDPR Checker</CardTitle>
             <CardDescription className="text-sm">
-              Scan for personal data & identify compliance gaps
+              Privacy compliance & data protection
             </CardDescription>
           </CardHeader>
           <CardContent className="relative">
-            <Badge variant="secondary" className="mb-4 bg-accent/10 text-accent border-0 group-hover:animate-bounce-subtle">GDPR</Badge>
-            <HapticButton className="w-full group-hover:shadow-lg" onClick={(e) => {
+            <Badge variant="secondary" className="mb-3 bg-primary/10 text-primary border-0">GDPR</Badge>
+            <HapticButton className="w-full" onClick={(e) => {
               e.stopPropagation()
               vibrate("medium")
               navigate("/gdpr")
@@ -267,21 +263,21 @@ const Dashboard = () => {
             vibrate("medium")
             navigate("/esg")
           }}
-          className="group hover:shadow-xl hover:border-accent/50 overflow-hidden underwater-glow"
+          className="cockpit-panel group cursor-pointer hover:border-primary/50 hover:shadow-lg transition-all"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <CardHeader className="relative">
-            <div className="h-14 w-14 rounded-xl bg-accent/10 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-              <Leaf className="h-7 w-7 text-accent" />
+            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+              <Leaf className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle className="text-xl">ESG Reporter</CardTitle>
+            <CardTitle className="text-lg">ESG Reporter</CardTitle>
             <CardDescription className="text-sm">
-              Generate CSRD/ESRS sustainability reports with AI
+              Sustainability metrics & CSRD reporting
             </CardDescription>
           </CardHeader>
           <CardContent className="relative">
-            <Badge variant="secondary" className="mb-4 bg-accent/10 text-accent border-0 group-hover:animate-bounce-subtle">ESG/CSRD</Badge>
-            <HapticButton className="w-full group-hover:shadow-lg" onClick={(e) => {
+            <Badge variant="secondary" className="mb-3 bg-primary/10 text-primary border-0">ESG/CSRD</Badge>
+            <HapticButton className="w-full" onClick={(e) => {
               e.stopPropagation()
               vibrate("medium")
               navigate("/esg")
@@ -293,7 +289,7 @@ const Dashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <Card className="border-border/50 underwater-glow">
+      <Card className="cockpit-panel">
         <CardHeader>
           <CardTitle className="text-xl">Quick Actions</CardTitle>
           <CardDescription>Common compliance tasks</CardDescription>
