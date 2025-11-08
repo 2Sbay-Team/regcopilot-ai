@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
+import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, FileCheck, Leaf, Database, LogOut, AlertTriangle, CheckCircle2 } from "lucide-react"
+import { Shield, FileCheck, Leaf, Database, LogOut } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 const Dashboard = () => {
-  const [user, setUser] = useState<any>(null)
+  const { user } = useAuth()
   const [profile, setProfile] = useState<any>(null)
   const [stats, setStats] = useState({
     ai_systems: 0,
@@ -21,18 +22,13 @@ const Dashboard = () => {
   const { toast } = useToast()
 
   useEffect(() => {
-    checkUser()
-  }, [])
-
-  const checkUser = async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    
-    if (!user) {
-      navigate("/login")
-      return
+    if (user) {
+      loadUserData()
     }
+  }, [user])
 
-    setUser(user)
+  const loadUserData = async () => {
+    if (!user) return
 
     // Get profile
     const { data: profileData } = await supabase

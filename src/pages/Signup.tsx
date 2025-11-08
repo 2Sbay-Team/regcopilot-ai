@@ -1,6 +1,7 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
+import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -9,12 +10,19 @@ import { useToast } from "@/hooks/use-toast"
 import { Shield } from "lucide-react"
 
 const Signup = () => {
+  const { user } = useAuth()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [fullName, setFullName] = useState("")
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { toast } = useToast()
+
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard")
+    }
+  }, [user, navigate])
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()

@@ -724,21 +724,21 @@ export type Database = {
           email: string
           full_name: string | null
           id: string
-          organization_id: string | null
+          organization_id: string
         }
         Insert: {
           created_at?: string | null
           email: string
           full_name?: string | null
           id: string
-          organization_id?: string | null
+          organization_id: string
         }
         Update: {
           created_at?: string | null
           email?: string
           full_name?: string | null
           id?: string
-          organization_id?: string | null
+          organization_id?: string
         }
         Relationships: [
           {
