@@ -26,8 +26,9 @@ const Index = () => {
             <AnimatedOwl 
               size="xl" 
               enableBlink={true} 
-              enableTilt={true} 
+              enableTilt={false} 
               enableFloat={true}
+              followCursor={true}
               className="group-hover:scale-110 transition-transform duration-300"
             />
           </div>
