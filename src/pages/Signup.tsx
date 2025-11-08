@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { AnimatedOwl } from "@/components/AnimatedOwl"
+import { AnimatedElephant } from "@/components/AnimatedElephant"
 
 const Signup = () => {
   const { user } = useAuth()
@@ -43,7 +43,7 @@ const Signup = () => {
 
       toast({
         title: "Account created!",
-        description: "Welcome to CompliWise",
+        description: "Welcome to HannibalAI - Strategic compliance that never forgets",
       })
       navigate("/dashboard")
     } catch (error: any) {
@@ -63,12 +63,12 @@ const Signup = () => {
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">
             <div className="p-3 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl hover:shadow-lg transition-all">
-              <AnimatedOwl size="lg" enableBlink={true} enableTilt={true} />
+              <AnimatedElephant size="lg" enableBlink={true} enableTilt={true} />
             </div>
           </div>
-          <CardTitle className="text-2xl">Join CompliWise</CardTitle>
+          <CardTitle className="text-2xl">Join HannibalAI</CardTitle>
           <CardDescription>
-            Start your wise compliance journey today
+            Strategic compliance that never forgets
           </CardDescription>
         </CardHeader>
         <CardContent>

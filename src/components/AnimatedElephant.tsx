@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react"
-import owlLogo from "@/assets/owl-logo.png"
+import elephantLogo from "@/assets/elephant-logo.png"
 import { cn } from "@/lib/utils"
 
-interface AnimatedOwlProps {
+interface AnimatedElephantProps {
   size?: "sm" | "md" | "lg" | "xl"
   className?: string
   enableBlink?: boolean
@@ -18,17 +18,17 @@ const sizeClasses = {
   xl: "h-24 w-24",
 }
 
-export function AnimatedOwl({ 
+export function AnimatedElephant({ 
   size = "lg", 
   className,
   enableBlink = true,
   enableTilt = true,
   enableFloat = false,
   followCursor = false
-}: AnimatedOwlProps) {
+}: AnimatedElephantProps) {
   const [isBlinking, setIsBlinking] = useState(false)
   const [rotation, setRotation] = useState({ x: 0, y: 0 })
-  const owlRef = useRef<HTMLDivElement>(null)
+  const elephantRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!enableBlink) return
@@ -42,17 +42,17 @@ export function AnimatedOwl({
   }, [enableBlink])
 
   useEffect(() => {
-    if (!followCursor || !owlRef.current) return
+    if (!followCursor || !elephantRef.current) return
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = owlRef.current?.getBoundingClientRect()
+      const rect = elephantRef.current?.getBoundingClientRect()
       if (!rect) return
 
-      const owlCenterX = rect.left + rect.width / 2
-      const owlCenterY = rect.top + rect.height / 2
+      const elephantCenterX = rect.left + rect.width / 2
+      const elephantCenterY = rect.top + rect.height / 2
       
-      const deltaX = e.clientX - owlCenterX
-      const deltaY = e.clientY - owlCenterY
+      const deltaX = e.clientX - elephantCenterX
+      const deltaY = e.clientY - elephantCenterY
       
       // Calculate rotation angles (limited range for natural look)
       const maxRotation = 15
@@ -66,7 +66,7 @@ export function AnimatedOwl({
       setRotation({ x: 0, y: 0 })
     }
 
-    const element = owlRef.current
+    const element = elephantRef.current
     element.addEventListener('mousemove', handleMouseMove)
     element.addEventListener('mouseleave', handleMouseLeave)
 
@@ -78,13 +78,13 @@ export function AnimatedOwl({
 
   return (
     <div 
-      ref={owlRef}
+      ref={elephantRef}
       className={cn("relative inline-block", className)}
     >
-      {/* Main owl image */}
+      {/* Main elephant image */}
       <img
-        src={owlLogo}
-        alt="CompliWise Owl"
+        src={elephantLogo}
+        alt="HannibalAI Elephant"
         className={cn(
           "object-contain transition-all duration-300",
           sizeClasses[size],
@@ -106,7 +106,7 @@ export function AnimatedOwl({
             isBlinking ? "opacity-100" : "opacity-0"
           )}
           style={{
-            background: "radial-gradient(circle at 35% 35%, rgba(255,255,255,0.9) 8%, transparent 8%), radial-gradient(circle at 65% 35%, rgba(255,255,255,0.9) 8%, transparent 8%)",
+            background: "radial-gradient(circle at 35% 30%, rgba(139,69,19,0.8) 6%, transparent 6%), radial-gradient(circle at 65% 30%, rgba(139,69,19,0.8) 6%, transparent 6%)",
             pointerEvents: "none"
           }}
         />

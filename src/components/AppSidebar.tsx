@@ -11,7 +11,7 @@ import {
   Eye
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
-import { AnimatedOwl } from "@/components/AnimatedOwl"
+import { AnimatedElephant } from "@/components/AnimatedElephant"
 
 import {
   Sidebar,
@@ -52,11 +52,11 @@ export function AppSidebar() {
         <SidebarGroup>
           <div className="px-3 mb-2">
             <div className="flex items-center gap-2">
-              <AnimatedOwl size="sm" enableBlink={true} enableTilt={false} />
+              <AnimatedElephant size="sm" enableBlink={true} enableTilt={false} />
               {!isCollapsed && (
                 <div>
-                  <span className="font-bold text-lg block leading-tight">CompliWise</span>
-                  <span className="text-[10px] text-muted-foreground leading-none">Wise Compliance Intelligence</span>
+                  <span className="font-bold text-lg block leading-tight">HannibalAI</span>
+                  <span className="text-[10px] text-muted-foreground leading-none">Strategic Compliance</span>
                 </div>
               )}
             </div>

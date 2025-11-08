@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Shield, FileCheck, Leaf, Lock, Database, Zap, Twitter, Linkedin, Github, Mail } from "lucide-react"
 import { useEffect } from "react"
-import { AnimatedOwl } from "@/components/AnimatedOwl"
-import owlLogo from "@/assets/owl-logo.png"
+import { AnimatedElephant } from "@/components/AnimatedElephant"
+import elephantLogo from "@/assets/elephant-logo.png"
 
 const Index = () => {
   const navigate = useNavigate()
@@ -23,7 +23,7 @@ const Index = () => {
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <div className="inline-block p-6 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl mb-6 hover:shadow-2xl transition-all duration-300 cursor-pointer group">
-            <AnimatedOwl 
+            <AnimatedElephant 
               size="xl" 
               enableBlink={true} 
               enableTilt={false} 
@@ -32,11 +32,11 @@ const Index = () => {
               className="group-hover:scale-110 transition-transform duration-300"
             />
           </div>
-          <h1 className="text-5xl font-bold mb-2 animate-in">CompliWise</h1>
-          <p className="text-lg text-primary font-medium mb-4 animate-in" style={{ animationDelay: "0.1s" }}>Wise Compliance Intelligence</p>
+          <h1 className="text-5xl font-bold mb-2 animate-in">HannibalAI</h1>
+          <p className="text-lg text-primary font-medium mb-4 animate-in" style={{ animationDelay: "0.1s" }}>Strategic Compliance Intelligence</p>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-in" style={{ animationDelay: "0.2s" }}>
             AI-powered compliance for EU AI Act, GDPR & ESG reporting. 
-            Your wise companion for regulatory excellence.
+            Strategic compliance that never forgets.
           </p>
           <div className="flex gap-4 justify-center">
             <Button size="lg" onClick={() => navigate("/signup")}>
@@ -114,9 +114,9 @@ const Index = () => {
         {/* CTA */}
         <Card className="bg-primary text-primary-foreground">
           <CardContent className="py-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to make wise compliance decisions?</h2>
+            <h2 className="text-3xl font-bold mb-4">Ready for strategic compliance intelligence?</h2>
             <p className="text-lg mb-6 opacity-90">
-              Join organizations using CompliWise for smarter regulatory management
+              Join organizations using HannibalAI for compliance that never forgets
             </p>
             <Button size="lg" variant="secondary" onClick={() => navigate("/signup")}>
               Start Free Trial
@@ -132,14 +132,14 @@ const Index = () => {
             {/* Company Info */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <img src={owlLogo} alt="CompliWise Owl" className="h-8 w-8 object-contain" />
+                <img src={elephantLogo} alt="HannibalAI Elephant" className="h-8 w-8 object-contain" />
                 <div>
-                  <span className="font-bold text-lg block leading-tight">CompliWise</span>
-                  <span className="text-xs text-muted-foreground">Wise Compliance Intelligence</span>
+                  <span className="font-bold text-lg block leading-tight">HannibalAI</span>
+                  <span className="text-xs text-muted-foreground">Strategic Compliance</span>
                 </div>
               </div>
               <p className="text-sm text-muted-foreground mb-4">
-                AI-powered compliance solutions for modern enterprises. Your wise companion for regulatory excellence.
+                AI-powered compliance solutions for modern enterprises. Strategic compliance that never forgets.
               </p>
               <div className="flex gap-3">
                 <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
@@ -151,7 +151,7 @@ const Index = () => {
                 <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                   <Github className="h-5 w-5" />
                 </a>
-                <a href="mailto:hello@compliwise.ai" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="mailto:hello@hannibalai.com" className="text-muted-foreground hover:text-primary transition-colors">
                   <Mail className="h-5 w-5" />
                 </a>
               </div>
@@ -240,7 +240,7 @@ const Index = () => {
           </div>
 
           <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>© {new Date().getFullYear()} CompliWise. All rights reserved. Built with wisdom for compliance excellence.</p>
+            <p>© {new Date().getFullYear()} HannibalAI. All rights reserved. Strategic compliance that never forgets.</p>
           </div>
         </div>
       </footer>
