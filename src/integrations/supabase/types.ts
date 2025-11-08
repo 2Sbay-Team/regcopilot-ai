@@ -164,6 +164,69 @@ export type Database = {
           },
         ]
       }
+      alert_notifications: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          id: string
+          metric_type: string
+          metric_value: number
+          notes: string | null
+          organization_id: string
+          period_label: string
+          threshold_id: string
+          threshold_value: number
+          time_period: string
+          triggered_at: string | null
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          id?: string
+          metric_type: string
+          metric_value: number
+          notes?: string | null
+          organization_id: string
+          period_label: string
+          threshold_id: string
+          threshold_value: number
+          time_period: string
+          triggered_at?: string | null
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          id?: string
+          metric_type?: string
+          metric_value?: number
+          notes?: string | null
+          organization_id?: string
+          period_label?: string
+          threshold_id?: string
+          threshold_value?: number
+          time_period?: string
+          triggered_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_notifications_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alert_notifications_threshold_id_fkey"
+            columns: ["threshold_id"]
+            isOneToOne: false
+            referencedRelation: "alert_thresholds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       alert_thresholds: {
         Row: {
           created_at: string | null

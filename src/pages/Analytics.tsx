@@ -5,12 +5,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
-import { ArrowLeft, TrendingUp, BarChart3, PieChart as PieChartIcon, Sparkles, Settings, AlertTriangle } from "lucide-react"
+import { ArrowLeft, TrendingUp, BarChart3, PieChart as PieChartIcon, Sparkles, Settings, AlertTriangle, Bell, CheckCircle2, Clock } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
+import { Textarea } from "@/components/ui/textarea"
 import {
   LineChart,
   Line,
@@ -41,6 +43,8 @@ const Analytics = () => {
   const [heatmapData, setHeatmapData] = useState<any[]>([])
   const [thresholds, setThresholds] = useState<any[]>([])
   const [alertsTriggered, setAlertsTriggered] = useState<any[]>([])
+  const [alertHistory, setAlertHistory] = useState<any[]>([])
+  const [showAlertHistory, setShowAlertHistory] = useState(false)
   const [thresholdDialogOpen, setThresholdDialogOpen] = useState(false)
   const [editingThreshold, setEditingThreshold] = useState<any>(null)
   const navigate = useNavigate()
@@ -49,6 +53,7 @@ const Analytics = () => {
   useEffect(() => {
     loadAnalytics()
     loadThresholds()
+    loadAlertHistory()
   }, [timeRange])
 
   useEffect(() => {
@@ -65,6 +70,32 @@ const Analytics = () => {
     }
   }, [heatmapData, thresholds])
 
+  // Setup realtime subscription for new alerts
+  useEffect(() => {
+    const channel = supabase
+      .channel('alert-notifications-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'alert_notifications'
+        },
+        (payload) => {
+          loadAlertHistory()
+          toast({
+            title: "New Alert Triggered",
+            description: `${payload.new.metric_type} threshold exceeded`,
+          })
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [])
+
   const loadThresholds = async () => {
     try {
       const { data, error } = await supabase
@@ -80,11 +111,42 @@ const Analytics = () => {
     }
   }
 
-  const checkAlerts = () => {
+  const loadAlertHistory = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("alert_notifications")
+        .select(`
+          *,
+          alert_thresholds (metric_type, threshold_value),
+          profiles!alert_notifications_acknowledged_by_fkey (full_name, email)
+        `)
+        .order("triggered_at", { ascending: false })
+        .limit(50)
+
+      if (error) throw error
+      setAlertHistory(data || [])
+    } catch (error: any) {
+      console.error("Failed to load alert history:", error)
+    }
+  }
+
+  const checkAlerts = async () => {
     const alerts: any[] = []
     const thresholdMap = new Map(thresholds.map(t => [t.metric_type, t]))
 
-    heatmapData.forEach((row) => {
+    // Get current user's organization
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("organization_id")
+      .eq("id", user.id)
+      .single()
+
+    if (!profile) return
+
+    for (const row of heatmapData) {
       const aiActThreshold = thresholdMap.get('ai_act_risk')
       const gdprThreshold = thresholdMap.get('gdpr_violations')
       const esgThreshold = thresholdMap.get('esg_issues')
@@ -96,7 +158,19 @@ const Analytics = () => {
           value: row.aiActRisk,
           threshold: aiActThreshold.threshold_value,
         })
+
+        // Save to database (check if not already logged for this period)
+        await saveAlertNotification(
+          profile.organization_id,
+          aiActThreshold.id,
+          'ai_act_risk',
+          row.aiActRisk,
+          aiActThreshold.threshold_value,
+          'week',
+          row.week
+        )
       }
+
       if (gdprThreshold?.notification_enabled && row.gdprViolations > gdprThreshold.threshold_value) {
         alerts.push({
           week: row.week,
@@ -104,7 +178,18 @@ const Analytics = () => {
           value: row.gdprViolations,
           threshold: gdprThreshold.threshold_value,
         })
+
+        await saveAlertNotification(
+          profile.organization_id,
+          gdprThreshold.id,
+          'gdpr_violations',
+          row.gdprViolations,
+          gdprThreshold.threshold_value,
+          'week',
+          row.week
+        )
       }
+
       if (esgThreshold?.notification_enabled && row.esgIssues > esgThreshold.threshold_value) {
         alerts.push({
           week: row.week,
@@ -112,10 +197,83 @@ const Analytics = () => {
           value: row.esgIssues,
           threshold: esgThreshold.threshold_value,
         })
+
+        await saveAlertNotification(
+          profile.organization_id,
+          esgThreshold.id,
+          'esg_issues',
+          row.esgIssues,
+          esgThreshold.threshold_value,
+          'week',
+          row.week
+        )
       }
-    })
+    }
 
     setAlertsTriggered(alerts)
+  }
+
+  const saveAlertNotification = async (
+    orgId: string,
+    thresholdId: string,
+    metricType: string,
+    metricValue: number,
+    thresholdValue: number,
+    timePeriod: string,
+    periodLabel: string
+  ) => {
+    try {
+      // Check if alert already exists for this period
+      const { data: existing } = await supabase
+        .from("alert_notifications")
+        .select("id")
+        .eq("organization_id", orgId)
+        .eq("threshold_id", thresholdId)
+        .eq("period_label", periodLabel)
+        .maybeSingle()
+
+      if (existing) return // Already logged
+
+      const { error } = await supabase
+        .from("alert_notifications")
+        .insert({
+          organization_id: orgId,
+          threshold_id: thresholdId,
+          metric_type: metricType,
+          metric_value: metricValue,
+          threshold_value: thresholdValue,
+          time_period: timePeriod,
+          period_label: periodLabel,
+        })
+
+      if (error) throw error
+    } catch (error: any) {
+      console.error("Failed to save alert notification:", error)
+    }
+  }
+
+  const acknowledgeAlert = async (alertId: string, notes?: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const { error } = await supabase
+        .from("alert_notifications")
+        .update({
+          acknowledged: true,
+          acknowledged_by: user.id,
+          acknowledged_at: new Date().toISOString(),
+          notes: notes || null,
+        })
+        .eq("id", alertId)
+
+      if (error) throw error
+
+      await loadAlertHistory()
+      toast({ title: "Alert acknowledged" })
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Failed to acknowledge alert", description: error.message })
+    }
   }
 
   const updateThreshold = async (id: string, value: number, enabled: boolean) => {
@@ -410,7 +568,7 @@ const Analytics = () => {
             </Select>
             <Dialog open={thresholdDialogOpen} onOpenChange={setThresholdDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="icon" title="Alert Settings">
                   <Settings className="h-4 w-4" />
                 </Button>
               </DialogTrigger>
@@ -456,6 +614,22 @@ const Analytics = () => {
                 </div>
               </DialogContent>
             </Dialog>
+            <Button 
+              variant="outline" 
+              size="icon"
+              onClick={() => setShowAlertHistory(!showAlertHistory)}
+              title="Alert History"
+            >
+              <Bell className="h-4 w-4" />
+              {alertHistory.filter(a => !a.acknowledged).length > 0 && (
+                <Badge 
+                  variant="destructive" 
+                  className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
+                >
+                  {alertHistory.filter(a => !a.acknowledged).length}
+                </Badge>
+              )}
+            </Button>
           </div>
         </div>
       </header>
@@ -467,6 +641,116 @@ const Analytics = () => {
           </div>
         ) : (
           <div className="grid gap-6">
+            {/* Alert History Panel */}
+            {showAlertHistory && (
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="flex items-center gap-2">
+                        <Bell className="h-5 w-5" />
+                        Alert Notification History
+                      </CardTitle>
+                      <CardDescription>
+                        Past threshold breaches and their status
+                      </CardDescription>
+                    </div>
+                    <Button variant="ghost" size="sm" onClick={() => setShowAlertHistory(false)}>
+                      Close
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {alertHistory.length > 0 ? (
+                      alertHistory.map((alert) => (
+                        <div
+                          key={alert.id}
+                          className={`p-4 border rounded-lg space-y-2 ${
+                            alert.acknowledged ? 'bg-muted/50' : 'bg-background'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1 space-y-1">
+                              <div className="flex items-center gap-2">
+                                {alert.acknowledged ? (
+                                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                                ) : (
+                                  <AlertTriangle className="h-4 w-4 text-destructive" />
+                                )}
+                                <span className="font-medium">
+                                  {alert.metric_type === 'ai_act_risk' && 'AI Act High Risk'}
+                                  {alert.metric_type === 'gdpr_violations' && 'GDPR Violations'}
+                                  {alert.metric_type === 'esg_issues' && 'ESG Issues'}
+                                </span>
+                                {alert.acknowledged ? (
+                                  <Badge variant="secondary">Acknowledged</Badge>
+                                ) : (
+                                  <Badge variant="destructive">Active</Badge>
+                                )}
+                              </div>
+                              <div className="text-sm text-muted-foreground">
+                                <Clock className="h-3 w-3 inline mr-1" />
+                                {alert.period_label} - Value: {alert.metric_value} (Threshold: {alert.threshold_value})
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                Triggered: {new Date(alert.triggered_at).toLocaleString()}
+                              </div>
+                              {alert.acknowledged && alert.profiles && (
+                                <div className="text-xs text-muted-foreground">
+                                  Acknowledged by {alert.profiles.full_name || alert.profiles.email} on{' '}
+                                  {new Date(alert.acknowledged_at).toLocaleString()}
+                                </div>
+                              )}
+                              {alert.notes && (
+                                <div className="text-sm bg-muted p-2 rounded mt-2">
+                                  <strong>Notes:</strong> {alert.notes}
+                                </div>
+                              )}
+                            </div>
+                            {!alert.acknowledged && (
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <Button size="sm" variant="outline">
+                                    Acknowledge
+                                  </Button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-md">
+                                  <DialogHeader>
+                                    <DialogTitle>Acknowledge Alert</DialogTitle>
+                                    <DialogDescription>
+                                      Add optional notes about how this alert was addressed
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <div className="space-y-4 py-4">
+                                    <Textarea
+                                      id={`notes-${alert.id}`}
+                                      placeholder="Enter notes (optional)..."
+                                      rows={4}
+                                    />
+                                    <Button
+                                      onClick={() => {
+                                        const notes = (document.getElementById(`notes-${alert.id}`) as HTMLTextAreaElement)?.value
+                                        acknowledgeAlert(alert.id, notes)
+                                      }}
+                                    >
+                                      Confirm Acknowledgment
+                                    </Button>
+                                  </div>
+                                </DialogContent>
+                              </Dialog>
+                            )}
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-center text-muted-foreground py-8">No alerts triggered yet</p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Alerts Banner */}
             {alertsTriggered.length > 0 && (
               <Alert variant="destructive">
