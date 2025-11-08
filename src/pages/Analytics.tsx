@@ -35,6 +35,7 @@ const Analytics = () => {
   const [moduleActivity, setModuleActivity] = useState<any[]>([])
   const [predictions, setPredictions] = useState<any[]>([])
   const [predictedWorkload, setPredictedWorkload] = useState<number>(0)
+  const [heatmapData, setHeatmapData] = useState<any[]>([])
   const navigate = useNavigate()
   const { toast } = useToast()
 
@@ -201,11 +202,99 @@ const Analytics = () => {
         count,
       }))
       setModuleActivity(activity)
+
+      // Calculate risk heatmap data
+      await calculateHeatmap(startDate)
     } catch (error: any) {
       toast({ variant: "destructive", title: "Failed to load analytics", description: error.message })
     } finally {
       setLoading(false)
     }
+  }
+
+  const calculateHeatmap = async (startDate: Date) => {
+    try {
+      // Get AI Act high-risk assessments
+      const { data: aiActData } = await supabase
+        .from("ai_act_assessments")
+        .select("created_at, risk_category")
+        .gte("created_at", startDate.toISOString())
+        .order("created_at")
+
+      // Get GDPR violations
+      const { data: gdprData } = await supabase
+        .from("gdpr_assessments")
+        .select("created_at, violations")
+        .gte("created_at", startDate.toISOString())
+        .order("created_at")
+
+      // Get ESG reports with issues
+      const { data: esgData } = await supabase
+        .from("esg_reports")
+        .select("created_at, completeness_score, anomalies_detected")
+        .gte("created_at", startDate.toISOString())
+        .order("created_at")
+
+      // Create weekly buckets
+      const weekMap = new Map<string, any>()
+      
+      const getWeekKey = (date: string) => {
+        const d = new Date(date)
+        const week = Math.ceil((d.getDate() - d.getDay() + 1) / 7)
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-W${week}`
+      }
+
+      // Aggregate AI Act risks by week
+      aiActData?.forEach((item) => {
+        const weekKey = getWeekKey(item.created_at)
+        if (!weekMap.has(weekKey)) {
+          weekMap.set(weekKey, { week: weekKey, aiActRisk: 0, gdprViolations: 0, esgIssues: 0 })
+        }
+        const entry = weekMap.get(weekKey)
+        if (item.risk_category === 'high' || item.risk_category === 'unacceptable') {
+          entry.aiActRisk++
+        }
+      })
+
+      // Aggregate GDPR violations by week
+      gdprData?.forEach((item) => {
+        const weekKey = getWeekKey(item.created_at)
+        if (!weekMap.has(weekKey)) {
+          weekMap.set(weekKey, { week: weekKey, aiActRisk: 0, gdprViolations: 0, esgIssues: 0 })
+        }
+        const entry = weekMap.get(weekKey)
+        const violations = Array.isArray(item.violations) ? item.violations : []
+        entry.gdprViolations += violations.length
+      })
+
+      // Aggregate ESG issues by week
+      esgData?.forEach((item) => {
+        const weekKey = getWeekKey(item.created_at)
+        if (!weekMap.has(weekKey)) {
+          weekMap.set(weekKey, { week: weekKey, aiActRisk: 0, gdprViolations: 0, esgIssues: 0 })
+        }
+        const entry = weekMap.get(weekKey)
+        const hasLowCompleteness = (item.completeness_score || 100) < 70
+        const hasAnomalies = item.anomalies_detected && item.anomalies_detected.length > 0
+        if (hasLowCompleteness || hasAnomalies) {
+          entry.esgIssues++
+        }
+      })
+
+      const heatmap = Array.from(weekMap.values()).sort((a, b) => a.week.localeCompare(b.week))
+      setHeatmapData(heatmap)
+    } catch (error: any) {
+      console.error("Failed to calculate heatmap:", error)
+    }
+  }
+
+  const getHeatmapColor = (value: number, max: number) => {
+    if (value === 0) return "hsl(var(--muted))"
+    const intensity = Math.min(value / max, 1)
+    if (intensity < 0.3) return "hsl(var(--chart-4))"
+    if (intensity < 0.6) return "hsl(142 76% 36%)" // warning yellow-green
+    if (intensity < 0.8) return "hsl(25 95% 53%)" // warning orange
+    return "hsl(0 84% 60%)" // high risk red
   }
 
   const COLORS = ["hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))", "hsl(var(--chart-4))", "hsl(var(--chart-5))"]
@@ -487,6 +576,98 @@ const Analytics = () => {
                   </ResponsiveContainer>
                 ) : (
                   <p className="text-center text-muted-foreground py-12">No violation data available</p>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Risk Heatmap */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  Risk Concentration Heatmap
+                </CardTitle>
+                <CardDescription>
+                  Weekly view of compliance violations and high-risk systems
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {heatmapData.length > 0 ? (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <div className="font-medium text-sm text-muted-foreground">Period</div>
+                      <div className="grid grid-cols-3 gap-2 text-center">
+                        <div className="font-medium text-sm text-muted-foreground">AI Act High Risk</div>
+                        <div className="font-medium text-sm text-muted-foreground">GDPR Violations</div>
+                        <div className="font-medium text-sm text-muted-foreground">ESG Issues</div>
+                      </div>
+                    </div>
+                    <div className="space-y-2 max-h-96 overflow-y-auto">
+                      {heatmapData.map((row) => {
+                        const maxValue = Math.max(
+                          ...heatmapData.flatMap(r => [r.aiActRisk, r.gdprViolations, r.esgIssues])
+                        )
+                        return (
+                          <div key={row.week} className="grid grid-cols-[120px_1fr] gap-2">
+                            <div className="text-sm py-2 truncate">{row.week}</div>
+                            <div className="grid grid-cols-3 gap-2">
+                              <div
+                                className="rounded p-2 text-center text-sm font-medium transition-colors"
+                                style={{
+                                  backgroundColor: getHeatmapColor(row.aiActRisk, maxValue),
+                                  color: row.aiActRisk > maxValue * 0.3 ? "hsl(var(--background))" : "hsl(var(--foreground))",
+                                }}
+                              >
+                                {row.aiActRisk}
+                              </div>
+                              <div
+                                className="rounded p-2 text-center text-sm font-medium transition-colors"
+                                style={{
+                                  backgroundColor: getHeatmapColor(row.gdprViolations, maxValue),
+                                  color: row.gdprViolations > maxValue * 0.3 ? "hsl(var(--background))" : "hsl(var(--foreground))",
+                                }}
+                              >
+                                {row.gdprViolations}
+                              </div>
+                              <div
+                                className="rounded p-2 text-center text-sm font-medium transition-colors"
+                                style={{
+                                  backgroundColor: getHeatmapColor(row.esgIssues, maxValue),
+                                  color: row.esgIssues > maxValue * 0.3 ? "hsl(var(--background))" : "hsl(var(--foreground))",
+                                }}
+                              >
+                                {row.esgIssues}
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                    <div className="flex items-center justify-end gap-4 pt-2 border-t text-xs text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded" style={{ backgroundColor: "hsl(var(--muted))" }}></div>
+                        <span>None</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded" style={{ backgroundColor: "hsl(var(--chart-4))" }}></div>
+                        <span>Low</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded" style={{ backgroundColor: "hsl(142 76% 36%)" }}></div>
+                        <span>Medium</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded" style={{ backgroundColor: "hsl(25 95% 53%)" }}></div>
+                        <span>High</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded" style={{ backgroundColor: "hsl(0 84% 60%)" }}></div>
+                        <span>Critical</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-center text-muted-foreground py-12">No risk data available</p>
                 )}
               </CardContent>
             </Card>
