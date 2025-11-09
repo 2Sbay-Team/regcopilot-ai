@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
-import { Bot, Plus, TrendingUp, DollarSign, Zap } from "lucide-react"
+import { Bot, Plus, TrendingUp, DollarSign, Zap, Search, Filter, ArrowUpDown } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 const AVAILABLE_MODELS = [
@@ -32,6 +32,9 @@ const ModelManagement = () => {
   const [models, setModels] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all')
+  const [sortBy, setSortBy] = useState<'name' | 'provider' | 'price' | 'date'>('date')
   
   const [newModel, setNewModel] = useState({
     model_name: '',
@@ -172,8 +175,105 @@ const ModelManagement = () => {
         </Dialog>
       </div>
 
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Filter className="h-5 w-5" />
+            Filter & Sort
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label>Search</Label>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by name or provider..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Status</Label>
+              <Select value={statusFilter} onValueChange={(val: any) => setStatusFilter(val)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Models</SelectItem>
+                  <SelectItem value="active">Active Only</SelectItem>
+                  <SelectItem value="inactive">Inactive Only</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Sort By</Label>
+              <Select value={sortBy} onValueChange={(val: any) => setSortBy(val)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="date">
+                    <div className="flex items-center gap-2">
+                      <ArrowUpDown className="h-4 w-4" />
+                      Date Added
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="name">
+                    <div className="flex items-center gap-2">
+                      <ArrowUpDown className="h-4 w-4" />
+                      Name
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="provider">
+                    <div className="flex items-center gap-2">
+                      <ArrowUpDown className="h-4 w-4" />
+                      Provider
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="price">
+                    <div className="flex items-center gap-2">
+                      <ArrowUpDown className="h-4 w-4" />
+                      Price
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="grid gap-6">
-        {models.map((model) => (
+        {models
+          .filter(model => {
+            const matchesSearch = searchQuery === '' || 
+              model.model_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              model.provider.toLowerCase().includes(searchQuery.toLowerCase())
+            
+            const matchesStatus = statusFilter === 'all' ||
+              (statusFilter === 'active' && model.active) ||
+              (statusFilter === 'inactive' && !model.active)
+            
+            return matchesSearch && matchesStatus
+          })
+          .sort((a, b) => {
+            switch (sortBy) {
+              case 'name':
+                return a.model_name.localeCompare(b.model_name)
+              case 'provider':
+                return a.provider.localeCompare(b.provider)
+              case 'price':
+                return a.price_per_1k_tokens - b.price_per_1k_tokens
+              case 'date':
+              default:
+                return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            }
+          })
+          .map((model) => (
           <Card key={model.id} className={model.active ? 'border-primary/20' : 'border-muted'}>
             <CardHeader>
               <div className="flex items-center justify-between">
