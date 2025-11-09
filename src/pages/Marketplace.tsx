@@ -126,11 +126,11 @@ const Marketplace = () => {
             {UPCOMING_COPILOTS.map((copilot) => {
               const Icon = copilot.icon
               return (
-                <Card key={copilot.id} className="opacity-75 hover:opacity-100 transition-opacity">
+                <Card key={copilot.id} className="border-primary/20 hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-start justify-between">
-                      <Icon className="h-10 w-10 text-muted-foreground mb-3" />
-                      <Badge variant="secondary">{copilot.eta}</Badge>
+                      <Icon className="h-10 w-10 text-primary mb-3" />
+                      <Badge variant="default">{copilot.eta}</Badge>
                     </div>
                     <CardTitle>{copilot.name}</CardTitle>
                     <CardDescription>{copilot.description}</CardDescription>
@@ -140,8 +140,8 @@ const Marketplace = () => {
                       <Shield className="h-4 w-4" />
                       {copilot.category}
                     </div>
-                    <Button variant="outline" className="w-full" disabled>
-                      Notify Me
+                    <Button variant="outline" className="w-full">
+                      Launch Copilot
                     </Button>
                   </CardContent>
                 </Card>
