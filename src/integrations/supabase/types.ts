@@ -632,6 +632,68 @@ export type Database = {
           },
         ]
       }
+      alert_policies: {
+        Row: {
+          comparison_operator: string
+          contact_email: string | null
+          cooldown_minutes: number | null
+          created_at: string | null
+          enabled: boolean | null
+          id: string
+          last_triggered_at: string | null
+          metric_type: string
+          notification_channels: string[] | null
+          organization_id: string | null
+          policy_name: string
+          severity: string
+          threshold_value: number
+          updated_at: string | null
+          webhook_url: string | null
+        }
+        Insert: {
+          comparison_operator: string
+          contact_email?: string | null
+          cooldown_minutes?: number | null
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          last_triggered_at?: string | null
+          metric_type: string
+          notification_channels?: string[] | null
+          organization_id?: string | null
+          policy_name: string
+          severity: string
+          threshold_value: number
+          updated_at?: string | null
+          webhook_url?: string | null
+        }
+        Update: {
+          comparison_operator?: string
+          contact_email?: string | null
+          cooldown_minutes?: number | null
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          last_triggered_at?: string | null
+          metric_type?: string
+          notification_channels?: string[] | null
+          organization_id?: string | null
+          policy_name?: string
+          severity?: string
+          threshold_value?: number
+          updated_at?: string | null
+          webhook_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_policies_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       alert_thresholds: {
         Row: {
           created_at: string | null
@@ -1318,6 +1380,50 @@ export type Database = {
           },
           {
             foreignKeyName: "data_sources_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      demo_tenants: {
+        Row: {
+          access_count: number | null
+          created_at: string | null
+          demo_type: string
+          id: string
+          last_reset_at: string | null
+          organization_id: string | null
+          read_only: boolean | null
+          reset_on_reload: boolean | null
+          tenant_key: string
+        }
+        Insert: {
+          access_count?: number | null
+          created_at?: string | null
+          demo_type: string
+          id?: string
+          last_reset_at?: string | null
+          organization_id?: string | null
+          read_only?: boolean | null
+          reset_on_reload?: boolean | null
+          tenant_key: string
+        }
+        Update: {
+          access_count?: number | null
+          created_at?: string | null
+          demo_type?: string
+          id?: string
+          last_reset_at?: string | null
+          organization_id?: string | null
+          read_only?: boolean | null
+          reset_on_reload?: boolean | null
+          tenant_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "demo_tenants_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -2165,6 +2271,44 @@ export type Database = {
           },
         ]
       }
+      onboarding_events: {
+        Row: {
+          created_at: string | null
+          event_data: Json | null
+          event_name: string
+          id: string
+          organization_id: string | null
+          step_number: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_name: string
+          id?: string
+          organization_id?: string | null
+          step_number?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_name?: string
+          id?: string
+          organization_id?: string | null
+          step_number?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       org_policies: {
         Row: {
           content: string
@@ -2260,7 +2404,12 @@ export type Database = {
           name: string
           plan: string | null
           quota_reset_date: string | null
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          subscription_plan: string | null
+          subscription_status: string | null
           tokens_used_this_month: number
+          trial_end_date: string | null
         }
         Insert: {
           billing_model?: string
@@ -2274,7 +2423,12 @@ export type Database = {
           name: string
           plan?: string | null
           quota_reset_date?: string | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
           tokens_used_this_month?: number
+          trial_end_date?: string | null
         }
         Update: {
           billing_model?: string
@@ -2288,7 +2442,12 @@ export type Database = {
           name?: string
           plan?: string | null
           quota_reset_date?: string | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
           tokens_used_this_month?: number
+          trial_end_date?: string | null
         }
         Relationships: []
       }
@@ -2732,6 +2891,128 @@ export type Database = {
           },
         ]
       }
+      security_alert_notifications: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          created_at: string | null
+          event_data: Json | null
+          id: string
+          message: string
+          metric_value: number | null
+          organization_id: string | null
+          policy_id: string | null
+          sent_channels: string[] | null
+          severity: string
+          threshold_value: number | null
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          created_at?: string | null
+          event_data?: Json | null
+          id?: string
+          message: string
+          metric_value?: number | null
+          organization_id?: string | null
+          policy_id?: string | null
+          sent_channels?: string[] | null
+          severity: string
+          threshold_value?: number | null
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          created_at?: string | null
+          event_data?: Json | null
+          id?: string
+          message?: string
+          metric_value?: number | null
+          organization_id?: string | null
+          policy_id?: string | null
+          sent_channels?: string[] | null
+          severity?: string
+          threshold_value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_alert_notifications_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "security_alert_notifications_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "alert_policies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      security_events: {
+        Row: {
+          created_at: string | null
+          event_details: Json
+          event_type: string
+          id: string
+          ip_address: unknown
+          organization_id: string | null
+          resolved: boolean | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          threat_indicators: string[] | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_details?: Json
+          event_type: string
+          id?: string
+          ip_address?: unknown
+          organization_id?: string | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity: string
+          threat_indicators?: string[] | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_details?: Json
+          event_type?: string
+          id?: string
+          ip_address?: unknown
+          organization_id?: string | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          threat_indicators?: string[] | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       seeding_progress: {
         Row: {
           created_at: string | null
@@ -2767,6 +3048,59 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      soc2_evidence_snapshots: {
+        Row: {
+          access_logs_summary: Json
+          audit_chain_status: Json
+          created_at: string | null
+          evidence_type: string
+          hash_signature: string
+          id: string
+          metrics_summary: Json
+          organization_id: string | null
+          security_events_summary: Json
+          snapshot_date: string
+          storage_path: string | null
+          trust_principle: string
+        }
+        Insert: {
+          access_logs_summary: Json
+          audit_chain_status: Json
+          created_at?: string | null
+          evidence_type: string
+          hash_signature: string
+          id?: string
+          metrics_summary: Json
+          organization_id?: string | null
+          security_events_summary: Json
+          snapshot_date: string
+          storage_path?: string | null
+          trust_principle: string
+        }
+        Update: {
+          access_logs_summary?: Json
+          audit_chain_status?: Json
+          created_at?: string | null
+          evidence_type?: string
+          hash_signature?: string
+          id?: string
+          metrics_summary?: Json
+          organization_id?: string | null
+          security_events_summary?: Json
+          snapshot_date?: string
+          storage_path?: string | null
+          trust_principle?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "soc2_evidence_snapshots_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       social_sentiment_data: {
         Row: {
@@ -2932,6 +3266,112 @@ export type Database = {
             foreignKeyName: "subscriptions_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          assigned_to: string | null
+          category: string | null
+          created_at: string | null
+          description: string
+          id: string
+          organization_id: string | null
+          priority: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          status: string | null
+          subject: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          category?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          organization_id?: string | null
+          priority?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          status?: string | null
+          subject: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          organization_id?: string | null
+          priority?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          status?: string | null
+          subject?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_tickets_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      system_metrics: {
+        Row: {
+          active_users: number | null
+          api_latency_ms: number | null
+          cpu_usage: number | null
+          created_at: string | null
+          error_rate: number | null
+          id: string
+          memory_usage: number | null
+          metadata: Json | null
+          organization_id: string | null
+          storage_utilization_gb: number | null
+          timestamp: string
+        }
+        Insert: {
+          active_users?: number | null
+          api_latency_ms?: number | null
+          cpu_usage?: number | null
+          created_at?: string | null
+          error_rate?: number | null
+          id?: string
+          memory_usage?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          storage_utilization_gb?: number | null
+          timestamp?: string
+        }
+        Update: {
+          active_users?: number | null
+          api_latency_ms?: number | null
+          cpu_usage?: number | null
+          created_at?: string | null
+          error_rate?: number | null
+          id?: string
+          memory_usage?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          storage_utilization_gb?: number | null
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "system_metrics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
             referencedRelation: "organizations"
             referencedColumns: ["id"]
           },

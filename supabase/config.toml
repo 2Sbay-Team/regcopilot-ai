@@ -9,6 +9,9 @@ verify_jwt = true
 [functions.security-audit]
 verify_jwt = true
 
+[functions.monitoring-agent]
+verify_jwt = false
+
 [functions.agent-runner]
 verify_jwt = false
 
