@@ -33,6 +33,11 @@ All colors MUST be HSL.
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    
+    /* Heading dual-tone colors - optimized for readability */
+    --heading-primary: 221.2 83.2% 53.3%; /* Brand blue */
+    --heading-secondary: 215 25% 35%; /* Mid-gray for light mode - WCAG compliant */
+    
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -68,6 +73,11 @@ All colors MUST be HSL.
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    
+    /* Heading dual-tone colors - optimized for readability in dark mode */
+    --heading-primary: 217 91% 60%; /* Brand blue for dark */
+    --heading-secondary: 215 20% 75%; /* Light gray for dark mode - WCAG compliant */
+    
     --sidebar-background: 222 47% 7%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 217 91% 60%;
@@ -354,6 +364,31 @@ All colors MUST be HSL.
     100% {
       background-position: 200% 0;
     }
+  }
+
+  /* Readable dual-tone heading utility */
+  .heading-dual-tone {
+    font-weight: 700;
+    color: hsl(var(--heading-primary));
+  }
+
+  .heading-dual-tone .secondary {
+    color: hsl(var(--heading-secondary));
+    font-weight: 600;
+  }
+
+  /* Legacy gradient support - improved for readability */
+  .heading-gradient {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--heading-primary)) 0%,
+      hsl(var(--heading-primary)) 50%,
+      hsl(var(--heading-secondary)) 50%,
+      hsl(var(--heading-secondary)) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
 

@@ -255,10 +255,10 @@ const ModelManagement = () => {
   return (
     <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Model Management
-          </h1>
+      <div>
+        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
+          Model <span className="secondary">Management</span>
+        </h1>
           <p className="text-muted-foreground font-medium">Configure and manage AI models for your copilots</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

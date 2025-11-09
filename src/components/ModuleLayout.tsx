@@ -106,19 +106,9 @@ export const ModuleLayout = ({
           <div className="flex items-center justify-between">
             {/* Left: Breadcrumb */}
             <div className="flex items-center gap-2 text-sm flex-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="gap-2 text-muted-foreground hover:text-foreground"
-                onClick={() => navigate("/")}
-              >
-                <Home className="h-4 w-4" />
-                Startseite
-              </Button>
-              <ChevronRight className="h-4 w-4 text-muted-foreground" />
-              <div className="flex items-center gap-2 font-medium">
+              <div className="flex items-center gap-2">
                 {getPageIcon()}
-                <span>{getPageName()}</span>
+                <span className="font-medium">{getPageName()}</span>
               </div>
             </div>
 
@@ -134,7 +124,7 @@ export const ModuleLayout = ({
           {/* Page Title & Status */}
           <div className="flex items-center justify-between p-6 rounded-2xl cockpit-panel">
             <div>
-              <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary via-blue-500 to-cyan-500 bg-clip-text text-transparent">
+              <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
                 {title}
               </h1>
               {description && (

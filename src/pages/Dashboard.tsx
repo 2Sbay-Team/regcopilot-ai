@@ -148,22 +148,11 @@ const Dashboard = () => {
       {/* Enhanced Top Header */}
       <div className="sticky top-0 z-10 backdrop-blur-lg bg-background/80 border-b border-border/50 -mx-6 -mt-6 px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Left: Breadcrumb */}
+          {/* Left: Page Title */}
           <div className="flex items-center gap-2 text-sm">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="gap-2 text-muted-foreground hover:text-foreground"
-              onClick={() => navigate("/")}
-            >
-              <Home className="h-4 w-4" />
-              Startseite
-            </Button>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
             <span className="font-medium">Dashboard</span>
           </div>
-
-          
+        
         </div>
       </div>
 
@@ -171,8 +160,8 @@ const Dashboard = () => {
         {/* Page Title & Status */}
         <div className="flex items-center justify-between p-6 rounded-2xl cockpit-panel">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary via-blue-500 to-cyan-500 bg-clip-text text-transparent">
-              Compliance Dashboard
+            <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
+              Compliance <span className="secondary">Dashboard</span>
             </h1>
             <p className="text-sm text-muted-foreground font-medium">{profile?.organizations?.name || "Regulatory Intelligence Platform"}</p>
           </div>

@@ -8,8 +8,8 @@ const Impressum = () => {
   return (
     <div className="space-y-6 p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div>
-        <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          {language === 'de' ? 'Impressum' : language === 'fr' ? 'Mentions Légales' : language === 'ar' ? 'البيانات القانونية' : 'Legal Notice'}
+        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
+          {language === 'de' ? 'Impressum' : language === 'fr' ? 'Mentions Légales' : language === 'ar' ? 'البيانات القانونية' : 'Legal <span className="secondary">Notice</span>'}
         </h1>
         <p className="text-muted-foreground font-medium">
           {language === 'de' ? 'Angaben gemäß § 5 TMG' : language === 'fr' ? 'Informations légales' : language === 'ar' ? 'المعلومات القانونية' : 'Legal information according to applicable law'}

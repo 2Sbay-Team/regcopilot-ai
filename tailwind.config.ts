@@ -64,6 +64,10 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        heading: {
+          primary: "hsl(var(--heading-primary))",
+          secondary: "hsl(var(--heading-secondary))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

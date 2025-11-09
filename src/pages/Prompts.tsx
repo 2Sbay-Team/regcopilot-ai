@@ -140,8 +140,8 @@ const Prompts = () => {
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          System Prompt Manager
+        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
+          System Prompt <span className="secondary">Manager</span>
         </h1>
         <p className="text-muted-foreground font-medium">
           Customize AI copilot behavior by editing system prompts

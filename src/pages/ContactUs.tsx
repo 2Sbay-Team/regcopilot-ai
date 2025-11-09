@@ -37,8 +37,8 @@ const ContactUs = () => {
   return (
     <div className="space-y-6 p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div>
-        <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          {language === 'de' ? 'Kontaktieren Sie uns' : language === 'fr' ? 'Contactez-nous' : language === 'ar' ? 'اتصل بنا' : 'Contact Us'}
+        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
+          {language === 'de' ? 'Kontaktieren Sie uns' : language === 'fr' ? 'Contactez-nous' : language === 'ar' ? 'اتصل بنا' : 'Contact <span className="secondary">Us</span>'}
         </h1>
         <p className="text-muted-foreground font-medium">
           {language === 'de' ? 'Haben Sie Fragen? Wir helfen Ihnen gerne weiter.' : language === 'fr' ? 'Des questions ? Nous sommes là pour vous aider.' : language === 'ar' ? 'هل لديك أسئلة؟ نحن هنا للمساعدة.' : 'Have questions? We\'re here to help.'}

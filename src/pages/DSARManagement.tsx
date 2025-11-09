@@ -202,8 +202,8 @@ const DSARManagement = () => {
     <div className="space-y-6 p-6">
       <div>
         <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            DSAR Management
+          <h1 className="text-4xl tracking-tight heading-dual-tone">
+            DSAR <span className="secondary">Management</span>
           </h1>
           <TooltipProvider>
             <Tooltip>

@@ -76,7 +76,7 @@ const Marketplace = () => {
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
           {t('marketplace.title', language)}
         </h1>
         <p className="text-muted-foreground font-medium">

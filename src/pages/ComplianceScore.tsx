@@ -78,10 +78,10 @@ const ComplianceScore = () => {
   return (
     <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Compliance Score
-          </h1>
+      <div>
+        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
+          Compliance <span className="secondary">Score</span>
+        </h1>
           <p className="text-muted-foreground font-medium">Overall compliance health and trends</p>
         </div>
         <Button onClick={calculateScore} disabled={loading}>

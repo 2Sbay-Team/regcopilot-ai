@@ -198,10 +198,10 @@ const DataLineage = () => {
   return (
     <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            DataSage Governance
-          </h1>
+      <div>
+        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
+          DataSage <span className="secondary">Governance</span>
+        </h1>
           <p className="text-muted-foreground font-medium">Track data lineage and sovereignty for GDPR compliance</p>
         </div>
         <Button onClick={generateInsights} disabled={loading}>

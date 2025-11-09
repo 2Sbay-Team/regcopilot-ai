@@ -326,8 +326,8 @@ const AIGateway = () => {
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          AI Gateway Controller
+        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
+          AI Gateway <span className="secondary">Controller</span>
         </h1>
         <p className="text-muted-foreground font-medium">
           Multi-tenant AI routing with cost control and usage tracking
