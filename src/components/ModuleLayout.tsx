@@ -105,7 +105,7 @@ export const ModuleLayout = ({
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             {/* Left: Breadcrumb */}
-            <div className="flex items-center gap-2 text-sm">
+            <div className="flex items-center gap-2 text-sm flex-1">
               <Button
                 variant="ghost"
                 size="sm"
@@ -122,7 +122,7 @@ export const ModuleLayout = ({
               </div>
             </div>
 
-            {/* Right: Actions */}
+            {/* Right: Actions - Grouped together */}
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
@@ -133,7 +133,8 @@ export const ModuleLayout = ({
                 <HelpCircle className="h-5 w-5" />
               </Button>
               <NotificationCenter />
-              <div className="flex items-center gap-3 pl-3 border-l border-border">
+              <div className="h-6 w-px bg-border mx-1" />
+              <div className="flex items-center gap-2">
                 <div className="text-right hidden md:block">
                   <p className="text-sm font-medium leading-none">{profile?.full_name || "User"}</p>
                   <p className="text-xs text-muted-foreground">{profile?.organizations?.name || "Organization"}</p>
