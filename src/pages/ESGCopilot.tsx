@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { Leaf, ArrowLeft, Loader2, Upload, X, FileText } from "lucide-react"
+import { Leaf, ArrowLeft, Loader2, Upload, X, FileText, HelpCircle, BookOpen } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 const ESGCopilot = () => {
   const [profile, setProfile] = useState<any>(null)
@@ -132,6 +133,36 @@ const ESGCopilot = () => {
       </header>
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
+        {/* Help Section */}
+        <Card className="mb-6 bg-primary/5 border-primary/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <BookOpen className="h-5 w-5 text-primary" />
+              How to Use ESG Reporter
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2 text-sm">
+            <div>
+              <strong>Reporting Period:</strong> Enter the fiscal year or reporting period (e.g., "2024-FY", "Q1-2025").
+            </div>
+            <div>
+              <strong>Scope 1 Emissions:</strong> Direct emissions from owned/controlled sources (company vehicles, on-site fuel combustion). Measured in tonnes of CO2 equivalent (tCO2e).
+            </div>
+            <div>
+              <strong>Scope 2 Emissions:</strong> Indirect emissions from purchased electricity, heating, and cooling. Measured in tCO2e.
+            </div>
+            <div>
+              <strong>Scope 3 Emissions:</strong> All other indirect emissions in the value chain (business travel, employee commuting, purchased goods, waste). Measured in tCO2e.
+            </div>
+            <div>
+              <strong>Energy Consumption:</strong> Total energy used in megawatt-hours (MWh). Include electricity, natural gas, and other energy sources.
+            </div>
+            <p className="text-muted-foreground mt-2">
+              ℹ️ You can also upload CSV/Excel files with detailed emissions data. The AI will generate a CSRD/ESRS-compliant narrative.
+            </p>
+          </CardContent>
+        </Card>
+
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
@@ -140,49 +171,157 @@ const ESGCopilot = () => {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="period">Reporting Period</Label>
-                  <Input id="period" value={formData.period} onChange={(e) => setFormData({ ...formData, period: e.target.value })} />
-                </div>
-                <div className="space-y-2">
-                  <Label>Scope 1 Emissions (tCO2e)</Label>
-                  <Input type="number" step="0.01" value={formData.co2_scope1} onChange={(e) => setFormData({ ...formData, co2_scope1: e.target.value })} />
-                </div>
-                <div className="space-y-2">
-                  <Label>Scope 2 Emissions (tCO2e)</Label>
-                  <Input type="number" step="0.01" value={formData.co2_scope2} onChange={(e) => setFormData({ ...formData, co2_scope2: e.target.value })} />
-                </div>
-                <div className="space-y-2">
-                  <Label>Scope 3 Emissions (tCO2e)</Label>
-                  <Input type="number" step="0.01" value={formData.co2_scope3} onChange={(e) => setFormData({ ...formData, co2_scope3: e.target.value })} />
-                </div>
-                <div className="space-y-2">
-                  <Label>Energy Consumption (MWh)</Label>
-                  <Input type="number" step="0.01" value={formData.energy_mwh} onChange={(e) => setFormData({ ...formData, energy_mwh: e.target.value })} />
-                </div>
+                <TooltipProvider>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor="period">Reporting Period *</Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>Enter the reporting period in format: YYYY-FY (fiscal year) or Q#-YYYY (quarter). Example: "2024-FY" or "Q1-2025"</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <Input 
+                      id="period" 
+                      value={formData.period} 
+                      onChange={(e) => setFormData({ ...formData, period: e.target.value })} 
+                      placeholder="e.g., 2024-FY"
+                      required
+                      maxLength={50}
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <Label>Upload Data Files (Optional)</Label>
-                  <Input
-                    ref={fileInputRef}
-                    type="file"
-                    multiple
-                    accept=".csv,.xlsx,.xls,.pdf"
-                    onChange={handleFileSelect}
-                    disabled={loading || files.length >= 5}
-                    className="hidden"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={loading || files.length >= 5}
-                    className="w-full"
-                  >
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload Files ({files.length}/5)
-                  </Button>
-                </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Label>Scope 1 Emissions (tCO2e) *</Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>Direct greenhouse gas emissions from sources owned or controlled by your organization (company vehicles, facilities, manufacturing processes). Enter in tonnes of CO2 equivalent.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <Input 
+                      type="number" 
+                      step="0.01" 
+                      value={formData.co2_scope1} 
+                      onChange={(e) => setFormData({ ...formData, co2_scope1: e.target.value })} 
+                      placeholder="e.g., 125.50"
+                      required
+                      min="0"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Label>Scope 2 Emissions (tCO2e) *</Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>Indirect emissions from purchased electricity, steam, heating and cooling. These are emissions from energy your company buys and uses.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <Input 
+                      type="number" 
+                      step="0.01" 
+                      value={formData.co2_scope2} 
+                      onChange={(e) => setFormData({ ...formData, co2_scope2: e.target.value })} 
+                      placeholder="e.g., 450.75"
+                      required
+                      min="0"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Label>Scope 3 Emissions (tCO2e) *</Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>All other indirect emissions in your value chain: business travel, employee commuting, purchased goods and services, waste disposal, product use, and end-of-life treatment.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <Input 
+                      type="number" 
+                      step="0.01" 
+                      value={formData.co2_scope3} 
+                      onChange={(e) => setFormData({ ...formData, co2_scope3: e.target.value })} 
+                      placeholder="e.g., 890.25"
+                      required
+                      min="0"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Label>Energy Consumption (MWh) *</Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>Total energy consumption in megawatt-hours. Include all energy sources: electricity, natural gas, heating oil, renewables, etc.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <Input 
+                      type="number" 
+                      step="0.01" 
+                      value={formData.energy_mwh} 
+                      onChange={(e) => setFormData({ ...formData, energy_mwh: e.target.value })} 
+                      placeholder="e.g., 1250.00"
+                      required
+                      min="0"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Label>Upload Data Files (Optional)</Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>Upload detailed ESG data files (CSV, Excel, PDF) with additional sustainability metrics, supplier data, or environmental reports.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <Input
+                      ref={fileInputRef}
+                      type="file"
+                      multiple
+                      accept=".csv,.xlsx,.xls,.pdf"
+                      onChange={handleFileSelect}
+                      disabled={loading || files.length >= 5}
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={loading || files.length >= 5}
+                      className="w-full"
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      Upload Files ({files.length}/5)
+                    </Button>
+                    <p className="text-xs text-muted-foreground">
+                      Supported: CSV, XLSX, XLS, PDF • Max 5 files
+                    </p>
+                  </div>
+                </TooltipProvider>
 
                 {files.length > 0 && (
                   <div className="space-y-2">

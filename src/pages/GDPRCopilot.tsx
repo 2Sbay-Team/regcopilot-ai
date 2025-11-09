@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
-import { FileCheck, ArrowLeft, Loader2, AlertTriangle, Upload, X, FileText } from "lucide-react"
+import { FileCheck, ArrowLeft, Loader2, AlertTriangle, Upload, X, FileText, HelpCircle, BookOpen } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 const GDPRCopilot = () => {
   const [profile, setProfile] = useState<any>(null)
@@ -130,6 +131,30 @@ const GDPRCopilot = () => {
       </header>
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
+        {/* Help Section */}
+        <Card className="mb-6 bg-primary/5 border-primary/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <BookOpen className="h-5 w-5 text-primary" />
+              How to Use GDPR Checker
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2 text-sm">
+            <div>
+              <strong>What to Enter:</strong> Paste any text containing personal data (employee records, customer data, vendor contracts, privacy policies) or upload documents (PDF, DOCX, TXT, CSV).
+            </div>
+            <div>
+              <strong>What it Checks:</strong> The AI scans for personal data (names, emails, phone numbers, addresses, IDs), identifies GDPR violations, and checks for proper consent, data minimization, and cross-border transfers.
+            </div>
+            <div>
+              <strong>Common Violations Detected:</strong> Missing consent, excessive data collection, lack of data protection measures, unauthorized cross-border transfers, missing privacy notices.
+            </div>
+            <p className="text-muted-foreground mt-2">
+              ℹ️ This tool helps identify potential GDPR compliance issues. For legal advice, consult a data protection expert.
+            </p>
+          </CardContent>
+        </Card>
+
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
@@ -138,40 +163,69 @@ const GDPRCopilot = () => {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="documents">Paste Documents (Optional)</Label>
-                  <Textarea
-                    id="documents"
-                    value={documents}
-                    onChange={(e) => setDocuments(e.target.value)}
-                    placeholder="Paste employee data, vendor agreements, or other documents..."
-                    disabled={loading}
-                    rows={6}
-                  />
-                </div>
+                <TooltipProvider>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor="documents">Paste Documents (Optional)</Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>Paste any text that may contain personal data: employee forms, customer lists, contracts, privacy policies, marketing materials, or data processing records.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <Textarea
+                      id="documents"
+                      value={documents}
+                      onChange={(e) => setDocuments(e.target.value)}
+                      placeholder="e.g., Employee records with names, email addresses, phone numbers, social security numbers..."
+                      disabled={loading}
+                      rows={6}
+                      maxLength={10000}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Max 10,000 characters. Include any text that processes personal data.
+                    </p>
+                  </div>
 
-                <div className="space-y-2">
-                  <Label>Upload Files (Optional)</Label>
-                  <Input
-                    ref={fileInputRef}
-                    type="file"
-                    multiple
-                    accept=".pdf,.docx,.txt,.csv"
-                    onChange={handleFileSelect}
-                    disabled={loading || files.length >= 5}
-                    className="hidden"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={loading || files.length >= 5}
-                    className="w-full"
-                  >
-                    <Upload className="mr-2 h-4 w-4" />
-                    Select Files ({files.length}/5)
-                  </Button>
-                </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Label>Upload Files (Optional)</Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>Upload documents containing personal data for GDPR compliance scanning. Accepted formats: PDF, DOCX, TXT, CSV. Max 5 files.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <Input
+                      ref={fileInputRef}
+                      type="file"
+                      multiple
+                      accept=".pdf,.docx,.txt,.csv"
+                      onChange={handleFileSelect}
+                      disabled={loading || files.length >= 5}
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={loading || files.length >= 5}
+                      className="w-full"
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      Select Files ({files.length}/5)
+                    </Button>
+                    <p className="text-xs text-muted-foreground">
+                      Supported: PDF, DOCX, TXT, CSV • Max 5 files
+                    </p>
+                  </div>
+                </TooltipProvider>
 
                 {files.length > 0 && (
                   <div className="space-y-2">
