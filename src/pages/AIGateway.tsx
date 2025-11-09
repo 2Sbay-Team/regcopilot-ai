@@ -34,6 +34,19 @@ const AIGateway = () => {
   const [modelBreakdown, setModelBreakdown] = useState<any[]>([])
   const [forecast, setForecast] = useState<any[]>([])
 
+  // Alert state
+  const [alertsShown, setAlertsShown] = useState<{
+    tokens80: boolean;
+    tokens90: boolean;
+    cost80: boolean;
+    cost90: boolean;
+  }>({
+    tokens80: false,
+    tokens90: false,
+    cost80: false,
+    cost90: false,
+  })
+
   useEffect(() => {
     loadProfile()
   }, [user])
@@ -44,8 +57,26 @@ const AIGateway = () => {
       loadUsageLogs()
       loadDailyUsage()
       loadAnalytics()
+      setupRealtimeSubscription()
     }
   }, [profile])
+
+  // Reset alerts when date changes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date()
+      if (now.getHours() === 0 && now.getMinutes() === 0) {
+        setAlertsShown({
+          tokens80: false,
+          tokens90: false,
+          cost80: false,
+          cost90: false,
+        })
+      }
+    }, 60000) // Check every minute
+
+    return () => clearInterval(interval)
+  }, [])
 
   const loadProfile = async () => {
     if (!user) return
@@ -161,6 +192,84 @@ const AIGateway = () => {
     }
   }
 
+  const checkBudgetAlerts = (currentTokens: number, currentCost: number) => {
+    const tokenPercentage = (currentTokens / dailyTokenLimit) * 100
+    const costPercentage = (currentCost / dailyCostLimit) * 100
+
+    // Token alerts
+    if (tokenPercentage >= 90 && !alertsShown.tokens90) {
+      toast({
+        title: "⚠️ Critical: Token Limit",
+        description: `You've used ${tokenPercentage.toFixed(1)}% of your daily token limit (${currentTokens.toLocaleString()}/${dailyTokenLimit.toLocaleString()})`,
+        variant: "destructive",
+      })
+      setAlertsShown(prev => ({ ...prev, tokens90: true }))
+    } else if (tokenPercentage >= 80 && !alertsShown.tokens80) {
+      toast({
+        title: "⚠️ Warning: Token Usage High",
+        description: `You've used ${tokenPercentage.toFixed(1)}% of your daily token limit (${currentTokens.toLocaleString()}/${dailyTokenLimit.toLocaleString()})`,
+      })
+      setAlertsShown(prev => ({ ...prev, tokens80: true }))
+    }
+
+    // Cost alerts
+    if (costPercentage >= 90 && !alertsShown.cost90) {
+      toast({
+        title: "⚠️ Critical: Cost Limit",
+        description: `You've used ${costPercentage.toFixed(1)}% of your daily cost limit ($${currentCost.toFixed(2)}/$${dailyCostLimit.toFixed(2)})`,
+        variant: "destructive",
+      })
+      setAlertsShown(prev => ({ ...prev, cost90: true }))
+    } else if (costPercentage >= 80 && !alertsShown.cost80) {
+      toast({
+        title: "⚠️ Warning: Cost Usage High",
+        description: `You've used ${costPercentage.toFixed(1)}% of your daily cost limit ($${currentCost.toFixed(2)}/$${dailyCostLimit.toFixed(2)})`,
+      })
+      setAlertsShown(prev => ({ ...prev, cost80: true }))
+    }
+  }
+
+  const setupRealtimeSubscription = () => {
+    if (!profile?.organization_id) return
+
+    const channel = supabase
+      .channel('model-usage-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'model_usage_logs',
+          filter: `organization_id=eq.${profile.organization_id}`,
+        },
+        async (payload) => {
+          console.log('New model usage:', payload)
+          
+          // Refresh usage data
+          await loadDailyUsage()
+          await loadUsageLogs()
+          await loadAnalytics()
+
+          // Check if we need to show alerts
+          const { data } = await supabase
+            .rpc('get_daily_token_usage', { org_id: profile.organization_id.toString() })
+
+          if (data && data.length > 0) {
+            const usage = data[0]
+            checkBudgetAlerts(
+              Number(usage.total_tokens || 0),
+              Number(usage.total_cost || 0)
+            )
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }
+
   const saveBudgetSettings = async () => {
     setLoading(true)
     try {
@@ -249,7 +358,13 @@ const AIGateway = () => {
             <div className="flex items-center gap-2 mt-2">
               <div className="w-full bg-muted rounded-full h-2">
                 <div
-                  className="bg-primary h-2 rounded-full transition-all"
+                  className={`h-2 rounded-full transition-all ${
+                    getUsagePercentage(dailyUsage?.total_tokens || 0, dailyTokenLimit) >= 90
+                      ? 'bg-destructive'
+                      : getUsagePercentage(dailyUsage?.total_tokens || 0, dailyTokenLimit) >= 80
+                      ? 'bg-yellow-500'
+                      : 'bg-primary'
+                  }`}
                   style={{
                     width: `${getUsagePercentage(
                       dailyUsage?.total_tokens || 0,
@@ -262,6 +377,12 @@ const AIGateway = () => {
                 {dailyTokenLimit.toLocaleString()} limit
               </span>
             </div>
+            {getUsagePercentage(dailyUsage?.total_tokens || 0, dailyTokenLimit) >= 80 && (
+              <p className="text-xs text-yellow-600 dark:text-yellow-500 mt-2 flex items-center gap-1">
+                <AlertCircle className="h-3 w-3" />
+                High usage detected
+              </p>
+            )}
           </CardContent>
         </Card>
 
@@ -277,7 +398,13 @@ const AIGateway = () => {
             <div className="flex items-center gap-2 mt-2">
               <div className="w-full bg-muted rounded-full h-2">
                 <div
-                  className="bg-accent h-2 rounded-full transition-all"
+                  className={`h-2 rounded-full transition-all ${
+                    getUsagePercentage(parseFloat(dailyUsage?.total_cost || 0), dailyCostLimit) >= 90
+                      ? 'bg-destructive'
+                      : getUsagePercentage(parseFloat(dailyUsage?.total_cost || 0), dailyCostLimit) >= 80
+                      ? 'bg-yellow-500'
+                      : 'bg-accent'
+                  }`}
                   style={{
                     width: `${getUsagePercentage(
                       parseFloat(dailyUsage?.total_cost || 0),
@@ -290,6 +417,12 @@ const AIGateway = () => {
                 ${dailyCostLimit.toFixed(2)} limit
               </span>
             </div>
+            {getUsagePercentage(parseFloat(dailyUsage?.total_cost || 0), dailyCostLimit) >= 80 && (
+              <p className="text-xs text-yellow-600 dark:text-yellow-500 mt-2 flex items-center gap-1">
+                <AlertCircle className="h-3 w-3" />
+                High usage detected
+              </p>
+            )}
           </CardContent>
         </Card>
 
