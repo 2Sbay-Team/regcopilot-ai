@@ -27,7 +27,8 @@ import {
   Search,
   ChevronRight,
   HelpCircle,
-  Wrench
+  Wrench,
+  Info
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
@@ -35,6 +36,7 @@ import { ThemeToggle } from "@/components/ThemeToggle"
 import { t } from "@/lib/i18n"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 import { 
   Tooltip, 
   TooltipContent, 
@@ -58,6 +60,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+import { ModuleHelpModal } from "@/components/ModuleHelpModal"
+import { moduleHelpContent } from "@/lib/helpContent"
 
 export function AppSidebar() {
   const { state } = useSidebar()
@@ -69,6 +73,8 @@ export function AppSidebar() {
     management: true,
     tools: true
   })
+  const [helpModalOpen, setHelpModalOpen] = useState(false)
+  const [selectedModule, setSelectedModule] = useState<keyof typeof moduleHelpContent | null>(null)
 
   const complianceItems = [
     { 
@@ -238,27 +244,61 @@ export function AppSidebar() {
     )
   }
 
+  const handleOpenHelp = (url: string, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    // Map URLs to help content keys
+    const urlToKey: Record<string, keyof typeof moduleHelpContent> = {
+      "/ai-act": "ai-act",
+      "/gdpr": "gdpr",
+      "/esg": "esg",
+      "/dsar": "dsar",
+      "/dora": "dora",
+      "/dora-copilot": "dora"
+    }
+    
+    const key = urlToKey[url]
+    if (key && moduleHelpContent[key]) {
+      setSelectedModule(key)
+      setHelpModalOpen(true)
+    }
+  }
+
   const renderMenuItem = (item: typeof allItems[0]) => {
     const Icon = item.icon
     const title = t(item.titleKey, language)
+    const hasHelp = ["/ai-act", "/gdpr", "/esg", "/dsar", "/dora", "/dora-copilot"].includes(item.url)
     
     const menuButton = (
       <SidebarMenuButton asChild>
-        <NavLink 
-          to={item.url} 
-          end={item.url === "/dashboard"}
-          className="hover:bg-accent/50 transition-colors group py-2 px-3 rounded-md"
-          activeClassName="bg-accent text-accent-foreground font-medium"
-        >
-          {isCollapsed ? (
-            <Icon className="h-5 w-5 mx-auto" />
-          ) : (
-            <>
-              <Icon className="h-5 w-5 shrink-0" />
-              <span className="text-sm">{title}</span>
-            </>
+        <div className="flex items-center w-full group">
+          <NavLink 
+            to={item.url} 
+            end={item.url === "/dashboard"}
+            className="hover:bg-accent/50 transition-colors py-2 px-3 rounded-md flex-1 flex items-center"
+            activeClassName="bg-accent text-accent-foreground font-medium"
+          >
+            {isCollapsed ? (
+              <Icon className="h-5 w-5 mx-auto" />
+            ) : (
+              <>
+                <Icon className="h-5 w-5 shrink-0" />
+                <span className="text-sm ml-3">{title}</span>
+              </>
+            )}
+          </NavLink>
+          {hasHelp && !isCollapsed && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={(e) => handleOpenHelp(item.url, e)}
+            >
+              <Info className="h-4 w-4" />
+            </Button>
           )}
-        </NavLink>
+        </div>
       </SidebarMenuButton>
     )
 
@@ -280,6 +320,14 @@ export function AppSidebar() {
 
   return (
     <TooltipProvider delayDuration={200}>
+      {selectedModule && moduleHelpContent[selectedModule] && (
+        <ModuleHelpModal
+          open={helpModalOpen}
+          onOpenChange={setHelpModalOpen}
+          module={moduleHelpContent[selectedModule]}
+        />
+      )}
+      
       <Sidebar collapsible="icon" className="border-r">
         <SidebarContent className="pt-3">
           <SidebarGroup>

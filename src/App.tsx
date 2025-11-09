@@ -115,6 +115,7 @@ const App = () => (
             <Route path="/privacy-policy" element={<ProtectedRoute><AppLayout><PrivacyPolicy /></AppLayout></ProtectedRoute>} />
             <Route path="/nis2" element={<ProtectedRoute><AppLayout><NIS2Copilot /></AppLayout></ProtectedRoute>} />
             <Route path="/dora" element={<ProtectedRoute><AppLayout><DORACopilot /></AppLayout></ProtectedRoute>} />
+            <Route path="/dora-copilot" element={<ProtectedRoute><AppLayout><DORACopilot /></AppLayout></ProtectedRoute>} />
             <Route path="/dma" element={<ProtectedRoute><AppLayout><DMACopilot /></AppLayout></ProtectedRoute>} />
             <Route path="/agents" element={<ProtectedRoute><AppLayout><AgentTasks /></AppLayout></ProtectedRoute>} />
             <Route path="/connectors" element={<ProtectedRoute><AppLayout><Connectors /></AppLayout></ProtectedRoute>} />

@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
-import { Shield, FileCheck, Leaf, Database, FileText, BookOpen, TrendingUp, Activity, Home, Plus, Search, HelpCircle, ChevronRight } from "lucide-react"
+import { Shield, FileCheck, Leaf, Database, FileText, BookOpen, TrendingUp, Activity, Home, Plus, Search, HelpCircle, ChevronRight, Sparkles } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { HapticButton } from "@/components/ui/haptic-button"
 import { InteractiveCard } from "@/components/ui/interactive-card"
@@ -17,6 +17,7 @@ import { QuotaWarningBanner } from "@/components/QuotaWarningBanner"
 import { NotificationCenter } from "@/components/NotificationCenter"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { t } from "@/lib/i18n"
+import { QuickStartWizard } from "@/components/QuickStartWizard"
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -30,6 +31,7 @@ const Dashboard = () => {
   })
   const [quotaInfo, setQuotaInfo] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [wizardOpen, setWizardOpen] = useState(false)
   const navigate = useNavigate()
   const { toast } = useToast()
   const { vibrate } = useHaptic()
@@ -38,8 +40,19 @@ const Dashboard = () => {
     if (user) {
       loadUserData()
       checkSystemSetup()
+      checkFirstTime()
     }
   }, [user])
+
+  const checkFirstTime = () => {
+    const completed = localStorage.getItem("quickstart_completed")
+    const skipped = localStorage.getItem("quickstart_skipped")
+    
+    // Show wizard if user hasn't completed or skipped it
+    if (!completed && !skipped) {
+      setTimeout(() => setWizardOpen(true), 1000)
+    }
+  }
 
   const checkSystemSetup = async () => {
     const { count } = await supabase
@@ -130,6 +143,8 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <QuickStartWizard open={wizardOpen} onOpenChange={setWizardOpen} />
+      
       {/* Enhanced Top Header */}
       <div className="sticky top-0 z-10 backdrop-blur-lg bg-background/80 border-b border-border/50 -mx-6 -mt-6 px-6 py-4">
         <div className="flex items-center justify-between">
@@ -188,6 +203,16 @@ const Dashboard = () => {
 
         {/* Quick Action Bar */}
         <div className="flex items-center gap-3 flex-wrap">
+          <Button
+            onClick={() => {
+              vibrate("selection")
+              setWizardOpen(true)
+            }}
+            className="gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-300"
+          >
+            <Sparkles className="h-4 w-4" />
+            Quick Start Guide
+          </Button>
           <Button
             onClick={() => {
               vibrate("selection")
