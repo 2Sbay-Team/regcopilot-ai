@@ -34,7 +34,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -47,7 +46,7 @@ export function AppSidebar() {
   const { language } = useLanguage()
   const isCollapsed = state === "collapsed"
 
-  const mainItems = [
+  const navigationItems = [
     { 
       titleKey: "nav.dashboard", 
       url: "/dashboard", 
@@ -83,9 +82,6 @@ export function AppSidebar() {
       iconBgClass: "bg-gradient-to-br from-green-500 to-lime-600",
       iconTextClass: "text-white",
     },
-  ]
-
-  const toolsItems = [
     { 
       titleKey: "nav.scheduledJobs", 
       url: "/scheduled-jobs", 
@@ -232,7 +228,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className="border-r">
       <SidebarContent className="pt-4">
         <SidebarGroup>
-          <div className="px-3 mb-2">
+          <div className="px-3 mb-6">
             <div className="flex items-center gap-2">
               <RoboticShieldLogo size={32} />
               {!isCollapsed && (
@@ -246,10 +242,9 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>{t('nav.main', language)}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {mainItems.map((item) => {
+              {navigationItems.map((item) => {
                 const Icon = item.icon
                 return (
                   <SidebarMenuItem key={item.titleKey}>
@@ -257,33 +252,6 @@ export function AppSidebar() {
                       <NavLink 
                         to={item.url} 
                         end={item.url === "/dashboard"}
-                        className="hover:bg-accent/50 transition-all group"
-                        activeClassName="bg-accent/10 text-accent-foreground font-medium"
-                      >
-                        <div className={`p-1.5 rounded-lg ${item.iconBgClass} shadow-sm group-hover:shadow-md transition-shadow`}>
-                          <Icon className={`h-4 w-4 ${item.iconTextClass}`} />
-                        </div>
-                        {!isCollapsed && <span>{t(item.titleKey, language)}</span>}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel>{t('nav.tools', language)}</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {toolsItems.map((item) => {
-                const Icon = item.icon
-                return (
-                  <SidebarMenuItem key={item.titleKey}>
-                    <SidebarMenuButton asChild>
-                      <NavLink 
-                        to={item.url}
                         className="hover:bg-accent/50 transition-all group"
                         activeClassName="bg-accent/10 text-accent-foreground font-medium"
                       >
