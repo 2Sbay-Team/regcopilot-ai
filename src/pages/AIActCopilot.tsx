@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
-import { Brain, Loader2, HelpCircle, BookOpen, Plus, FileText, Download, Shield } from "lucide-react"
+import { Scale, Loader2, HelpCircle, BookOpen, Plus, FileText, Download, Shield } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { t } from "@/lib/i18n"
@@ -108,7 +108,7 @@ const AIActCopilot = () => {
     <ModuleLayout
       title={
         <div className="flex items-center gap-2">
-          <Brain className="h-8 w-8 text-primary" />
+          <Scale className="h-8 w-8 text-primary" />
           {t('aiact.title', language)}
           <TooltipProvider>
             <Tooltip>

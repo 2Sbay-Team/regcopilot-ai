@@ -68,7 +68,7 @@ export const ModuleLayout = ({
   const getPageIcon = () => {
     const path = location.pathname
     const iconMap: Record<string, JSX.Element> = {
-      '/ai-act': <Brain className="h-4 w-4" />,
+      '/ai-act': <Scale className="h-4 w-4" />,
       '/gdpr': <ShieldCheck className="h-4 w-4" />,
       '/esg': <Sprout className="h-4 w-4" />,
       '/dora': <ServerCog className="h-4 w-4" />,
