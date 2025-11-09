@@ -507,17 +507,21 @@ export default function ModelGovernance() {
                 LLM Usage & Reliability Analytics
               </CardTitle>
               <CardDescription>
-                Coming in Phase 5 - Real-time monitoring of model performance and costs
+                View comprehensive analytics, metrics, and performance monitoring
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <Alert>
-                <AlertTriangle className="h-4 w-4" />
+                <TrendingUp className="h-4 w-4" />
                 <AlertDescription>
-                  Analytics dashboard will show: Active provider, Fallback rate, Average latency, 
+                  The analytics dashboard shows: Active provider, Fallback rate, Average latency, 
                   Monthly cost estimate, Token consumption per module, and alerts when fallback exceeds 10% in 24h.
                 </AlertDescription>
               </Alert>
+              <Button onClick={() => window.location.href = '/llm-analytics'}>
+                <TrendingUp className="mr-2 h-4 w-4" />
+                Open Analytics Dashboard
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
