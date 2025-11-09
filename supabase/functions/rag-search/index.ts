@@ -1,5 +1,13 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.80.0'
 import { corsHeaders } from '../_shared/cors.ts'
+import { sanitizeInput } from '../_shared/sanitize.ts'
+import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts'
+
+const RAGSearchSchema = z.object({
+  query: z.string().trim().min(1).max(500),
+  top_k: z.number().int().min(1).max(20).optional(),
+  source_filter: z.string().optional()
+})
 
 interface RAGSearchRequest {
   query: string
@@ -23,17 +31,24 @@ Deno.serve(async (req) => {
       throw new Error('LOVABLE_API_KEY not configured')
     }
 
-    const { query, top_k = 5, source_filter }: RAGSearchRequest = await req.json()
-
-    if (!query || query.trim().length === 0) {
+    const rawBody = await req.json()
+    
+    // Validate input
+    const validationResult = RAGSearchSchema.safeParse(rawBody)
+    if (!validationResult.success) {
       return new Response(
-        JSON.stringify({ error: 'Query parameter is required' }),
+        JSON.stringify({ error: 'Invalid request parameters' }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 400 
         }
       )
     }
+
+    const { query: rawQuery, top_k = 5, source_filter } = validationResult.data
+    
+    // Sanitize query input
+    const query = sanitizeInput(rawQuery, 500)
 
     console.log('RAG search query:', query)
 
@@ -139,10 +154,13 @@ Deno.serve(async (req) => {
     )
 
   } catch (error) {
-    console.error('RAG search error:', error)
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error('RAG search error:', error) // Log detailed error server-side
+    // Return generic error to client (don't leak internals)
     return new Response(
-      JSON.stringify({ success: false, error: errorMessage }),
+      JSON.stringify({ 
+        success: false, 
+        error: 'An error occurred processing your search request. Please try again.' 
+      }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500
