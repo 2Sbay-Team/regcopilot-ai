@@ -321,6 +321,48 @@ export type Database = {
           },
         ]
       }
+      assessment_tasks: {
+        Row: {
+          assessment_id: string
+          assessment_type: string
+          assigned_to: string | null
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          priority: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          assessment_id: string
+          assessment_type: string
+          assigned_to?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          priority?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          assessment_id?: string
+          assessment_type?: string
+          assigned_to?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          priority?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
@@ -429,6 +471,44 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "compliance_reports_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_scores: {
+        Row: {
+          ai_act_score: number | null
+          calculated_at: string | null
+          esg_score: number | null
+          gdpr_score: number | null
+          id: string
+          organization_id: string
+          overall_score: number | null
+        }
+        Insert: {
+          ai_act_score?: number | null
+          calculated_at?: string | null
+          esg_score?: number | null
+          gdpr_score?: number | null
+          id?: string
+          organization_id: string
+          overall_score?: number | null
+        }
+        Update: {
+          ai_act_score?: number | null
+          calculated_at?: string | null
+          esg_score?: number | null
+          gdpr_score?: number | null
+          id?: string
+          organization_id?: string
+          overall_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_scores_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -866,6 +946,53 @@ export type Database = {
           },
         ]
       }
+      model_configs: {
+        Row: {
+          active: boolean | null
+          api_key_ref: string | null
+          base_url: string | null
+          created_at: string | null
+          id: string
+          model_name: string
+          organization_id: string
+          price_per_1k_tokens: number
+          provider: string
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          api_key_ref?: string | null
+          base_url?: string | null
+          created_at?: string | null
+          id?: string
+          model_name: string
+          organization_id: string
+          price_per_1k_tokens?: number
+          provider: string
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          api_key_ref?: string | null
+          base_url?: string | null
+          created_at?: string | null
+          id?: string
+          model_name?: string
+          organization_id?: string
+          price_per_1k_tokens?: number
+          provider?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "model_configs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       model_datasets: {
         Row: {
           created_at: string | null
@@ -1229,6 +1356,38 @@ export type Database = {
           version?: number | null
         }
         Relationships: []
+      }
+      task_comments: {
+        Row: {
+          comment: string
+          created_at: string | null
+          id: string
+          task_id: string
+          user_id: string
+        }
+        Insert: {
+          comment: string
+          created_at?: string | null
+          id?: string
+          task_id: string
+          user_id: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string | null
+          id?: string
+          task_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_comments_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {

@@ -16,7 +16,9 @@ import {
   Bot,
   MessageSquare,
   DollarSign,
-  User
+  User,
+  TrendingUp,
+  Store
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
@@ -42,6 +44,8 @@ const mainItems = [
 
 const toolsItems = [
   { title: "AI Gateway", url: "/ai-gateway", icon: Zap },
+  { title: "Model Management", url: "/model-management", icon: Bot },
+  { title: "Compliance Score", url: "/compliance-score", icon: TrendingUp },
   { title: "DataSage", url: "/data-lineage", icon: GitBranch },
   { title: "DSAR Queue", url: "/dsar", icon: Mail },
   { title: "Audit Verify", url: "/audit-verify", icon: ShieldCheck },
@@ -53,6 +57,7 @@ const toolsItems = [
   { title: "RAG Search", url: "/rag-search", icon: BookOpen },
   { title: "Audit Trail", url: "/audit", icon: Database },
   { title: "Explainability", url: "/explainability", icon: Eye },
+  { title: "Marketplace", url: "/marketplace", icon: Store },
   { title: "Admin", url: "/admin", icon: Settings },
 ]
 
