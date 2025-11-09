@@ -194,15 +194,7 @@ const Settings = () => {
   useEffect(() => {
     if (newPassword) {
       const validation = calculatePasswordStrength(newPassword)
-      const errors: string[] = []
-      if (validation.score < 3) {
-        if (!validation.hasMinLength) errors.push("At least 8 characters")
-        if (!validation.hasUpperCase) errors.push("One uppercase letter")
-        if (!validation.hasLowerCase) errors.push("One lowercase letter")
-        if (!validation.hasNumber) errors.push("One number")
-        if (!validation.hasSpecialChar) errors.push("One special character")
-      }
-      setPasswordErrors(errors)
+      setPasswordErrors(validation.feedback)
     } else {
       setPasswordErrors([])
     }
