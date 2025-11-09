@@ -34,6 +34,7 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.gdpr': 'GDPR Checker',
     'nav.esg': 'ESG Reporter',
     'nav.agentDashboard': 'Agent Dashboard',
+    'nav.connectors': 'Connectors',
     'nav.aiGateway': 'AI Gateway',
     'nav.modelManagement': 'Model Management',
     'nav.complianceScore': 'Compliance Score',

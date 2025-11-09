@@ -632,6 +632,131 @@ export type Database = {
           },
         ]
       }
+      connector_sync_logs: {
+        Row: {
+          completed_at: string | null
+          connector_id: string
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          records_created: number | null
+          records_failed: number | null
+          records_processed: number | null
+          records_updated: number | null
+          started_at: string | null
+          status: string
+        }
+        Insert: {
+          completed_at?: string | null
+          connector_id: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          records_created?: number | null
+          records_failed?: number | null
+          records_processed?: number | null
+          records_updated?: number | null
+          started_at?: string | null
+          status: string
+        }
+        Update: {
+          completed_at?: string | null
+          connector_id?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          records_created?: number | null
+          records_failed?: number | null
+          records_processed?: number | null
+          records_updated?: number | null
+          started_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connector_sync_logs_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "connectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "connector_sync_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      connectors: {
+        Row: {
+          config: Json
+          connector_type: Database["public"]["Enums"]["connector_type"]
+          created_at: string | null
+          created_by: string | null
+          credentials_ref: string | null
+          description: string | null
+          id: string
+          last_error: string | null
+          last_sync_at: string | null
+          last_sync_status: string | null
+          name: string
+          organization_id: string
+          status: Database["public"]["Enums"]["connector_status"]
+          sync_frequency: Database["public"]["Enums"]["sync_frequency"]
+          sync_stats: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          config: Json
+          connector_type: Database["public"]["Enums"]["connector_type"]
+          created_at?: string | null
+          created_by?: string | null
+          credentials_ref?: string | null
+          description?: string | null
+          id?: string
+          last_error?: string | null
+          last_sync_at?: string | null
+          last_sync_status?: string | null
+          name: string
+          organization_id: string
+          status?: Database["public"]["Enums"]["connector_status"]
+          sync_frequency?: Database["public"]["Enums"]["sync_frequency"]
+          sync_stats?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          config?: Json
+          connector_type?: Database["public"]["Enums"]["connector_type"]
+          created_at?: string | null
+          created_by?: string | null
+          credentials_ref?: string | null
+          description?: string | null
+          id?: string
+          last_error?: string | null
+          last_sync_at?: string | null
+          last_sync_status?: string | null
+          name?: string
+          organization_id?: string
+          status?: Database["public"]["Enums"]["connector_status"]
+          sync_frequency?: Database["public"]["Enums"]["sync_frequency"]
+          sync_stats?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connectors_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       data_processing_activities: {
         Row: {
           activity_name: string
@@ -684,6 +809,78 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "data_processing_activities_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      data_sources: {
+        Row: {
+          checksum: string | null
+          connector_id: string
+          content_type: string | null
+          created_at: string | null
+          file_size: number | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          processed_at: string | null
+          source_id: string
+          source_name: string
+          source_path: string | null
+          source_type: string
+          storage_path: string | null
+          synced_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          checksum?: string | null
+          connector_id: string
+          content_type?: string | null
+          created_at?: string | null
+          file_size?: number | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          processed_at?: string | null
+          source_id: string
+          source_name: string
+          source_path?: string | null
+          source_type: string
+          storage_path?: string | null
+          synced_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          checksum?: string | null
+          connector_id?: string
+          content_type?: string | null
+          created_at?: string | null
+          file_size?: number | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          processed_at?: string | null
+          source_id?: string
+          source_name?: string
+          source_path?: string | null
+          source_type?: string
+          storage_path?: string | null
+          synced_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "data_sources_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "connectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "data_sources_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -1766,6 +1963,20 @@ export type Database = {
         | "dora_assessment"
         | "dma_assessment"
       app_role: "admin" | "analyst" | "auditor" | "viewer"
+      connector_status: "active" | "inactive" | "error" | "configuring"
+      connector_type:
+        | "sap"
+        | "sharepoint"
+        | "onedrive"
+        | "aws_s3"
+        | "azure_blob"
+        | "jira"
+        | "slack"
+        | "teams"
+        | "linkedin"
+        | "glassdoor"
+        | "rss_feed"
+      sync_frequency: "realtime" | "hourly" | "daily" | "weekly" | "manual"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1909,6 +2120,21 @@ export const Constants = {
         "dma_assessment",
       ],
       app_role: ["admin", "analyst", "auditor", "viewer"],
+      connector_status: ["active", "inactive", "error", "configuring"],
+      connector_type: [
+        "sap",
+        "sharepoint",
+        "onedrive",
+        "aws_s3",
+        "azure_blob",
+        "jira",
+        "slack",
+        "teams",
+        "linkedin",
+        "glassdoor",
+        "rss_feed",
+      ],
+      sync_frequency: ["realtime", "hourly", "daily", "weekly", "manual"],
     },
   },
 } as const

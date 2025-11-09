@@ -83,6 +83,13 @@ export function AppSidebar() {
       iconTextClass: "text-white",
     },
     { 
+      titleKey: "nav.connectors", 
+      url: "/connectors", 
+      icon: GitBranch,
+      iconBgClass: "bg-gradient-to-br from-cyan-500 to-blue-600",
+      iconTextClass: "text-white",
+    },
+    { 
       titleKey: "nav.aiGateway", 
       url: "/ai-gateway", 
       icon: Zap,

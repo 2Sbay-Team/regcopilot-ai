@@ -3,6 +3,9 @@ project_id = "usaygwvfanqlpruyzmhl"
 [functions.agent-runner]
 verify_jwt = false
 
+[functions.connector-sync]
+verify_jwt = false
+
 [functions.ai-act-auditor]
 verify_jwt = true
 
