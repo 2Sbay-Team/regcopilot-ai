@@ -41,6 +41,9 @@ import DMACopilot from "./pages/DMACopilot";
 import AgentTasks from "./pages/AgentTasks";
 import Connectors from "./pages/Connectors";
 import SocialSentiment from "./pages/SocialSentiment";
+import MFASetup from "./pages/MFASetup";
+import ContinuousIntelligence from "./pages/ContinuousIntelligence";
+import ScheduledJobs from "./pages/ScheduledJobs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -89,6 +92,9 @@ const App = () => (
             <Route path="/agents" element={<ProtectedRoute><AppLayout><AgentTasks /></AppLayout></ProtectedRoute>} />
             <Route path="/connectors" element={<ProtectedRoute><AppLayout><Connectors /></AppLayout></ProtectedRoute>} />
             <Route path="/social-sentiment" element={<ProtectedRoute><AppLayout><SocialSentiment /></AppLayout></ProtectedRoute>} />
+            <Route path="/mfa-setup" element={<ProtectedRoute><MFASetup /></ProtectedRoute>} />
+            <Route path="/continuous-intelligence" element={<ProtectedRoute><AppLayout><ContinuousIntelligence /></AppLayout></ProtectedRoute>} />
+            <Route path="/scheduled-jobs" element={<ProtectedRoute><AppLayout><ScheduledJobs /></AppLayout></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

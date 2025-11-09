@@ -1303,6 +1303,47 @@ export type Database = {
           },
         ]
       }
+      intelligence_scores: {
+        Row: {
+          automation_score: number | null
+          calculated_at: string | null
+          coverage_score: number | null
+          explainability_score: number | null
+          id: string
+          organization_id: string
+          overall_score: number | null
+          response_score: number | null
+        }
+        Insert: {
+          automation_score?: number | null
+          calculated_at?: string | null
+          coverage_score?: number | null
+          explainability_score?: number | null
+          id?: string
+          organization_id: string
+          overall_score?: number | null
+          response_score?: number | null
+        }
+        Update: {
+          automation_score?: number | null
+          calculated_at?: string | null
+          coverage_score?: number | null
+          explainability_score?: number | null
+          id?: string
+          organization_id?: string
+          overall_score?: number | null
+          response_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intelligence_scores_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mcp_agents: {
         Row: {
           created_at: string | null
@@ -1668,6 +1709,9 @@ export type Database = {
           full_name: string | null
           id: string
           language: string | null
+          mfa_enabled: boolean | null
+          mfa_secret: string | null
+          mfa_secret_temp: string | null
           organization_id: string
         }
         Insert: {
@@ -1677,6 +1721,9 @@ export type Database = {
           full_name?: string | null
           id: string
           language?: string | null
+          mfa_enabled?: boolean | null
+          mfa_secret?: string | null
+          mfa_secret_temp?: string | null
           organization_id: string
         }
         Update: {
@@ -1686,6 +1733,9 @@ export type Database = {
           full_name?: string | null
           id?: string
           language?: string | null
+          mfa_enabled?: boolean | null
+          mfa_secret?: string | null
+          mfa_secret_temp?: string | null
           organization_id?: string
         }
         Relationships: [

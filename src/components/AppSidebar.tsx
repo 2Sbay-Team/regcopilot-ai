@@ -19,7 +19,9 @@ import {
   User,
   TrendingUp,
   Store,
-  Play
+  Play,
+  Brain,
+  Calendar
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
@@ -54,6 +56,13 @@ export function AppSidebar() {
       iconTextClass: "text-white",
     },
     { 
+      title: "Continuous Intelligence", 
+      url: "/continuous-intelligence", 
+      icon: Brain,
+      iconBgClass: "bg-gradient-to-br from-violet-500 to-purple-600",
+      iconTextClass: "text-white",
+    },
+    { 
       titleKey: "nav.aiAct", 
       url: "/ai-act", 
       icon: Shield,
@@ -77,6 +86,13 @@ export function AppSidebar() {
   ]
 
   const toolsItems = [
+    { 
+      title: "Scheduled Jobs", 
+      url: "/scheduled-jobs", 
+      icon: Calendar,
+      iconBgClass: "bg-gradient-to-br from-amber-500 to-orange-600",
+      iconTextClass: "text-white",
+    },
     { 
       titleKey: "nav.agentDashboard", 
       url: "/agents", 
