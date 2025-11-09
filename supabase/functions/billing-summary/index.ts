@@ -46,6 +46,13 @@ Deno.serve(async (req) => {
       })
     }
 
+    if (!profile) {
+      return new Response(JSON.stringify({ error: 'Profile not found' }), {
+        status: 404,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
     if (isSuperAdmin) {
       // Super admin: get platform-wide analytics
       const { data: analytics } = await supabase
@@ -145,7 +152,7 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('Billing summary error:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
