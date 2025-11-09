@@ -158,6 +158,33 @@ ${ragContext}`
       }),
     })
 
+    if (!aiResponse.ok) {
+      const errorText = await aiResponse.text()
+      console.error('AI Gateway error:', aiResponse.status, errorText)
+      
+      if (aiResponse.status === 429) {
+        return new Response(JSON.stringify({ 
+          error: 'Rate limit exceeded. Please try again in a few moments.',
+          code: 'RATE_LIMIT_EXCEEDED'
+        }), {
+          status: 429,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+      }
+      
+      if (aiResponse.status === 402) {
+        return new Response(JSON.stringify({ 
+          error: 'AI credits exhausted. Please add credits to your workspace.',
+          code: 'PAYMENT_REQUIRED'
+        }), {
+          status: 402,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+      }
+      
+      throw new Error(`AI Gateway error: ${aiResponse.status}`)
+    }
+
     const aiData = await aiResponse.json()
     const narrative = aiData.choices?.[0]?.message?.content || 'Unable to generate narrative'
 

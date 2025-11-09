@@ -21,6 +21,9 @@ import Analytics from "./pages/Analytics";
 import Reports from "./pages/Reports";
 import RAGSearch from "./pages/RAGSearch";
 import SystemSetup from "./pages/SystemSetup";
+import DataLineage from "./pages/DataLineage";
+import DSARManagement from "./pages/DSARManagement";
+import AuditChainVerify from "./pages/AuditChainVerify";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +46,9 @@ const App = () => (
             <Route path="/audit" element={<ProtectedRoute><AppLayout><AuditTrail /></AppLayout></ProtectedRoute>} />
             <Route path="/models" element={<ProtectedRoute><AppLayout><ModelRegistry /></AppLayout></ProtectedRoute>} />
             <Route path="/explainability" element={<ProtectedRoute><AppLayout><Explainability /></AppLayout></ProtectedRoute>} />
+            <Route path="/data-lineage" element={<ProtectedRoute><AppLayout><DataLineage /></AppLayout></ProtectedRoute>} />
+            <Route path="/dsar" element={<ProtectedRoute><AppLayout><DSARManagement /></AppLayout></ProtectedRoute>} />
+            <Route path="/audit-verify" element={<ProtectedRoute><AppLayout><AuditChainVerify /></AppLayout></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute><AppLayout><Admin /></AppLayout></ProtectedRoute>} />
             <Route path="/analytics" element={<ProtectedRoute><AppLayout><Analytics /></AppLayout></ProtectedRoute>} />
             <Route path="/reports" element={<ProtectedRoute><AppLayout><Reports /></AppLayout></ProtectedRoute>} />

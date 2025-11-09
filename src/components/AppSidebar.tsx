@@ -8,7 +8,10 @@ import {
   BarChart3,
   Settings,
   LayoutDashboard,
-  Eye
+  Eye,
+  GitBranch,
+  Mail,
+  ShieldCheck
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
@@ -33,6 +36,9 @@ const mainItems = [
 ]
 
 const toolsItems = [
+  { title: "DataSage", url: "/data-lineage", icon: GitBranch },
+  { title: "DSAR Queue", url: "/dsar", icon: Mail },
+  { title: "Audit Verify", url: "/audit-verify", icon: ShieldCheck },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "Reports", url: "/reports", icon: FileText },
   { title: "RAG Search", url: "/rag-search", icon: BookOpen },
