@@ -6,6 +6,9 @@ verify_jwt = false
 [functions.connector-sync]
 verify_jwt = false
 
+[functions.connector-validate]
+verify_jwt = false
+
 [functions.social-sentiment-analysis]
 verify_jwt = true
 

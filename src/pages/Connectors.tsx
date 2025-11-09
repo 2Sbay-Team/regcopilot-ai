@@ -46,6 +46,8 @@ const Connectors = () => {
   const [loading, setLoading] = useState(true);
   const [showNewConnector, setShowNewConnector] = useState(false);
   const [selectedType, setSelectedType] = useState('');
+  const [validating, setValidating] = useState(false);
+  const [validationResult, setValidationResult] = useState<{ valid: boolean; message: string } | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -106,7 +108,44 @@ const Connectors = () => {
     }
   };
 
+  const validateConnector = async () => {
+    setValidating(true);
+    setValidationResult(null);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('connector-validate', {
+        body: {
+          connector_type: selectedType,
+          config: formData.config
+        }
+      });
+
+      if (error) throw error;
+      
+      setValidationResult(data);
+      
+      if (data.valid) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error: any) {
+      console.error('Validation error:', error);
+      const errorMessage = error.message || 'Validation failed';
+      setValidationResult({ valid: false, message: errorMessage });
+      toast.error(errorMessage);
+    } finally {
+      setValidating(false);
+    }
+  };
+
   const createConnector = async () => {
+    // Validate before creating
+    if (!validationResult?.valid) {
+      toast.error('Please validate the connector configuration first');
+      return;
+    }
+
     try {
       const { data: profile } = await supabase.auth.getUser();
       if (!profile.user) throw new Error('Not authenticated');
@@ -128,13 +167,17 @@ const Connectors = () => {
           description: formData.description,
           sync_frequency: formData.sync_frequency as any,
           config: formData.config as any,
-          created_by: profile.user.id
+          created_by: profile.user.id,
+          status: 'active'
         } as any);
 
       if (error) throw error;
       
-      toast.success('Connector created');
+      toast.success('Connector created successfully');
       setShowNewConnector(false);
+      setValidationResult(null);
+      setFormData({ name: '', description: '', sync_frequency: 'daily', config: {} });
+      setSelectedType('');
       await fetchConnectors();
     } catch (error: any) {
       console.error('Error creating connector:', error);
@@ -483,9 +526,51 @@ const Connectors = () => {
 
                       {renderConfigFields()}
 
-                      <Button onClick={createConnector} className="w-full">
-                        Create Connector
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          onClick={validateConnector} 
+                          variant="outline" 
+                          disabled={validating || !selectedType || Object.keys(formData.config).length === 0}
+                          className="flex-1"
+                        >
+                          {validating ? (
+                            <>
+                              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                              Validating...
+                            </>
+                          ) : (
+                            <>
+                              <CheckCircle2 className="w-4 h-4 mr-2" />
+                              Test Connection
+                            </>
+                          )}
+                        </Button>
+                        
+                        <Button 
+                          onClick={createConnector} 
+                          disabled={!validationResult?.valid || !formData.name}
+                          className="flex-1"
+                        >
+                          Create Connector
+                        </Button>
+                      </div>
+
+                      {validationResult && (
+                        <div className={`p-3 rounded-md text-sm ${
+                          validationResult.valid 
+                            ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800' 
+                            : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800'
+                        }`}>
+                          <div className="flex items-start gap-2">
+                            {validationResult.valid ? (
+                              <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                            ) : (
+                              <XCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                            )}
+                            <span>{validationResult.message}</span>
+                          </div>
+                        </div>
+                      )}
                     </>
                   )}
                 </div>
