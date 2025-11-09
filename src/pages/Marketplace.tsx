@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Shield, FileCheck, Leaf, Lock, Network, Database, Clock, Star } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 const AVAILABLE_COPILOTS = [
   {
@@ -39,31 +40,36 @@ const UPCOMING_COPILOTS = [
     name: 'NIS2 Compliance',
     description: 'Cybersecurity incident reporting and supply chain risk management',
     icon: Lock,
-    status: 'coming-soon',
+    status: 'active',
     category: 'Cybersecurity',
-    eta: 'Q2 2025'
+    eta: 'Q2 2025',
+    route: '/nis2'
   },
   {
     id: 'dora',
     name: 'DORA Compliance',
     description: 'Digital operational resilience for financial institutions',
     icon: Network,
-    status: 'coming-soon',
+    status: 'active',
     category: 'Financial Services',
-    eta: 'Q3 2025'
+    eta: 'Q3 2025',
+    route: '/dora'
   },
   {
     id: 'dma',
     name: 'Digital Markets Act',
     description: 'Gatekeeper compliance and interoperability requirements',
     icon: Database,
-    status: 'planned',
+    status: 'active',
     category: 'Digital Markets',
-    eta: 'Q4 2025'
+    eta: 'Q4 2025',
+    route: '/dma'
   },
 ]
 
 const Marketplace = () => {
+  const navigate = useNavigate()
+
   return (
     <div className="space-y-6 p-6">
       <div>
@@ -140,7 +146,11 @@ const Marketplace = () => {
                       <Shield className="h-4 w-4" />
                       {copilot.category}
                     </div>
-                    <Button variant="outline" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={() => navigate(copilot.route)}
+                    >
                       Launch Copilot
                     </Button>
                   </CardContent>

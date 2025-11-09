@@ -35,6 +35,9 @@ import Marketplace from "./pages/Marketplace";
 import Impressum from "./pages/Impressum";
 import ContactUs from "./pages/ContactUs";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import NIS2Copilot from "./pages/NIS2Copilot";
+import DORACopilot from "./pages/DORACopilot";
+import DMACopilot from "./pages/DMACopilot";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -77,6 +80,9 @@ const App = () => (
             <Route path="/impressum" element={<ProtectedRoute><AppLayout><Impressum /></AppLayout></ProtectedRoute>} />
             <Route path="/contact" element={<ProtectedRoute><AppLayout><ContactUs /></AppLayout></ProtectedRoute>} />
             <Route path="/privacy-policy" element={<ProtectedRoute><AppLayout><PrivacyPolicy /></AppLayout></ProtectedRoute>} />
+            <Route path="/nis2" element={<ProtectedRoute><AppLayout><NIS2Copilot /></AppLayout></ProtectedRoute>} />
+            <Route path="/dora" element={<ProtectedRoute><AppLayout><DORACopilot /></AppLayout></ProtectedRoute>} />
+            <Route path="/dma" element={<ProtectedRoute><AppLayout><DMACopilot /></AppLayout></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
