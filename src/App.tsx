@@ -65,9 +65,9 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <GlobalHelpSearch />
-          <GuidedTour />
           <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <GlobalHelpSearch />
+            <GuidedTour />
             <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
