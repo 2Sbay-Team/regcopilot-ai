@@ -20,7 +20,78 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { organization_id, report_type, period_start, period_end, user_id }: ReportRequest = await req.json()
+    // Support both automated cron jobs and manual requests
+    const body = req.method === 'GET' ? {} : await req.json()
+    const { organization_id, report_type = 'weekly', period_start, period_end, user_id }: Partial<ReportRequest> = body
+
+    // For automated weekly reports, process all organizations
+    if (!organization_id) {
+      const { data: organizations } = await supabase
+        .from('organizations')
+        .select('id, name')
+      
+      const results = []
+      for (const org of organizations || []) {
+        const endDate = new Date()
+        const startDate = new Date()
+        startDate.setDate(startDate.getDate() - 7) // Last 7 days
+        
+        const result = await generateReportForOrg(
+          supabase, 
+          org.id, 
+          'weekly',
+          startDate.toISOString(),
+          endDate.toISOString(),
+          null
+        )
+        results.push({ organization: org.name, ...result })
+      }
+      
+      return new Response(JSON.stringify({ 
+        success: true, 
+        reports_generated: results.length,
+        results 
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    // Single organization report
+    const result = await generateReportForOrg(
+      supabase,
+      organization_id,
+      report_type,
+      period_start || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+      period_end || new Date().toISOString(),
+      user_id || null
+    )
+
+    return new Response(JSON.stringify(result), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: result.success ? 200 : 500
+    })
+
+  } catch (error) {
+    console.error('Error generating report:', error)
+    return new Response(JSON.stringify({ 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error' 
+    }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 500
+    })
+  }
+})
+
+async function generateReportForOrg(
+  supabase: any,
+  organization_id: string,
+  report_type: string,
+  period_start: string,
+  period_end: string,
+  user_id: string | null
+) {
+  try {
 
     console.log(`Generating ${report_type} compliance report for org ${organization_id}`)
 
@@ -169,33 +240,20 @@ Deno.serve(async (req) => {
 
     console.log(`Report generated successfully: ${report.id}`)
 
-    return new Response(
-      JSON.stringify({ 
-        success: true, 
-        report_id: report.id,
-        report_data: reportData 
-      }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200 
-      }
-    )
+    return { 
+      success: true, 
+      report_id: report.id,
+      report_data: reportData 
+    }
 
   } catch (error) {
     console.error('Error generating report:', error)
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
-    return new Response(
-      JSON.stringify({ 
-        success: false, 
-        error: errorMessage 
-      }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500 
-      }
-    )
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
+    }
   }
-})
+}
 
 function calculateRiskScore(
   aiAct: any, 
