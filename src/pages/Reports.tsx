@@ -218,8 +218,8 @@ const Reports = () => {
     <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
       <div>
-        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
-          Compliance <span className="secondary">Reports</span>
+        <h1 className="text-4xl tracking-tight mb-2 heading-unified">
+          Compliance Reports
         </h1>
           <p className="text-muted-foreground font-medium">
             Generate and download unified compliance reports across all modules

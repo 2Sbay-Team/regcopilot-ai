@@ -37,7 +37,7 @@ export const ModuleLayout = ({
           {/* Page Title & Status */}
           <div className="flex items-center justify-between p-6 rounded-2xl cockpit-panel">
             <div>
-              <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
+              <h1 className="text-4xl tracking-tight mb-2 heading-unified">
                 {title}
               </h1>
               {description && (

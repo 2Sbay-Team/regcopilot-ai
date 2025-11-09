@@ -366,29 +366,10 @@ All colors MUST be HSL.
     }
   }
 
-  /* Readable dual-tone heading utility */
-  .heading-dual-tone {
+  /* Readable unified heading utility */
+  .heading-unified {
     font-weight: 700;
     color: hsl(var(--heading-primary));
-  }
-
-  .heading-dual-tone .secondary {
-    color: hsl(var(--heading-secondary));
-    font-weight: 600;
-  }
-
-  /* Legacy gradient support - improved for readability */
-  .heading-gradient {
-    background: linear-gradient(
-      90deg,
-      hsl(var(--heading-primary)) 0%,
-      hsl(var(--heading-primary)) 50%,
-      hsl(var(--heading-secondary)) 50%,
-      hsl(var(--heading-secondary)) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
   }
 }
 

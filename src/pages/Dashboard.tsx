@@ -160,8 +160,8 @@ const Dashboard = () => {
         {/* Page Title & Status */}
         <div className="flex items-center justify-between p-6 rounded-2xl cockpit-panel">
           <div>
-            <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
-              Compliance <span className="secondary">Dashboard</span>
+            <h1 className="text-4xl tracking-tight mb-2 heading-unified">
+              Compliance Dashboard
             </h1>
             <p className="text-sm text-muted-foreground font-medium">{profile?.organizations?.name || "Regulatory Intelligence Platform"}</p>
           </div>

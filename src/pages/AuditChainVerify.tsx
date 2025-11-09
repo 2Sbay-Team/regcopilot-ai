@@ -75,8 +75,8 @@ const AuditChainVerify = () => {
     <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
       <div>
-        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
-          Audit Chain <span className="secondary">Verification</span>
+        <h1 className="text-4xl tracking-tight mb-2 heading-unified">
+          Audit Chain Verification
         </h1>
           <p className="text-muted-foreground font-medium">Cryptographic integrity verification for compliance audit logs</p>
         </div>

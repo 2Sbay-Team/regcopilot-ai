@@ -142,7 +142,7 @@ const PrivacyPolicy = () => {
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
+        <h1 className="text-4xl tracking-tight mb-2 heading-unified">
           {t('nav.privacyPolicy', language)}
         </h1>
         <p className="text-muted-foreground font-medium">

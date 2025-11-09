@@ -256,8 +256,8 @@ const ModelManagement = () => {
     <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
       <div>
-        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
-          Model <span className="secondary">Management</span>
+        <h1 className="text-4xl tracking-tight mb-2 heading-unified">
+          Model Management
         </h1>
           <p className="text-muted-foreground font-medium">Configure and manage AI models for your copilots</p>
         </div>

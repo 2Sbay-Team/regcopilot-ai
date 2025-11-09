@@ -203,7 +203,7 @@ const Settings = () => {
   return (
     <div className="space-y-6 p-6" dir={currentLanguage === 'ar' ? 'rtl' : 'ltr'}>
       <div>
-        <h1 className="text-4xl tracking-tight mb-2 heading-dual-tone">
+        <h1 className="text-4xl tracking-tight mb-2 heading-unified">
           {t('settings.title', currentLanguage)}
         </h1>
         <p className="text-muted-foreground font-medium">
