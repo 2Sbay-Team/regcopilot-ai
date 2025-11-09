@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { supabase } from "@/integrations/supabase/client"
-import AppLayout from "@/components/AppLayout"
+import { AppLayout } from "@/components/AppLayout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"

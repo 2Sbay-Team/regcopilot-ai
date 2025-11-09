@@ -32,15 +32,16 @@ const RoleGuard = ({
       }
 
       try {
-        // Get user's roles
+        // Get user's roles - using select('*') to avoid type issues with new columns
         const { data: userRoles, error: rolesError } = await supabase
           .from('user_roles')
-          .select('role')
+          .select('*')
           .eq('user_id', user.id)
 
         if (rolesError) throw rolesError
 
-        const roles = userRoles?.map(r => r.role) || []
+        // Extract roles safely handling both 'role' and 'app_role' column names
+        const roles = (userRoles?.map((r: any) => r.app_role || r.role) || []) as string[]
 
         // Check super admin first (has access to everything)
         if (roles.includes('super_admin')) {
@@ -53,11 +54,12 @@ const RoleGuard = ({
         if (organizationOnly) {
           const { data: profile } = await supabase
             .from('profiles')
-            .select('organization_id')
+            .select('*')
             .eq('id', user.id)
             .single()
 
-          if (!profile?.organization_id) {
+          const orgId = (profile as any)?.organization_id
+          if (!orgId) {
             setError('No organization found. Please contact support.')
             setHasAccess(false)
             setLoading(false)
