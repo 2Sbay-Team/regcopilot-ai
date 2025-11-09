@@ -122,8 +122,8 @@ export const ModuleLayout = ({
               </div>
             </div>
 
-            {/* Right: Actions - Grouped together */}
-            <div className="flex items-center gap-2">
+            {/* Right: Actions - Compact grouping */}
+            <div className="flex items-center gap-3">
               <Button
                 variant="ghost"
                 size="icon"
@@ -133,7 +133,6 @@ export const ModuleLayout = ({
                 <HelpCircle className="h-5 w-5" />
               </Button>
               <NotificationCenter />
-              <div className="h-6 w-px bg-border mx-1" />
               <div className="flex items-center gap-2">
                 <div className="text-right hidden md:block">
                   <p className="text-sm font-medium leading-none">{profile?.full_name || "User"}</p>
