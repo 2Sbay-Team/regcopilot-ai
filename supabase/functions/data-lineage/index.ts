@@ -103,8 +103,14 @@ Deno.serve(async (req) => {
       const destLower = (data?.destination || '').toLowerCase()
       lineageEntry.is_cross_border = crossBorderKeywords.some(k => destLower.includes(k))
 
+      // Create service role client for audit log insertion
+      const supabaseServiceClient = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      )
+
       // Store in JSONB for flexible schema (no dedicated table yet)
-      const { data: stored, error } = await supabaseClient
+      const { data: stored, error } = await supabaseServiceClient
         .from('audit_logs')
         .insert({
           organization_id: org_id,
