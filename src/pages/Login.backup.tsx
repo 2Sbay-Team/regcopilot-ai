@@ -75,22 +75,22 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4 sm:p-6">
-      <Card className="w-full max-w-md cockpit-panel shadow-xl border-primary/10">
-        <CardHeader className="space-y-3 text-center pb-6">
-          <div className="flex justify-center mb-2">
-            <div className="p-5 bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 rounded-2xl hover:shadow-xl hover:scale-105 transition-all duration-300">
-              <RoboticShieldLogo size={68} />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+      <Card className="w-full max-w-md cockpit-panel">
+        <CardHeader className="space-y-1 text-center">
+          <div className="flex justify-center mb-4">
+            <div className="p-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl hover:shadow-lg transition-all">
+              <RoboticShieldLogo size={64} />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold tracking-tight">RegSense Advisor</CardTitle>
-          <CardDescription className="text-sm leading-relaxed px-2">
-            AI-Powered Regulatory Intelligence — Effortless Compliance
+          <CardTitle className="text-2xl">RegSense Advisor</CardTitle>
+          <CardDescription>
+            AI-Powered Regulatory Intelligence — Making Compliance Effortless
           </CardDescription>
         </CardHeader>
-        <CardContent className="pt-2">
+        <CardContent>
           {/* OAuth Buttons */}
-          <div className="space-y-3 mb-6">
+          <div className="space-y-3 mb-4">
             <Button
               type="button"
               variant="outline"
@@ -123,14 +123,14 @@ const Login = () => {
             </Button>
           </div>
 
-          <div className="relative my-6">
+          <div className="relative my-4">
             <Separator />
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-3 text-xs text-muted-foreground font-medium">
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-xs text-muted-foreground">
               Or continue with email
             </span>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -171,13 +171,13 @@ const Login = () => {
                 </Button>
               </div>
             </div>
-            <Button type="submit" className="w-full h-11 font-medium" disabled={loading}>
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
-          <div className="mt-6 text-center text-sm">
+          <div className="mt-4 text-center text-sm">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-primary hover:underline font-medium transition-colors">
+            <Link to="/signup" className="text-primary hover:underline">
               Sign up
             </Link>
           </div>
