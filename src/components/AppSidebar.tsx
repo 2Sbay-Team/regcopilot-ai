@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { 
   Shield, 
   FileCheck, 
@@ -21,273 +22,395 @@ import {
   Store,
   Play,
   Brain,
-  Calendar
+  Calendar,
+  Search,
+  ChevronRight,
+  HelpCircle,
+  Wrench
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { t } from "@/lib/i18n"
 import { useLanguage } from "@/contexts/LanguageContext"
-
+import { Input } from "@/components/ui/input"
+import { 
+  Tooltip, 
+  TooltipContent, 
+  TooltipProvider, 
+  TooltipTrigger 
+} from "@/components/ui/tooltip"
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
   useSidebar,
 } from "@/components/ui/sidebar"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 
 export function AppSidebar() {
   const { state } = useSidebar()
   const { language } = useLanguage()
   const isCollapsed = state === "collapsed"
+  const [searchQuery, setSearchQuery] = useState("")
+  const [openSections, setOpenSections] = useState({
+    compliance: true,
+    management: true,
+    tools: true
+  })
 
-  const navigationItems = [
+  const complianceItems = [
     { 
       titleKey: "nav.dashboard", 
       url: "/dashboard", 
       icon: LayoutDashboard,
-      iconBgClass: "bg-gradient-to-br from-emerald-500 to-green-600",
-      iconTextClass: "text-white",
     },
     { 
       titleKey: "nav.continuousIntelligence", 
       url: "/continuous-intelligence", 
       icon: Brain,
-      iconBgClass: "bg-gradient-to-br from-violet-500 to-purple-600",
-      iconTextClass: "text-white",
     },
     { 
       titleKey: "nav.aiAct", 
       url: "/ai-act", 
       icon: Shield,
-      iconBgClass: "bg-gradient-to-br from-blue-500 to-indigo-600",
-      iconTextClass: "text-white",
     },
     { 
       titleKey: "nav.gdpr", 
       url: "/gdpr", 
       icon: FileCheck,
-      iconBgClass: "bg-gradient-to-br from-purple-500 to-pink-600",
-      iconTextClass: "text-white",
     },
     { 
       titleKey: "nav.esg", 
       url: "/esg", 
       icon: Leaf,
-      iconBgClass: "bg-gradient-to-br from-green-500 to-lime-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.scheduledJobs", 
-      url: "/scheduled-jobs", 
-      icon: Calendar,
-      iconBgClass: "bg-gradient-to-br from-amber-500 to-orange-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.agentDashboard", 
-      url: "/agents", 
-      icon: Play,
-      iconBgClass: "bg-gradient-to-br from-emerald-500 to-green-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.connectors", 
-      url: "/connectors", 
-      icon: GitBranch,
-      iconBgClass: "bg-gradient-to-br from-cyan-500 to-blue-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.socialSentiment", 
-      url: "/social-sentiment", 
-      icon: User,
-      iconBgClass: "bg-gradient-to-br from-pink-500 to-rose-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.aiGateway", 
-      url: "/ai-gateway", 
-      icon: Zap,
-      iconBgClass: "bg-gradient-to-br from-orange-500 to-amber-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.modelManagement", 
-      url: "/model-management", 
-      icon: Bot,
-      iconBgClass: "bg-gradient-to-br from-indigo-500 to-purple-600",
-      iconTextClass: "text-white",
     },
     { 
       titleKey: "nav.complianceScore", 
       url: "/compliance-score", 
       icon: TrendingUp,
-      iconBgClass: "bg-gradient-to-br from-red-500 to-rose-600",
-      iconTextClass: "text-white",
+    },
+  ]
+
+  const managementItems = [
+    { 
+      titleKey: "nav.modelManagement", 
+      url: "/model-management", 
+      icon: Bot,
+    },
+    { 
+      titleKey: "nav.modelRegistry", 
+      url: "/model-registry", 
+      icon: Database,
     },
     { 
       titleKey: "nav.dataLineage", 
       url: "/data-lineage", 
       icon: GitBranch,
-      iconBgClass: "bg-gradient-to-br from-teal-500 to-cyan-600",
-      iconTextClass: "text-white",
     },
     { 
       titleKey: "nav.dsar", 
       url: "/dsar", 
       icon: Mail,
-      iconBgClass: "bg-gradient-to-br from-sky-500 to-blue-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.auditVerify", 
-      url: "/audit-verify", 
-      icon: ShieldCheck,
-      iconBgClass: "bg-gradient-to-br from-violet-500 to-purple-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.modelRegistry", 
-      url: "/model-registry", 
-      icon: Bot,
-      iconBgClass: "bg-gradient-to-br from-fuchsia-500 to-pink-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.promptManager", 
-      url: "/prompts", 
-      icon: MessageSquare,
-      iconBgClass: "bg-gradient-to-br from-amber-500 to-yellow-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.usage", 
-      url: "/usage", 
-      icon: Activity,
-      iconBgClass: "bg-gradient-to-br from-cyan-500 to-teal-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.analytics", 
-      url: "/analytics", 
-      icon: BarChart3,
-      iconBgClass: "bg-gradient-to-br from-rose-500 to-red-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.reports", 
-      url: "/reports", 
-      icon: FileText,
-      iconBgClass: "bg-gradient-to-br from-slate-500 to-gray-600",
-      iconTextClass: "text-white",
-    },
-    { 
-      titleKey: "nav.ragSearch", 
-      url: "/rag-search", 
-      icon: BookOpen,
-      iconBgClass: "bg-gradient-to-br from-lime-500 to-green-600",
-      iconTextClass: "text-white",
     },
     { 
       titleKey: "nav.auditTrail", 
       url: "/audit", 
       icon: Database,
-      iconBgClass: "bg-gradient-to-br from-zinc-500 to-slate-600",
-      iconTextClass: "text-white",
+    },
+    { 
+      titleKey: "nav.auditVerify", 
+      url: "/audit-verify", 
+      icon: ShieldCheck,
     },
     { 
       titleKey: "nav.explainability", 
       url: "/explainability", 
       icon: Eye,
-      iconBgClass: "bg-gradient-to-br from-pink-500 to-rose-600",
-      iconTextClass: "text-white",
+    },
+  ]
+
+  const toolsItems = [
+    { 
+      titleKey: "nav.scheduledJobs", 
+      url: "/scheduled-jobs", 
+      icon: Calendar,
+    },
+    { 
+      titleKey: "nav.agentDashboard", 
+      url: "/agents", 
+      icon: Play,
+    },
+    { 
+      titleKey: "nav.connectors", 
+      url: "/connectors", 
+      icon: GitBranch,
+    },
+    { 
+      titleKey: "nav.socialSentiment", 
+      url: "/social-sentiment", 
+      icon: User,
+    },
+    { 
+      titleKey: "nav.aiGateway", 
+      url: "/ai-gateway", 
+      icon: Zap,
+    },
+    { 
+      titleKey: "nav.promptManager", 
+      url: "/prompts", 
+      icon: MessageSquare,
+    },
+    { 
+      titleKey: "nav.usage", 
+      url: "/usage", 
+      icon: Activity,
+    },
+    { 
+      titleKey: "nav.analytics", 
+      url: "/analytics", 
+      icon: BarChart3,
+    },
+    { 
+      titleKey: "nav.reports", 
+      url: "/reports", 
+      icon: FileText,
+    },
+    { 
+      titleKey: "nav.ragSearch", 
+      url: "/rag-search", 
+      icon: BookOpen,
     },
     { 
       titleKey: "nav.marketplace", 
       url: "/marketplace", 
       icon: Store,
-      iconBgClass: "bg-gradient-to-br from-yellow-500 to-orange-600",
-      iconTextClass: "text-white",
     },
     { 
       titleKey: "nav.admin", 
       url: "/admin", 
       icon: Settings,
-      iconBgClass: "bg-gradient-to-br from-gray-500 to-zinc-600",
-      iconTextClass: "text-white",
     },
   ]
 
+  const allItems = [...complianceItems, ...managementItems, ...toolsItems]
+
+  const filterItems = (items: typeof allItems) => {
+    if (!searchQuery) return items
+    return items.filter(item => 
+      t(item.titleKey, language).toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  }
+
+  const renderMenuItem = (item: typeof allItems[0]) => {
+    const Icon = item.icon
+    const title = t(item.titleKey, language)
+    
+    const menuButton = (
+      <SidebarMenuButton asChild>
+        <NavLink 
+          to={item.url} 
+          end={item.url === "/dashboard"}
+          className="hover:bg-accent/50 transition-colors group py-2 px-3 rounded-md"
+          activeClassName="bg-accent text-accent-foreground font-medium"
+        >
+          {isCollapsed ? (
+            <Icon className="h-5 w-5 mx-auto" />
+          ) : (
+            <>
+              <Icon className="h-5 w-5 shrink-0" />
+              <span className="text-sm">{title}</span>
+            </>
+          )}
+        </NavLink>
+      </SidebarMenuButton>
+    )
+
+    if (isCollapsed) {
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            {menuButton}
+          </TooltipTrigger>
+          <TooltipContent side="right" className="font-medium">
+            {title}
+          </TooltipContent>
+        </Tooltip>
+      )
+    }
+
+    return menuButton
+  }
+
   return (
-    <Sidebar collapsible="icon" className="border-r">
-      <SidebarContent className="pt-3">
-        <SidebarGroup>
-          <div className={`px-3 mb-4 ${isCollapsed ? 'flex justify-center' : ''}`}>
-            {isCollapsed ? (
-              <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">RE</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <RoboticShieldLogo size={28} />
-                <div>
-                  <span className="font-semibold text-base block leading-tight">Regulix</span>
-                  <span className="text-[10px] text-muted-foreground leading-none">Regulatory Intelligence</span>
+    <TooltipProvider delayDuration={200}>
+      <Sidebar collapsible="icon" className="border-r">
+        <SidebarContent className="pt-3">
+          <SidebarGroup>
+            <div className={`px-3 mb-4 ${isCollapsed ? 'flex justify-center' : ''}`}>
+              {isCollapsed ? (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center cursor-pointer">
+                      <span className="text-primary-foreground font-bold text-sm">RE</span>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p className="font-semibold">Regulix</p>
+                    <p className="text-xs text-muted-foreground">Regulatory Intelligence</p>
+                  </TooltipContent>
+                </Tooltip>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <RoboticShieldLogo size={28} />
+                  <div>
+                    <span className="font-semibold text-base block leading-tight">Regulix</span>
+                    <span className="text-[10px] text-muted-foreground leading-none">Regulatory Intelligence</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </SidebarGroup>
+
+          {/* Search Bar */}
+          {!isCollapsed && (
+            <SidebarGroup>
+              <div className="px-3 pb-2">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search pages..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9 h-9 text-sm"
+                  />
                 </div>
               </div>
-            )}
-          </div>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu className="gap-0.5">
-              {navigationItems.map((item) => {
-                const Icon = item.icon
-                return (
-                  <SidebarMenuItem key={item.titleKey}>
-                    <SidebarMenuButton asChild>
-                      <NavLink 
-                        to={item.url} 
-                        end={item.url === "/dashboard"}
-                        className="hover:bg-accent/50 transition-colors group py-2 px-3 rounded-md"
-                        activeClassName="bg-accent text-accent-foreground font-medium"
-                      >
-                        {isCollapsed ? (
-                          <Icon className="h-5 w-5 mx-auto" />
-                        ) : (
-                          <>
-                            <Icon className="h-5 w-5 shrink-0" />
-                            <span className="text-sm">{t(item.titleKey, language)}</span>
-                          </>
-                        )}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-      </SidebarContent>
-      
-      <SidebarFooter>
-        <div className={`flex items-center px-3 py-2 ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
-          {!isCollapsed && (
-            <span className="text-xs text-muted-foreground font-medium">
-              Theme
-            </span>
+            </SidebarGroup>
           )}
-          <ThemeToggle />
-        </div>
-      </SidebarFooter>
-    </Sidebar>
+
+          {/* Compliance Section */}
+          <Collapsible
+            open={openSections.compliance}
+            onOpenChange={(open) => setOpenSections({ ...openSections, compliance: open })}
+          >
+            <SidebarGroup>
+              {!isCollapsed && (
+                <CollapsibleTrigger className="w-full">
+                  <SidebarGroupLabel className="flex items-center justify-between cursor-pointer hover:bg-accent/50 rounded-md px-3 py-2">
+                    <span>Compliance</span>
+                    <ChevronRight className={`h-4 w-4 transition-transform ${openSections.compliance ? 'rotate-90' : ''}`} />
+                  </SidebarGroupLabel>
+                </CollapsibleTrigger>
+              )}
+              <CollapsibleContent>
+                <SidebarGroupContent>
+                  <SidebarMenu className="gap-0.5">
+                    {filterItems(complianceItems).map((item) => (
+                      <SidebarMenuItem key={item.titleKey}>
+                        {renderMenuItem(item)}
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </CollapsibleContent>
+            </SidebarGroup>
+          </Collapsible>
+
+          {/* Management Section */}
+          <Collapsible
+            open={openSections.management}
+            onOpenChange={(open) => setOpenSections({ ...openSections, management: open })}
+          >
+            <SidebarGroup>
+              {!isCollapsed && (
+                <CollapsibleTrigger className="w-full">
+                  <SidebarGroupLabel className="flex items-center justify-between cursor-pointer hover:bg-accent/50 rounded-md px-3 py-2">
+                    <span>Management</span>
+                    <ChevronRight className={`h-4 w-4 transition-transform ${openSections.management ? 'rotate-90' : ''}`} />
+                  </SidebarGroupLabel>
+                </CollapsibleTrigger>
+              )}
+              <CollapsibleContent>
+                <SidebarGroupContent>
+                  <SidebarMenu className="gap-0.5">
+                    {filterItems(managementItems).map((item) => (
+                      <SidebarMenuItem key={item.titleKey}>
+                        {renderMenuItem(item)}
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </CollapsibleContent>
+            </SidebarGroup>
+          </Collapsible>
+
+          {/* Tools Section */}
+          <Collapsible
+            open={openSections.tools}
+            onOpenChange={(open) => setOpenSections({ ...openSections, tools: open })}
+          >
+            <SidebarGroup>
+              {!isCollapsed && (
+                <CollapsibleTrigger className="w-full">
+                  <SidebarGroupLabel className="flex items-center justify-between cursor-pointer hover:bg-accent/50 rounded-md px-3 py-2">
+                    <span>Tools</span>
+                    <ChevronRight className={`h-4 w-4 transition-transform ${openSections.tools ? 'rotate-90' : ''}`} />
+                  </SidebarGroupLabel>
+                </CollapsibleTrigger>
+              )}
+              <CollapsibleContent>
+                <SidebarGroupContent>
+                  <SidebarMenu className="gap-0.5">
+                    {filterItems(toolsItems).map((item) => (
+                      <SidebarMenuItem key={item.titleKey}>
+                        {renderMenuItem(item)}
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </CollapsibleContent>
+            </SidebarGroup>
+          </Collapsible>
+
+        </SidebarContent>
+        
+        <SidebarFooter>
+          {/* Help Center Link */}
+          {!isCollapsed && (
+            <div className="px-3 py-2">
+              <NavLink 
+                to="/help-center"
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-accent/50 transition-colors text-sm"
+                activeClassName="bg-accent text-accent-foreground font-medium"
+              >
+                <HelpCircle className="h-4 w-4" />
+                <span>Help Center</span>
+              </NavLink>
+            </div>
+          )}
+          
+          <div className={`flex items-center px-3 py-2 ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
+            {!isCollapsed && (
+              <span className="text-xs text-muted-foreground font-medium">
+                Theme
+              </span>
+            )}
+            <ThemeToggle />
+          </div>
+        </SidebarFooter>
+      </Sidebar>
+    </TooltipProvider>
   )
 }
