@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
-import { FileCheck, Loader2, AlertTriangle, Upload, X, FileText, HelpCircle, BookOpen, Plus, Download } from "lucide-react"
+import { ShieldCheck, Loader2, AlertTriangle, Upload, X, FileText, HelpCircle, BookOpen, Plus, Download } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { ModuleLayout } from "@/components/ModuleLayout"
 
@@ -122,6 +122,7 @@ const GDPRCopilot = () => {
     <ModuleLayout
       title={
         <div className="flex items-center gap-2">
+          <ShieldCheck className="h-8 w-8 text-primary" />
           GDPR Checker
           <TooltipProvider>
             <Tooltip>
@@ -130,7 +131,7 @@ const GDPRCopilot = () => {
               </TooltipTrigger>
               <TooltipContent className="max-w-sm">
                 <p className="font-semibold">GDPR / DSGVO (General Data Protection Regulation / Datenschutz-Grundverordnung)</p>
-                <p className="mt-1">Regulation (EU) 2016/679 - The EU's comprehensive data protection law that governs how personal data is collected, processed, and protected. Grants individuals rights over their data including access, rectification, and erasure.</p>
+                <p className="mt-1">Regulation (EU) 2016/679 - The EU&apos;s comprehensive data protection law that governs how personal data is collected, processed, and protected. Grants individuals rights over their data including access, rectification, and erasure.</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -275,7 +276,7 @@ const GDPRCopilot = () => {
                 )}
 
                 <Button type="submit" className="w-full" disabled={loading || (!documents && files.length === 0)}>
-                  {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Scanning...</> : <><FileCheck className="mr-2 h-4 w-4" />Run GDPR Check</>}
+                  {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Scanning...</> : <><ShieldCheck className="mr-2 h-4 w-4" />Run GDPR Check</>}
                 </Button>
               </form>
             </CardContent>

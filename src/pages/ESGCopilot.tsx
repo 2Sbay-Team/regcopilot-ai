@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { Leaf, Loader2, Upload, X, FileText, HelpCircle, BookOpen, Plus, Download } from "lucide-react"
+import { Sprout, Loader2, Upload, X, FileText, HelpCircle, BookOpen, Plus, Download } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { ModuleLayout } from "@/components/ModuleLayout"
 
@@ -126,6 +126,7 @@ const ESGCopilot = () => {
     <ModuleLayout
       title={
         <div className="flex items-center gap-2">
+          <Sprout className="h-8 w-8 text-primary" />
           ESG Reporter
           <TooltipProvider>
             <Tooltip>
@@ -134,7 +135,7 @@ const ESGCopilot = () => {
               </TooltipTrigger>
               <TooltipContent className="max-w-sm">
                 <p className="font-semibold">ESG (Environmental, Social, and Governance)</p>
-                <p className="mt-1">A framework for measuring an organization's sustainability and ethical impact. Covers carbon emissions, resource use, labor practices, diversity, and corporate governance.</p>
+                <p className="mt-1">A framework for measuring an organization&apos;s sustainability and ethical impact. Covers carbon emissions, resource use, labor practices, diversity, and corporate governance.</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -390,7 +391,7 @@ const ESGCopilot = () => {
                 )}
 
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating...</> : <><Leaf className="mr-2 h-4 w-4" />Generate Report</>}
+                  {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating...</> : <><Sprout className="mr-2 h-4 w-4" />Generate Report</>}
                 </Button>
               </form>
             </CardContent>

@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
-import { Home, ChevronRight, HelpCircle } from "lucide-react"
+import { Home, ChevronRight, HelpCircle, Brain, ShieldCheck, Sprout, FileText, TrendingUp, Zap, Network, Workflow } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { NotificationCenter } from "@/components/NotificationCenter"
@@ -65,6 +65,22 @@ export const ModuleLayout = ({
     return user?.email?.[0]?.toUpperCase() || 'U'
   }
 
+  const getPageIcon = () => {
+    const path = location.pathname
+    const iconMap: Record<string, JSX.Element> = {
+      '/ai-act': <Brain className="h-4 w-4" />,
+      '/gdpr': <ShieldCheck className="h-4 w-4" />,
+      '/esg': <Sprout className="h-4 w-4" />,
+      '/reports': <FileText className="h-4 w-4" />,
+      '/compliance-score': <TrendingUp className="h-4 w-4" />,
+      '/regsense': <Brain className="h-4 w-4" />,
+      '/ai-gateway': <Zap className="h-4 w-4" />,
+      '/connectors': <Network className="h-4 w-4" />,
+      '/automation': <Workflow className="h-4 w-4" />,
+    }
+    return iconMap[path] || null
+  }
+
   const getPageName = () => {
     const path = location.pathname
     const segments = path.split('/').filter(Boolean)
@@ -97,7 +113,10 @@ export const ModuleLayout = ({
                 Startseite
               </Button>
               <ChevronRight className="h-4 w-4 text-muted-foreground" />
-              <span className="font-medium">{getPageName()}</span>
+              <div className="flex items-center gap-2 font-medium">
+                {getPageIcon()}
+                <span>{getPageName()}</span>
+              </div>
             </div>
 
             {/* Right: Actions */}
