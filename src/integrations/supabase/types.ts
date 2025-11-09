@@ -14,6 +14,122 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_queue: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          id: string
+          max_retries: number | null
+          organization_id: string
+          payload: Json
+          priority: number | null
+          result: Json | null
+          retry_count: number | null
+          scheduled_for: string | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["agent_task_status"]
+          task_type: Database["public"]["Enums"]["agent_task_type"]
+          updated_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          max_retries?: number | null
+          organization_id: string
+          payload: Json
+          priority?: number | null
+          result?: Json | null
+          retry_count?: number | null
+          scheduled_for?: string | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["agent_task_status"]
+          task_type: Database["public"]["Enums"]["agent_task_type"]
+          updated_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          max_retries?: number | null
+          organization_id?: string
+          payload?: Json
+          priority?: number | null
+          result?: Json | null
+          retry_count?: number | null
+          scheduled_for?: string | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["agent_task_status"]
+          task_type?: Database["public"]["Enums"]["agent_task_type"]
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_queue_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_task_history: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          execution_time_ms: number | null
+          id: string
+          organization_id: string
+          payload: Json
+          result: Json | null
+          status: Database["public"]["Enums"]["agent_task_status"]
+          task_id: string
+          task_type: Database["public"]["Enums"]["agent_task_type"]
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          organization_id: string
+          payload: Json
+          result?: Json | null
+          status: Database["public"]["Enums"]["agent_task_status"]
+          task_id: string
+          task_type: Database["public"]["Enums"]["agent_task_type"]
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          organization_id?: string
+          payload?: Json
+          result?: Json | null
+          status?: Database["public"]["Enums"]["agent_task_status"]
+          task_id?: string
+          task_type?: Database["public"]["Enums"]["agent_task_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_task_history_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_task_history_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "agent_queue"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_act_assessments: {
         Row: {
           ai_system_id: string | null
@@ -1636,6 +1752,19 @@ export type Database = {
       }
     }
     Enums: {
+      agent_task_status:
+        | "pending"
+        | "in_progress"
+        | "completed"
+        | "failed"
+        | "cancelled"
+      agent_task_type:
+        | "ai_act_audit"
+        | "gdpr_scan"
+        | "esg_analysis"
+        | "nis2_assessment"
+        | "dora_assessment"
+        | "dma_assessment"
       app_role: "admin" | "analyst" | "auditor" | "viewer"
     }
     CompositeTypes: {
@@ -1764,6 +1893,21 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      agent_task_status: [
+        "pending",
+        "in_progress",
+        "completed",
+        "failed",
+        "cancelled",
+      ],
+      agent_task_type: [
+        "ai_act_audit",
+        "gdpr_scan",
+        "esg_analysis",
+        "nis2_assessment",
+        "dora_assessment",
+        "dma_assessment",
+      ],
       app_role: ["admin", "analyst", "auditor", "viewer"],
     },
   },
