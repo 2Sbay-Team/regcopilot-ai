@@ -9,7 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
-import { Bot, Plus, TrendingUp, DollarSign, Zap, Search, Filter, ArrowUpDown } from "lucide-react"
+import { Bot, Plus, TrendingUp, DollarSign, Zap, Search, Filter, ArrowUpDown, Trash2, Power, PowerOff, CheckSquare } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 const AVAILABLE_MODELS = [
@@ -35,6 +37,8 @@ const ModelManagement = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all')
   const [sortBy, setSortBy] = useState<'name' | 'provider' | 'price' | 'date'>('date')
+  const [selectedModels, setSelectedModels] = useState<string[]>([])
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   
   const [newModel, setNewModel] = useState({
     model_name: '',
@@ -110,6 +114,109 @@ const ModelManagement = () => {
       loadModels()
     }
   }
+
+  const toggleSelectedModels = (modelId: string) => {
+    setSelectedModels(prev => 
+      prev.includes(modelId) 
+        ? prev.filter(id => id !== modelId)
+        : [...prev, modelId]
+    )
+  }
+
+  const selectAllModels = (filteredModels: any[]) => {
+    if (selectedModels.length === filteredModels.length) {
+      setSelectedModels([])
+    } else {
+      setSelectedModels(filteredModels.map(m => m.id))
+    }
+  }
+
+  const bulkActivate = async () => {
+    setLoading(true)
+    try {
+      const { error } = await supabase
+        .from('model_configs')
+        .update({ active: true })
+        .in('id', selectedModels)
+
+      if (error) throw error
+
+      toast({ title: "Success", description: `Activated ${selectedModels.length} model(s)` })
+      setSelectedModels([])
+      loadModels()
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Error", description: error.message })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const bulkDeactivate = async () => {
+    setLoading(true)
+    try {
+      const { error } = await supabase
+        .from('model_configs')
+        .update({ active: false })
+        .in('id', selectedModels)
+
+      if (error) throw error
+
+      toast({ title: "Success", description: `Deactivated ${selectedModels.length} model(s)` })
+      setSelectedModels([])
+      loadModels()
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Error", description: error.message })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const bulkDelete = async () => {
+    setLoading(true)
+    try {
+      const { error } = await supabase
+        .from('model_configs')
+        .delete()
+        .in('id', selectedModels)
+
+      if (error) throw error
+
+      toast({ title: "Success", description: `Deleted ${selectedModels.length} model(s)` })
+      setSelectedModels([])
+      setShowDeleteDialog(false)
+      loadModels()
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Error", description: error.message })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const filteredAndSortedModels = models
+    .filter(model => {
+      const matchesSearch = searchQuery === '' || 
+        model.model_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        model.provider.toLowerCase().includes(searchQuery.toLowerCase())
+      
+      const matchesStatus = statusFilter === 'all' ||
+        (statusFilter === 'active' && model.active) ||
+        (statusFilter === 'inactive' && !model.active)
+      
+      return matchesSearch && matchesStatus
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          return a.model_name.localeCompare(b.model_name)
+        case 'provider':
+          return a.provider.localeCompare(b.provider)
+        case 'price':
+          return a.price_per_1k_tokens - b.price_per_1k_tokens
+        case 'date':
+        default:
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      }
+    })
 
   return (
     <div className="space-y-6 p-6">
@@ -247,37 +354,72 @@ const ModelManagement = () => {
         </CardContent>
       </Card>
 
+      {selectedModels.length > 0 && (
+        <Card className="border-primary bg-primary/5">
+          <CardContent className="py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <CheckSquare className="h-5 w-5 text-primary" />
+                <p className="font-medium">
+                  {selectedModels.length} model(s) selected
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={bulkActivate}
+                  disabled={loading}
+                >
+                  <Power className="mr-2 h-4 w-4" />
+                  Activate
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={bulkDeactivate}
+                  disabled={loading}
+                >
+                  <PowerOff className="mr-2 h-4 w-4" />
+                  Deactivate
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => setShowDeleteDialog(true)}
+                  disabled={loading}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {filteredAndSortedModels.length > 0 && (
+        <div className="flex items-center gap-2">
+          <Checkbox
+            checked={selectedModels.length === filteredAndSortedModels.length}
+            onCheckedChange={() => selectAllModels(filteredAndSortedModels)}
+          />
+          <Label className="text-sm cursor-pointer" onClick={() => selectAllModels(filteredAndSortedModels)}>
+            Select all {filteredAndSortedModels.length} model(s)
+          </Label>
+        </div>
+      )}
+
       <div className="grid gap-6">
-        {models
-          .filter(model => {
-            const matchesSearch = searchQuery === '' || 
-              model.model_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              model.provider.toLowerCase().includes(searchQuery.toLowerCase())
-            
-            const matchesStatus = statusFilter === 'all' ||
-              (statusFilter === 'active' && model.active) ||
-              (statusFilter === 'inactive' && !model.active)
-            
-            return matchesSearch && matchesStatus
-          })
-          .sort((a, b) => {
-            switch (sortBy) {
-              case 'name':
-                return a.model_name.localeCompare(b.model_name)
-              case 'provider':
-                return a.provider.localeCompare(b.provider)
-              case 'price':
-                return a.price_per_1k_tokens - b.price_per_1k_tokens
-              case 'date':
-              default:
-                return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-            }
-          })
-          .map((model) => (
-          <Card key={model.id} className={model.active ? 'border-primary/20' : 'border-muted'}>
+        {filteredAndSortedModels.map((model) => (
+          <Card key={model.id} className={selectedModels.includes(model.id) ? 'border-primary' : model.active ? 'border-primary/20' : 'border-muted'}>
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
+                  <Checkbox
+                    checked={selectedModels.includes(model.id)}
+                    onCheckedChange={() => toggleSelectedModels(model.id)}
+                  />
                   <Bot className="h-6 w-6 text-primary" />
                   <div>
                     <CardTitle className="flex items-center gap-2">
@@ -316,6 +458,18 @@ const ModelManagement = () => {
           </Card>
         ))}
 
+        {filteredAndSortedModels.length === 0 && models.length > 0 && (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <Filter className="h-12 w-12 text-muted-foreground mb-4" />
+              <p className="text-muted-foreground text-center">No models match your filters</p>
+              <p className="text-sm text-muted-foreground text-center mt-1">
+                Try adjusting your search or filter criteria
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
         {models.length === 0 && (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
@@ -328,6 +482,23 @@ const ModelManagement = () => {
           </Card>
         )}
       </div>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Selected Models</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete {selectedModels.length} model(s)? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={bulkDelete} disabled={loading} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
