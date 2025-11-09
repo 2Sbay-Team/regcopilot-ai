@@ -15,7 +15,7 @@ import {
   Zap,
   Bot,
   MessageSquare,
-  DollarSign,
+  Activity,
   User,
   TrendingUp,
   Store
@@ -58,7 +58,7 @@ export function AppSidebar() {
     { titleKey: "nav.auditVerify", url: "/audit-verify", icon: ShieldCheck },
     { titleKey: "nav.modelRegistry", url: "/model-registry", icon: Bot },
     { titleKey: "nav.promptManager", url: "/prompts", icon: MessageSquare },
-    { titleKey: "nav.usage", url: "/usage", icon: DollarSign },
+    { titleKey: "nav.usage", url: "/usage", icon: Activity },
     { titleKey: "nav.analytics", url: "/analytics", icon: BarChart3 },
     { titleKey: "nav.reports", url: "/reports", icon: FileText },
     { titleKey: "nav.ragSearch", url: "/rag-search", icon: BookOpen },
@@ -66,10 +66,6 @@ export function AppSidebar() {
     { titleKey: "nav.explainability", url: "/explainability", icon: Eye },
     { titleKey: "nav.marketplace", url: "/marketplace", icon: Store },
     { titleKey: "nav.admin", url: "/admin", icon: Settings },
-  ]
-
-  const accountItems = [
-    { titleKey: "nav.settings", url: "/settings", icon: User },
   ]
 
   return (
@@ -134,27 +130,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>{t('nav.account', language)}</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {accountItems.map((item) => (
-                <SidebarMenuItem key={item.titleKey}>
-                  <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url}
-                      className="hover:bg-accent/50 transition-colors"
-                      activeClassName="bg-accent text-accent-foreground font-medium"
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!isCollapsed && <span>{t(item.titleKey, language)}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   )

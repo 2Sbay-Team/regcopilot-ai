@@ -49,10 +49,13 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.explainability': 'Explainability',
     'nav.marketplace': 'Marketplace',
     'nav.admin': 'Admin',
-    'nav.settings': 'Settings',
     'nav.main': 'Main',
     'nav.tools': 'Tools',
     'nav.account': 'Account',
+    'nav.settings': 'Settings',
+    'nav.impressum': 'Impressum',
+    'nav.contactUs': 'Contact Us',
+    'nav.logout': 'Logout',
     
     // Dashboard
     'dashboard.title': 'Compliance Dashboard',
@@ -146,10 +149,13 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.explainability': 'Explicabilité',
     'nav.marketplace': 'Marché',
     'nav.admin': 'Administration',
-    'nav.settings': 'Paramètres',
     'nav.main': 'Principal',
     'nav.tools': 'Outils',
     'nav.account': 'Compte',
+    'nav.settings': 'Paramètres',
+    'nav.impressum': 'Mentions Légales',
+    'nav.contactUs': 'Nous Contacter',
+    'nav.logout': 'Déconnexion',
     
     // Dashboard
     'dashboard.title': 'Tableau de Bord de Conformité',
@@ -240,10 +246,13 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.explainability': 'Erklärbarkeit',
     'nav.marketplace': 'Marktplatz',
     'nav.admin': 'Verwaltung',
-    'nav.settings': 'Einstellungen',
     'nav.main': 'Haupt',
     'nav.tools': 'Werkzeuge',
     'nav.account': 'Konto',
+    'nav.settings': 'Einstellungen',
+    'nav.impressum': 'Impressum',
+    'nav.contactUs': 'Kontakt',
+    'nav.logout': 'Abmelden',
     
     // Dashboard
     'dashboard.title': 'Compliance-Dashboard',
@@ -334,10 +343,13 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.explainability': 'القابلية للتفسير',
     'nav.marketplace': 'السوق',
     'nav.admin': 'الإدارة',
-    'nav.settings': 'الإعدادات',
     'nav.main': 'رئيسي',
     'nav.tools': 'الأدوات',
     'nav.account': 'الحساب',
+    'nav.settings': 'الإعدادات',
+    'nav.impressum': 'البيانات القانونية',
+    'nav.contactUs': 'اتصل بنا',
+    'nav.logout': 'تسجيل الخروج',
     
     // Dashboard
     'dashboard.title': 'لوحة تحكم الامتثال',
