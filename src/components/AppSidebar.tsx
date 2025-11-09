@@ -328,7 +328,7 @@ export function AppSidebar() {
         />
       )}
       
-      <Sidebar collapsible="icon" className="border-r">
+      <Sidebar collapsible="offcanvas" className="border-r">
         <SidebarContent className="pt-3">
           <SidebarGroup>
             <div className={`px-3 mb-4 ${isCollapsed ? 'flex justify-center' : ''}`}>
