@@ -34,6 +34,7 @@ import ComplianceScore from "./pages/ComplianceScore";
 import Marketplace from "./pages/Marketplace";
 import Impressum from "./pages/Impressum";
 import ContactUs from "./pages/ContactUs";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -75,6 +76,7 @@ const App = () => (
             <Route path="/marketplace" element={<ProtectedRoute><AppLayout><Marketplace /></AppLayout></ProtectedRoute>} />
             <Route path="/impressum" element={<ProtectedRoute><AppLayout><Impressum /></AppLayout></ProtectedRoute>} />
             <Route path="/contact" element={<ProtectedRoute><AppLayout><ContactUs /></AppLayout></ProtectedRoute>} />
+            <Route path="/privacy-policy" element={<ProtectedRoute><AppLayout><PrivacyPolicy /></AppLayout></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

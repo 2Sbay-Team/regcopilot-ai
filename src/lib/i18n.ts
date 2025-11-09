@@ -55,6 +55,7 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.settings': 'Settings',
     'nav.impressum': 'Impressum',
     'nav.contactUs': 'Contact Us',
+    'nav.privacyPolicy': 'Privacy Policy',
     'nav.logout': 'Logout',
     
     // Dashboard
@@ -155,6 +156,7 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.settings': 'Paramètres',
     'nav.impressum': 'Mentions Légales',
     'nav.contactUs': 'Nous Contacter',
+    'nav.privacyPolicy': 'Politique de Confidentialité',
     'nav.logout': 'Déconnexion',
     
     // Dashboard
@@ -252,6 +254,7 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.settings': 'Einstellungen',
     'nav.impressum': 'Impressum',
     'nav.contactUs': 'Kontakt',
+    'nav.privacyPolicy': 'Datenschutzerklärung',
     'nav.logout': 'Abmelden',
     
     // Dashboard
@@ -349,6 +352,7 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.settings': 'الإعدادات',
     'nav.impressum': 'البيانات القانونية',
     'nav.contactUs': 'اتصل بنا',
+    'nav.privacyPolicy': 'سياسة الخصوصية',
     'nav.logout': 'تسجيل الخروج',
     
     // Dashboard

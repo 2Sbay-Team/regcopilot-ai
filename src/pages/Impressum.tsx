@@ -26,36 +26,25 @@ const Impressum = () => {
         <CardContent className="space-y-4">
           <div>
             <h3 className="font-semibold mb-2">{language === 'de' ? 'Anbieter' : language === 'fr' ? 'Fournisseur' : language === 'ar' ? 'المزود' : 'Provider'}</h3>
-            <p className="text-muted-foreground">Regulix GmbH</p>
-            <p className="text-muted-foreground">Compliance Street 123</p>
-            <p className="text-muted-foreground">10115 Berlin, Germany</p>
+            <p className="text-muted-foreground">Köln, Germany</p>
           </div>
 
           <div>
             <h3 className="font-semibold mb-2">{language === 'de' ? 'Kontakt' : language === 'fr' ? 'Contact' : language === 'ar' ? 'الاتصال' : 'Contact'}</h3>
             <p className="text-muted-foreground">
-              {language === 'de' ? 'Telefon: ' : language === 'fr' ? 'Téléphone: ' : language === 'ar' ? 'الهاتف: ' : 'Phone: '}+49 (0) 30 123456
-            </p>
-            <p className="text-muted-foreground">
-              {language === 'de' ? 'E-Mail: ' : language === 'fr' ? 'E-mail: ' : language === 'ar' ? 'البريد الإلكتروني: ' : 'Email: '}info@regulix.com
+              {language === 'de' ? 'Telefon: ' : language === 'fr' ? 'Téléphone: ' : language === 'ar' ? 'الهاتف: ' : 'Phone: '}015118383733
             </p>
           </div>
 
           <div>
             <h3 className="font-semibold mb-2">{language === 'de' ? 'Geschäftsführung' : language === 'fr' ? 'Direction' : language === 'ar' ? 'الإدارة' : 'Management'}</h3>
-            <p className="text-muted-foreground">Max Mustermann</p>
+            <p className="text-muted-foreground">Yousri Gammoudi</p>
           </div>
 
           <div>
             <h3 className="font-semibold mb-2">{language === 'de' ? 'Handelsregister' : language === 'fr' ? 'Registre du commerce' : language === 'ar' ? 'السجل التجاري' : 'Commercial Register'}</h3>
-            <p className="text-muted-foreground">
-              {language === 'de' ? 'Eintragung im Handelsregister' : language === 'fr' ? 'Enregistrement au registre du commerce' : language === 'ar' ? 'التسجيل في السجل التجاري' : 'Registration in the commercial register'}
-            </p>
-            <p className="text-muted-foreground">
-              {language === 'de' ? 'Registergericht: ' : language === 'fr' ? 'Tribunal: ' : language === 'ar' ? 'المحكمة: ' : 'Court: '}Amtsgericht Charlottenburg
-            </p>
-            <p className="text-muted-foreground">
-              {language === 'de' ? 'Registernummer: ' : language === 'fr' ? 'Numéro d\'enregistrement: ' : language === 'ar' ? 'رقم التسجيل: ' : 'Registration number: '}HRB 123456
+            <p className="text-muted-foreground text-amber-600 dark:text-amber-400">
+              {language === 'de' ? 'Demnächst verfügbar' : language === 'fr' ? 'Disponible prochainement' : language === 'ar' ? 'متاح قريبًا' : 'Coming soon'}
             </p>
           </div>
 
@@ -63,7 +52,9 @@ const Impressum = () => {
             <h3 className="font-semibold mb-2">
               {language === 'de' ? 'Umsatzsteuer-ID' : language === 'fr' ? 'Numéro de TVA' : language === 'ar' ? 'رقم ضريبة القيمة المضافة' : 'VAT ID'}
             </h3>
-            <p className="text-muted-foreground">DE123456789</p>
+            <p className="text-muted-foreground text-amber-600 dark:text-amber-400">
+              {language === 'de' ? 'Demnächst verfügbar' : language === 'fr' ? 'Disponible prochainement' : language === 'ar' ? 'متاح قريبًا' : 'Coming soon'}
+            </p>
           </div>
 
           <div className="pt-4 border-t">
