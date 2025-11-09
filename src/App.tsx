@@ -28,6 +28,7 @@ import AuditChainVerify from "./pages/AuditChainVerify";
 import AIGateway from "./pages/AIGateway";
 import Usage from "./pages/Usage";
 import Prompts from "./pages/Prompts";
+import LLMSettings from "./pages/LLMSettings";
 import Settings from "./pages/Settings";
 import ModelManagement from "./pages/ModelManagement";
 import ComplianceScore from "./pages/ComplianceScore";
@@ -86,6 +87,7 @@ const App = () => (
             <Route path="/usage" element={<ProtectedRoute><AppLayout><Usage /></AppLayout></ProtectedRoute>} />
             <Route path="/prompts" element={<ProtectedRoute><AppLayout><Prompts /></AppLayout></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><AppLayout><Settings /></AppLayout></ProtectedRoute>} />
+            <Route path="/settings/llm" element={<ProtectedRoute><AppLayout><LLMSettings /></AppLayout></ProtectedRoute>} />
             <Route path="/model-management" element={<ProtectedRoute><AppLayout><ModelManagement /></AppLayout></ProtectedRoute>} />
             <Route path="/compliance-score" element={<ProtectedRoute><AppLayout><ComplianceScore /></AppLayout></ProtectedRoute>} />
             <Route path="/marketplace" element={<ProtectedRoute><AppLayout><Marketplace /></AppLayout></ProtectedRoute>} />

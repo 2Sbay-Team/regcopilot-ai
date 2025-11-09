@@ -5,12 +5,14 @@ import { useAuth } from "@/contexts/AuthContext"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
 import { Shield, FileCheck, Leaf, Database, FileText, BookOpen, TrendingUp, Activity } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { HapticButton } from "@/components/ui/haptic-button"
 import { InteractiveCard } from "@/components/ui/interactive-card"
 import { useHaptic } from "@/hooks/useHaptic"
 import { RealTimeStatusIndicator } from "@/components/RealTimeStatusIndicator"
+import { QuotaWarningBanner } from "@/components/QuotaWarningBanner"
 import { t } from "@/lib/i18n"
 
 const Dashboard = () => {
@@ -23,6 +25,7 @@ const Dashboard = () => {
     esg_reports: 0,
     audit_logs: 0,
   })
+  const [quotaInfo, setQuotaInfo] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
   const { toast } = useToast()
@@ -76,6 +79,23 @@ const Dashboard = () => {
         esg_reports: esgReports.count || 0,
         audit_logs: auditLogs.count || 0,
       })
+
+      // Load quota information
+      const { data: org } = await supabase
+        .from('organizations')
+        .select('llm_token_quota, tokens_used_this_month, billing_model')
+        .eq('id', profileData.organization_id)
+        .single()
+
+      if (org) {
+        const usagePercentage = (org.tokens_used_this_month / org.llm_token_quota) * 100
+        setQuotaInfo({
+          quota: org.llm_token_quota,
+          used: org.tokens_used_this_month,
+          percentage: usagePercentage,
+          billing_model: org.billing_model
+        })
+      }
     }
 
     setLoading(false)
@@ -110,8 +130,38 @@ const Dashboard = () => {
         <RealTimeStatusIndicator />
       </div>
 
+      {/* Quota Warning Banner */}
+      <QuotaWarningBanner />
+
       {/* Stats Dashboard */}
       <div className="grid gap-4 md:grid-cols-4">
+        {/* Token Quota Card */}
+        {quotaInfo && quotaInfo.billing_model !== 'byok' && (
+          <InteractiveCard 
+            onClick={() => {
+              vibrate("selection")
+              navigate("/usage")
+            }}
+            className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
+          >
+            <CardHeader className="flex flex-row items-center justify-between pb-3 space-y-0">
+              <div className="flex flex-col gap-2">
+                <CardTitle className="text-sm font-semibold text-muted-foreground">Token Usage</CardTitle>
+                <div className="text-4xl font-bold text-foreground">{quotaInfo.percentage.toFixed(0)}%</div>
+              </div>
+              <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                <Activity className="h-7 w-7 text-white" />
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0 space-y-2">
+              <Progress value={quotaInfo.percentage} className="h-2" />
+              <p className="text-xs text-muted-foreground font-medium">
+                {quotaInfo.used.toLocaleString()} / {quotaInfo.quota.toLocaleString()} tokens
+              </p>
+            </CardContent>
+          </InteractiveCard>
+        )}
+
         <InteractiveCard 
           onClick={() => {
             vibrate("selection")
@@ -150,7 +200,7 @@ const Dashboard = () => {
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <p className="text-xs text-muted-foreground font-medium">{t('dashboard.complianceVerified', language)}</p>
+            <p className="text-xs text-muted-foreground font-medium">{t('dashboard.assessments', language)}</p>
           </CardContent>
         </InteractiveCard>
 
@@ -166,12 +216,12 @@ const Dashboard = () => {
               <CardTitle className="text-sm font-semibold text-muted-foreground">{t('dashboard.esgReports', language)}</CardTitle>
               <div className="text-4xl font-bold text-foreground">{stats.esg_reports}</div>
             </div>
-            <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-green-500 to-lime-500 flex items-center justify-center shadow-lg shadow-green-500/30">
+            <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/30">
               <Leaf className="h-7 w-7 text-white" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <p className="text-xs text-muted-foreground font-medium">{t('dashboard.reportsGenerated', language)}</p>
+            <p className="text-xs text-muted-foreground font-medium">{t('dashboard.reports', language)}</p>
           </CardContent>
         </InteractiveCard>
 
@@ -187,193 +237,57 @@ const Dashboard = () => {
               <CardTitle className="text-sm font-semibold text-muted-foreground">{t('dashboard.auditLogs', language)}</CardTitle>
               <div className="text-4xl font-bold text-foreground">{stats.audit_logs}</div>
             </div>
-            <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
+            <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
               <Database className="h-7 w-7 text-white" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <p className="text-xs text-muted-foreground font-medium">{t('dashboard.eventsTracked', language)}</p>
-          </CardContent>
-        </InteractiveCard>
-      </div>
-
-      {/* Main Copilot Modules */}
-      <div className="grid gap-6 md:grid-cols-3">
-        <InteractiveCard 
-          onClick={() => {
-            vibrate("medium")
-            navigate("/ai-act")
-          }}
-          className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
-        >
-          <CardHeader>
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-blue-500/40">
-              <Shield className="h-8 w-8 text-white" />
-            </div>
-            <CardTitle className="text-2xl font-bold mb-2">{t('dashboard.aiActAuditor', language)}</CardTitle>
-            <CardDescription className="text-base">
-              {t('dashboard.aiActDesc', language)}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <HapticButton 
-              size="lg" 
-              className="w-full" 
-              onClick={(e) => {
-                e.stopPropagation()
-                vibrate("medium")
-                navigate("/ai-act")
-              }}
-            >
-              {t('dashboard.startAssessment', language)}
-            </HapticButton>
-          </CardContent>
-        </InteractiveCard>
-
-        <InteractiveCard 
-          onClick={() => {
-            vibrate("medium")
-            navigate("/gdpr")
-          }}
-          className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
-        >
-          <CardHeader>
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-emerald-500/40">
-              <FileCheck className="h-8 w-8 text-white" />
-            </div>
-            <CardTitle className="text-2xl font-bold mb-2">{t('dashboard.gdprChecker', language)}</CardTitle>
-            <CardDescription className="text-base">
-              {t('dashboard.gdprDesc', language)}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <HapticButton 
-              size="lg" 
-              className="w-full" 
-              onClick={(e) => {
-                e.stopPropagation()
-                vibrate("medium")
-                navigate("/gdpr")
-              }}
-            >
-              {t('dashboard.runCheck', language)}
-            </HapticButton>
-          </CardContent>
-        </InteractiveCard>
-
-        <InteractiveCard 
-          onClick={() => {
-            vibrate("medium")
-            navigate("/esg")
-          }}
-          className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
-        >
-          <CardHeader>
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-green-500 to-lime-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-green-500/40">
-              <Leaf className="h-8 w-8 text-white" />
-            </div>
-            <CardTitle className="text-2xl font-bold mb-2">{t('dashboard.esgReporter', language)}</CardTitle>
-            <CardDescription className="text-base">
-              {t('dashboard.esgDesc', language)}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <HapticButton 
-              size="lg" 
-              className="w-full" 
-              onClick={(e) => {
-                e.stopPropagation()
-                vibrate("medium")
-                navigate("/esg")
-              }}
-            >
-              {t('dashboard.createReport', language)}
-            </HapticButton>
+            <p className="text-xs text-muted-foreground font-medium">{t('dashboard.entries', language)}</p>
           </CardContent>
         </InteractiveCard>
       </div>
 
       {/* Quick Actions */}
-      <Card className="cockpit-panel">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">{t('dashboard.quickActions', language)}</CardTitle>
-          <CardDescription className="text-base">{t('dashboard.quickActionsDesc', language)}</CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <HapticButton 
-            variant="outline" 
-            className="justify-start h-auto py-5 hover:scale-[1.02] hover:border-primary/40 transition-all group" 
-            onClick={() => navigate("/analytics")}
-          >
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-violet-500/30">
-                <TrendingUp className="h-6 w-6 text-white" />
-              </div>
-              <span className="font-semibold text-base">{t('dashboard.viewAnalytics', language)}</span>
+      <div className="grid gap-4 md:grid-cols-3">
+        <InteractiveCard onClick={() => {
+          vibrate("selection")
+          navigate("/ai-act")
+        }} className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300">
+          <CardHeader>
+            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20 mb-3">
+              <Shield className="h-6 w-6 text-white" />
             </div>
-          </HapticButton>
-          <HapticButton 
-            variant="outline" 
-            className="justify-start h-auto py-5 hover:scale-[1.02] hover:border-primary/40 transition-all group" 
-            onClick={() => navigate("/reports")}
-          >
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-orange-500/30">
-                <FileText className="h-6 w-6 text-white" />
-              </div>
-              <span className="font-semibold text-base">{t('dashboard.complianceReports', language)}</span>
+            <CardTitle>{t('dashboard.aiActCopilot', language)}</CardTitle>
+            <CardDescription>{t('dashboard.assessAISystems', language)}</CardDescription>
+          </CardHeader>
+        </InteractiveCard>
+
+        <InteractiveCard onClick={() => {
+          vibrate("selection")
+          navigate("/gdpr")
+        }} className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300">
+          <CardHeader>
+            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 mb-3">
+              <FileCheck className="h-6 w-6 text-white" />
             </div>
-          </HapticButton>
-          <HapticButton 
-            variant="outline" 
-            className="justify-start h-auto py-5 hover:scale-[1.02] hover:border-primary/40 transition-all group" 
-            onClick={() => navigate("/rag-search")}
-          >
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-cyan-500/30">
-                <BookOpen className="h-6 w-6 text-white" />
-              </div>
-              <span className="font-semibold text-base">{t('dashboard.searchRegulations', language)}</span>
+            <CardTitle>{t('dashboard.gdprCopilot', language)}</CardTitle>
+            <CardDescription>{t('dashboard.scanPrivacy', language)}</CardDescription>
+          </CardHeader>
+        </InteractiveCard>
+
+        <InteractiveCard onClick={() => {
+          vibrate("selection")
+          navigate("/esg")
+        }} className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300">
+          <CardHeader>
+            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/20 mb-3">
+              <Leaf className="h-6 w-6 text-white" />
             </div>
-          </HapticButton>
-          <HapticButton 
-            variant="outline" 
-            className="justify-start h-auto py-5 hover:scale-[1.02] hover:border-primary/40 transition-all group" 
-            onClick={() => navigate("/audit")}
-          >
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/30">
-                <Database className="h-6 w-6 text-white" />
-              </div>
-              <span className="font-semibold text-base">{t('dashboard.viewAuditTrail', language)}</span>
-            </div>
-          </HapticButton>
-          <HapticButton 
-            variant="outline" 
-            className="justify-start h-auto py-5 hover:scale-[1.02] hover:border-primary/40 transition-all group" 
-            onClick={() => navigate("/models")}
-          >
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-indigo-500/30">
-                <Shield className="h-6 w-6 text-white" />
-              </div>
-              <span className="font-semibold text-base">{t('dashboard.modelRegistry', language)}</span>
-            </div>
-          </HapticButton>
-          <HapticButton 
-            variant="outline" 
-            className="justify-start h-auto py-5 hover:scale-[1.02] hover:border-primary/40 transition-all group" 
-            onClick={() => navigate("/admin")}
-          >
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-slate-500 to-gray-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-slate-500/30">
-                <Shield className="h-6 w-6 text-white" />
-              </div>
-              <span className="font-semibold text-base">{t('dashboard.adminPanel', language)}</span>
-            </div>
-          </HapticButton>
-        </CardContent>
-      </Card>
+            <CardTitle>{t('dashboard.esgCopilot', language)}</CardTitle>
+            <CardDescription>{t('dashboard.generateReports', language)}</CardDescription>
+          </CardHeader>
+        </InteractiveCard>
+      </div>
     </div>
   )
 }

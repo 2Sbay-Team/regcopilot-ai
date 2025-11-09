@@ -1945,25 +1945,46 @@ export type Database = {
       }
       organizations: {
         Row: {
+          billing_model: string
+          byok_api_key_encrypted: string | null
+          byok_model: string | null
+          byok_provider: string | null
           country_code: string | null
           created_at: string | null
           id: string
+          llm_token_quota: number
           name: string
           plan: string | null
+          quota_reset_date: string | null
+          tokens_used_this_month: number
         }
         Insert: {
+          billing_model?: string
+          byok_api_key_encrypted?: string | null
+          byok_model?: string | null
+          byok_provider?: string | null
           country_code?: string | null
           created_at?: string | null
           id?: string
+          llm_token_quota?: number
           name: string
           plan?: string | null
+          quota_reset_date?: string | null
+          tokens_used_this_month?: number
         }
         Update: {
+          billing_model?: string
+          byok_api_key_encrypted?: string | null
+          byok_model?: string | null
+          byok_provider?: string | null
           country_code?: string | null
           created_at?: string | null
           id?: string
+          llm_token_quota?: number
           name?: string
           plan?: string | null
+          quota_reset_date?: string | null
+          tokens_used_this_month?: number
         }
         Relationships: []
       }
@@ -2324,6 +2345,39 @@ export type Database = {
           },
         ]
       }
+      stripe_usage_events: {
+        Row: {
+          cost_usd: number
+          created_at: string | null
+          id: string
+          organization_id: string
+          reported_at: string | null
+          stripe_event_id: string | null
+          subscription_item_id: string
+          tokens_consumed: number
+        }
+        Insert: {
+          cost_usd: number
+          created_at?: string | null
+          id?: string
+          organization_id: string
+          reported_at?: string | null
+          stripe_event_id?: string | null
+          subscription_item_id: string
+          tokens_consumed: number
+        }
+        Update: {
+          cost_usd?: number
+          created_at?: string | null
+          id?: string
+          organization_id?: string
+          reported_at?: string | null
+          stripe_event_id?: string | null
+          subscription_item_id?: string
+          tokens_consumed?: number
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           created_at: string | null
@@ -2475,10 +2529,15 @@ export type Database = {
       }
     }
     Functions: {
+      check_token_quota: {
+        Args: { org_id: string; requested_tokens: number }
+        Returns: Json
+      }
       gdpr_delete_user_data: {
         Args: { subject_email: string }
         Returns: undefined
       }
+      get_byok_config: { Args: { org_id: string }; Returns: Json }
       get_daily_token_usage: {
         Args: { org_id: string; target_date?: string }
         Returns: {
@@ -2494,6 +2553,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_token_usage: {
+        Args: { org_id: string; tokens_consumed: number }
+        Returns: undefined
       }
       match_regulatory_chunks: {
         Args: {
