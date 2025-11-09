@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/contexts/AuthContext"
@@ -8,8 +8,10 @@ import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
-import { Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff, ShieldAlert } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
+import ReCAPTCHA from "react-google-recaptcha"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 const Login = () => {
   const { user } = useAuth()
@@ -17,8 +19,17 @@ const Login = () => {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [failedAttempts, setFailedAttempts] = useState(0)
+  const [showCaptcha, setShowCaptcha] = useState(false)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const [isLocked, setIsLocked] = useState(false)
+  const [lockoutTime, setLockoutTime] = useState<number | null>(null)
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
   const navigate = useNavigate()
   const { toast } = useToast()
+
+  // Get reCAPTCHA site key from environment
+  const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
 
   useEffect(() => {
     if (user) {
@@ -26,22 +37,178 @@ const Login = () => {
     }
   }, [user, navigate])
 
+  // Check for account lockout
+  useEffect(() => {
+    const checkLockout = async () => {
+      if (!email) return
+
+      try {
+        const { data, error } = await supabase.rpc('is_account_locked', {
+          user_email: email
+        })
+
+        if (error) {
+          console.error('Error checking lockout:', error)
+          return
+        }
+
+        if (data && typeof data === 'object') {
+          const lockInfo = data as { locked: boolean; lockout_until?: string; attempts?: number }
+          setIsLocked(lockInfo.locked)
+          
+          if (lockInfo.locked && lockInfo.lockout_until) {
+            const lockTime = new Date(lockInfo.lockout_until).getTime()
+            setLockoutTime(lockTime)
+          }
+
+          // Show CAPTCHA if there have been failed attempts (even if not locked yet)
+          if (lockInfo.attempts && lockInfo.attempts >= 3) {
+            setShowCaptcha(true)
+          }
+        }
+      } catch (err) {
+        console.error('Error checking lockout:', err)
+      }
+    }
+
+    if (email) {
+      checkLockout()
+    }
+  }, [email, failedAttempts])
+
+  // Countdown timer for lockout
+  useEffect(() => {
+    if (!lockoutTime || !isLocked) return
+
+    const interval = setInterval(() => {
+      const now = Date.now()
+      if (now >= lockoutTime) {
+        setIsLocked(false)
+        setLockoutTime(null)
+        setFailedAttempts(0)
+        setShowCaptcha(false)
+      }
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [lockoutTime, isLocked])
+
+  const verifyCaptcha = async (token: string): Promise<boolean> => {
+    try {
+      const { data, error } = await supabase.functions.invoke('verify-recaptcha', {
+        body: { token, email }
+      })
+
+      if (error) {
+        console.error('CAPTCHA verification error:', error)
+        return false
+      }
+
+      return data?.success === true
+    } catch (error) {
+      console.error('CAPTCHA verification failed:', error)
+      return false
+    }
+  }
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Check if account is locked
+    if (isLocked) {
+      const remaining = lockoutTime ? Math.ceil((lockoutTime - Date.now()) / 1000 / 60) : 0
+      toast({
+        variant: "destructive",
+        title: "Account Locked",
+        description: `Account is temporarily locked. Please try again in ${remaining} minutes.`,
+      })
+      return
+    }
+
+    // Check if CAPTCHA is required but not completed
+    if (showCaptcha && !captchaToken) {
+      toast({
+        variant: "destructive",
+        title: "CAPTCHA Required",
+        description: "Please complete the CAPTCHA verification",
+      })
+      return
+    }
+
     setLoading(true)
 
     try {
+      // Verify CAPTCHA if required
+      if (showCaptcha && captchaToken) {
+        const captchaValid = await verifyCaptcha(captchaToken)
+        if (!captchaValid) {
+          toast({
+            variant: "destructive",
+            title: "CAPTCHA Failed",
+            description: "CAPTCHA verification failed. Please try again.",
+          })
+          recaptchaRef.current?.reset()
+          setCaptchaToken(null)
+          setLoading(false)
+          return
+        }
+      }
+
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      if (error) throw error
+      if (error) {
+        // Increment failed attempts
+        const newFailedAttempts = failedAttempts + 1
+        setFailedAttempts(newFailedAttempts)
+
+        // Log failed attempt
+        await supabase.from('login_attempts').insert({
+          user_email: email,
+          ip_address: 'client', // Browser doesn't have direct IP access
+          success: false
+        })
+
+        // Show CAPTCHA after 3 failed attempts
+        if (newFailedAttempts >= 3) {
+          setShowCaptcha(true)
+          toast({
+            variant: "destructive",
+            title: "Security Check Required",
+            description: `Login failed. Please complete CAPTCHA verification. (${newFailedAttempts} failed attempts)`,
+          })
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Login Failed",
+            description: `${error.message} (${newFailedAttempts}/3 attempts)`,
+          })
+        }
+
+        // Reset CAPTCHA for next attempt
+        if (recaptchaRef.current) {
+          recaptchaRef.current.reset()
+          setCaptchaToken(null)
+        }
+
+        return
+      }
+
+      // Success - log and reset
+      await supabase.from('login_attempts').insert({
+        user_email: email,
+        ip_address: 'client',
+        success: true
+      })
 
       toast({
         title: "Welcome back!",
         description: "Successfully logged in",
       })
+      setFailedAttempts(0)
+      setShowCaptcha(false)
       navigate("/dashboard")
     } catch (error: any) {
       toast({
@@ -131,6 +298,25 @@ const Login = () => {
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
+            {isLocked && lockoutTime && (
+              <Alert variant="destructive">
+                <ShieldAlert className="h-4 w-4" />
+                <AlertDescription>
+                  Account temporarily locked due to multiple failed login attempts. 
+                  Try again in {Math.ceil((lockoutTime - Date.now()) / 1000 / 60)} minutes.
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {showCaptcha && !isLocked && (
+              <Alert>
+                <ShieldAlert className="h-4 w-4" />
+                <AlertDescription>
+                  Multiple failed login attempts detected. Please complete CAPTCHA verification.
+                </AlertDescription>
+              </Alert>
+            )}
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -140,7 +326,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                disabled={loading}
+                disabled={loading || isLocked}
               />
             </div>
             <div className="space-y-2">
@@ -152,7 +338,7 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  disabled={loading}
+                  disabled={loading || isLocked}
                   className="pr-10"
                 />
                 <Button
@@ -161,7 +347,7 @@ const Login = () => {
                   size="icon"
                   className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
-                  disabled={loading}
+                  disabled={loading || isLocked}
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -171,8 +357,20 @@ const Login = () => {
                 </Button>
               </div>
             </div>
-            <Button type="submit" className="w-full h-11 font-medium" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
+
+            {showCaptcha && !isLocked && (
+              <div className="flex justify-center py-2">
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={RECAPTCHA_SITE_KEY}
+                  onChange={(token) => setCaptchaToken(token)}
+                  onExpired={() => setCaptchaToken(null)}
+                />
+              </div>
+            )}
+
+            <Button type="submit" className="w-full h-11 font-medium" disabled={loading || isLocked}>
+              {loading ? "Signing in..." : isLocked ? "Account Locked" : "Sign In"}
             </Button>
           </form>
           <div className="mt-6 text-center text-sm">
