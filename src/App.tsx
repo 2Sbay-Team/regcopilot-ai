@@ -38,7 +38,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NIS2Copilot from "./pages/NIS2Copilot";
 import DORACopilot from "./pages/DORACopilot";
 import DMACopilot from "./pages/DMACopilot";
-import AgentDashboard from "./pages/AgentDashboard";
+import AgentTasks from "./pages/AgentTasks";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -84,7 +84,7 @@ const App = () => (
             <Route path="/nis2" element={<ProtectedRoute><AppLayout><NIS2Copilot /></AppLayout></ProtectedRoute>} />
             <Route path="/dora" element={<ProtectedRoute><AppLayout><DORACopilot /></AppLayout></ProtectedRoute>} />
             <Route path="/dma" element={<ProtectedRoute><AppLayout><DMACopilot /></AppLayout></ProtectedRoute>} />
-            <Route path="/agents" element={<ProtectedRoute><AppLayout><AgentDashboard /></AppLayout></ProtectedRoute>} />
+            <Route path="/agents" element={<ProtectedRoute><AppLayout><AgentTasks /></AppLayout></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
