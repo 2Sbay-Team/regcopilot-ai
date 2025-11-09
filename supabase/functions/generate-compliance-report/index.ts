@@ -144,19 +144,19 @@ async function generateReportForOrg(
     // Calculate summary statistics
     const aiActSummary = {
       total: aiActData.data?.length || 0,
-      high_risk: aiActData.data?.filter(a => a.risk_category === 'high' || a.risk_category === 'unacceptable').length || 0,
-      limited_risk: aiActData.data?.filter(a => a.risk_category === 'limited').length || 0,
-      minimal_risk: aiActData.data?.filter(a => a.risk_category === 'minimal').length || 0,
+      high_risk: aiActData.data?.filter((a: any) => a.risk_category === 'high' || a.risk_category === 'unacceptable').length || 0,
+      limited_risk: aiActData.data?.filter((a: any) => a.risk_category === 'limited').length || 0,
+      minimal_risk: aiActData.data?.filter((a: any) => a.risk_category === 'minimal').length || 0,
     }
 
     const gdprSummary = {
       total: gdprData.data?.length || 0,
-      violations: gdprData.data?.reduce((sum, a) => sum + (Array.isArray(a.violations) ? a.violations.length : 0), 0) || 0,
+      violations: gdprData.data?.reduce((sum: number, a: any) => sum + (Array.isArray(a.violations) ? a.violations.length : 0), 0) || 0,
       by_article: {} as Record<string, number>
     }
 
     // Aggregate violations by article
-    gdprData.data?.forEach(assessment => {
+    gdprData.data?.forEach((assessment: any) => {
       if (Array.isArray(assessment.violations)) {
         assessment.violations.forEach((v: any) => {
           const article = v.article || 'Unknown'
@@ -168,18 +168,18 @@ async function generateReportForOrg(
     const esgSummary = {
       total: esgData.data?.length || 0,
       avg_completeness: (esgData.data && esgData.data.length > 0) 
-        ? esgData.data.reduce((sum, r) => sum + (r.completeness_score || 0), 0) / esgData.data.length
+        ? esgData.data.reduce((sum: number, r: any) => sum + (r.completeness_score || 0), 0) / esgData.data.length
         : 0,
     }
 
     const alertSummary = {
       total: alertData.data?.length || 0,
-      acknowledged: alertData.data?.filter(a => a.acknowledged).length || 0,
-      unacknowledged: alertData.data?.filter(a => !a.acknowledged).length || 0,
+      acknowledged: alertData.data?.filter((a: any) => a.acknowledged).length || 0,
+      unacknowledged: alertData.data?.filter((a: any) => !a.acknowledged).length || 0,
       by_type: {} as Record<string, number>
     }
 
-    alertData.data?.forEach(alert => {
+    alertData.data?.forEach((alert: any) => {
       alertSummary.by_type[alert.metric_type] = (alertSummary.by_type[alert.metric_type] || 0) + 1
     })
 
@@ -189,7 +189,7 @@ async function generateReportForOrg(
       by_status: {} as Record<string, number>
     }
 
-    auditData.data?.forEach(log => {
+    auditData.data?.forEach((log: any) => {
       activitySummary.by_agent[log.agent] = (activitySummary.by_agent[log.agent] || 0) + 1
       activitySummary.by_status[log.status] = (activitySummary.by_status[log.status] || 0) + 1
     })
