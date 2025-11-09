@@ -286,7 +286,7 @@ export function AppSidebar() {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent side="right">
-                    <p className="font-semibold">Regulix</p>
+                    <p className="font-semibold">Regulix™</p>
                     <p className="text-xs text-muted-foreground">Regulatory Intelligence</p>
                   </TooltipContent>
                 </Tooltip>

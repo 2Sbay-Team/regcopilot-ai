@@ -167,7 +167,7 @@ const Signup = () => {
               <RoboticShieldLogo size={64} />
             </div>
           </div>
-          <CardTitle className="text-2xl">Join Regulix</CardTitle>
+          <CardTitle className="text-2xl">Join Regulix™</CardTitle>
           <CardDescription>
             Modern regulatory intelligence for your organization
           </CardDescription>
