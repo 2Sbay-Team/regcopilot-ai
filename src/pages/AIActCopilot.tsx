@@ -12,11 +12,13 @@ import { Shield, ArrowLeft, Loader2, HelpCircle, BookOpen } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { t } from "@/lib/i18n"
+import { DocumentUploadSection } from "@/components/DocumentUploadSection"
 
 const AIActCopilot = () => {
   const [profile, setProfile] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
+  const [uploadEnabled, setUploadEnabled] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     purpose: "",
@@ -44,6 +46,15 @@ const AIActCopilot = () => {
       .single()
 
     setProfile(profileData)
+
+    // Check upload policy
+    const { data: policy } = await supabase
+      .from("upload_policies")
+      .select("ai_act_enabled")
+      .eq("organization_id", profileData?.organization_id)
+      .single()
+
+    setUploadEnabled(policy?.ai_act_enabled ?? true)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -75,6 +86,21 @@ const AIActCopilot = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleDocumentAnalysis = (extractedData: any) => {
+    // Auto-fill form fields from document analysis
+    setFormData(prev => ({
+      ...prev,
+      name: extractedData.system_name || prev.name,
+      purpose: extractedData.purpose || prev.purpose,
+      sector: extractedData.sector || prev.sector,
+    }))
+
+    toast({
+      title: "Fields Pre-filled",
+      description: "Form fields have been populated from document analysis",
+    })
   }
 
   return (

@@ -225,6 +225,18 @@ const Admin = () => {
                 </CardContent>
               </Card>
 
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/admin/upload-policies')}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <FileText className="h-4 w-4" />
+                    Upload Policies
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">Configure document upload and RAG settings for all modules</p>
+                </CardContent>
+              </Card>
+
               <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/admin/guide')}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-base">

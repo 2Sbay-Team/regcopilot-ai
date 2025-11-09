@@ -2570,6 +2570,126 @@ export type Database = {
           },
         ]
       }
+      upload_policies: {
+        Row: {
+          ai_act_enabled: boolean | null
+          allow_embeddings: boolean | null
+          allowed_types: string[] | null
+          created_at: string | null
+          esg_enabled: boolean | null
+          gdpr_enabled: boolean | null
+          id: string
+          max_file_size_mb: number | null
+          organization_id: string
+          retention_days: number | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          ai_act_enabled?: boolean | null
+          allow_embeddings?: boolean | null
+          allowed_types?: string[] | null
+          created_at?: string | null
+          esg_enabled?: boolean | null
+          gdpr_enabled?: boolean | null
+          id?: string
+          max_file_size_mb?: number | null
+          organization_id: string
+          retention_days?: number | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          ai_act_enabled?: boolean | null
+          allow_embeddings?: boolean | null
+          allowed_types?: string[] | null
+          created_at?: string | null
+          esg_enabled?: boolean | null
+          gdpr_enabled?: boolean | null
+          id?: string
+          max_file_size_mb?: number | null
+          organization_id?: string
+          retention_days?: number | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "upload_policies_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "upload_policies_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      uploaded_documents: {
+        Row: {
+          analyzed_at: string | null
+          created_at: string | null
+          doc_type: string
+          extracted_data: Json | null
+          extracted_summary: string | null
+          file_name: string
+          file_path: string
+          file_size_bytes: number | null
+          id: string
+          organization_id: string
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          analyzed_at?: string | null
+          created_at?: string | null
+          doc_type: string
+          extracted_data?: Json | null
+          extracted_summary?: string | null
+          file_name: string
+          file_path: string
+          file_size_bytes?: number | null
+          id?: string
+          organization_id: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          analyzed_at?: string | null
+          created_at?: string | null
+          doc_type?: string
+          extracted_data?: Json | null
+          extracted_summary?: string | null
+          file_name?: string
+          file_path?: string
+          file_size_bytes?: number | null
+          id?: string
+          organization_id?: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "uploaded_documents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "uploaded_documents_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string

@@ -51,6 +51,7 @@ import FeedbackAnalytics from "./pages/FeedbackAnalytics";
 import AdminHelp from "./pages/admin/Help";
 import AdminGuide from "./pages/admin/AdminGuide";
 import RegulationUploader from "./pages/admin/RegulationUploader";
+import UploadPolicies from "./pages/admin/UploadPolicies";
 import RiskRegister from "./pages/RiskRegister";
 import DSARQueue from "./pages/DSARQueue";
 import SecurityCenter from "./pages/SecurityCenter";
@@ -114,6 +115,7 @@ const App = () => (
             <Route path="/admin/help" element={<ProtectedRoute><AppLayout><AdminHelp /></AppLayout></ProtectedRoute>} />
             <Route path="/admin/guide" element={<ProtectedRoute><AppLayout><AdminGuide /></AppLayout></ProtectedRoute>} />
             <Route path="/admin/regulations" element={<ProtectedRoute><AppLayout><RegulationUploader /></AppLayout></ProtectedRoute>} />
+            <Route path="/admin/upload-policies" element={<ProtectedRoute><AppLayout><UploadPolicies /></AppLayout></ProtectedRoute>} />
             <Route path="/admin/rag-insights" element={<ProtectedRoute><AppLayout><FeedbackAnalytics /></AppLayout></ProtectedRoute>} />
             <Route path="/risk-register" element={<ProtectedRoute><AppLayout><RiskRegister /></AppLayout></ProtectedRoute>} />
             <Route path="/dsar-queue" element={<ProtectedRoute><AppLayout><DSARQueue /></AppLayout></ProtectedRoute>} />

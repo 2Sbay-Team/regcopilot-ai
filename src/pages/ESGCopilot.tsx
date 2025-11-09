@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
+import { DocumentUploadSection } from "@/components/DocumentUploadSection"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,6 +14,7 @@ const ESGCopilot = () => {
   const [profile, setProfile] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
+  const [uploadEnabled, setUploadEnabled] = useState(false)
   const [formData, setFormData] = useState({
     period: "2024-FY",
     co2_scope1: "",
@@ -21,7 +23,7 @@ const ESGCopilot = () => {
     energy_mwh: "",
   })
   const [files, setFiles] = useState<File[]>([])
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
   const navigate = useNavigate()
   const { toast } = useToast()
 
@@ -299,18 +301,18 @@ const ESGCopilot = () => {
                       </Tooltip>
                     </div>
                     <Input
-                      ref={fileInputRef}
                       type="file"
                       multiple
                       accept=".csv,.xlsx,.xls,.pdf"
                       onChange={handleFileSelect}
                       disabled={loading || files.length >= 5}
                       className="hidden"
+                      id="file-upload-esg"
                     />
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => fileInputRef.current?.click()}
+                      onClick={() => document.getElementById('file-upload-esg')?.click()}
                       disabled={loading || files.length >= 5}
                       className="w-full"
                     >

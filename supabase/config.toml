@@ -92,3 +92,15 @@ verify_jwt = true
 
 [functions.process-regulation-pdf]
 verify_jwt = true
+
+[functions.analyze-uploaded-doc]
+verify_jwt = true
+
+[functions.enrich-ai-act-assessment]
+verify_jwt = true
+
+[functions.enrich-gdpr-assessment]
+verify_jwt = true
+
+[functions.extract-esg-metrics]
+verify_jwt = true
