@@ -2222,6 +2222,75 @@ export type Database = {
           },
         ]
       }
+      regsense_sessions: {
+        Row: {
+          citations: Json | null
+          context_scope: string
+          created_at: string | null
+          embedding_version: string | null
+          error_message: string | null
+          fallback_used: boolean | null
+          id: string
+          input_hash: string | null
+          model_name: string | null
+          organization_id: string
+          output_hash: string | null
+          query_text: string
+          response_text: string | null
+          response_time_ms: number | null
+          user_id: string | null
+        }
+        Insert: {
+          citations?: Json | null
+          context_scope: string
+          created_at?: string | null
+          embedding_version?: string | null
+          error_message?: string | null
+          fallback_used?: boolean | null
+          id?: string
+          input_hash?: string | null
+          model_name?: string | null
+          organization_id: string
+          output_hash?: string | null
+          query_text: string
+          response_text?: string | null
+          response_time_ms?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          citations?: Json | null
+          context_scope?: string
+          created_at?: string | null
+          embedding_version?: string | null
+          error_message?: string | null
+          fallback_used?: boolean | null
+          id?: string
+          input_hash?: string | null
+          model_name?: string | null
+          organization_id?: string
+          output_hash?: string | null
+          query_text?: string
+          response_text?: string | null
+          response_time_ms?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "regsense_sessions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "regsense_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       regulation_versions: {
         Row: {
           chunks_count: number | null
@@ -2840,7 +2909,27 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      regsense_analytics: {
+        Row: {
+          avg_response_time_ms: number | null
+          context_scope: string | null
+          error_count: number | null
+          fallback_count: number | null
+          organization_id: string | null
+          query_count: number | null
+          query_date: string | null
+          unique_users: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "regsense_sessions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       check_token_quota: {

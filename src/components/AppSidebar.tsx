@@ -142,6 +142,11 @@ export function AppSidebar() {
 
   const toolsItems = [
     { 
+      titleKey: "nav.regSense", 
+      url: "/regsense", 
+      icon: Brain,
+    },
+    { 
       titleKey: "nav.scheduledJobs", 
       url: "/scheduled-jobs", 
       icon: Calendar,
