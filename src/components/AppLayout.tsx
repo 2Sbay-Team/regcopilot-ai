@@ -5,9 +5,10 @@ import { useLanguage } from "@/contexts/LanguageContext"
 import { Button } from "@/components/ui/button"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
-import { LogOut, User, Settings, FileText, Mail } from "lucide-react"
+import { LogOut, User, Settings } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { t } from "@/lib/i18n"
+import { Footer } from "@/components/Footer"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -85,14 +86,6 @@ export function AppLayout({ children }: AppLayoutProps) {
                     <Settings className="mr-2 h-4 w-4" />
                     <span>{t('nav.settings', language)}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/impressum')}>
-                    <FileText className="mr-2 h-4 w-4" />
-                    <span>{t('nav.impressum', language)}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/contact')}>
-                    <Mail className="mr-2 h-4 w-4" />
-                    <span>{t('nav.contactUs', language)}</span>
-                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout}>
                     <LogOut className="mr-2 h-4 w-4" />
@@ -107,6 +100,9 @@ export function AppLayout({ children }: AppLayoutProps) {
           <main className="flex-1 p-6 animate-in fade-in duration-300">
             {children}
           </main>
+
+          {/* Footer */}
+          <Footer />
         </div>
       </div>
     </SidebarProvider>
