@@ -201,6 +201,18 @@ const Admin = () => {
                 </CardContent>
               </Card>
 
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/admin/guide')}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <FileText className="h-4 w-4" />
+                    Admin Guide
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">Complete onboarding guide for administrators</p>
+                </CardContent>
+              </Card>
+
               <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/model-registry')}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-base">
