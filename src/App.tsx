@@ -44,6 +44,7 @@ import SocialSentiment from "./pages/SocialSentiment";
 import MFASetup from "./pages/MFASetup";
 import ContinuousIntelligence from "./pages/ContinuousIntelligence";
 import ScheduledJobs from "./pages/ScheduledJobs";
+import FeedbackAnalytics from "./pages/FeedbackAnalytics";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -95,6 +96,7 @@ const App = () => (
             <Route path="/mfa-setup" element={<ProtectedRoute><MFASetup /></ProtectedRoute>} />
             <Route path="/continuous-intelligence" element={<ProtectedRoute><AppLayout><ContinuousIntelligence /></AppLayout></ProtectedRoute>} />
             <Route path="/scheduled-jobs" element={<ProtectedRoute><AppLayout><ScheduledJobs /></AppLayout></ProtectedRoute>} />
+            <Route path="/feedback-analytics" element={<ProtectedRoute><AppLayout><FeedbackAnalytics /></AppLayout></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

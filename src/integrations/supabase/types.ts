@@ -574,6 +574,61 @@ export type Database = {
         }
         Relationships: []
       }
+      chunk_feedback: {
+        Row: {
+          chunk_id: string | null
+          created_at: string | null
+          id: string
+          notes: string | null
+          organization_id: string | null
+          signal: string
+          user_id: string | null
+          weight: number | null
+        }
+        Insert: {
+          chunk_id?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          signal: string
+          user_id?: string | null
+          weight?: number | null
+        }
+        Update: {
+          chunk_id?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          signal?: string
+          user_id?: string | null
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chunk_feedback_chunk_id_fkey"
+            columns: ["chunk_id"]
+            isOneToOne: false
+            referencedRelation: "document_chunks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chunk_feedback_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chunk_feedback_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       compliance_reports: {
         Row: {
           created_at: string | null
@@ -1767,6 +1822,47 @@ export type Database = {
           },
         ]
       }
+      org_policies: {
+        Row: {
+          content: string
+          created_at: string | null
+          embedding: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_policies_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organization_budgets: {
         Row: {
           created_at: string
@@ -1953,6 +2049,60 @@ export type Database = {
           version?: string | null
         }
         Relationships: []
+      }
+      retrieval_feedback: {
+        Row: {
+          clicked_chunk_id: string | null
+          created_at: string | null
+          id: string
+          missing_citation: boolean | null
+          module: string
+          organization_id: string | null
+          query: string
+          satisfaction: number | null
+          topk_result_ids: string[] | null
+          user_id: string | null
+        }
+        Insert: {
+          clicked_chunk_id?: string | null
+          created_at?: string | null
+          id?: string
+          missing_citation?: boolean | null
+          module: string
+          organization_id?: string | null
+          query: string
+          satisfaction?: number | null
+          topk_result_ids?: string[] | null
+          user_id?: string | null
+        }
+        Update: {
+          clicked_chunk_id?: string | null
+          created_at?: string | null
+          id?: string
+          missing_citation?: boolean | null
+          module?: string
+          organization_id?: string | null
+          query?: string
+          satisfaction?: number | null
+          topk_result_ids?: string[] | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "retrieval_feedback_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "retrieval_feedback_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       scheduled_jobs: {
         Row: {
@@ -2267,7 +2417,23 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      chunk_feedback_scores: {
+        Row: {
+          chunk_id: string | null
+          last_feedback_at: string | null
+          score: number | null
+          total_votes: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chunk_feedback_chunk_id_fkey"
+            columns: ["chunk_id"]
+            isOneToOne: false
+            referencedRelation: "document_chunks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       gdpr_delete_user_data: {
@@ -2305,6 +2471,7 @@ export type Database = {
         }[]
       }
       purge_old_audit_logs: { Args: never; Returns: undefined }
+      refresh_chunk_feedback_scores: { Args: never; Returns: undefined }
     }
     Enums: {
       agent_task_status:
