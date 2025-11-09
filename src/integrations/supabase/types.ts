@@ -2560,23 +2560,7 @@ export type Database = {
       }
     }
     Views: {
-      chunk_feedback_scores: {
-        Row: {
-          chunk_id: string | null
-          last_feedback_at: string | null
-          score: number | null
-          total_votes: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "chunk_feedback_chunk_id_fkey"
-            columns: ["chunk_id"]
-            isOneToOne: false
-            referencedRelation: "document_chunks"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
+      [_ in never]: never
     }
     Functions: {
       check_token_quota: {
@@ -2588,6 +2572,17 @@ export type Database = {
         Returns: undefined
       }
       get_byok_config: { Args: { org_id: string }; Returns: Json }
+      get_chunk_feedback_scores: {
+        Args: { p_chunk_id?: string; p_organization_id?: string }
+        Returns: {
+          chunk_id: string
+          downvotes: number
+          last_feedback_at: string
+          net_score: number
+          unique_raters: number
+          upvotes: number
+        }[]
+      }
       get_daily_token_usage: {
         Args: { org_id: string; target_date?: string }
         Returns: {
