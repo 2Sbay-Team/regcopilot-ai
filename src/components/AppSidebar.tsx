@@ -18,7 +18,8 @@ import {
   Activity,
   User,
   TrendingUp,
-  Store
+  Store,
+  Play
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
@@ -74,6 +75,13 @@ export function AppSidebar() {
   ]
 
   const toolsItems = [
+    { 
+      titleKey: "nav.agentDashboard", 
+      url: "/agents", 
+      icon: Play,
+      iconBgClass: "bg-gradient-to-br from-emerald-500 to-green-600",
+      iconTextClass: "text-white",
+    },
     { 
       titleKey: "nav.aiGateway", 
       url: "/ai-gateway", 
