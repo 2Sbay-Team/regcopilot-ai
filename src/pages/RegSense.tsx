@@ -142,7 +142,7 @@ export default function RegSense() {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <Brain className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold">RegSense™</h1>
+            <h1 className="text-4xl font-bold">RegSense</h1>
           </div>
           <p className="text-muted-foreground text-lg">
             Conversational Intelligence Layer for Compliance & ESG
@@ -219,7 +219,7 @@ export default function RegSense() {
                 {messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
                     <Brain className="h-16 w-16 mb-4 opacity-20" />
-                    <p className="text-lg font-medium mb-2">Welcome to RegSense™</p>
+                    <p className="text-lg font-medium mb-2">Welcome to RegSense</p>
                     <p className="text-sm max-w-md">
                       Ask any compliance question and get answers grounded in official regulations 
                       with full citation transparency.
