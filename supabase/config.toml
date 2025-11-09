@@ -134,3 +134,6 @@ verify_jwt = true
 
 [functions.generate-screenshots]
 verify_jwt = true
+
+[functions.generate-screenshots-ai]
+verify_jwt = true
