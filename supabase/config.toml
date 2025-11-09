@@ -62,3 +62,6 @@ verify_jwt = true
 
 [functions.feedback-handler]
 verify_jwt = true
+
+[functions.refresh-feedback-views]
+verify_jwt = true
