@@ -257,8 +257,8 @@ const Dashboard = () => {
             <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20 mb-3">
               <Shield className="h-6 w-6 text-white" />
             </div>
-            <CardTitle>{t('dashboard.aiActCopilot', language)}</CardTitle>
-            <CardDescription>{t('dashboard.assessAISystems', language)}</CardDescription>
+            <CardTitle>AI Act Auditor</CardTitle>
+            <CardDescription>Assess AI systems for EU AI Act compliance</CardDescription>
           </CardHeader>
         </InteractiveCard>
 
@@ -270,8 +270,8 @@ const Dashboard = () => {
             <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 mb-3">
               <FileCheck className="h-6 w-6 text-white" />
             </div>
-            <CardTitle>{t('dashboard.gdprCopilot', language)}</CardTitle>
-            <CardDescription>{t('dashboard.scanPrivacy', language)}</CardDescription>
+            <CardTitle>GDPR Privacy Checker</CardTitle>
+            <CardDescription>Scan documents for data privacy compliance</CardDescription>
           </CardHeader>
         </InteractiveCard>
 
@@ -283,8 +283,8 @@ const Dashboard = () => {
             <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/20 mb-3">
               <Leaf className="h-6 w-6 text-white" />
             </div>
-            <CardTitle>{t('dashboard.esgCopilot', language)}</CardTitle>
-            <CardDescription>{t('dashboard.generateReports', language)}</CardDescription>
+            <CardTitle>ESG Reporter</CardTitle>
+            <CardDescription>Generate CSRD sustainability reports</CardDescription>
           </CardHeader>
         </InteractiveCard>
       </div>
