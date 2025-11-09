@@ -40,6 +40,7 @@ import DORACopilot from "./pages/DORACopilot";
 import DMACopilot from "./pages/DMACopilot";
 import AgentTasks from "./pages/AgentTasks";
 import Connectors from "./pages/Connectors";
+import SocialSentiment from "./pages/SocialSentiment";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -87,6 +88,7 @@ const App = () => (
             <Route path="/dma" element={<ProtectedRoute><AppLayout><DMACopilot /></AppLayout></ProtectedRoute>} />
             <Route path="/agents" element={<ProtectedRoute><AppLayout><AgentTasks /></AppLayout></ProtectedRoute>} />
             <Route path="/connectors" element={<ProtectedRoute><AppLayout><Connectors /></AppLayout></ProtectedRoute>} />
+            <Route path="/social-sentiment" element={<ProtectedRoute><AppLayout><SocialSentiment /></AppLayout></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

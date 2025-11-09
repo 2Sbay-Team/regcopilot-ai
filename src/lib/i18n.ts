@@ -35,6 +35,7 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.esg': 'ESG Reporter',
     'nav.agentDashboard': 'Agent Dashboard',
     'nav.connectors': 'Connectors',
+    'nav.socialSentiment': 'Social Sentiment',
     'nav.aiGateway': 'AI Gateway',
     'nav.modelManagement': 'Model Management',
     'nav.complianceScore': 'Compliance Score',

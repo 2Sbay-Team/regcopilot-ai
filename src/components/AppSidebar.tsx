@@ -90,6 +90,13 @@ export function AppSidebar() {
       iconTextClass: "text-white",
     },
     { 
+      titleKey: "nav.socialSentiment", 
+      url: "/social-sentiment", 
+      icon: User,
+      iconBgClass: "bg-gradient-to-br from-pink-500 to-rose-600",
+      iconTextClass: "text-white",
+    },
+    { 
       titleKey: "nav.aiGateway", 
       url: "/ai-gateway", 
       icon: Zap,

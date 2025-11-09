@@ -1782,6 +1782,98 @@ export type Database = {
         }
         Relationships: []
       }
+      social_sentiment_data: {
+        Row: {
+          ai_summary: string | null
+          analyzed_at: string | null
+          career_opportunities_rating: number | null
+          company_name: string
+          company_url: string | null
+          compensation_benefits_rating: number | null
+          created_at: string | null
+          culture_values_rating: number | null
+          data_freshness: string | null
+          diversity_inclusion_rating: number | null
+          esg_indicators: Json | null
+          id: string
+          negative_themes: Json | null
+          organization_id: string
+          overall_rating: number | null
+          positive_themes: Json | null
+          raw_data: Json | null
+          recommendations: string | null
+          sample_reviews: Json | null
+          senior_management_rating: number | null
+          sentiment_score: number | null
+          source: string
+          total_reviews: number | null
+          updated_at: string | null
+          work_life_balance_rating: number | null
+        }
+        Insert: {
+          ai_summary?: string | null
+          analyzed_at?: string | null
+          career_opportunities_rating?: number | null
+          company_name: string
+          company_url?: string | null
+          compensation_benefits_rating?: number | null
+          created_at?: string | null
+          culture_values_rating?: number | null
+          data_freshness?: string | null
+          diversity_inclusion_rating?: number | null
+          esg_indicators?: Json | null
+          id?: string
+          negative_themes?: Json | null
+          organization_id: string
+          overall_rating?: number | null
+          positive_themes?: Json | null
+          raw_data?: Json | null
+          recommendations?: string | null
+          sample_reviews?: Json | null
+          senior_management_rating?: number | null
+          sentiment_score?: number | null
+          source: string
+          total_reviews?: number | null
+          updated_at?: string | null
+          work_life_balance_rating?: number | null
+        }
+        Update: {
+          ai_summary?: string | null
+          analyzed_at?: string | null
+          career_opportunities_rating?: number | null
+          company_name?: string
+          company_url?: string | null
+          compensation_benefits_rating?: number | null
+          created_at?: string | null
+          culture_values_rating?: number | null
+          data_freshness?: string | null
+          diversity_inclusion_rating?: number | null
+          esg_indicators?: Json | null
+          id?: string
+          negative_themes?: Json | null
+          organization_id?: string
+          overall_rating?: number | null
+          positive_themes?: Json | null
+          raw_data?: Json | null
+          recommendations?: string | null
+          sample_reviews?: Json | null
+          senior_management_rating?: number | null
+          sentiment_score?: number | null
+          source?: string
+          total_reviews?: number | null
+          updated_at?: string | null
+          work_life_balance_rating?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_sentiment_data_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           created_at: string | null
