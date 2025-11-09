@@ -33,14 +33,16 @@ const DSARManagement = () => {
   const [requestType, setRequestType] = useState<'access' | 'rectification' | 'erasure' | 'portability' | 'restriction'>('access')
 
   useEffect(() => {
-    loadProfile()
+    if (user) {
+      loadProfile()
+    }
   }, [user])
 
   useEffect(() => {
-    if (profile?.organization_id) {
+    if (profile?.organization_id && user) {
       loadDSARs()
     }
-  }, [profile])
+  }, [profile, user])
 
   const loadProfile = async () => {
     if (!user) return
@@ -160,6 +162,16 @@ const DSARManagement = () => {
       return <Badge variant="outline" className="border-yellow-500 text-yellow-500">Due Soon</Badge>
     }
     return <Badge variant="secondary">Pending</Badge>
+  }
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <p className="text-muted-foreground">Loading authentication...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
