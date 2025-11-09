@@ -46,9 +46,11 @@ const ContactUs = () => {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
-        <Card className="cockpit-panel border-primary/20">
+        <Card className="cockpit-panel border-primary/20 bg-gradient-to-br from-card to-card/80">
           <CardHeader>
-            <Mail className="h-10 w-10 text-primary mb-2" />
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center mb-2 shadow-xl shadow-blue-500/30">
+              <Mail className="h-8 w-8 text-white" />
+            </div>
             <CardTitle>{language === 'de' ? 'E-Mail' : language === 'fr' ? 'E-mail' : language === 'ar' ? 'البريد الإلكتروني' : 'Email'}</CardTitle>
           </CardHeader>
           <CardContent>
@@ -57,9 +59,11 @@ const ContactUs = () => {
           </CardContent>
         </Card>
 
-        <Card className="cockpit-panel border-primary/20">
+        <Card className="cockpit-panel border-primary/20 bg-gradient-to-br from-card to-card/80">
           <CardHeader>
-            <Phone className="h-10 w-10 text-primary mb-2" />
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center mb-2 shadow-xl shadow-emerald-500/30">
+              <Phone className="h-8 w-8 text-white" />
+            </div>
             <CardTitle>{language === 'de' ? 'Telefon' : language === 'fr' ? 'Téléphone' : language === 'ar' ? 'الهاتف' : 'Phone'}</CardTitle>
           </CardHeader>
           <CardContent>
@@ -70,9 +74,11 @@ const ContactUs = () => {
           </CardContent>
         </Card>
 
-        <Card className="cockpit-panel border-primary/20">
+        <Card className="cockpit-panel border-primary/20 bg-gradient-to-br from-card to-card/80">
           <CardHeader>
-            <MapPin className="h-10 w-10 text-primary mb-2" />
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center mb-2 shadow-xl shadow-orange-500/30">
+              <MapPin className="h-8 w-8 text-white" />
+            </div>
             <CardTitle>{language === 'de' ? 'Adresse' : language === 'fr' ? 'Adresse' : language === 'ar' ? 'العنوان' : 'Address'}</CardTitle>
           </CardHeader>
           <CardContent>

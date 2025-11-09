@@ -124,8 +124,8 @@ const Dashboard = () => {
               <CardTitle className="text-sm font-semibold text-muted-foreground">{t('dashboard.aiSystems', language)}</CardTitle>
               <div className="text-4xl font-bold text-foreground">{stats.ai_systems}</div>
             </div>
-            <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Shield className="h-7 w-7 text-primary" />
+            <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30">
+              <Shield className="h-7 w-7 text-white" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
@@ -145,8 +145,8 @@ const Dashboard = () => {
               <CardTitle className="text-sm font-semibold text-muted-foreground">{t('dashboard.gdprChecks', language)}</CardTitle>
               <div className="text-4xl font-bold text-foreground">{stats.gdpr_assessments}</div>
             </div>
-            <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center">
-              <FileCheck className="h-7 w-7 text-primary" />
+            <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+              <FileCheck className="h-7 w-7 text-white" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
@@ -166,8 +166,8 @@ const Dashboard = () => {
               <CardTitle className="text-sm font-semibold text-muted-foreground">{t('dashboard.esgReports', language)}</CardTitle>
               <div className="text-4xl font-bold text-foreground">{stats.esg_reports}</div>
             </div>
-            <div className="h-14 w-14 rounded-xl bg-accent/10 flex items-center justify-center">
-              <Leaf className="h-7 w-7 text-accent" />
+            <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-green-500 to-lime-500 flex items-center justify-center shadow-lg shadow-green-500/30">
+              <Leaf className="h-7 w-7 text-white" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
@@ -187,8 +187,8 @@ const Dashboard = () => {
               <CardTitle className="text-sm font-semibold text-muted-foreground">{t('dashboard.auditLogs', language)}</CardTitle>
               <div className="text-4xl font-bold text-foreground">{stats.audit_logs}</div>
             </div>
-            <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Database className="h-7 w-7 text-primary" />
+            <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
+              <Database className="h-7 w-7 text-white" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
@@ -207,8 +207,8 @@ const Dashboard = () => {
           className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
         >
           <CardHeader>
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Shield className="h-8 w-8 text-primary" />
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-blue-500/40">
+              <Shield className="h-8 w-8 text-white" />
             </div>
             <CardTitle className="text-2xl font-bold mb-2">{t('dashboard.aiActAuditor', language)}</CardTitle>
             <CardDescription className="text-base">
@@ -238,8 +238,8 @@ const Dashboard = () => {
           className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
         >
           <CardHeader>
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <FileCheck className="h-8 w-8 text-primary" />
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-emerald-500/40">
+              <FileCheck className="h-8 w-8 text-white" />
             </div>
             <CardTitle className="text-2xl font-bold mb-2">{t('dashboard.gdprChecker', language)}</CardTitle>
             <CardDescription className="text-base">
@@ -269,8 +269,8 @@ const Dashboard = () => {
           className="cockpit-panel group cursor-pointer hover:scale-[1.02] transition-all duration-300"
         >
           <CardHeader>
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Leaf className="h-8 w-8 text-accent" />
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-green-500 to-lime-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-green-500/40">
+              <Leaf className="h-8 w-8 text-white" />
             </div>
             <CardTitle className="text-2xl font-bold mb-2">{t('dashboard.esgReporter', language)}</CardTitle>
             <CardDescription className="text-base">
@@ -306,8 +306,8 @@ const Dashboard = () => {
             onClick={() => navigate("/analytics")}
           >
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                <TrendingUp className="h-6 w-6 text-primary" />
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-violet-500/30">
+                <TrendingUp className="h-6 w-6 text-white" />
               </div>
               <span className="font-semibold text-base">{t('dashboard.viewAnalytics', language)}</span>
             </div>
@@ -318,8 +318,8 @@ const Dashboard = () => {
             onClick={() => navigate("/reports")}
           >
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                <FileText className="h-6 w-6 text-primary" />
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-orange-500/30">
+                <FileText className="h-6 w-6 text-white" />
               </div>
               <span className="font-semibold text-base">{t('dashboard.complianceReports', language)}</span>
             </div>
@@ -330,8 +330,8 @@ const Dashboard = () => {
             onClick={() => navigate("/rag-search")}
           >
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                <BookOpen className="h-6 w-6 text-primary" />
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-cyan-500/30">
+                <BookOpen className="h-6 w-6 text-white" />
               </div>
               <span className="font-semibold text-base">{t('dashboard.searchRegulations', language)}</span>
             </div>
@@ -342,8 +342,8 @@ const Dashboard = () => {
             onClick={() => navigate("/audit")}
           >
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                <Database className="h-6 w-6 text-primary" />
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/30">
+                <Database className="h-6 w-6 text-white" />
               </div>
               <span className="font-semibold text-base">{t('dashboard.viewAuditTrail', language)}</span>
             </div>
@@ -354,8 +354,8 @@ const Dashboard = () => {
             onClick={() => navigate("/models")}
           >
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                <Shield className="h-6 w-6 text-primary" />
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-indigo-500/30">
+                <Shield className="h-6 w-6 text-white" />
               </div>
               <span className="font-semibold text-base">{t('dashboard.modelRegistry', language)}</span>
             </div>
@@ -366,8 +366,8 @@ const Dashboard = () => {
             onClick={() => navigate("/admin")}
           >
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                <Shield className="h-6 w-6 text-primary" />
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-slate-500 to-gray-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-slate-500/30">
+                <Shield className="h-6 w-6 text-white" />
               </div>
               <span className="font-semibold text-base">{t('dashboard.adminPanel', language)}</span>
             </div>

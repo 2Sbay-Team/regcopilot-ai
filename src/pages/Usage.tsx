@@ -146,12 +146,14 @@ const Usage = () => {
       </div>
 
       {/* Current Plan Card */}
-      <Card className="cockpit-panel border-primary/20">
+      <Card className="cockpit-panel border-primary/20 bg-gradient-to-br from-card to-card/80">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center gap-2">
-                <CreditCard className="h-5 w-5 text-primary" />
+                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+                  <CreditCard className="h-5 w-5 text-white" />
+                </div>
                 {t('usage.currentPlan', language)}: <span className="capitalize">{subscription?.plan || 'Free'}</span>
               </CardTitle>
               <CardDescription>
@@ -213,10 +215,12 @@ const Usage = () => {
 
       {/* Usage Charts */}
       <div className="grid md:grid-cols-2 gap-6">
-        <Card className="cockpit-panel">
+        <Card className="cockpit-panel bg-gradient-to-br from-card to-card/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
+                <TrendingUp className="h-5 w-5 text-white" />
+              </div>
               {t('usage.dailyTokenUsage', language)}
             </CardTitle>
             <CardDescription>{t('usage.last30Days', language)}</CardDescription>
@@ -250,10 +254,12 @@ const Usage = () => {
           </CardContent>
         </Card>
 
-        <Card className="cockpit-panel">
+        <Card className="cockpit-panel bg-gradient-to-br from-card to-card/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5" />
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                <DollarSign className="h-5 w-5 text-white" />
+              </div>
               {t('usage.costByModel', language)}
             </CardTitle>
             <CardDescription>{t('usage.distributionBreakdown', language)}</CardDescription>
