@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
+import { CircuitBackground } from "@/components/CircuitBackground"
 import { Shield, FileCheck, Leaf, Lock, Database, Zap, Twitter, Linkedin, Github, Mail } from "lucide-react"
 import { useEffect } from "react"
 
@@ -17,9 +18,11 @@ const Index = () => {
   }, [user, navigate])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted">
+    <div className="relative min-h-screen bg-gradient-to-b from-background to-muted">
+      <CircuitBackground density="low" speed="slow" />
+      
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="relative container mx-auto px-4 py-16" style={{ zIndex: 1 }}>
         <div className="text-center mb-16">
           <div className="inline-flex p-8 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl mb-6 hover:shadow-2xl transition-all duration-300">
             <RoboticShieldLogo size={96} />

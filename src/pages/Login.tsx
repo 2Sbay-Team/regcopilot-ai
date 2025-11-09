@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
+import { CircuitBackground } from "@/components/CircuitBackground"
 
 const Login = () => {
   const { user } = useAuth()
@@ -52,8 +53,10 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
-      <Card className="w-full max-w-md cockpit-panel">
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+      <CircuitBackground density="low" speed="medium" />
+      
+      <Card className="relative w-full max-w-md cockpit-panel" style={{ zIndex: 1 }}>
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">
             <div className="p-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl hover:shadow-lg transition-all">

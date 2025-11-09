@@ -369,6 +369,123 @@ All colors MUST be HSL.
       background-position: 200% 0;
     }
   }
+
+  /* Circuit Background Styles */
+  .circuit-grid {
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(hsl(var(--border) / 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .circuit-line {
+    position: absolute;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      hsl(var(--primary) / 0.15) 50%, 
+      transparent 100%);
+    pointer-events: none;
+  }
+
+  .circuit-line-horizontal {
+    width: 100%;
+    height: 1px;
+    animation: circuit-flow-horizontal 25s linear infinite;
+  }
+
+  .circuit-line-vertical {
+    width: 1px;
+    height: 100%;
+    animation: circuit-flow-vertical 25s linear infinite;
+  }
+
+  @keyframes circuit-flow-horizontal {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.5;
+    }
+    90% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes circuit-flow-vertical {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.5;
+    }
+    90% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+  }
+
+  .circuit-node {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: hsl(var(--primary));
+    border-radius: 50%;
+    box-shadow: 0 0 8px hsl(var(--primary) / 0.6);
+    animation: circuit-node-pulse 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes circuit-node-pulse {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.5);
+    }
+  }
+
+  .circuit-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: hsl(var(--accent));
+    border-radius: 50%;
+    animation: circuit-particle-flow 15s linear infinite;
+    pointer-events: none;
+    box-shadow: 0 0 6px hsl(var(--accent) / 0.8);
+  }
+
+  @keyframes circuit-particle-flow {
+    0% {
+      transform: translate(0, 0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(100vw, 100vh);
+      opacity: 0;
+    }
+  }
 }
 
 /* Smooth scrolling */

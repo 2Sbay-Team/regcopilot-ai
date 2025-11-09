@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast"
 import { HapticButton } from "@/components/ui/haptic-button"
 import { InteractiveCard } from "@/components/ui/interactive-card"
 import { useHaptic } from "@/hooks/useHaptic"
+import { CircuitBackground } from "@/components/CircuitBackground"
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -94,8 +95,11 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Command Header */}
+    <div className="relative min-h-screen">
+      <CircuitBackground density="medium" speed="medium" />
+      
+      <div className="relative space-y-6 p-6" style={{ zIndex: 1 }}>
+        {/* Command Header */}
       <div className="flex items-center justify-between p-6 rounded-2xl cockpit-panel">
         <div>
           <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
@@ -375,6 +379,7 @@ const Dashboard = () => {
           </HapticButton>
         </CardContent>
       </Card>
+      </div>
     </div>
   )
 }
