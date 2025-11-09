@@ -1,0 +1,230 @@
+/* ============================================================================
+   REGULIX NINJA - Design System
+   Tagline: "Fast. Precise. Undetectable."
+   Style: Dynamic, speed-focused, expert precision
+   ============================================================================ */
+
+@layer base {
+  :root {
+    /* Primary Colors - Dark & Powerful */
+    --primary: 0 85% 55%;              /* Strike Red - Energy, action */
+    --primary-foreground: 0 0% 100%;   /* Pure White */
+    
+    /* Secondary Colors - Lightning & Speed */
+    --secondary: 200 100% 50%;         /* Lightning Blue - Speed, electricity */
+    --secondary-foreground: 220 25% 10%; /* Midnight Black */
+    
+    /* Accent Colors - Neon Ready State */
+    --accent: 130 100% 50%;            /* Neon Green - High-tech, ready */
+    --accent-foreground: 220 25% 10%;
+    
+    /* Neutral Colors - Dark & Stealth */
+    --background: 220 25% 10%;         /* Midnight Black - Stealth */
+    --foreground: 0 0% 95%;            /* Near White */
+    
+    --card: 220 20% 13%;               /* Slightly lighter black */
+    --card-foreground: 0 0% 95%;
+    
+    --muted: 210 15% 25%;              /* Dark gray */
+    --muted-foreground: 210 15% 75%;   /* Blade Silver */
+    
+    --popover: 220 20% 13%;
+    --popover-foreground: 0 0% 95%;
+    
+    --border: 220 20% 20%;             /* Subtle border */
+    --input: 220 20% 20%;
+    --ring: 0 85% 55%;                 /* Strike Red ring */
+    
+    /* Semantic Colors - High Contrast */
+    --destructive: 0 100% 50%;         /* Pure red */
+    --destructive-foreground: 0 0% 100%;
+    
+    --success: 130 100% 45%;           /* Neon green */
+    --success-foreground: 220 25% 10%;
+    
+    --warning: 45 100% 50%;            /* Sharp yellow */
+    --warning-foreground: 220 25% 10%;
+    
+    /* Ninja Accent Colors */
+    --blade-silver: 210 15% 75%;       /* Sharp, metallic */
+    --shadow-purple: 270 45% 30%;      /* Mysterious, expert */
+    
+    /* Chart Colors - Action & Speed */
+    --chart-1: 0 85% 55%;     /* Strike Red */
+    --chart-2: 200 100% 50%;  /* Lightning Blue */
+    --chart-3: 130 100% 50%;  /* Neon Green */
+    --chart-4: 270 45% 50%;   /* Shadow Purple */
+    --chart-5: 210 15% 75%;   /* Blade Silver */
+    
+    /* Custom Gradients - Dynamic & Powerful */
+    --gradient-primary: linear-gradient(135deg, hsl(220 25% 10%), hsl(0 85% 55%));
+    --gradient-speed: linear-gradient(90deg, hsl(270 45% 30%), hsl(200 100% 50%));
+    --gradient-strike: linear-gradient(
+      135deg,
+      hsl(0 85% 55% / 0.3),
+      hsl(200 100% 50% / 0.2),
+      hsl(130 100% 50% / 0.1)
+    );
+    
+    /* Custom Shadows - Dramatic & Dynamic */
+    --shadow-strike: 0 4px 16px hsl(0 85% 55% / 0.3);
+    --shadow-deep: 0 8px 32px hsl(220 25% 5% / 0.6);
+    --shadow-glow-red: 0 0 20px hsl(0 85% 55% / 0.5);
+    --shadow-glow-blue: 0 0 20px hsl(200 100% 50% / 0.5);
+    
+    /* Border Radius - Sharp & Angular */
+    --radius: 0.25rem;  /* 4px - sharp but not too harsh */
+  }
+
+  .dark {
+    /* Dark is the default theme */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    letter-spacing: -0.01em;
+  }
+  
+  /* Typography - Bold & Dynamic */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-black;
+    letter-spacing: -0.03em;
+    font-variation-settings: "wght" 900;
+    text-transform: uppercase;
+  }
+  
+  /* Angular Cuts */
+  .angular-cut {
+    clip-path: polygon(0 0, 95% 0, 100% 100%, 5% 100%);
+  }
+  
+  .angular-cut-reverse {
+    clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+  }
+  
+  /* Speed Lines */
+  @keyframes speed-line {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+  
+  .speed-line {
+    animation: speed-line 0.6s ease-out;
+  }
+  
+  /* Strike Effect */
+  @keyframes strike {
+    0% {
+      transform: scaleX(0) skewX(-45deg);
+      transform-origin: left;
+    }
+    100% {
+      transform: scaleX(1) skewX(-45deg);
+      transform-origin: left;
+    }
+  }
+  
+  .strike {
+    animation: strike 0.3s ease-out;
+  }
+  
+  /* Slash Effect */
+  .slash-divider {
+    position: relative;
+    transform: skewX(-15deg);
+  }
+  
+  /* Motion Blur */
+  .motion-blur {
+    position: relative;
+  }
+  
+  .motion-blur::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, 
+      transparent 0%,
+      hsl(0 85% 55% / 0.2) 50%,
+      hsl(200 100% 50% / 0.2) 100%
+    );
+    filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.1s;
+  }
+  
+  .motion-blur:hover::after {
+    opacity: 1;
+  }
+  
+  /* Glow Effects */
+  .glow-strike {
+    box-shadow: var(--shadow-glow-red);
+  }
+  
+  .glow-speed {
+    box-shadow: var(--shadow-glow-blue);
+  }
+  
+  /* Diagonal Pattern */
+  .diagonal-pattern {
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      hsl(0 85% 55% / 0.05) 10px,
+      hsl(0 85% 55% / 0.05) 20px
+    );
+  }
+  
+  /* Command Center Grid */
+  .command-grid {
+    background-image: 
+      linear-gradient(hsl(0 85% 55% / 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(0 85% 55% / 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: -1px -1px;
+  }
+  
+  /* Aggressive Hover State */
+  .ninja-hover {
+    transition: all 0.1s ease-out;
+  }
+  
+  .ninja-hover:hover {
+    transform: translateY(-2px) skewX(-2deg);
+    box-shadow: var(--shadow-strike);
+  }
+  
+  /* Mission Status */
+  @keyframes pulse-strong {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+  
+  .mission-active {
+    animation: pulse-strong 1s ease-in-out infinite;
+  }
+}
+
+/* Google Fonts - Bebas Neue & Roboto */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;500;700;900&family=Barlow+Condensed:wght@400;500;600;700&display=swap');

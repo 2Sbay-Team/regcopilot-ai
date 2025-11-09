@@ -1,0 +1,155 @@
+/* ============================================================================
+   REGULIX (REFINED) - Design System
+   Tagline: "Precision Regulatory Intelligence"
+   Style: Sharp, futuristic, high-tech precision
+   ============================================================================ */
+
+@layer base {
+  :root {
+    /* Primary Colors - Electric & Cyber */
+    --primary: 214 100% 58%;           /* Electric Blue - Advanced technology */
+    --primary-foreground: 210 20% 98%; /* Arctic White */
+    --primary-glow: 214 100% 70%;      /* Lighter electric blue for glow */
+    
+    /* Secondary Colors - Cyber Cyan */
+    --secondary: 190 100% 50%;         /* Cyber Cyan - Digital intelligence */
+    --secondary-foreground: 220 40% 12%; /* Deep Navy */
+    
+    /* Accent Colors - Neon & Steel */
+    --accent: 180 100% 45%;            /* Neon Teal - Energy, precision */
+    --accent-foreground: 220 40% 12%;  /* Deep Navy */
+    
+    /* Neutral Colors */
+    --background: 220 40% 12%;         /* Deep Navy - Authority */
+    --foreground: 210 20% 98%;         /* Arctic White */
+    
+    --card: 220 35% 15%;               /* Slightly lighter navy */
+    --card-foreground: 210 20% 98%;
+    
+    --muted: 215 20% 25%;              /* Steel Gray muted */
+    --muted-foreground: 215 20% 65%;   /* Steel Gray */
+    
+    --popover: 220 35% 15%;
+    --popover-foreground: 210 20% 98%;
+    
+    --border: 215 25% 20%;             /* Subtle border */
+    --input: 215 25% 20%;
+    --ring: 214 100% 58%;              /* Electric Blue ring */
+    
+    /* Semantic Colors */
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 210 20% 98%;
+    
+    --success: 140 85% 50%;
+    --success-foreground: 220 40% 12%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 220 40% 12%;
+    
+    /* Chart Colors - Electric theme */
+    --chart-1: 214 100% 58%;  /* Electric Blue */
+    --chart-2: 190 100% 50%;  /* Cyber Cyan */
+    --chart-3: 180 100% 45%;  /* Neon Teal */
+    --chart-4: 215 20% 65%;   /* Steel Gray */
+    --chart-5: 200 100% 65%;  /* Light Blue */
+    
+    /* Custom Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(214 100% 58%), hsl(190 100% 50%));
+    --gradient-accent: linear-gradient(135deg, hsl(220 40% 12%), hsl(180 100% 45%));
+    --gradient-holographic: linear-gradient(
+      120deg,
+      hsl(214 100% 58% / 0.2),
+      hsl(190 100% 50% / 0.3),
+      hsl(180 100% 45% / 0.2)
+    );
+    
+    /* Custom Shadows - Sharp & Glowing */
+    --shadow-sharp: 0 2px 4px hsl(220 40% 5% / 0.5);
+    --shadow-glow: 0 0 20px hsl(214 100% 58% / 0.3);
+    --shadow-glow-strong: 0 0 30px hsl(214 100% 58% / 0.5);
+    
+    /* Border Radius - Sharp */
+    --radius: 0.125rem;  /* 2px - ultra-sharp */
+  }
+
+  .dark {
+    /* Dark mode is default for this theme */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    letter-spacing: -0.02em; /* Tighter, more technical */
+  }
+  
+  /* Typography - Sharp & Technical */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+    letter-spacing: -0.03em;
+    font-variation-settings: "wght" 700;
+  }
+  
+  /* Hexagonal Elements */
+  .hexagon-clip {
+    clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+  }
+  
+  /* Circuit Path Animation */
+  @keyframes circuit-flow {
+    0% {
+      stroke-dashoffset: 1000;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+  
+  .circuit-animate {
+    animation: circuit-flow 3s linear infinite;
+  }
+  
+  /* Glow Effects */
+  .glow-primary {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .glow-primary-strong {
+    box-shadow: var(--shadow-glow-strong);
+  }
+  
+  /* Tech Grid Background */
+  .tech-grid {
+    background-image: 
+      linear-gradient(hsl(214 100% 58% / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(214 100% 58% / 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  
+  /* Holographic Effect */
+  .holographic {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .holographic::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-holographic);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  
+  .holographic:hover::before {
+    opacity: 1;
+  }
+}
+
+/* Google Fonts - Space Grotesk & Inter */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');

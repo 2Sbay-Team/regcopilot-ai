@@ -1,0 +1,195 @@
+/* ============================================================================
+   NINAREGULIX - Design System
+   Tagline: "Your Compliance Companion"
+   Style: Warm, friendly, approachable AI assistant
+   ============================================================================ */
+
+@layer base {
+  :root {
+    /* Primary Colors - Warm & Friendly */
+    --primary: 210 75% 55%;            /* Warm Blue - Friendly, trustworthy */
+    --primary-foreground: 40 30% 95%;  /* Cream */
+    
+    /* Secondary Colors - Sage & Calm */
+    --secondary: 150 35% 55%;          /* Sage Green - Growth, wisdom */
+    --secondary-foreground: 220 15% 25%; /* Charcoal */
+    
+    /* Accent Colors - Soft & Energetic */
+    --accent: 260 50% 65%;             /* Soft Violet - Creative, modern AI */
+    --accent-foreground: 40 30% 95%;
+    
+    /* Neutral Colors - Warm */
+    --background: 40 30% 95%;          /* Cream - Soft, inviting */
+    --foreground: 220 15% 25%;         /* Charcoal - Readable */
+    
+    --card: 0 0% 100%;                 /* Pure white cards */
+    --card-foreground: 220 15% 25%;
+    
+    --muted: 30 15% 88%;               /* Warm light gray */
+    --muted-foreground: 30 15% 50%;    /* Warm Gray */
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 25%;
+    
+    --border: 30 20% 85%;              /* Soft borders */
+    --input: 30 20% 85%;
+    --ring: 210 75% 55%;               /* Warm Blue ring */
+    
+    /* Semantic Colors - Softer variants */
+    --destructive: 0 65% 65%;          /* Softer red */
+    --destructive-foreground: 0 0% 100%;
+    
+    --success: 150 45% 55%;            /* Sage green success */
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 45 90% 65%;             /* Honey Yellow */
+    --warning-foreground: 220 15% 25%;
+    
+    /* Friendly Accent Colors */
+    --coral: 15 80% 65%;               /* Warmth, energy */
+    --honey: 45 90% 65%;               /* Optimism, clarity */
+    --lavender: 270 60% 80%;           /* Calm, intelligent */
+    
+    /* Chart Colors - Warm & Friendly */
+    --chart-1: 210 75% 55%;   /* Warm Blue */
+    --chart-2: 150 35% 55%;   /* Sage Green */
+    --chart-3: 260 50% 65%;   /* Soft Violet */
+    --chart-4: 15 80% 65%;    /* Coral */
+    --chart-5: 45 90% 65%;    /* Honey Yellow */
+    
+    /* Custom Gradients - Soft & Welcoming */
+    --gradient-primary: linear-gradient(135deg, hsl(210 75% 55%), hsl(150 35% 55%));
+    --gradient-accent: linear-gradient(135deg, hsl(260 50% 65%), hsl(15 80% 65%));
+    --gradient-warm: linear-gradient(
+      135deg,
+      hsl(210 75% 55% / 0.1),
+      hsl(150 35% 55% / 0.1),
+      hsl(260 50% 65% / 0.1)
+    );
+    
+    /* Custom Shadows - Soft & Organic */
+    --shadow-soft: 0 4px 12px hsl(220 15% 25% / 0.08);
+    --shadow-lifted: 0 8px 24px hsl(220 15% 25% / 0.12);
+    --shadow-floating: 0 12px 32px hsl(220 15% 25% / 0.15);
+    
+    /* Border Radius - Generous & Rounded */
+    --radius: 0.75rem;  /* 12px - friendly, rounded */
+  }
+
+  .dark {
+    /* Dark mode - warmer dark variant */
+    --background: 220 15% 15%;
+    --foreground: 40 30% 95%;
+    
+    --card: 220 15% 18%;
+    --card-foreground: 40 30% 95%;
+    
+    --muted: 220 15% 25%;
+    --muted-foreground: 30 15% 65%;
+    
+    --popover: 220 15% 18%;
+    --popover-foreground: 40 30% 95%;
+    
+    --border: 220 15% 30%;
+    --input: 220 15% 30%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    letter-spacing: 0.01em; /* Slightly more open */
+  }
+  
+  /* Typography - Warm & Friendly */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold;
+    letter-spacing: 0;
+    font-variation-settings: "wght" 600;
+  }
+  
+  /* Organic Shapes */
+  .blob-shape {
+    border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
+  }
+  
+  /* Friendly Animations */
+  @keyframes bounce-gentle {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  
+  .bounce-gentle {
+    animation: bounce-gentle 2s ease-in-out infinite;
+  }
+  
+  @keyframes wave {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(15deg);
+    }
+    75% {
+      transform: rotate(-15deg);
+    }
+  }
+  
+  .wave {
+    animation: wave 2s ease-in-out infinite;
+    transform-origin: 70% 70%;
+  }
+  
+  /* Soft Glow */
+  .glow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .glow-lifted {
+    box-shadow: var(--shadow-lifted);
+  }
+  
+  /* Warm Background Pattern */
+  .warm-pattern {
+    background-image: 
+      radial-gradient(circle at 20% 30%, hsl(210 75% 55% / 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, hsl(150 35% 55% / 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, hsl(260 50% 65% / 0.03) 0%, transparent 50%);
+  }
+  
+  /* Conversational UI Elements */
+  .chat-bubble {
+    border-radius: 1.5rem 1.5rem 1.5rem 0.25rem;
+  }
+  
+  .chat-bubble-reverse {
+    border-radius: 1.5rem 1.5rem 0.25rem 1.5rem;
+  }
+  
+  /* Progress Celebrations */
+  @keyframes confetti {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  
+  .confetti {
+    animation: confetti 1s ease-out forwards;
+  }
+}
+
+/* Google Fonts - Nunito & Open Sans */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap');
