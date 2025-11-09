@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { VideoPlayer } from "@/components/VideoPlayer"
 import { 
   Search, 
   BookOpen, 
@@ -473,28 +474,92 @@ const HelpCenter = () => {
 
         {/* Video Tutorials Tab */}
         <TabsContent value="videos" className="space-y-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            {videoTutorials.map((video, idx) => (
-              <Card key={idx} className="hover:shadow-lg transition-shadow overflow-hidden">
-                <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                  <PlayCircle className="h-16 w-16 text-primary/50" />
-                </div>
-                <CardHeader>
-                  <div className="flex items-start justify-between gap-4">
-                    <CardTitle className="text-lg">{video.title}</CardTitle>
-                    <Badge variant="secondary">{video.duration}</Badge>
-                  </div>
-                  <CardDescription>{video.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button variant="outline" className="w-full">
-                    <PlayCircle className="h-4 w-4 mr-2" />
-                    Watch Tutorial
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+          {/* Featured Video */}
+          <div>
+            <h2 className="text-2xl font-semibold mb-4">Featured Tutorials</h2>
+            <VideoPlayer
+              title={videoTutorials[0].title}
+              thumbnail={videoTutorials[0].thumbnail}
+              className="max-w-4xl mx-auto"
+            />
+            <div className="mt-4 max-w-4xl mx-auto">
+              <p className="text-muted-foreground">{videoTutorials[0].description}</p>
+              <div className="flex items-center gap-4 mt-2">
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  <PlayCircle className="h-3 w-3" />
+                  {videoTutorials[0].duration}
+                </Badge>
+                <span className="text-xs text-muted-foreground">Updated: Nov 2024</span>
+              </div>
+            </div>
           </div>
+
+          {/* All Tutorials Grid */}
+          <div>
+            <h2 className="text-2xl font-semibold mb-4">All Tutorials</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {videoTutorials.map((video, idx) => (
+                <div key={idx} className="space-y-3">
+                  <VideoPlayer
+                    title={video.title}
+                    thumbnail={video.thumbnail}
+                  />
+                  <div>
+                    <h3 className="font-semibold mb-1">{video.title}</h3>
+                    <p className="text-sm text-muted-foreground line-clamp-2">
+                      {video.description}
+                    </p>
+                    <div className="flex items-center gap-3 mt-2">
+                      <Badge variant="outline" className="text-xs">
+                        {video.duration}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {idx === 0 && "Most Popular"}
+                        {idx === 1 && "Trending"}
+                        {idx === 2 && "Essential"}
+                        {idx === 3 && "New"}
+                        {idx > 3 && "Recommended"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Learning Path Suggestion */}
+          <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-primary" />
+                Recommended Learning Path
+              </CardTitle>
+              <CardDescription>
+                Follow this sequence for comprehensive platform mastery
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {[
+                  { title: "Platform Overview & Getting Started", duration: "15 min", completed: false },
+                  { title: "EU AI Act Compliance Deep Dive", duration: "13 min", completed: false },
+                  { title: "GDPR Automation & DSAR Handling", duration: "10 min", completed: false },
+                  { title: "Connector Integration & Automation", duration: "13 min", completed: false },
+                ].map((step, idx) => (
+                  <div key={idx} className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-semibold shrink-0">
+                      {idx + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm">{step.title}</p>
+                      <p className="text-xs text-muted-foreground">{step.duration}</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
 
