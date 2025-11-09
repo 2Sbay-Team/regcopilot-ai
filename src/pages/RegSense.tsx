@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { AppLayout } from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -136,7 +135,6 @@ export default function RegSense() {
   };
 
   return (
-    <AppLayout>
       <div className="container mx-auto py-8 px-4 max-w-6xl">
         {/* Header */}
         <div className="mb-8">
@@ -304,6 +302,5 @@ export default function RegSense() {
           </div>
         </div>
       </div>
-    </AppLayout>
   );
 }
