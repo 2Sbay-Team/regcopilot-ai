@@ -1,5 +1,11 @@
 project_id = "usaygwvfanqlpruyzmhl"
 
+[functions.actuator-engine]
+verify_jwt = true
+
+[functions.ai-actuator-agent]
+verify_jwt = true
+
 [functions.agent-runner]
 verify_jwt = false
 

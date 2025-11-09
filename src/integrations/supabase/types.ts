@@ -14,6 +14,188 @@ export type Database = {
   }
   public: {
     Tables: {
+      actuator_logs: {
+        Row: {
+          action_hash: string
+          action_payload: Json
+          action_type: string
+          error_message: string | null
+          executed_at: string | null
+          execution_time_ms: number | null
+          id: string
+          organization_id: string
+          reasoning_summary: string | null
+          result: Json | null
+          rule_id: string | null
+          status: string
+          trigger_id: string | null
+          trigger_source: string
+        }
+        Insert: {
+          action_hash: string
+          action_payload: Json
+          action_type: string
+          error_message?: string | null
+          executed_at?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          organization_id: string
+          reasoning_summary?: string | null
+          result?: Json | null
+          rule_id?: string | null
+          status: string
+          trigger_id?: string | null
+          trigger_source: string
+        }
+        Update: {
+          action_hash?: string
+          action_payload?: Json
+          action_type?: string
+          error_message?: string | null
+          executed_at?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          organization_id?: string
+          reasoning_summary?: string | null
+          result?: Json | null
+          rule_id?: string | null
+          status?: string
+          trigger_id?: string | null
+          trigger_source?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "actuator_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "actuator_logs_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "actuator_rules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      actuator_rules: {
+        Row: {
+          action_config: Json
+          action_type: string
+          ai_managed: boolean | null
+          condition_logic: Json
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          enabled: boolean | null
+          execution_count: number | null
+          id: string
+          last_executed_at: string | null
+          name: string
+          organization_id: string
+          priority: number | null
+          trigger_config: Json
+          trigger_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          action_config: Json
+          action_type: string
+          ai_managed?: boolean | null
+          condition_logic: Json
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          enabled?: boolean | null
+          execution_count?: number | null
+          id?: string
+          last_executed_at?: string | null
+          name: string
+          organization_id: string
+          priority?: number | null
+          trigger_config?: Json
+          trigger_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          action_config?: Json
+          action_type?: string
+          ai_managed?: boolean | null
+          condition_logic?: Json
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          enabled?: boolean | null
+          execution_count?: number | null
+          id?: string
+          last_executed_at?: string | null
+          name?: string
+          organization_id?: string
+          priority?: number | null
+          trigger_config?: Json
+          trigger_type?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "actuator_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      actuator_triggers: {
+        Row: {
+          created_at: string | null
+          data_source_id: string | null
+          data_source_type: string
+          enabled: boolean | null
+          filter_config: Json | null
+          id: string
+          organization_id: string
+          rule_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          data_source_id?: string | null
+          data_source_type: string
+          enabled?: boolean | null
+          filter_config?: Json | null
+          id?: string
+          organization_id: string
+          rule_id: string
+        }
+        Update: {
+          created_at?: string | null
+          data_source_id?: string | null
+          data_source_type?: string
+          enabled?: boolean | null
+          filter_config?: Json | null
+          id?: string
+          organization_id?: string
+          rule_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "actuator_triggers_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "actuator_triggers_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "actuator_rules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agent_queue: {
         Row: {
           completed_at: string | null
@@ -223,6 +405,60 @@ export type Database = {
             columns: ["assessment_id"]
             isOneToOne: false
             referencedRelation: "ai_act_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_actuator_feedback: {
+        Row: {
+          ai_suggestions: Json | null
+          avg_time_to_resolution: number | null
+          created_at: string | null
+          evaluated_period_end: string | null
+          evaluated_period_start: string | null
+          id: string
+          manual_overrides: number | null
+          organization_id: string
+          rule_id: string
+          success_rate: number | null
+        }
+        Insert: {
+          ai_suggestions?: Json | null
+          avg_time_to_resolution?: number | null
+          created_at?: string | null
+          evaluated_period_end?: string | null
+          evaluated_period_start?: string | null
+          id?: string
+          manual_overrides?: number | null
+          organization_id: string
+          rule_id: string
+          success_rate?: number | null
+        }
+        Update: {
+          ai_suggestions?: Json | null
+          avg_time_to_resolution?: number | null
+          created_at?: string | null
+          evaluated_period_end?: string | null
+          evaluated_period_start?: string | null
+          id?: string
+          manual_overrides?: number | null
+          organization_id?: string
+          rule_id?: string
+          success_rate?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_actuator_feedback_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_actuator_feedback_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "actuator_rules"
             referencedColumns: ["id"]
           },
         ]

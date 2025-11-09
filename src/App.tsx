@@ -61,6 +61,7 @@ import UserGuide from "./pages/UserGuide";
 import HelpCenter from "./pages/HelpCenter";
 import RegSense from "./pages/RegSense";
 import BrandComparison from "./pages/BrandComparison";
+import Automation from "./pages/Automation";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -130,6 +131,7 @@ const App = () => (
             <Route path="/help-center" element={<ProtectedRoute><AppLayout><HelpCenter /></AppLayout></ProtectedRoute>} />
             <Route path="/regsense" element={<ProtectedRoute><AppLayout><RegSense /></AppLayout></ProtectedRoute>} />
             <Route path="/brand-comparison" element={<ProtectedRoute><BrandComparison /></ProtectedRoute>} />
+            <Route path="/automation" element={<ProtectedRoute><AppLayout><Automation /></AppLayout></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

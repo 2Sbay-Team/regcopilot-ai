@@ -202,6 +202,11 @@ export function AppSidebar() {
       icon: Store,
     },
     { 
+      titleKey: "nav.automation", 
+      url: "/automation", 
+      icon: Zap,
+    },
+    { 
       titleKey: "nav.admin", 
       url: "/admin", 
       icon: Settings,

@@ -242,7 +242,8 @@ Frontend displays result + "View Explainability" button
 ✅ **Predictions**: Linear regression forecasting  
 ✅ **Alerts**: Configurable thresholds + notifications  
 ✅ **Automation**: Cron-scheduled reports  
-✅ **PWA**: Installable, offline-capable  
+✅ **Actuator Engine**: Rule-based automation with AI-ready architecture
+✅ **PWA**: Installable, offline-capable
 ✅ **Security**: Input sanitization, RLS policies, JWT auth  
 
 ## 📈 Scalability
