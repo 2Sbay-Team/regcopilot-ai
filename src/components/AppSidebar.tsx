@@ -226,24 +226,28 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" className="border-r">
-      <SidebarContent className="pt-4">
+      <SidebarContent className="pt-3">
         <SidebarGroup>
-          <div className="px-3 mb-6">
-            <div className="flex items-center gap-2">
-              <RoboticShieldLogo size={32} />
-              {!isCollapsed && (
+          <div className={`px-3 mb-4 ${isCollapsed ? 'flex justify-center' : ''}`}>
+            {isCollapsed ? (
+              <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-sm">RE</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <RoboticShieldLogo size={28} />
                 <div>
-                  <span className="font-bold text-lg block leading-tight">Regulix</span>
+                  <span className="font-semibold text-base block leading-tight">Regulix</span>
                   <span className="text-[10px] text-muted-foreground leading-none">Regulatory Intelligence</span>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </SidebarGroup>
 
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-0.5">
               {navigationItems.map((item) => {
                 const Icon = item.icon
                 return (
@@ -252,13 +256,17 @@ export function AppSidebar() {
                       <NavLink 
                         to={item.url} 
                         end={item.url === "/dashboard"}
-                        className="hover:bg-accent/50 transition-all group"
-                        activeClassName="bg-accent/10 text-accent-foreground font-medium"
+                        className="hover:bg-accent/50 transition-colors group py-2 px-3 rounded-md"
+                        activeClassName="bg-accent text-accent-foreground font-medium"
                       >
-                        <div className={`p-1.5 rounded-lg ${item.iconBgClass} shadow-sm group-hover:shadow-md transition-shadow`}>
-                          <Icon className={`h-4 w-4 ${item.iconTextClass}`} />
-                        </div>
-                        {!isCollapsed && <span>{t(item.titleKey, language)}</span>}
+                        {isCollapsed ? (
+                          <Icon className="h-5 w-5 mx-auto" />
+                        ) : (
+                          <>
+                            <Icon className="h-5 w-5 shrink-0" />
+                            <span className="text-sm">{t(item.titleKey, language)}</span>
+                          </>
+                        )}
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -271,7 +279,7 @@ export function AppSidebar() {
       </SidebarContent>
       
       <SidebarFooter>
-        <div className="flex items-center justify-between px-3 py-2">
+        <div className={`flex items-center px-3 py-2 ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
           {!isCollapsed && (
             <span className="text-xs text-muted-foreground font-medium">
               Theme
