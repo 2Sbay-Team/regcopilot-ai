@@ -123,9 +123,9 @@ const Dashboard = () => {
       <div className="flex items-center justify-between p-6 rounded-2xl cockpit-panel">
         <div>
           <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
-            {t('dashboard.title', language)}
+            Compliance Dashboard
           </h1>
-          <p className="text-sm text-muted-foreground font-medium">{profile?.organizations?.name || "Welcome back"}</p>
+          <p className="text-sm text-muted-foreground font-medium">{profile?.organizations?.name || "Regulatory Intelligence Platform"}</p>
         </div>
         <RealTimeStatusIndicator />
       </div>

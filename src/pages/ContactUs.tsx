@@ -67,7 +67,7 @@ const ContactUs = () => {
             <CardTitle>{language === 'de' ? 'Telefon' : language === 'fr' ? 'Téléphone' : language === 'ar' ? 'الهاتف' : 'Phone'}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">+49 (0) 30 123456</p>
+            <p className="text-muted-foreground">+49 15118383733</p>
             <p className="text-sm text-muted-foreground mt-2">
               {language === 'de' ? 'Mo-Fr 9:00-18:00 Uhr' : language === 'fr' ? 'Lun-Ven 9h-18h' : language === 'ar' ? 'الاثنين-الجمعة 9:00-18:00' : 'Mon-Fri 9am-6pm'}
             </p>
@@ -83,7 +83,7 @@ const ContactUs = () => {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">Compliance Street 123</p>
-            <p className="text-muted-foreground">10115 Berlin</p>
+            <p className="text-muted-foreground">51069 Cologne</p>
             <p className="text-muted-foreground">Germany</p>
           </CardContent>
         </Card>

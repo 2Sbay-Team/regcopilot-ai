@@ -18,7 +18,8 @@ import {
   Database,
   Zap,
   Calendar,
-  GitBranch
+  GitBranch,
+  ShieldCheck
 } from "lucide-react"
 import {
   Accordion,
@@ -92,11 +93,15 @@ const HelpCenter = () => {
       questions: [
         {
           q: "What ESG metrics should I track for CSRD compliance?",
-          a: "For CSRD (Corporate Sustainability Reporting Directive), track:\n• Environmental: CO₂ emissions, energy consumption, waste\n• Social: Workforce diversity, employee wellbeing, human rights\n• Governance: Board composition, ethics policies, transparency\n\nOur ESG Copilot guides you through each metric with examples and calculates your completeness score."
+          a: "For CSRD (Corporate Sustainability Reporting Directive), track:\n• Environmental: CO₂ emissions (Scope 1, 2, 3), energy consumption, water usage, waste management, renewable energy percentage\n• Social: Workforce diversity metrics, employee wellbeing programs, training hours, human rights policies, supply chain labor practices\n• Governance: Board composition and independence, ethics policies, anti-corruption measures, data protection compliance, transparency reporting\n\nOur ESG Copilot guides you through each metric with industry benchmarks and calculates your ESRS completeness score."
         },
         {
           q: "How do I generate an ESG report?",
-          a: "1. Navigate to ESG Copilot\n2. Enter your metrics (CO₂, energy, diversity, etc.)\n3. Upload supporting documents if available\n4. Click 'Generate Report'\n5. Review the AI-generated CSRD/ESRS narrative\n6. Download as PDF or export for editing\n\nThe system uses RAG (Retrieval-Augmented Generation) to reference relevant ESRS standards."
+          a: "1. Navigate to ESG Copilot from the Compliance section\n2. Enter your environmental metrics (CO₂, energy, water, waste)\n3. Add social metrics (diversity, wellbeing, training)\n4. Include governance data (board composition, policies)\n5. Upload supporting documents (emission reports, audit statements)\n6. Click 'Generate Report' for AI-powered CSRD narrative\n7. Review against ESRS (European Sustainability Reporting Standards)\n8. Download as PDF or export to Word for customization\n9. Share with stakeholders or submit to regulators\n\nThe system uses RAG to reference specific ESRS double materiality requirements and best practices."
+        },
+        {
+          q: "Can I track Scope 3 emissions automatically?",
+          a: "Yes! Use the Scope 3 Connector to automatically pull emissions data from:\n• Supply chain partners via API integrations\n• Cloud providers (AWS, Azure, GCP carbon footprint)\n• Business travel systems (flight and hotel bookings)\n• Logistics providers (shipping and freight)\n\nSchedule automatic monthly syncs to keep your carbon footprint data current for CSRD reporting."
         }
       ]
     },
@@ -147,20 +152,42 @@ const HelpCenter = () => {
       ]
     },
     {
+      category: "NIS2, DORA & DMA Compliance",
+      icon: ShieldCheck,
+      questions: [
+        {
+          q: "What is NIS2 and who does it apply to?",
+          a: "NIS2 (Network and Information Security Directive 2) is the EU's cybersecurity law requiring:\n• Essential entities (energy, transport, banking, healthcare, digital infrastructure)\n• Important entities (postal services, waste management, manufacturing, digital providers)\n\nRequirements include:\n• Cybersecurity risk management measures\n• Incident reporting (24-hour preliminary, 72-hour detailed)\n• Supply chain security assessment\n• Business continuity planning\n\nUse the NIS2 Copilot to assess your obligations and generate compliance reports."
+        },
+        {
+          q: "How does DORA affect financial institutions?",
+          a: "DORA (Digital Operational Resilience Act) applies to:\n• Banks, insurance companies, investment firms\n• Payment institutions, crypto-asset service providers\n• Critical ICT third-party service providers\n\nKey requirements:\n• ICT risk management framework\n• Incident reporting to authorities\n• Digital operational resilience testing\n• Third-party ICT service provider oversight\n• Information sharing arrangements\n\nThe DORA Copilot helps assess ICT dependencies and generate resilience documentation."
+        },
+        {
+          q: "What is the Digital Markets Act (DMA)?",
+          a: "DMA regulates 'gatekeeper' platforms (large tech companies) to ensure fair competition:\n\nGatekeeper criteria:\n• €7.5B+ annual EEA turnover or €75B+ market value\n• 45M+ monthly active end users in EU\n• 10,000+ yearly active business users\n\nObligations include:\n• Interoperability requirements\n• Data portability and access\n• Anti-self-preferencing rules\n• Transparency in algorithms and ranking\n\nUse the DMA Assessor to determine gatekeeper status and compliance gaps."
+        }
+      ]
+    },
+    {
       category: "Audit & Compliance",
       icon: FileCheck,
       questions: [
         {
           q: "What is the Audit Trail and why is it important?",
-          a: "The Audit Trail is an immutable, hash-chained log of all compliance activities:\n• Who performed what action\n• When and why it was done\n• Input and output data\n• AI reasoning and decisions\n• Changes to models or policies\n\nThis is critical for regulatory audits, proving compliance, and incident investigation."
+          a: "The Audit Trail is an immutable, hash-chained log of all compliance activities:\n• Who performed what action (user ID and role)\n• When it was performed (timestamp with timezone)\n• What was changed (input/output data)\n• Why it was done (business justification)\n• AI model reasoning and confidence scores\n• Changes to models, policies, or configurations\n\nThis cryptographic audit trail is critical for:\n• Regulatory audits (demonstrating due diligence)\n• Incident investigation (root cause analysis)\n• Compliance reporting (Article 30 GDPR records)\n• Legal defense (proving proper governance)\n\nAll entries are stored in append-only mode with cryptographic signatures."
         },
         {
           q: "How does hash-chain verification work?",
-          a: "Each audit entry includes:\n• Hash of previous entry (creating a chain)\n• Hash of current entry data\n• Timestamp and actor information\n\nUse Audit Chain Verify to detect any tampering. If the chain is broken, it indicates data manipulation."
+          a: "Each audit entry includes:\n• Hash of previous entry (SHA-256)\n• Hash of current entry data\n• Timestamp (UTC, millisecond precision)\n• Digital signature of the entry\n• Actor information (user ID, IP, action type)\n\nThe hash chain works like blockchain:\n1. Entry N contains hash of Entry N-1\n2. Any modification to Entry N-1 breaks the chain\n3. Audit Verify tool recalculates all hashes\n4. Flags any discrepancies or tampering\n\nThis makes it cryptographically impossible to alter historical records without detection."
         },
         {
           q: "Can I export compliance reports for regulators?",
-          a: "Yes! Go to Reports to generate:\n• AI Act compliance reports (Annex IV documentation)\n• GDPR data processing records (Article 30)\n• ESG/CSRD sustainability reports\n• Unified compliance summary across all regulations\n\nExport as PDF, Word, or JSON format."
+          a: "Yes! Navigate to Reports to generate:\n• AI Act: Annex IV technical documentation, conformity assessments, risk management reports\n• GDPR: Article 30 processing records, DPIA summaries, DSAR fulfillment logs\n• ESG/CSRD: ESRS sustainability disclosures, double materiality assessments\n• NIS2: Incident reports, risk management documentation\n• DORA: ICT resilience testing reports, third-party dependency maps\n• DMA: Gatekeeper compliance reports\n• Unified Report: Cross-regulation compliance summary\n\nExport formats:\n• PDF (regulator submission)\n• Word/DOCX (editable for legal review)\n• JSON (system integration)\n• CSV (data analysis)\n\nAll reports include audit trail references and cryptographic signatures."
+        },
+        {
+          q: "How do I prepare for a regulatory audit?",
+          a: "Preparation checklist:\n1. Go to Audit Trail → verify hash chain integrity\n2. Generate Unified Compliance Report for last 12 months\n3. Export all assessment results (AI Act, GDPR, ESG)\n4. Download Model Registry inventory with risk tags\n5. Compile DSAR fulfillment logs and response times\n6. Review Explainability logs for AI decision rationale\n7. Prepare evidence from connected systems (Connectors)\n8. Verify all audit entries have proper justifications\n\nRegulators commonly request:\n• Proof of continuous compliance monitoring\n• AI model documentation and testing results\n• Data processing records and legal basis\n• Incident response timelines\n• Third-party risk assessments"
         }
       ]
     }
@@ -173,10 +200,11 @@ const HelpCenter = () => {
       icon: PlayCircle,
       duration: "5 min",
       steps: [
-        "Create your organization account",
-        "Run your first AI Act audit",
-        "Review compliance score on dashboard",
-        "Set up automated monitoring"
+        "Create your organization account and verify email",
+        "Navigate to AI Act Copilot from sidebar",
+        "Fill in your AI system details and risk factors",
+        "Review automated risk classification results",
+        "Check compliance score on main dashboard"
       ]
     },
     {
@@ -185,65 +213,123 @@ const HelpCenter = () => {
       icon: GitBranch,
       duration: "10 min",
       steps: [
-        "Navigate to Connectors",
-        "Choose your data source type",
-        "Enter connection credentials",
-        "Test and validate connection",
-        "Configure sync frequency"
+        "Navigate to Connectors from Tools section",
+        "Click 'Add Connector' and choose type (AWS, Azure, SharePoint, etc.)",
+        "Enter connection credentials and API keys securely",
+        "Test connection and validate access",
+        "Configure automatic sync frequency (hourly/daily/weekly)",
+        "Monitor connector status in dashboard"
       ]
     },
     {
       title: "DSAR Workflow",
-      description: "Handle data subject access requests efficiently",
+      description: "Handle data subject access requests efficiently under GDPR",
       icon: FileCheck,
       duration: "3 min",
       steps: [
-        "Go to DSAR Management",
-        "Create new request with email",
-        "Select request type",
-        "Click Fulfill Request",
-        "Review and send compiled data"
+        "Go to DSAR Management from sidebar",
+        "Click 'New Request' and enter data subject email",
+        "Select request type (Access, Erasure, Rectification, Portability)",
+        "Click 'Fulfill Request' to auto-search connected systems",
+        "Review compiled personal data results",
+        "Download response package and send to requester within 30 days"
       ]
     },
     {
       title: "Model Registry Setup",
-      description: "Track all AI models for compliance governance",
+      description: "Track all AI models for EU AI Act compliance governance",
       icon: Database,
       duration: "5 min",
       steps: [
-        "Open Model Registry",
-        "Click Register Model",
-        "Enter model details and risk tag",
-        "Link to training dataset",
-        "Set compliance status"
+        "Open Model Registry from Management section",
+        "Click 'Register New Model' button",
+        "Enter model details (name, version, provider, purpose)",
+        "Assign risk classification tag (minimal/limited/high/unacceptable)",
+        "Link to training dataset and documentation",
+        "Set compliance status and review schedule",
+        "Enable monitoring for production models"
+      ]
+    },
+    {
+      title: "NIS2 Incident Reporting",
+      description: "Report cybersecurity incidents in compliance with NIS2",
+      icon: ShieldCheck,
+      duration: "7 min",
+      steps: [
+        "Go to NIS2 Copilot when incident occurs",
+        "Click 'Report Incident' within 24 hours",
+        "Document incident type, scope, and impact",
+        "Submit preliminary report to authorities",
+        "Provide detailed report within 72 hours",
+        "Track remediation and follow-up actions"
+      ]
+    },
+    {
+      title: "ESG Report Generation",
+      description: "Create CSRD-compliant sustainability reports with AI assistance",
+      icon: Leaf,
+      duration: "15 min",
+      steps: [
+        "Navigate to ESG Copilot and select reporting period",
+        "Input environmental data (CO₂ Scope 1, 2, 3, energy, water, waste)",
+        "Add social metrics (diversity, employee wellbeing, training)",
+        "Include governance data (board composition, policies, ethics)",
+        "Upload supporting evidence documents",
+        "Click 'Generate ESRS Report' for AI-powered narrative",
+        "Review against double materiality requirements",
+        "Export as PDF for stakeholder distribution"
       ]
     }
   ]
 
   const videoTutorials = [
     {
-      title: "Platform Overview",
-      description: "Complete walkthrough of Regulix features and capabilities",
+      title: "Platform Overview & Getting Started",
+      description: "Complete walkthrough of Regulix features, navigation, and key capabilities",
       duration: "15:30",
       thumbnail: "overview"
     },
     {
-      title: "EU AI Act Compliance",
-      description: "Step-by-step guide to AI system risk assessment",
+      title: "EU AI Act Compliance Deep Dive",
+      description: "Step-by-step guide to AI system risk assessment, Annex IV documentation, and model registry",
       duration: "12:45",
       thumbnail: "ai-act"
     },
     {
-      title: "GDPR Automation",
-      description: "Automate DSAR handling and privacy compliance",
+      title: "GDPR Automation & DSAR Handling",
+      description: "Automate privacy compliance scanning, DSAR fulfillment, and data lineage tracking",
       duration: "10:20",
       thumbnail: "gdpr"
     },
     {
-      title: "ESG Reporting",
-      description: "Create CSRD-compliant sustainability reports",
+      title: "ESG & CSRD Reporting",
+      description: "Create ESRS-compliant sustainability reports with Scope 3 emissions tracking",
       duration: "8:15",
       thumbnail: "esg"
+    },
+    {
+      title: "NIS2 Cybersecurity Compliance",
+      description: "Implement NIS2 requirements, incident reporting, and supply chain security",
+      duration: "11:05",
+      thumbnail: "nis2"
+    },
+    {
+      title: "DORA for Financial Services",
+      description: "Digital operational resilience, ICT risk management, and third-party oversight",
+      duration: "9:40",
+      thumbnail: "dora"
+    },
+    {
+      title: "Connector Integration & Automation",
+      description: "Connect AWS, Azure, SharePoint, SAP, and schedule automated compliance scans",
+      duration: "13:20",
+      thumbnail: "connectors"
+    },
+    {
+      title: "Audit Trail & Explainability",
+      description: "Understand hash-chain verification, audit logs, and AI decision transparency",
+      duration: "7:50",
+      thumbnail: "audit"
     }
   ]
 
