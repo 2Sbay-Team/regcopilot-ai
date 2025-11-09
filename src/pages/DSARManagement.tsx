@@ -7,9 +7,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { FileText, Clock, CheckCircle, AlertCircle, Mail, Info } from "lucide-react"
+import { FileText, Clock, CheckCircle, AlertCircle, Mail, Info, HelpCircle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { InfoModal } from "@/components/InfoModal"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface DSARRequest {
   id: string
@@ -200,9 +201,22 @@ const DSARManagement = () => {
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          DSAR Management
-        </h1>
+        <div className="flex items-center gap-3 mb-2">
+          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            DSAR Management
+          </h1>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <HelpCircle className="h-6 w-6 text-muted-foreground cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-sm">
+                <p className="font-semibold">DSAR (Data Subject Access Request)</p>
+                <p className="mt-1">A formal request from an individual to access, rectify, erase, or port their personal data under GDPR Articles 15-20. Organizations must respond within 30 days.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <p className="text-muted-foreground font-medium">Automate Data Subject Access Requests (GDPR Art. 15-20)</p>
       </div>
 

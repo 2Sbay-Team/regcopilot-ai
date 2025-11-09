@@ -120,7 +120,22 @@ const GDPRCopilot = () => {
 
   return (
     <ModuleLayout
-      title="GDPR Checker"
+      title={
+        <div className="flex items-center gap-2">
+          GDPR Checker
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <HelpCircle className="h-5 w-5 text-muted-foreground cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-sm">
+                <p className="font-semibold">GDPR / DSGVO (General Data Protection Regulation / Datenschutz-Grundverordnung)</p>
+                <p className="mt-1">Regulation (EU) 2016/679 - The EU's comprehensive data protection law that governs how personal data is collected, processed, and protected. Grants individuals rights over their data including access, rectification, and erasure.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      }
       description="Scan for personal data & compliance issues"
       quickActions={[
         {

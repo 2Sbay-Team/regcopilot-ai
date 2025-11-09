@@ -20,8 +20,8 @@ interface QuickAction {
 
 interface ModuleLayoutProps {
   children: ReactNode
-  title: string
-  description?: string
+  title: string | ReactNode
+  description?: string | ReactNode
   quickActions?: QuickAction[]
   showStatus?: boolean
 }

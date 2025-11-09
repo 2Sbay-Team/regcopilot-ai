@@ -106,7 +106,22 @@ const AIActCopilot = () => {
 
   return (
     <ModuleLayout
-      title={t('aiact.title', language)}
+      title={
+        <div className="flex items-center gap-2">
+          {t('aiact.title', language)}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <HelpCircle className="h-5 w-5 text-muted-foreground cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-sm">
+                <p className="font-semibold">EU AI Act (European Union Artificial Intelligence Act)</p>
+                <p className="mt-1">Regulation (EU) 2024/1689 - The world's first comprehensive legal framework for artificial intelligence, establishing risk-based requirements for AI systems in the European Union.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      }
       description={t('aiact.subtitle', language)}
       quickActions={[
         {

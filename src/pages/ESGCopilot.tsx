@@ -124,8 +124,40 @@ const ESGCopilot = () => {
 
   return (
     <ModuleLayout
-      title="ESG Reporter"
-      description="CSRD/ESRS sustainability reporting"
+      title={
+        <div className="flex items-center gap-2">
+          ESG Reporter
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <HelpCircle className="h-5 w-5 text-muted-foreground cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-sm">
+                <p className="font-semibold">ESG (Environmental, Social, and Governance)</p>
+                <p className="mt-1">A framework for measuring an organization's sustainability and ethical impact. Covers carbon emissions, resource use, labor practices, diversity, and corporate governance.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      }
+      description={
+        <div className="flex items-center gap-2">
+          CSRD/ESRS sustainability reporting
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-sm">
+                <p className="font-semibold">CSRD (Corporate Sustainability Reporting Directive)</p>
+                <p className="mt-1">EU Directive 2022/2464 requiring companies to report on sustainability matters.</p>
+                <p className="font-semibold mt-2">ESRS (European Sustainability Reporting Standards)</p>
+                <p className="mt-1">The detailed reporting standards that define what and how companies must disclose ESG information under CSRD.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      }
       quickActions={[
         {
           label: "Berichte",

@@ -10,6 +10,7 @@ import { Network, Server, AlertTriangle, HelpCircle, CheckCircle2, Clock } from 
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { supabase } from "@/integrations/supabase/client"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 const DORACopilot = () => {
   const { toast } = useToast()
@@ -67,9 +68,22 @@ const DORACopilot = () => {
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-          DORA Compliance Copilot
-        </h1>
+        <div className="flex items-center gap-3 mb-2">
+          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            DORA Compliance Copilot
+          </h1>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <HelpCircle className="h-6 w-6 text-muted-foreground cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-sm">
+                <p className="font-semibold">DORA (Digital Operational Resilience Act)</p>
+                <p className="mt-1">Regulation (EU) 2022/2554 - Establishes requirements for digital operational resilience in the EU financial sector, covering ICT risk management, incident reporting, resilience testing, and third-party risk oversight.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <p className="text-muted-foreground font-medium">
           Digital Operational Resilience Act for Financial Institutions
         </p>
