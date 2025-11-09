@@ -198,7 +198,7 @@ const Index = () => {
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                  <button onClick={() => navigate("/contact")} className="hover:text-primary transition-colors">
                     Contact
                   </button>
                 </li>
@@ -210,7 +210,7 @@ const Index = () => {
               <h3 className="font-semibold mb-4">Legal</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
+                  <button onClick={() => navigate("/privacy-policy")} className="hover:text-primary transition-colors">
                     Privacy Policy
                   </button>
                 </li>
@@ -225,8 +225,8 @@ const Index = () => {
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
-                    Security
+                  <button onClick={() => navigate("/security-privacy")} className="hover:text-primary transition-colors">
+                    Security & Data Protection
                   </button>
                 </li>
               </ul>
