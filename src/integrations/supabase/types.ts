@@ -2062,6 +2062,56 @@ export type Database = {
           },
         ]
       }
+      regulation_versions: {
+        Row: {
+          chunks_count: number | null
+          created_at: string | null
+          file_path: string
+          id: string
+          metadata: Json | null
+          organization_id: string
+          regulation_type: string
+          status: string | null
+          uploaded_at: string | null
+          uploaded_by: string | null
+          version: string
+        }
+        Insert: {
+          chunks_count?: number | null
+          created_at?: string | null
+          file_path: string
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          regulation_type: string
+          status?: string | null
+          uploaded_at?: string | null
+          uploaded_by?: string | null
+          version: string
+        }
+        Update: {
+          chunks_count?: number | null
+          created_at?: string | null
+          file_path?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          regulation_type?: string
+          status?: string | null
+          uploaded_at?: string | null
+          uploaded_by?: string | null
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "regulation_versions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       regulatory_documents: {
         Row: {
           content: string | null

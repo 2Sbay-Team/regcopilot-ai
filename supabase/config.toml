@@ -89,3 +89,6 @@ verify_jwt = true
 
 [functions.llm-gateway]
 verify_jwt = true
+
+[functions.process-regulation-pdf]
+verify_jwt = true

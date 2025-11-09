@@ -181,6 +181,41 @@ const Admin = () => {
           </CardContent>
         </Card>
 
+        {/* Admin Tools */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Admin Tools</CardTitle>
+            <CardDescription>Quick access to admin features</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-2">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/admin/regulations')}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <FileText className="h-4 w-4" />
+                    Regulation Uploader
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">Upload & manage official regulatory PDFs for RAG system</p>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/model-registry')}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Shield className="h-4 w-4" />
+                    Model Registry
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">Manage AI models and compliance tracking</p>
+                </CardContent>
+              </Card>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* User Management */}
         <Card>
           <CardHeader>

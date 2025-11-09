@@ -49,6 +49,7 @@ import ContinuousIntelligence from "./pages/ContinuousIntelligence";
 import ScheduledJobs from "./pages/ScheduledJobs";
 import FeedbackAnalytics from "./pages/FeedbackAnalytics";
 import AdminHelp from "./pages/admin/Help";
+import RegulationUploader from "./pages/admin/RegulationUploader";
 import RiskRegister from "./pages/RiskRegister";
 import DSARQueue from "./pages/DSARQueue";
 import SecurityCenter from "./pages/SecurityCenter";
@@ -110,6 +111,7 @@ const App = () => (
             <Route path="/scheduled-jobs" element={<ProtectedRoute><AppLayout><ScheduledJobs /></AppLayout></ProtectedRoute>} />
             <Route path="/feedback-analytics" element={<ProtectedRoute><AppLayout><FeedbackAnalytics /></AppLayout></ProtectedRoute>} />
             <Route path="/admin/help" element={<ProtectedRoute><AppLayout><AdminHelp /></AppLayout></ProtectedRoute>} />
+            <Route path="/admin/regulations" element={<ProtectedRoute><AppLayout><RegulationUploader /></AppLayout></ProtectedRoute>} />
             <Route path="/admin/rag-insights" element={<ProtectedRoute><AppLayout><FeedbackAnalytics /></AppLayout></ProtectedRoute>} />
             <Route path="/risk-register" element={<ProtectedRoute><AppLayout><RiskRegister /></AppLayout></ProtectedRoute>} />
             <Route path="/dsar-queue" element={<ProtectedRoute><AppLayout><DSARQueue /></AppLayout></ProtectedRoute>} />
