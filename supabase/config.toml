@@ -65,3 +65,12 @@ verify_jwt = true
 
 [functions.refresh-feedback-views]
 verify_jwt = true
+
+[functions.generate-annex-iv-report]
+verify_jwt = true
+
+[functions.update-rms-status]
+verify_jwt = true
+
+[functions.refresh-lineage-graph]
+verify_jwt = true

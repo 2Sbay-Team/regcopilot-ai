@@ -46,6 +46,7 @@ import ContinuousIntelligence from "./pages/ContinuousIntelligence";
 import ScheduledJobs from "./pages/ScheduledJobs";
 import FeedbackAnalytics from "./pages/FeedbackAnalytics";
 import AdminHelp from "./pages/admin/Help";
+import RiskRegister from "./pages/RiskRegister";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -100,6 +101,7 @@ const App = () => (
             <Route path="/feedback-analytics" element={<ProtectedRoute><AppLayout><FeedbackAnalytics /></AppLayout></ProtectedRoute>} />
             <Route path="/admin/help" element={<ProtectedRoute><AppLayout><AdminHelp /></AppLayout></ProtectedRoute>} />
             <Route path="/admin/rag-insights" element={<ProtectedRoute><AppLayout><FeedbackAnalytics /></AppLayout></ProtectedRoute>} />
+            <Route path="/risk-register" element={<ProtectedRoute><AppLayout><RiskRegister /></AppLayout></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
