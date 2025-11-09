@@ -216,7 +216,7 @@ const Dashboard = () => {
           <Button
             onClick={() => {
               vibrate("selection")
-              navigate("/ai-act")
+              setWizardOpen(true)
             }}
             className="gap-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300"
           >
