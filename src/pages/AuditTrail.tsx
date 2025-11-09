@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,9 +8,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
-import { ArrowLeft, Download, Shield, Search, CheckCircle, XCircle, Loader2 } from "lucide-react"
+import { Download, Shield, Search, CheckCircle, XCircle, Loader2 } from "lucide-react"
 
-const AuditTrail = () => {
+export default function AuditTrail() {
   const [logs, setLogs] = useState<any[]>([])
   const [filteredLogs, setFilteredLogs] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -20,7 +19,6 @@ const AuditTrail = () => {
   const [statusFilter, setStatusFilter] = useState("all")
   const [verifying, setVerifying] = useState(false)
   const [hashIntegrity, setHashIntegrity] = useState<{ valid: boolean; checked: number } | null>(null)
-  const navigate = useNavigate()
   const { toast } = useToast()
 
   useEffect(() => {
@@ -121,70 +119,58 @@ const AuditTrail = () => {
   const modules = Array.from(new Set(logs.map(l => l.agent).filter(Boolean)))
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <Shield className="h-8 w-8 text-primary" />
+    <div className="container mx-auto px-4 py-8 space-y-6">
+      {hashIntegrity && (
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-4">
+              {hashIntegrity.valid ? (
+                <>
+                  <CheckCircle className="h-6 w-6 text-green-500" />
+                  <div>
+                    <p className="font-semibold">Hash Chain Verified</p>
+                    <p className="text-sm text-muted-foreground">
+                      {hashIntegrity.checked} links verified - no tampering detected
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <XCircle className="h-6 w-6 text-destructive" />
+                  <div>
+                    <p className="font-semibold text-destructive">Chain Integrity Compromised</p>
+                    <p className="text-sm text-muted-foreground">
+                      Tampering detected in audit trail
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-bold">Audit Trail</h1>
-              <p className="text-sm text-muted-foreground">Hash-chained compliance logs</p>
+              <CardTitle>Audit Logs</CardTitle>
+              <CardDescription>Recent compliance activity with filtering and search</CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={verifyHashChain} disabled={verifying || logs.length === 0} variant="outline" size="sm">
+                {verifying ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Shield className="mr-2 h-4 w-4" />}
+                Verify Chain
+              </Button>
+              <Button onClick={exportLogs} disabled={filteredLogs.length === 0} size="sm">
+                <Download className="mr-2 h-4 w-4" />
+                Export
+              </Button>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Button onClick={verifyHashChain} disabled={verifying || logs.length === 0} variant="outline">
-              {verifying ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Shield className="mr-2 h-4 w-4" />}
-              Verify Chain
-            </Button>
-            <Button onClick={exportLogs} disabled={filteredLogs.length === 0}>
-              <Download className="mr-2 h-4 w-4" />
-              Export
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-8">
-        {hashIntegrity && (
-          <Card className="mb-6">
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-4">
-                {hashIntegrity.valid ? (
-                  <>
-                    <CheckCircle className="h-6 w-6 text-green-500" />
-                    <div>
-                      <p className="font-semibold">Hash Chain Verified</p>
-                      <p className="text-sm text-muted-foreground">
-                        {hashIntegrity.checked} links verified - no tampering detected
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <XCircle className="h-6 w-6 text-destructive" />
-                    <div>
-                      <p className="font-semibold text-destructive">Chain Integrity Compromised</p>
-                      <p className="text-sm text-muted-foreground">
-                        Tampering detected in audit trail
-                      </p>
-                    </div>
-                  </>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Audit Logs</CardTitle>
-            <CardDescription>Recent compliance activity with filtering and search</CardDescription>
-            
-            {/* Filters */}
-            <div className="grid gap-4 md:grid-cols-3 pt-4">
+          
+          {/* Filters */}
+          <div className="grid gap-4 md:grid-cols-3 pt-4">
               <div>
                 <Label htmlFor="search" className="text-sm">Search</Label>
                 <div className="relative mt-1">
@@ -278,8 +264,5 @@ const AuditTrail = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
-  )
-}
-
-export default AuditTrail
+    )
+  }
