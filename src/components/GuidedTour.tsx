@@ -16,7 +16,7 @@ interface TourStep {
 const tours: Record<string, TourStep[]> = {
   platform: [
     {
-      title: "Welcome to RegSense! 🎉",
+      title: "Welcome to RegSense Advisor! 🎉",
       description: "Let's take a quick tour to get you started. We'll show you the key features in just 2 minutes.",
     },
     {

@@ -24,10 +24,10 @@ const Index = () => {
           <div className="inline-flex p-8 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl mb-6 hover:shadow-2xl transition-all duration-300">
             <RoboticShieldLogo size={96} />
           </div>
-          <h1 className="text-5xl font-bold mb-2 animate-in">RegSense</h1>
+          <h1 className="text-5xl font-bold mb-2 animate-in">RegSense Advisor</h1>
           <p className="text-lg text-primary font-medium mb-4 animate-in" style={{ animationDelay: "0.1s" }}>AI-Powered Regulatory Intelligence</p>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-in" style={{ animationDelay: "0.2s" }}>
-            RegSense — Making Compliance Effortless. 
+            RegSense Advisor — Making Compliance Effortless.
             The AI Copilot for Smarter Compliance across EU AI Act, GDPR & ESG reporting.
           </p>
           <div className="flex gap-4 justify-center">
@@ -108,7 +108,7 @@ const Index = () => {
           <CardContent className="py-12 text-center">
             <h2 className="text-3xl font-bold mb-4">Ready for AI-powered regulatory intelligence?</h2>
             <p className="text-lg mb-6 opacity-90">
-              Join organizations using RegSense for effortless compliance solutions
+              Join organizations using RegSense Advisor for effortless compliance solutions
             </p>
             <Button size="lg" variant="secondary" onClick={() => navigate("/signup")}>
               Start Free Trial
@@ -128,12 +128,12 @@ const Index = () => {
                   <Shield className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <span className="font-bold text-lg block leading-tight">RegSense</span>
+                  <span className="font-bold text-lg block leading-tight">RegSense Advisor</span>
                   <span className="text-xs text-muted-foreground">AI-Powered Regulatory Intelligence</span>
                 </div>
               </div>
               <p className="text-sm text-muted-foreground mb-4">
-                RegSense — Making Compliance Effortless. AI-powered regulatory intelligence for modern enterprises.
+                RegSense Advisor — Making Compliance Effortless. AI-powered regulatory intelligence for modern enterprises.
               </p>
               <div className="flex gap-3">
                 <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
@@ -234,7 +234,7 @@ const Index = () => {
           </div>
 
           <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>© {new Date().getFullYear()} RegSense. All rights reserved. AI-Powered Regulatory Intelligence.</p>
+            <p>© {new Date().getFullYear()} RegSense Advisor. All rights reserved. AI-Powered Regulatory Intelligence.</p>
           </div>
         </div>
       </footer>

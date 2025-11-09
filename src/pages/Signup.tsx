@@ -122,7 +122,7 @@ const Signup = () => {
 
       toast({
         title: "Account created!",
-        description: "Welcome to RegSense. Your password will expire in 90 days.",
+        description: "Welcome to RegSense Advisor. Your password will expire in 90 days.",
       });
 
       navigate("/dashboard");
@@ -167,7 +167,7 @@ const Signup = () => {
               <RoboticShieldLogo size={64} />
             </div>
           </div>
-          <CardTitle className="text-2xl">Join RegSense</CardTitle>
+          <CardTitle className="text-2xl">Join RegSense Advisor</CardTitle>
           <CardDescription>
             AI-Powered Regulatory Intelligence for your organization
           </CardDescription>

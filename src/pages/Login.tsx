@@ -83,7 +83,7 @@ const Login = () => {
               <RoboticShieldLogo size={64} />
             </div>
           </div>
-          <CardTitle className="text-2xl">RegSense</CardTitle>
+          <CardTitle className="text-2xl">RegSense Advisor</CardTitle>
           <CardDescription>
             AI-Powered Regulatory Intelligence — Making Compliance Effortless
           </CardDescription>

@@ -340,7 +340,7 @@ export function AppSidebar() {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent side="right">
-                    <p className="font-semibold">RegSense</p>
+                    <p className="font-semibold">RegSense Advisor</p>
                     <p className="text-xs text-muted-foreground">AI-Powered Regulatory Intelligence</p>
                   </TooltipContent>
                 </Tooltip>
@@ -349,7 +349,7 @@ export function AppSidebar() {
                   <RoboticShieldLogo size={32} />
                   <div>
                     <span className="font-semibold text-base block leading-tight">
-                      RegSense
+                      RegSense Advisor
                     </span>
                     <span className="text-xs text-muted-foreground leading-none">
                       AI-Powered Regulatory Intelligence

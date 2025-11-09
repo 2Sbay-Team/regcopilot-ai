@@ -61,7 +61,7 @@ export default function SecurityCenter() {
       summary,
       results,
       timestamp: lastAuditTime,
-      generated_by: 'RegSense Security Center'
+      generated_by: 'RegSense Advisor Security Center'
     };
 
     const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });

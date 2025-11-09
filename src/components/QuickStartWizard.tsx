@@ -15,7 +15,7 @@ interface QuickStartWizardProps {
 const wizardSteps = [
   {
     id: "welcome",
-    title: "Welcome to RegSense",
+    title: "Welcome to RegSense Advisor",
     description: "Let's get you started with compliance assessments",
     icon: Shield,
   },
@@ -197,7 +197,7 @@ export const QuickStartWizard = ({ open, onOpenChange }: QuickStartWizardProps) 
                 <CardHeader>
                   <CardTitle>🎯 Your Compliance Journey Starts Here</CardTitle>
                   <CardDescription>
-                    RegSense provides AI-powered compliance tools for EU regulations. This wizard will introduce you to each module.
+                    RegSense Advisor provides AI-powered compliance tools for EU regulations. This wizard will introduce you to each module.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
