@@ -9,6 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Network, Server, AlertTriangle, HelpCircle, CheckCircle2, Clock } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { supabase } from "@/integrations/supabase/client"
 
 const DORACopilot = () => {
   const { toast } = useToast()
@@ -29,16 +30,34 @@ const DORACopilot = () => {
     setLoading(true)
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      const { data, error } = await supabase.functions.invoke('dora-assessor', {
+        body: formData
+      })
+
+      if (error) throw error
+
       toast({
-        title: "DORA Assessment Started",
-        description: "Digital operational resilience assessment is being processed"
+        title: "DORA Assessment Complete",
+        description: `Compliance score: ${data.assessment.compliance_score}/100. ${data.assessment.risk_classification}`
+      })
+
+      // Reset form
+      setFormData({
+        institutionName: '',
+        institutionType: '',
+        ictServices: '',
+        thirdPartyProviders: '',
+        incidentManagement: '',
+        testingFrequency: '',
+        recoveryTimeObjective: '',
+        businessContinuityPlan: ''
       })
     } catch (error) {
+      console.error('DORA assessment error:', error)
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to start assessment"
+        title: "Assessment Failed",
+        description: error instanceof Error ? error.message : "Failed to complete assessment"
       })
     } finally {
       setLoading(false)

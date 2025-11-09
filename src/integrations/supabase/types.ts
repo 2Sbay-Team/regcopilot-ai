@@ -575,6 +575,71 @@ export type Database = {
           },
         ]
       }
+      dma_assessments: {
+        Row: {
+          advertising_practices: string | null
+          business_users: string | null
+          compliance_score: number | null
+          created_at: string | null
+          data_practices: string | null
+          gatekeeper_status: string | null
+          id: string
+          interoperability: string | null
+          monthly_users: string
+          operates_in_eu: boolean
+          organization_id: string
+          platform_name: string
+          platform_type: string
+          recommendations: string | null
+          report_summary: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          advertising_practices?: string | null
+          business_users?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          data_practices?: string | null
+          gatekeeper_status?: string | null
+          id?: string
+          interoperability?: string | null
+          monthly_users: string
+          operates_in_eu: boolean
+          organization_id: string
+          platform_name: string
+          platform_type: string
+          recommendations?: string | null
+          report_summary?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          advertising_practices?: string | null
+          business_users?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          data_practices?: string | null
+          gatekeeper_status?: string | null
+          id?: string
+          interoperability?: string | null
+          monthly_users?: string
+          operates_in_eu?: boolean
+          organization_id?: string
+          platform_name?: string
+          platform_type?: string
+          recommendations?: string | null
+          report_summary?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dma_assessments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_chunks: {
         Row: {
           chunk_index: number
@@ -609,6 +674,71 @@ export type Database = {
             columns: ["document_id"]
             isOneToOne: false
             referencedRelation: "regulatory_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dora_assessments: {
+        Row: {
+          business_continuity_plan: string | null
+          compliance_score: number | null
+          created_at: string | null
+          ict_services: string
+          id: string
+          incident_management: string | null
+          institution_name: string
+          institution_type: string
+          organization_id: string
+          recommendations: string | null
+          recovery_time_objective: string | null
+          report_summary: string | null
+          risk_classification: string | null
+          testing_frequency: string
+          third_party_providers: string
+          updated_at: string | null
+        }
+        Insert: {
+          business_continuity_plan?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          ict_services: string
+          id?: string
+          incident_management?: string | null
+          institution_name: string
+          institution_type: string
+          organization_id: string
+          recommendations?: string | null
+          recovery_time_objective?: string | null
+          report_summary?: string | null
+          risk_classification?: string | null
+          testing_frequency: string
+          third_party_providers: string
+          updated_at?: string | null
+        }
+        Update: {
+          business_continuity_plan?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          ict_services?: string
+          id?: string
+          incident_management?: string | null
+          institution_name?: string
+          institution_type?: string
+          organization_id?: string
+          recommendations?: string | null
+          recovery_time_objective?: string | null
+          report_summary?: string | null
+          risk_classification?: string | null
+          testing_frequency?: string
+          third_party_providers?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dora_assessments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -1083,6 +1213,68 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "model_usage_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nis2_assessments: {
+        Row: {
+          compliance_score: number | null
+          created_at: string | null
+          critical_services: string | null
+          entity_type: string
+          id: string
+          incident_response: string | null
+          organization_id: string
+          organization_name: string
+          organization_type: string
+          recommendations: string | null
+          report_summary: string | null
+          risk_classification: string | null
+          sectors: string
+          updated_at: string | null
+          vulnerability_management: string | null
+        }
+        Insert: {
+          compliance_score?: number | null
+          created_at?: string | null
+          critical_services?: string | null
+          entity_type: string
+          id?: string
+          incident_response?: string | null
+          organization_id: string
+          organization_name: string
+          organization_type: string
+          recommendations?: string | null
+          report_summary?: string | null
+          risk_classification?: string | null
+          sectors: string
+          updated_at?: string | null
+          vulnerability_management?: string | null
+        }
+        Update: {
+          compliance_score?: number | null
+          created_at?: string | null
+          critical_services?: string | null
+          entity_type?: string
+          id?: string
+          incident_response?: string | null
+          organization_id?: string
+          organization_name?: string
+          organization_type?: string
+          recommendations?: string | null
+          report_summary?: string | null
+          risk_classification?: string | null
+          sectors?: string
+          updated_at?: string | null
+          vulnerability_management?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nis2_assessments_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"

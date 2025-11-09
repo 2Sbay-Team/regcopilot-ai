@@ -10,18 +10,19 @@ import { Badge } from "@/components/ui/badge"
 import { Lock, Shield, AlertCircle, HelpCircle, CheckCircle2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { supabase } from "@/integrations/supabase/client"
 
 const NIS2Copilot = () => {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     organizationName: '',
-    sector: '',
+    organizationType: '',
     entityType: '',
-    incidentDescription: '',
-    incidentDate: '',
-    affectedSystems: '',
-    supplyChainImpact: ''
+    sectors: '',
+    criticalServices: '',
+    incidentResponse: '',
+    vulnerabilityManagement: ''
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,17 +30,33 @@ const NIS2Copilot = () => {
     setLoading(true)
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      const { data, error } = await supabase.functions.invoke('nis2-assessor', {
+        body: formData
+      })
+
+      if (error) throw error
+
       toast({
-        title: "Assessment Started",
-        description: "NIS2 compliance assessment is being processed"
+        title: "NIS2 Assessment Complete",
+        description: `Compliance score: ${data.assessment.compliance_score}/100. ${data.assessment.risk_classification}`
+      })
+
+      // Reset form
+      setFormData({
+        organizationName: '',
+        organizationType: '',
+        entityType: '',
+        sectors: '',
+        criticalServices: '',
+        incidentResponse: '',
+        vulnerabilityManagement: ''
       })
     } catch (error) {
+      console.error('NIS2 assessment error:', error)
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to start assessment"
+        title: "Assessment Failed",
+        description: error instanceof Error ? error.message : "Failed to complete assessment"
       })
     } finally {
       setLoading(false)
@@ -173,20 +190,15 @@ const NIS2Copilot = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="sector">Sector *</Label>
-                <Select value={formData.sector} onValueChange={(val) => setFormData({ ...formData, sector: val })}>
+                <Label htmlFor="orgType">Organization Type *</Label>
+                <Select value={formData.organizationType} onValueChange={(val) => setFormData({ ...formData, organizationType: val })}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select your sector" />
+                    <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="energy">Energy</SelectItem>
-                    <SelectItem value="transport">Transport</SelectItem>
-                    <SelectItem value="banking">Banking & Finance</SelectItem>
-                    <SelectItem value="healthcare">Healthcare</SelectItem>
-                    <SelectItem value="water">Water</SelectItem>
-                    <SelectItem value="digital">Digital Infrastructure</SelectItem>
-                    <SelectItem value="public">Public Administration</SelectItem>
-                    <SelectItem value="space">Space</SelectItem>
+                    <SelectItem value="public">Public Sector</SelectItem>
+                    <SelectItem value="private">Private Company</SelectItem>
+                    <SelectItem value="critical-infra">Critical Infrastructure</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -199,55 +211,53 @@ const NIS2Copilot = () => {
                   <SelectValue placeholder="Select entity type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="essential">Essential Entity (Critical Services)</SelectItem>
-                  <SelectItem value="important">Important Entity (Significant Services)</SelectItem>
-                  <SelectItem value="preventive">Preventive Assessment (No Incident)</SelectItem>
-                  <SelectItem value="notsure">Not Sure - Need Classification</SelectItem>
+                  <SelectItem value="essential">Essential Entity</SelectItem>
+                  <SelectItem value="important">Important Entity</SelectItem>
+                  <SelectItem value="unsure">Not Sure</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="incidentDate">Incident Date (if applicable)</Label>
+              <Label htmlFor="sectors">Sectors (comma-separated) *</Label>
               <Input
-                id="incidentDate"
-                type="date"
-                value={formData.incidentDate}
-                onChange={(e) => setFormData({ ...formData, incidentDate: e.target.value })}
+                id="sectors"
+                placeholder="e.g., Energy, Healthcare, Finance"
+                value={formData.sectors}
+                onChange={(e) => setFormData({ ...formData, sectors: e.target.value })}
+                required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="incidentDesc">Incident Description</Label>
+              <Label htmlFor="criticalServices">Critical Services</Label>
               <Textarea
-                id="incidentDesc"
-                placeholder="Describe the cybersecurity incident: type (ransomware, data breach, DDoS), impact, affected data/systems..."
-                value={formData.incidentDescription}
-                onChange={(e) => setFormData({ ...formData, incidentDescription: e.target.value })}
-                rows={4}
-              />
-              <p className="text-xs text-muted-foreground">
-                If no incident, describe your current cybersecurity measures for assessment
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="affectedSystems">Affected Systems</Label>
-              <Input
-                id="affectedSystems"
-                placeholder="e.g., Customer database, Payment gateway, Internal network"
-                value={formData.affectedSystems}
-                onChange={(e) => setFormData({ ...formData, affectedSystems: e.target.value })}
+                id="criticalServices"
+                placeholder="List your critical services and systems..."
+                value={formData.criticalServices}
+                onChange={(e) => setFormData({ ...formData, criticalServices: e.target.value })}
+                rows={3}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="supplyChain">Supply Chain Impact</Label>
+              <Label htmlFor="incidentResponse">Incident Response Procedures</Label>
               <Textarea
-                id="supplyChain"
-                placeholder="List affected third-party services, vendors, or suppliers (e.g., Cloud provider AWS, Payment processor Stripe)"
-                value={formData.supplyChainImpact}
-                onChange={(e) => setFormData({ ...formData, supplyChainImpact: e.target.value })}
+                id="incidentResponse"
+                placeholder="Describe your incident detection, response, and reporting procedures..."
+                value={formData.incidentResponse}
+                onChange={(e) => setFormData({ ...formData, incidentResponse: e.target.value })}
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="vulnMgmt">Vulnerability Management</Label>
+              <Textarea
+                id="vulnMgmt"
+                placeholder="Describe your vulnerability scanning, patching, and security update processes..."
+                value={formData.vulnerabilityManagement}
+                onChange={(e) => setFormData({ ...formData, vulnerabilityManagement: e.target.value })}
                 rows={3}
               />
             </div>

@@ -10,62 +10,59 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Database, Users, Lock, HelpCircle, CheckCircle2, Info } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { supabase } from "@/integrations/supabase/client"
 
 const DMACopilot = () => {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     platformName: '',
-    isGatekeeper: '',
-    monthlyActiveUsers: '',
-    annualRevenue: '',
-    marketCap: '',
-    coreServices: [] as string[],
-    interoperabilityMeasures: '',
-    dataSharingPractices: '',
-    selfPreferencingPractices: '',
-    competitorAccess: ''
+    platformType: '',
+    monthlyUsers: '',
+    operatesInEu: true,
+    businessUsers: '',
+    dataPractices: '',
+    advertisingPractices: '',
+    interoperability: ''
   })
-
-  const coreServicesList = [
-    'Online search engines',
-    'Online social networking services',
-    'Video-sharing platform services',
-    'Number-independent interpersonal communications services',
-    'Operating systems',
-    'Web browsers',
-    'Cloud computing services',
-    'Advertising services',
-    'Online intermediation services',
-    'Virtual assistants'
-  ]
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      const { data, error } = await supabase.functions.invoke('dma-assessor', {
+        body: formData
+      })
+
+      if (error) throw error
+
       toast({
-        title: "DMA Assessment Started",
-        description: "Digital Markets Act compliance assessment is being processed"
+        title: "DMA Assessment Complete",
+        description: `Compliance score: ${data.assessment.compliance_score}/100. ${data.assessment.gatekeeper_status}`
+      })
+
+      // Reset form
+      setFormData({
+        platformName: '',
+        platformType: '',
+        monthlyUsers: '',
+        operatesInEu: true,
+        businessUsers: '',
+        dataPractices: '',
+        advertisingPractices: '',
+        interoperability: ''
       })
     } catch (error) {
+      console.error('DMA assessment error:', error)
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to start assessment"
+        title: "Assessment Failed",
+        description: error instanceof Error ? error.message : "Failed to complete assessment"
       })
     } finally {
       setLoading(false)
     }
-  }
-
-  const toggleService = (service: string) => {
-    const newServices = formData.coreServices.includes(service)
-      ? formData.coreServices.filter(s => s !== service)
-      : [...formData.coreServices, service]
-    setFormData({ ...formData, coreServices: newServices })
   }
 
   return (
@@ -199,119 +196,90 @@ const DMACopilot = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="isGatekeeper">Do you believe you're a designated gatekeeper?</Label>
-              <Select value={formData.isGatekeeper} onValueChange={(val) => setFormData({ ...formData, isGatekeeper: val })}>
+              <Label htmlFor="platformType">Platform Type *</Label>
+              <Select value={formData.platformType} onValueChange={(val) => setFormData({ ...formData, platformType: val })}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="yes">Yes - Formally Designated</SelectItem>
-                  <SelectItem value="likely">Likely (meet thresholds)</SelectItem>
-                  <SelectItem value="no">No</SelectItem>
-                  <SelectItem value="unsure">Unsure - Need Assessment</SelectItem>
+                  <SelectItem value="search">Search Engine</SelectItem>
+                  <SelectItem value="social">Social Network</SelectItem>
+                  <SelectItem value="marketplace">Online Marketplace</SelectItem>
+                  <SelectItem value="app-store">App Store</SelectItem>
+                  <SelectItem value="messaging">Messaging Platform</SelectItem>
+                  <SelectItem value="video">Video Platform</SelectItem>
+                  <SelectItem value="cloud">Cloud Computing</SelectItem>
+                  <SelectItem value="advertising">Advertising Platform</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="mau">Monthly Active Users (EU)</Label>
-                <Input
-                  id="mau"
-                  type="number"
-                  placeholder="e.g., 50000000"
-                  value={formData.monthlyActiveUsers}
-                  onChange={(e) => setFormData({ ...formData, monthlyActiveUsers: e.target.value })}
-                />
-                <p className="text-xs text-muted-foreground">Threshold: 45M+ users</p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="revenue">Annual EEA Revenue (€)</Label>
-                <Input
-                  id="revenue"
-                  type="number"
-                  placeholder="e.g., 8000000000"
-                  value={formData.annualRevenue}
-                  onChange={(e) => setFormData({ ...formData, annualRevenue: e.target.value })}
-                />
-                <p className="text-xs text-muted-foreground">Threshold: €7.5B+</p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="marketCap">Market Capitalization (€)</Label>
-                <Input
-                  id="marketCap"
-                  type="number"
-                  placeholder="e.g., 80000000000"
-                  value={formData.marketCap}
-                  onChange={(e) => setFormData({ ...formData, marketCap: e.target.value })}
-                />
-                <p className="text-xs text-muted-foreground">Threshold: €75B+</p>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="monthlyUsers">Monthly Active Users *</Label>
+              <Input
+                id="monthlyUsers"
+                placeholder="e.g., 50 million"
+                value={formData.monthlyUsers}
+                onChange={(e) => setFormData({ ...formData, monthlyUsers: e.target.value })}
+                required
+              />
+              <p className="text-xs text-muted-foreground">Gatekeeper threshold: 45M+ EU users</p>
             </div>
 
-            <div className="space-y-3">
-              <Label>Core Platform Services Provided *</Label>
-              <div className="grid md:grid-cols-2 gap-3">
-                {coreServicesList.map((service) => (
-                  <div key={service} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={service}
-                      checked={formData.coreServices.includes(service)}
-                      onCheckedChange={() => toggleService(service)}
-                    />
-                    <label
-                      htmlFor={service}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {service}
-                    </label>
-                  </div>
-                ))}
-              </div>
+            <div className="flex items-center space-x-2 py-2">
+              <Checkbox
+                id="operatesInEu"
+                checked={formData.operatesInEu}
+                onCheckedChange={(checked) => setFormData({ ...formData, operatesInEu: checked as boolean })}
+              />
+              <label
+                htmlFor="operatesInEu"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Platform operates in the European Union
+              </label>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="interop">Interoperability Measures</Label>
+              <Label htmlFor="businessUsers">Business Users</Label>
               <Textarea
-                id="interop"
-                placeholder="Describe your APIs, data standards, and interoperability features. Do you allow third-party integrations?"
-                value={formData.interoperabilityMeasures}
-                onChange={(e) => setFormData({ ...formData, interoperabilityMeasures: e.target.value })}
+                id="businessUsers"
+                placeholder="Describe the business users on your platform (merchants, content creators, app developers)..."
+                value={formData.businessUsers}
+                onChange={(e) => setFormData({ ...formData, businessUsers: e.target.value })}
                 rows={3}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="dataSharing">Data Sharing & Portability</Label>
+              <Label htmlFor="dataPractices">Data Practices</Label>
               <Textarea
-                id="dataSharing"
-                placeholder="How do you enable users to export their data? Do you combine data across services? Describe consent mechanisms."
-                value={formData.dataSharingPractices}
-                onChange={(e) => setFormData({ ...formData, dataSharingPractices: e.target.value })}
+                id="dataPractices"
+                placeholder="Describe how you collect, use, and combine user data. Include consent mechanisms and data portability features..."
+                value={formData.dataPractices}
+                onChange={(e) => setFormData({ ...formData, dataPractices: e.target.value })}
                 rows={3}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="selfPref">Self-Preferencing Practices</Label>
+              <Label htmlFor="advertisingPractices">Advertising Practices</Label>
               <Textarea
-                id="selfPref"
-                placeholder="Do you rank your own services higher? Do you pre-install your apps? Describe any preferential treatment of your services."
-                value={formData.selfPreferencingPractices}
-                onChange={(e) => setFormData({ ...formData, selfPreferencingPractices: e.target.value })}
+                id="advertisingPractices"
+                placeholder="Describe your advertising model, targeting practices, and how you use user data for ads..."
+                value={formData.advertisingPractices}
+                onChange={(e) => setFormData({ ...formData, advertisingPractices: e.target.value })}
                 rows={3}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="competitorAccess">Competitor Access to Platform</Label>
+              <Label htmlFor="interoperability">Interoperability</Label>
               <Textarea
-                id="competitorAccess"
-                placeholder="Do competitors have fair access to your platform? Describe terms and conditions for third-party access."
-                value={formData.competitorAccess}
-                onChange={(e) => setFormData({ ...formData, competitorAccess: e.target.value })}
+                id="interoperability"
+                placeholder="Describe your APIs, integration capabilities, and how third parties can access your platform..."
+                value={formData.interoperability}
+                onChange={(e) => setFormData({ ...formData, interoperability: e.target.value })}
                 rows={3}
               />
             </div>
