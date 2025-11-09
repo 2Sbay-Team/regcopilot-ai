@@ -6,13 +6,16 @@ import { useLanguage } from "@/contexts/LanguageContext"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Shield, FileCheck, Leaf, Database, FileText, BookOpen, TrendingUp, Activity } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Shield, FileCheck, Leaf, Database, FileText, BookOpen, TrendingUp, Activity, Home, Plus, Search, HelpCircle, ChevronRight } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { HapticButton } from "@/components/ui/haptic-button"
 import { InteractiveCard } from "@/components/ui/interactive-card"
 import { useHaptic } from "@/hooks/useHaptic"
 import { RealTimeStatusIndicator } from "@/components/RealTimeStatusIndicator"
 import { QuotaWarningBanner } from "@/components/QuotaWarningBanner"
+import { NotificationCenter } from "@/components/NotificationCenter"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { t } from "@/lib/i18n"
 
 const Dashboard = () => {
@@ -117,24 +120,113 @@ const Dashboard = () => {
     )
   }
 
+  const getUserInitials = () => {
+    if (profile?.full_name) {
+      const names = profile.full_name.split(' ')
+      return names.map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
+    }
+    return user?.email?.[0]?.toUpperCase() || 'U'
+  }
+
   return (
-    <div className="space-y-6 p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-      {/* Command Header */}
-      <div className="flex items-center justify-between p-6 rounded-2xl cockpit-panel">
-        <div>
-          <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
-            Compliance Dashboard
-          </h1>
-          <p className="text-sm text-muted-foreground font-medium">{profile?.organizations?.name || "Regulatory Intelligence Platform"}</p>
+    <div className="space-y-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      {/* Enhanced Top Header */}
+      <div className="sticky top-0 z-10 backdrop-blur-lg bg-background/80 border-b border-border/50 -mx-6 -mt-6 px-6 py-4">
+        <div className="flex items-center justify-between">
+          {/* Left: Breadcrumb */}
+          <div className="flex items-center gap-2 text-sm">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2 text-muted-foreground hover:text-foreground"
+              onClick={() => navigate("/")}
+            >
+              <Home className="h-4 w-4" />
+              Startseite
+            </Button>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <span className="font-medium">Dashboard</span>
+          </div>
+
+          {/* Right: Actions */}
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/help")}
+              className="hover:bg-muted"
+            >
+              <HelpCircle className="h-5 w-5" />
+            </Button>
+            <NotificationCenter />
+            <div className="flex items-center gap-3 pl-3 border-l border-border">
+              <div className="text-right">
+                <p className="text-sm font-medium leading-none">{profile?.full_name || "User"}</p>
+                <p className="text-xs text-muted-foreground">{profile?.organizations?.name || "Organization"}</p>
+              </div>
+              <Avatar className="h-9 w-9 border-2 border-primary/20">
+                <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
+                  {getUserInitials()}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          </div>
         </div>
-        <RealTimeStatusIndicator />
       </div>
 
-      {/* Quota Warning Banner */}
-      <QuotaWarningBanner />
+      <div className="space-y-6 px-6">
+        {/* Page Title & Status */}
+        <div className="flex items-center justify-between p-6 rounded-2xl cockpit-panel">
+          <div>
+            <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary via-blue-500 to-cyan-500 bg-clip-text text-transparent">
+              Compliance Dashboard
+            </h1>
+            <p className="text-sm text-muted-foreground font-medium">{profile?.organizations?.name || "Regulatory Intelligence Platform"}</p>
+          </div>
+          <RealTimeStatusIndicator />
+        </div>
 
-      {/* Stats Dashboard */}
-      <div className="grid gap-4 md:grid-cols-4">
+        {/* Quick Action Bar */}
+        <div className="flex items-center gap-3 flex-wrap">
+          <Button
+            onClick={() => {
+              vibrate("selection")
+              navigate("/ai-act")
+            }}
+            className="gap-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300"
+          >
+            <Plus className="h-4 w-4" />
+            Neue Prüfung starten
+          </Button>
+          <Button
+            onClick={() => {
+              vibrate("selection")
+              navigate("/reports")
+            }}
+            variant="outline"
+            className="gap-2 border-2 hover:bg-muted/50 transition-all duration-300"
+          >
+            <FileText className="h-4 w-4" />
+            Bericht generieren
+          </Button>
+          <Button
+            onClick={() => {
+              vibrate("selection")
+              navigate("/audit")
+            }}
+            variant="outline"
+            className="gap-2 border-2 hover:bg-muted/50 transition-all duration-300"
+          >
+            <Search className="h-4 w-4" />
+            Audit durchsuchen
+          </Button>
+        </div>
+
+        {/* Quota Warning Banner */}
+        <QuotaWarningBanner />
+
+        {/* Stats Dashboard */}
+        <div className="grid gap-4 md:grid-cols-4">
         {/* Token Quota Card */}
         {quotaInfo && quotaInfo.billing_model !== 'byok' && (
           <InteractiveCard 
@@ -247,8 +339,8 @@ const Dashboard = () => {
         </InteractiveCard>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid gap-4 md:grid-cols-3">
+        {/* Quick Actions */}
+        <div className="grid gap-4 md:grid-cols-3">
         <InteractiveCard onClick={() => {
           vibrate("selection")
           navigate("/ai-act")
@@ -287,6 +379,7 @@ const Dashboard = () => {
             <CardDescription>Generate CSRD sustainability reports</CardDescription>
           </CardHeader>
         </InteractiveCard>
+        </div>
       </div>
     </div>
   )
