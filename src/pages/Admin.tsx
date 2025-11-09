@@ -8,7 +8,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
-import { ArrowLeft, Shield, Users, Building, FileText, CheckCircle, AlertCircle } from "lucide-react"
+import { ArrowLeft, Shield, Users, Building, FileText, CheckCircle, AlertCircle, Rocket } from "lucide-react"
+import { AdminOnboardingWizard } from "@/components/AdminOnboardingWizard"
 
 const Admin = () => {
   const { user } = useAuth()
@@ -16,12 +17,23 @@ const Admin = () => {
   const [loading, setLoading] = useState(true)
   const [users, setUsers] = useState<any[]>([])
   const [organization, setOrganization] = useState<any>(null)
+  const [showWizard, setShowWizard] = useState(false)
   const navigate = useNavigate()
   const { toast } = useToast()
 
   useEffect(() => {
     checkAdminAccess()
   }, [user])
+
+  useEffect(() => {
+    // Check if wizard should be shown for first-time admin
+    const wizardCompleted = localStorage.getItem('admin_wizard_completed')
+    const wizardSkipped = localStorage.getItem('admin_wizard_skipped')
+    
+    if (isAdmin && !wizardCompleted && !wizardSkipped) {
+      setShowWizard(true)
+    }
+  }, [isAdmin])
 
   const checkAdminAccess = async () => {
     if (!user) {
@@ -141,16 +153,24 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <AdminOnboardingWizard open={showWizard} onClose={() => setShowWizard(false)} />
+      
       <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <Shield className="h-8 w-8 text-primary" />
-          <div>
-            <h1 className="text-xl font-bold">Admin Panel</h1>
-            <p className="text-sm text-muted-foreground">Role & organization management</p>
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <Shield className="h-8 w-8 text-primary" />
+            <div>
+              <h1 className="text-xl font-bold">Admin Panel</h1>
+              <p className="text-sm text-muted-foreground">Role & organization management</p>
+            </div>
           </div>
+          <Button variant="outline" onClick={() => setShowWizard(true)} className="gap-2">
+            <Rocket className="h-4 w-4" />
+            Quick Start Guide
+          </Button>
         </div>
       </header>
 
