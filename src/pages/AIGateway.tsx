@@ -7,9 +7,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
-import { Zap, DollarSign, Activity, Settings, TrendingUp, AlertCircle } from "lucide-react"
+import { Zap, DollarSign, Activity, Settings, TrendingUp, AlertCircle, PieChart as PieChartIcon, BarChart3 } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AIGatewayTester } from "@/components/AIGatewayTester"
+import { LineChart, Line, PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import { format, subDays, parseISO } from "date-fns"
 
 const AIGateway = () => {
   const { user } = useAuth()
@@ -26,6 +29,11 @@ const AIGateway = () => {
   const [fallbackModel, setFallbackModel] = useState<string>('google/gemini-2.5-flash')
   const [customApiUrl, setCustomApiUrl] = useState<string>('')
 
+  // Analytics state
+  const [dailyTrends, setDailyTrends] = useState<any[]>([])
+  const [modelBreakdown, setModelBreakdown] = useState<any[]>([])
+  const [forecast, setForecast] = useState<any[]>([])
+
   useEffect(() => {
     loadProfile()
   }, [user])
@@ -35,6 +43,7 @@ const AIGateway = () => {
       loadBudgetSettings()
       loadUsageLogs()
       loadDailyUsage()
+      loadAnalytics()
     }
   }, [profile])
 
@@ -83,6 +92,72 @@ const AIGateway = () => {
 
     if (data && data.length > 0) {
       setDailyUsage(data[0])
+    }
+  }
+
+  const loadAnalytics = async () => {
+    const thirtyDaysAgo = subDays(new Date(), 30)
+    
+    const { data: logs, error } = await supabase
+      .from("model_usage_logs")
+      .select("*")
+      .eq("organization_id", profile.organization_id)
+      .gte("timestamp", thirtyDaysAgo.toISOString())
+      .eq("status", "success")
+      .order("timestamp", { ascending: true })
+
+    if (error) {
+      console.error("Error fetching analytics:", error)
+      return
+    }
+
+    // Process daily trends
+    const dailyMap = new Map<string, { cost: number; tokens: number }>()
+    const modelMap = new Map<string, { cost: number; tokens: number; requests: number }>()
+
+    logs?.forEach((log) => {
+      const day = format(parseISO(log.timestamp), "MMM dd")
+      const existing = dailyMap.get(day) || { cost: 0, tokens: 0 }
+      dailyMap.set(day, {
+        cost: existing.cost + Number(log.cost_estimate || 0),
+        tokens: existing.tokens + Number(log.total_tokens || 0),
+      })
+
+      const modelExisting = modelMap.get(log.model) || { cost: 0, tokens: 0, requests: 0 }
+      modelMap.set(log.model, {
+        cost: modelExisting.cost + Number(log.cost_estimate || 0),
+        tokens: modelExisting.tokens + Number(log.total_tokens || 0),
+        requests: modelExisting.requests + 1,
+      })
+    })
+
+    const trends = Array.from(dailyMap.entries()).map(([day, data]) => ({
+      day,
+      cost: Number(data.cost.toFixed(4)),
+      tokens: data.tokens,
+    }))
+
+    const breakdown = Array.from(modelMap.entries()).map(([model, data]) => ({
+      model,
+      cost: Number(data.cost.toFixed(4)),
+      tokens: data.tokens,
+      requests: data.requests,
+    }))
+
+    setDailyTrends(trends)
+    setModelBreakdown(breakdown)
+
+    // Simple linear regression for forecasting
+    if (trends.length >= 7) {
+      const lastWeek = trends.slice(-7)
+      const avgDailyCost = lastWeek.reduce((sum, d) => sum + d.cost, 0) / lastWeek.length
+      
+      const forecastData = Array.from({ length: 7 }, (_, i) => ({
+        day: `Day +${i + 1}`,
+        predicted: Number((avgDailyCost * (1 + i * 0.05)).toFixed(4)),
+      }))
+      
+      setForecast(forecastData)
     }
   }
 
@@ -150,8 +225,18 @@ const AIGateway = () => {
         </p>
       </div>
 
-      {/* Daily Usage Overview */}
-      <div className="grid gap-6 md:grid-cols-3">
+      <Tabs defaultValue="dashboard" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="tester">Tester</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="dashboard" className="space-y-6">
+
+          {/* Daily Usage Overview */}
+          <div className="grid gap-6 md:grid-cols-3">
         <Card className="cockpit-panel">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tokens Today</CardTitle>
@@ -222,10 +307,233 @@ const AIGateway = () => {
             </p>
           </CardContent>
         </Card>
-      </div>
+          </div>
 
-      {/* Budget Settings */}
-      <Card className="cockpit-panel">
+          {/* Recent Usage */}
+          <Card className="cockpit-panel">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5 text-primary" />
+                Recent Usage
+              </CardTitle>
+              <CardDescription>Last 20 AI model requests</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {usageLogs.length > 0 ? (
+                <ScrollArea className="h-[400px]">
+                  <div className="space-y-3">
+                    {usageLogs.map((log) => (
+                      <div
+                        key={log.id}
+                        className="flex items-start justify-between p-3 rounded-lg border border-border bg-muted/20"
+                      >
+                        <div className="flex-1 space-y-1">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className="font-mono text-xs">
+                              {log.model}
+                            </Badge>
+                            <Badge
+                              variant={log.status === 'success' ? 'default' : 'destructive'}
+                              className="text-xs"
+                            >
+                              {log.status}
+                            </Badge>
+                            {log.custom_endpoint && (
+                              <Badge variant="secondary" className="text-xs">
+                                Custom
+                              </Badge>
+                            )}
+                          </div>
+
+                          <div className="text-xs text-muted-foreground">
+                            {new Date(log.timestamp).toLocaleString()}
+                          </div>
+
+                          {log.error_message && (
+                            <div className="flex items-start gap-1 text-xs text-destructive mt-1">
+                              <AlertCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
+                              <span>{log.error_message}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="text-right space-y-1">
+                          <div className="text-sm font-semibold">
+                            {formatCost(parseFloat(log.cost_estimate))}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {log.total_tokens.toLocaleString()} tokens
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              ) : (
+                <div className="text-center py-12 text-muted-foreground">
+                  <Activity className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                  <p>No usage logs yet</p>
+                  <p className="text-sm">Start making AI requests to see usage data</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="analytics" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" />
+                Daily Spending Trends
+              </CardTitle>
+              <CardDescription>Cost and token usage over the last 30 days</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {dailyTrends.length > 0 ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={dailyTrends}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis dataKey="day" className="text-xs" />
+                    <YAxis yAxisId="left" className="text-xs" />
+                    <YAxis yAxisId="right" orientation="right" className="text-xs" />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--card))',
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }}
+                    />
+                    <Legend />
+                    <Line
+                      yAxisId="left"
+                      type="monotone"
+                      dataKey="cost"
+                      stroke="hsl(var(--primary))"
+                      strokeWidth={2}
+                      name="Cost ($)"
+                    />
+                    <Line
+                      yAxisId="right"
+                      type="monotone"
+                      dataKey="tokens"
+                      stroke="hsl(var(--chart-2))"
+                      strokeWidth={2}
+                      name="Tokens"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <p className="text-muted-foreground text-center py-8">No usage data available yet</p>
+              )}
+            </CardContent>
+          </Card>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <PieChartIcon className="h-5 w-5" />
+                  Model Usage Breakdown
+                </CardTitle>
+                <CardDescription>Cost distribution by model</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {modelBreakdown.length > 0 ? (
+                  <>
+                    <ResponsiveContainer width="100%" height={250}>
+                      <PieChart>
+                        <Pie
+                          data={modelBreakdown}
+                          dataKey="cost"
+                          nameKey="model"
+                          cx="50%"
+                          cy="50%"
+                          outerRadius={80}
+                          label={(entry) => `$${entry.cost.toFixed(4)}`}
+                        >
+                          {modelBreakdown.map((entry, index) => (
+                            <Cell 
+                              key={`cell-${index}`} 
+                              fill={`hsl(var(--chart-${(index % 5) + 1}))`}
+                            />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'hsl(var(--card))',
+                            border: '1px solid hsl(var(--border))',
+                            borderRadius: '8px'
+                          }}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="mt-4 space-y-2">
+                      {modelBreakdown.map((item, index) => (
+                        <div key={item.model} className="flex items-center justify-between text-sm">
+                          <div className="flex items-center gap-2">
+                            <div 
+                              className="w-3 h-3 rounded-full" 
+                              style={{ backgroundColor: `hsl(var(--chart-${(index % 5) + 1}))` }}
+                            />
+                            <span className="font-medium">{item.model}</span>
+                          </div>
+                          <div className="text-muted-foreground">
+                            {item.requests} requests • {item.tokens.toLocaleString()} tokens
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-muted-foreground text-center py-8">No model usage data available</p>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5" />
+                  7-Day Cost Forecast
+                </CardTitle>
+                <CardDescription>Predicted spending based on current trends</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {forecast.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={250}>
+                    <BarChart data={forecast}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                      <XAxis dataKey="day" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--card))',
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px'
+                        }}
+                        formatter={(value: any) => [`$${value}`, 'Predicted Cost']}
+                      />
+                      <Bar 
+                        dataKey="predicted" 
+                        fill="hsl(var(--primary))" 
+                        opacity={0.8}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <p className="text-muted-foreground text-center py-8">
+                    Need at least 7 days of data for forecasting
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="settings" className="space-y-6">
+          {/* Budget Settings */}
+          <Card className="cockpit-panel">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Settings className="h-5 w-5 text-primary" />
@@ -300,85 +608,15 @@ const AIGateway = () => {
             Save Settings
           </Button>
         </CardContent>
-      </Card>
+          </Card>
+        </TabsContent>
 
-      {/* Usage Logs */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Tester */}
-        {profile?.organization_id && (
-          <AIGatewayTester organizationId={profile.organization_id} />
-        )}
-
-        {/* Usage Logs */}
-        <Card className="cockpit-panel">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-primary" />
-            Recent Usage
-          </CardTitle>
-          <CardDescription>Last 20 AI model requests</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {usageLogs.length > 0 ? (
-            <ScrollArea className="h-[400px]">
-              <div className="space-y-3">
-                {usageLogs.map((log) => (
-                  <div
-                    key={log.id}
-                    className="flex items-start justify-between p-3 rounded-lg border border-border bg-muted/20"
-                  >
-                    <div className="flex-1 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="font-mono text-xs">
-                          {log.model}
-                        </Badge>
-                        <Badge
-                          variant={log.status === 'success' ? 'default' : 'destructive'}
-                          className="text-xs"
-                        >
-                          {log.status}
-                        </Badge>
-                        {log.custom_endpoint && (
-                          <Badge variant="secondary" className="text-xs">
-                            Custom
-                          </Badge>
-                        )}
-                      </div>
-
-                      <div className="text-xs text-muted-foreground">
-                        {new Date(log.timestamp).toLocaleString()}
-                      </div>
-
-                      {log.error_message && (
-                        <div className="flex items-start gap-1 text-xs text-destructive mt-1">
-                          <AlertCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
-                          <span>{log.error_message}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="text-right space-y-1">
-                      <div className="text-sm font-semibold">
-                        {formatCost(parseFloat(log.cost_estimate))}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {log.total_tokens.toLocaleString()} tokens
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          ) : (
-            <div className="text-center py-12 text-muted-foreground">
-              <Activity className="h-12 w-12 mx-auto mb-3 opacity-50" />
-              <p>No usage logs yet</p>
-              <p className="text-sm">Start making AI requests to see usage data</p>
-            </div>
+        <TabsContent value="tester" className="space-y-6">
+          {profile?.organization_id && (
+            <AIGatewayTester organizationId={profile.organization_id} />
           )}
-        </CardContent>
-      </Card>
-      </div>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
