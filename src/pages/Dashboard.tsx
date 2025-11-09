@@ -10,10 +10,12 @@ import { HapticButton } from "@/components/ui/haptic-button"
 import { InteractiveCard } from "@/components/ui/interactive-card"
 import { useHaptic } from "@/hooks/useHaptic"
 import { RealTimeStatusIndicator } from "@/components/RealTimeStatusIndicator"
+import { t } from "@/lib/i18n"
 
 const Dashboard = () => {
   const { user } = useAuth()
   const [profile, setProfile] = useState<any>(null)
+  const [language, setLanguage] = useState('en')
   const [stats, setStats] = useState({
     ai_systems: 0,
     gdpr_assessments: 0,
@@ -57,6 +59,7 @@ const Dashboard = () => {
       .single()
 
     setProfile(profileData)
+    if (profileData?.language) setLanguage(profileData.language)
 
     if (profileData?.organization_id) {
       // Get stats
@@ -88,19 +91,19 @@ const Dashboard = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <Shield className="h-12 w-12 text-primary animate-pulse mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading dashboard...</p>
+          <p className="text-muted-foreground">{t('dashboard.loading', language)}</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       {/* Command Header */}
       <div className="flex items-center justify-between p-6 rounded-2xl cockpit-panel">
         <div>
           <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
-            Compliance Dashboard
+            {t('dashboard.title', language)}
           </h1>
           <p className="text-sm text-muted-foreground font-medium">{profile?.organizations?.name || "Welcome back"}</p>
         </div>
@@ -118,7 +121,7 @@ const Dashboard = () => {
         >
           <CardHeader className="flex flex-row items-center justify-between pb-3 space-y-0">
             <div className="flex flex-col gap-2">
-              <CardTitle className="text-sm font-semibold text-muted-foreground">AI Systems</CardTitle>
+              <CardTitle className="text-sm font-semibold text-muted-foreground">{t('dashboard.aiSystems', language)}</CardTitle>
               <div className="text-4xl font-bold text-foreground">{stats.ai_systems}</div>
             </div>
             <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -126,7 +129,7 @@ const Dashboard = () => {
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <p className="text-xs text-muted-foreground font-medium">Active assessments</p>
+            <p className="text-xs text-muted-foreground font-medium">{t('dashboard.activeAssessments', language)}</p>
           </CardContent>
         </InteractiveCard>
 
@@ -139,7 +142,7 @@ const Dashboard = () => {
         >
           <CardHeader className="flex flex-row items-center justify-between pb-3 space-y-0">
             <div className="flex flex-col gap-2">
-              <CardTitle className="text-sm font-semibold text-muted-foreground">GDPR Checks</CardTitle>
+              <CardTitle className="text-sm font-semibold text-muted-foreground">{t('dashboard.gdprChecks', language)}</CardTitle>
               <div className="text-4xl font-bold text-foreground">{stats.gdpr_assessments}</div>
             </div>
             <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -147,7 +150,7 @@ const Dashboard = () => {
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <p className="text-xs text-muted-foreground font-medium">Compliance verified</p>
+            <p className="text-xs text-muted-foreground font-medium">{t('dashboard.complianceVerified', language)}</p>
           </CardContent>
         </InteractiveCard>
 
@@ -160,7 +163,7 @@ const Dashboard = () => {
         >
           <CardHeader className="flex flex-row items-center justify-between pb-3 space-y-0">
             <div className="flex flex-col gap-2">
-              <CardTitle className="text-sm font-semibold text-muted-foreground">ESG Reports</CardTitle>
+              <CardTitle className="text-sm font-semibold text-muted-foreground">{t('dashboard.esgReports', language)}</CardTitle>
               <div className="text-4xl font-bold text-foreground">{stats.esg_reports}</div>
             </div>
             <div className="h-14 w-14 rounded-xl bg-accent/10 flex items-center justify-center">
@@ -168,7 +171,7 @@ const Dashboard = () => {
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <p className="text-xs text-muted-foreground font-medium">Reports generated</p>
+            <p className="text-xs text-muted-foreground font-medium">{t('dashboard.reportsGenerated', language)}</p>
           </CardContent>
         </InteractiveCard>
 
@@ -181,7 +184,7 @@ const Dashboard = () => {
         >
           <CardHeader className="flex flex-row items-center justify-between pb-3 space-y-0">
             <div className="flex flex-col gap-2">
-              <CardTitle className="text-sm font-semibold text-muted-foreground">Audit Logs</CardTitle>
+              <CardTitle className="text-sm font-semibold text-muted-foreground">{t('dashboard.auditLogs', language)}</CardTitle>
               <div className="text-4xl font-bold text-foreground">{stats.audit_logs}</div>
             </div>
             <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -189,7 +192,7 @@ const Dashboard = () => {
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <p className="text-xs text-muted-foreground font-medium">Events tracked</p>
+            <p className="text-xs text-muted-foreground font-medium">{t('dashboard.eventsTracked', language)}</p>
           </CardContent>
         </InteractiveCard>
       </div>
@@ -207,9 +210,9 @@ const Dashboard = () => {
             <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <Shield className="h-8 w-8 text-primary" />
             </div>
-            <CardTitle className="text-2xl font-bold mb-2">AI Act Auditor</CardTitle>
+            <CardTitle className="text-2xl font-bold mb-2">{t('dashboard.aiActAuditor', language)}</CardTitle>
             <CardDescription className="text-base">
-              Comprehensive risk assessment and compliance documentation
+              {t('dashboard.aiActDesc', language)}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -222,7 +225,7 @@ const Dashboard = () => {
                 navigate("/ai-act")
               }}
             >
-              Start Assessment
+              {t('dashboard.startAssessment', language)}
             </HapticButton>
           </CardContent>
         </InteractiveCard>
@@ -238,9 +241,9 @@ const Dashboard = () => {
             <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <FileCheck className="h-8 w-8 text-primary" />
             </div>
-            <CardTitle className="text-2xl font-bold mb-2">GDPR Checker</CardTitle>
+            <CardTitle className="text-2xl font-bold mb-2">{t('dashboard.gdprChecker', language)}</CardTitle>
             <CardDescription className="text-base">
-              Privacy compliance verification and data protection
+              {t('dashboard.gdprDesc', language)}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -253,7 +256,7 @@ const Dashboard = () => {
                 navigate("/gdpr")
               }}
             >
-              Run Check
+              {t('dashboard.runCheck', language)}
             </HapticButton>
           </CardContent>
         </InteractiveCard>
@@ -269,9 +272,9 @@ const Dashboard = () => {
             <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <Leaf className="h-8 w-8 text-accent" />
             </div>
-            <CardTitle className="text-2xl font-bold mb-2">ESG Reporter</CardTitle>
+            <CardTitle className="text-2xl font-bold mb-2">{t('dashboard.esgReporter', language)}</CardTitle>
             <CardDescription className="text-base">
-              Sustainability metrics and CSRD compliance reporting
+              {t('dashboard.esgDesc', language)}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -284,7 +287,7 @@ const Dashboard = () => {
                 navigate("/esg")
               }}
             >
-              Create Report
+              {t('dashboard.createReport', language)}
             </HapticButton>
           </CardContent>
         </InteractiveCard>
@@ -293,8 +296,8 @@ const Dashboard = () => {
       {/* Quick Actions */}
       <Card className="cockpit-panel">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Quick Actions</CardTitle>
-          <CardDescription className="text-base">Access common compliance tools and resources</CardDescription>
+          <CardTitle className="text-2xl font-bold">{t('dashboard.quickActions', language)}</CardTitle>
+          <CardDescription className="text-base">{t('dashboard.quickActionsDesc', language)}</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <HapticButton 
@@ -306,7 +309,7 @@ const Dashboard = () => {
               <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                 <TrendingUp className="h-6 w-6 text-primary" />
               </div>
-              <span className="font-semibold text-base">View Analytics</span>
+              <span className="font-semibold text-base">{t('dashboard.viewAnalytics', language)}</span>
             </div>
           </HapticButton>
           <HapticButton 
@@ -318,7 +321,7 @@ const Dashboard = () => {
               <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                 <FileText className="h-6 w-6 text-primary" />
               </div>
-              <span className="font-semibold text-base">Compliance Reports</span>
+              <span className="font-semibold text-base">{t('dashboard.complianceReports', language)}</span>
             </div>
           </HapticButton>
           <HapticButton 
@@ -330,7 +333,7 @@ const Dashboard = () => {
               <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                 <BookOpen className="h-6 w-6 text-primary" />
               </div>
-              <span className="font-semibold text-base">Search Regulations</span>
+              <span className="font-semibold text-base">{t('dashboard.searchRegulations', language)}</span>
             </div>
           </HapticButton>
           <HapticButton 
@@ -342,7 +345,7 @@ const Dashboard = () => {
               <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                 <Database className="h-6 w-6 text-primary" />
               </div>
-              <span className="font-semibold text-base">View Audit Trail</span>
+              <span className="font-semibold text-base">{t('dashboard.viewAuditTrail', language)}</span>
             </div>
           </HapticButton>
           <HapticButton 
@@ -354,7 +357,7 @@ const Dashboard = () => {
               <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                 <Shield className="h-6 w-6 text-primary" />
               </div>
-              <span className="font-semibold text-base">Model Registry</span>
+              <span className="font-semibold text-base">{t('dashboard.modelRegistry', language)}</span>
             </div>
           </HapticButton>
           <HapticButton 
@@ -366,7 +369,7 @@ const Dashboard = () => {
               <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                 <Shield className="h-6 w-6 text-primary" />
               </div>
-              <span className="font-semibold text-base">Admin Panel</span>
+              <span className="font-semibold text-base">{t('dashboard.adminPanel', language)}</span>
             </div>
           </HapticButton>
         </CardContent>

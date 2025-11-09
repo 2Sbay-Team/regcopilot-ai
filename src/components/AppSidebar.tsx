@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"
 import { 
   Shield, 
   FileCheck, 
@@ -22,6 +23,9 @@ import {
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
+import { t } from "@/lib/i18n"
+import { supabase } from "@/integrations/supabase/client"
+import { useAuth } from "@/contexts/AuthContext"
 
 import {
   Sidebar,
@@ -35,39 +39,54 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-const mainItems = [
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "AI Act Auditor", url: "/ai-act", icon: Shield },
-  { title: "GDPR Checker", url: "/gdpr", icon: FileCheck },
-  { title: "ESG Reporter", url: "/esg", icon: Leaf },
-]
-
-const toolsItems = [
-  { title: "AI Gateway", url: "/ai-gateway", icon: Zap },
-  { title: "Model Management", url: "/model-management", icon: Bot },
-  { title: "Compliance Score", url: "/compliance-score", icon: TrendingUp },
-  { title: "DataSage", url: "/data-lineage", icon: GitBranch },
-  { title: "DSAR Queue", url: "/dsar", icon: Mail },
-  { title: "Audit Verify", url: "/audit-verify", icon: ShieldCheck },
-  { title: "Model Registry", url: "/model-registry", icon: Bot },
-  { title: "Prompt Manager", url: "/prompts", icon: MessageSquare },
-  { title: "Usage & Billing", url: "/usage", icon: DollarSign },
-  { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "Reports", url: "/reports", icon: FileText },
-  { title: "RAG Search", url: "/rag-search", icon: BookOpen },
-  { title: "Audit Trail", url: "/audit", icon: Database },
-  { title: "Explainability", url: "/explainability", icon: Eye },
-  { title: "Marketplace", url: "/marketplace", icon: Store },
-  { title: "Admin", url: "/admin", icon: Settings },
-]
-
-const accountItems = [
-  { title: "Settings", url: "/settings", icon: User },
-]
-
 export function AppSidebar() {
   const { state } = useSidebar()
+  const { user } = useAuth()
   const isCollapsed = state === "collapsed"
+  const [language, setLanguage] = useState('en')
+
+  useEffect(() => {
+    const loadLanguage = async () => {
+      if (!user) return
+      const { data } = await supabase
+        .from('profiles')
+        .select('language')
+        .eq('id', user.id)
+        .single()
+      if (data?.language) setLanguage(data.language)
+    }
+    loadLanguage()
+  }, [user])
+
+  const mainItems = [
+    { titleKey: "nav.dashboard", url: "/dashboard", icon: LayoutDashboard },
+    { titleKey: "nav.aiAct", url: "/ai-act", icon: Shield },
+    { titleKey: "nav.gdpr", url: "/gdpr", icon: FileCheck },
+    { titleKey: "nav.esg", url: "/esg", icon: Leaf },
+  ]
+
+  const toolsItems = [
+    { titleKey: "nav.aiGateway", url: "/ai-gateway", icon: Zap },
+    { titleKey: "nav.modelManagement", url: "/model-management", icon: Bot },
+    { titleKey: "nav.complianceScore", url: "/compliance-score", icon: TrendingUp },
+    { titleKey: "nav.dataLineage", url: "/data-lineage", icon: GitBranch },
+    { titleKey: "nav.dsar", url: "/dsar", icon: Mail },
+    { titleKey: "nav.auditVerify", url: "/audit-verify", icon: ShieldCheck },
+    { titleKey: "nav.modelRegistry", url: "/model-registry", icon: Bot },
+    { titleKey: "nav.promptManager", url: "/prompts", icon: MessageSquare },
+    { titleKey: "nav.usage", url: "/usage", icon: DollarSign },
+    { titleKey: "nav.analytics", url: "/analytics", icon: BarChart3 },
+    { titleKey: "nav.reports", url: "/reports", icon: FileText },
+    { titleKey: "nav.ragSearch", url: "/rag-search", icon: BookOpen },
+    { titleKey: "nav.auditTrail", url: "/audit", icon: Database },
+    { titleKey: "nav.explainability", url: "/explainability", icon: Eye },
+    { titleKey: "nav.marketplace", url: "/marketplace", icon: Store },
+    { titleKey: "nav.admin", url: "/admin", icon: Settings },
+  ]
+
+  const accountItems = [
+    { titleKey: "nav.settings", url: "/settings", icon: User },
+  ]
 
   return (
     <Sidebar collapsible="icon" className="border-r">
@@ -87,11 +106,11 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Main</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('nav.main', language)}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {mainItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.titleKey}>
                   <SidebarMenuButton asChild>
                     <NavLink 
                       to={item.url} 
@@ -100,7 +119,7 @@ export function AppSidebar() {
                       activeClassName="bg-accent text-accent-foreground font-medium"
                     >
                       <item.icon className="h-4 w-4" />
-                      {!isCollapsed && <span>{item.title}</span>}
+                      {!isCollapsed && <span>{t(item.titleKey, language)}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -110,11 +129,11 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Tools</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('nav.tools', language)}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {toolsItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.titleKey}>
                   <SidebarMenuButton asChild>
                     <NavLink 
                       to={item.url}
@@ -122,7 +141,7 @@ export function AppSidebar() {
                       activeClassName="bg-accent text-accent-foreground font-medium"
                     >
                       <item.icon className="h-4 w-4" />
-                      {!isCollapsed && <span>{item.title}</span>}
+                      {!isCollapsed && <span>{t(item.titleKey, language)}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -132,11 +151,11 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Account</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('nav.account', language)}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {accountItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.titleKey}>
                   <SidebarMenuButton asChild>
                     <NavLink 
                       to={item.url}
@@ -144,7 +163,7 @@ export function AppSidebar() {
                       activeClassName="bg-accent text-accent-foreground font-medium"
                     >
                       <item.icon className="h-4 w-4" />
-                      {!isCollapsed && <span>{item.title}</span>}
+                      {!isCollapsed && <span>{t(item.titleKey, language)}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
