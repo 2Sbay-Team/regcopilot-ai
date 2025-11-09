@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Database, Plus, Trash2, CheckCircle, Clock, AlertTriangle } from "lucide-react"
+import { InfoModal } from "@/components/InfoModal"
+import { Database, Plus, Trash2, CheckCircle, Clock, AlertTriangle, Info } from "lucide-react"
 import { format } from "date-fns"
 
 const ModelRegistry = () => {
@@ -73,6 +75,25 @@ const ModelRegistry = () => {
   }
 
   const registerModel = async () => {
+    // Validate inputs
+    if (!formData.name.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Model name is required"
+      })
+      return
+    }
+
+    if (formData.name.length > 100) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Model name must be less than 100 characters"
+      })
+      return
+    }
+
     setLoading(true)
     try {
       const { error } = await supabase
@@ -199,36 +220,68 @@ const ModelRegistry = () => {
             <DialogHeader>
               <DialogTitle>Register New AI Model</DialogTitle>
               <DialogDescription>
-                Add a new AI model to your organization's registry
+                Add a new AI model to your organization's registry for compliance tracking
               </DialogDescription>
             </DialogHeader>
+
+            {/* Help Section */}
+            <Alert className="bg-muted/50 border-border">
+              <Info className="h-4 w-4" />
+              <AlertDescription>
+                Register AI models to track their compliance status, risk classification, and usage across your organization. This helps ensure EU AI Act compliance and proper model governance.
+              </AlertDescription>
+            </Alert>
 
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Model Name *</Label>
+                  <div className="flex items-center gap-1">
+                    <Label htmlFor="name">Model Name *</Label>
+                    <InfoModal 
+                      title="Model Name"
+                      description="The official name or identifier of the AI model. This should be unique and clearly identify the model."
+                      example="Examples:\n• GPT-4o\n• Gemini-2.5-Pro\n• Claude-3.5-Sonnet\n• Custom-Sentiment-Analyzer-v2"
+                    />
+                  </div>
                   <Input
                     id="name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g., GPT-4o-mini"
+                    maxLength={100}
+                    required
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="version">Version</Label>
+                  <div className="flex items-center gap-1">
+                    <Label htmlFor="version">Version</Label>
+                    <InfoModal 
+                      title="Model Version"
+                      description="Track different versions of the same model for proper versioning and audit trails."
+                      example="Examples:\n• 1.0.0\n• 2.5.1\n• 2024-11-20\n• beta-3"
+                    />
+                  </div>
                   <Input
                     id="version"
                     value={formData.version}
                     onChange={(e) => setFormData({ ...formData, version: e.target.value })}
                     placeholder="e.g., 1.0.0"
+                    maxLength={50}
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="provider">Provider</Label>
+                  <div className="flex items-center gap-1">
+                    <Label htmlFor="provider">Provider</Label>
+                    <InfoModal 
+                      title="Model Provider"
+                      description="The company or organization that developed and provides this AI model."
+                      example="Select from major providers like OpenAI, Google, Anthropic, Mistral, or choose 'Custom' for internally developed models."
+                    />
+                  </div>
                   <select
                     id="provider"
                     value={formData.provider}
@@ -238,14 +291,21 @@ const ModelRegistry = () => {
                     <option value="">Select provider</option>
                     <option value="OpenAI">OpenAI</option>
                     <option value="Google">Google (Gemini)</option>
-                    <option value="Anthropic">Anthropic</option>
-                    <option value="Mistral">Mistral</option>
-                    <option value="Custom">Custom</option>
+                    <option value="Anthropic">Anthropic (Claude)</option>
+                    <option value="Mistral">Mistral AI</option>
+                    <option value="Custom">Custom / In-house</option>
                   </select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="model_type">Model Type</Label>
+                  <div className="flex items-center gap-1">
+                    <Label htmlFor="model_type">Model Type</Label>
+                    <InfoModal 
+                      title="Model Type"
+                      description="The primary capability or use case of this AI model."
+                      example="• Chat/Completion: Text generation, conversations\n• Embedding: Vector representations for search\n• Classification: Categorization tasks\n• Vision: Image analysis and understanding"
+                    />
+                  </div>
                   <select
                     id="model_type"
                     value={formData.model_type}
@@ -256,14 +316,21 @@ const ModelRegistry = () => {
                     <option value="chat">Chat / Completion</option>
                     <option value="embedding">Embedding</option>
                     <option value="classification">Classification</option>
-                    <option value="vision">Vision</option>
+                    <option value="vision">Vision / Image Analysis</option>
                   </select>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="risk_tag">EU AI Act Risk Tag</Label>
+                  <div className="flex items-center gap-1">
+                    <Label htmlFor="risk_tag">EU AI Act Risk Tag</Label>
+                    <InfoModal 
+                      title="EU AI Act Risk Classification"
+                      description="Classify the AI model's risk level according to the EU AI Act requirements. This determines compliance obligations."
+                      example="• Minimal: Most AI systems (chatbots, spam filters)\n• Limited: Systems with transparency obligations\n• High: Critical infrastructure, employment decisions\n• Unacceptable: Social scoring, real-time biometric ID"
+                    />
+                  </div>
                   <select
                     id="risk_tag"
                     value={formData.risk_tag}
@@ -271,14 +338,21 @@ const ModelRegistry = () => {
                     className="w-full px-3 py-2 rounded-md border border-input bg-background"
                   >
                     <option value="minimal">Minimal Risk</option>
-                    <option value="limited">Limited Risk</option>
-                    <option value="high">High Risk</option>
-                    <option value="unacceptable">Unacceptable Risk</option>
+                    <option value="limited">Limited Risk (Transparency required)</option>
+                    <option value="high">High Risk (Strict requirements)</option>
+                    <option value="unacceptable">Unacceptable Risk (Prohibited)</option>
                   </select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="compliance_status">Compliance Status</Label>
+                  <div className="flex items-center gap-1">
+                    <Label htmlFor="compliance_status">Compliance Status</Label>
+                    <InfoModal 
+                      title="Compliance Status"
+                      description="Track the current compliance review status of this model."
+                      example="• Pending: Awaiting compliance review\n• Passed: Approved for use\n• Flagged: Requires attention or remediation"
+                    />
+                  </div>
                   <select
                     id="compliance_status"
                     value={formData.compliance_status}
@@ -287,18 +361,26 @@ const ModelRegistry = () => {
                   >
                     <option value="pending">Pending Review</option>
                     <option value="passed">Passed</option>
-                    <option value="flagged">Flagged</option>
+                    <option value="flagged">Flagged for Review</option>
                   </select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="dataset_ref">Dataset Reference</Label>
+                <div className="flex items-center gap-1">
+                  <Label htmlFor="dataset_ref">Dataset Reference</Label>
+                  <InfoModal 
+                    title="Dataset Reference"
+                    description="Optional: Link to the training dataset or documentation. Important for high-risk AI systems to demonstrate compliance."
+                    example="Examples:\n• https://huggingface.co/datasets/my-dataset\n• s3://my-bucket/training-data/\n• Internal dataset ID: DS-2024-001"
+                  />
+                </div>
                 <Input
                   id="dataset_ref"
                   value={formData.dataset_ref}
                   onChange={(e) => setFormData({ ...formData, dataset_ref: e.target.value })}
-                  placeholder="URL or path to training dataset"
+                  placeholder="e.g., https://huggingface.co/datasets/... or internal reference"
+                  maxLength={500}
                 />
               </div>
             </div>

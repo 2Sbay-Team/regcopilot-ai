@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { FileText, Clock, CheckCircle, AlertCircle, Mail } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { FileText, Clock, CheckCircle, AlertCircle, Mail, Info } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { InfoModal } from "@/components/InfoModal"
 
 interface DSARRequest {
   id: string
@@ -81,6 +83,27 @@ const DSARManagement = () => {
   }
 
   const createDSAR = async () => {
+    // Validate inputs
+    if (!email.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Email address is required"
+      })
+      return
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Please enter a valid email address"
+      })
+      return
+    }
+
     if (!profile?.organization_id || !email) return
 
     setLoading(true)
@@ -190,39 +213,63 @@ const DSARManagement = () => {
             <FileText className="h-5 w-5 text-primary" />
             Create New DSAR
           </CardTitle>
-          <CardDescription>30-day compliance deadline starts upon creation</CardDescription>
+          <CardDescription>30-day compliance deadline starts upon creation (GDPR Art. 12.3)</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Help Section */}
+          <Alert className="bg-muted/50 border-border">
+            <Info className="h-4 w-4" />
+            <AlertDescription>
+              Data Subject Access Requests (DSARs) must be fulfilled within 30 days under GDPR. Create a request, then use "Fulfill Request" to automatically search your systems for the data subject's information.
+            </AlertDescription>
+          </Alert>
+
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="email">Data Subject Email</Label>
+              <div className="flex items-center gap-1">
+                <Label htmlFor="email">Data Subject Email *</Label>
+                <InfoModal 
+                  title="Data Subject Email"
+                  description="The email address of the individual making the GDPR request. This will be used to search for their data across connected systems."
+                  example="Examples:\n• john.doe@company.com\n• customer@email.com\n• former.employee@domain.com"
+                />
+              </div>
               <Input
                 id="email"
                 type="email"
-                placeholder="subject@example.com"
+                placeholder="e.g., subject@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                maxLength={255}
+                required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="type">Request Type</Label>
+              <div className="flex items-center gap-1">
+                <Label htmlFor="type">Request Type</Label>
+                <InfoModal 
+                  title="GDPR Request Type"
+                  description="Select the type of GDPR request. Each type has different legal requirements and processes."
+                  example="• Access (Art. 15): Provide copy of personal data\n• Rectification (Art. 16): Correct inaccurate data\n• Erasure (Art. 17): Delete personal data ('Right to be forgotten')\n• Portability (Art. 20): Transfer data to another controller\n• Restriction (Art. 18): Limit data processing"
+                />
+              </div>
               <select
                 id="type"
                 value={requestType}
                 onChange={(e) => setRequestType(e.target.value as any)}
                 className="w-full px-3 py-2 rounded-md border border-input bg-background"
               >
-                <option value="access">Access (Art. 15)</option>
-                <option value="rectification">Rectification (Art. 16)</option>
-                <option value="erasure">Erasure (Art. 17)</option>
-                <option value="portability">Data Portability (Art. 20)</option>
-                <option value="restriction">Restriction (Art. 18)</option>
+                <option value="access">Access (Art. 15) - Provide data copy</option>
+                <option value="rectification">Rectification (Art. 16) - Correct data</option>
+                <option value="erasure">Erasure (Art. 17) - Delete data</option>
+                <option value="portability">Data Portability (Art. 20) - Transfer data</option>
+                <option value="restriction">Restriction (Art. 18) - Limit processing</option>
               </select>
             </div>
           </div>
 
           <Button onClick={createDSAR} disabled={loading || !email} className="w-full">
-            Create DSAR Request
+            {loading ? "Creating..." : "Create DSAR Request"}
           </Button>
         </CardContent>
       </Card>

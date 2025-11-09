@@ -8,7 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from 'sonner';
+import { InfoModal } from '@/components/InfoModal';
 import { 
   Plus, 
   RefreshCw, 
@@ -23,7 +25,8 @@ import {
   CheckCircle2,
   XCircle,
   AlertCircle,
-  Clock
+  Clock,
+  Info
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -140,6 +143,17 @@ const Connectors = () => {
   };
 
   const createConnector = async () => {
+    // Validate inputs
+    if (!formData.name.trim()) {
+      toast.error('Connector name is required');
+      return;
+    }
+
+    if (formData.name.length > 100) {
+      toast.error('Connector name must be less than 100 characters');
+      return;
+    }
+
     // Validate before creating
     if (!validationResult?.valid) {
       toast.error('Please validate the connector configuration first');
@@ -447,30 +461,46 @@ const Connectors = () => {
                   New Connector
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl">
+              <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Create New Connector</DialogTitle>
                   <DialogDescription>
                     Connect to an external data source to automate compliance monitoring
                   </DialogDescription>
                 </DialogHeader>
+
+                {/* Help Section */}
+                <Alert className="bg-muted/50 border-border">
+                  <Info className="h-4 w-4" />
+                  <AlertDescription>
+                    Connectors automatically sync data from external sources for compliance monitoring. Configure your connection details, test the connection, then create the connector for automated data syncing.
+                  </AlertDescription>
+                </Alert>
+
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label>Connector Type</Label>
+                    <div className="flex items-center gap-1">
+                      <Label htmlFor="connector-type">Connector Type</Label>
+                      <InfoModal 
+                        title="Connector Type"
+                        description="Choose the type of external system you want to connect to. Each connector type is optimized for specific data sources and compliance scenarios."
+                        example="• AWS S3: Cloud storage for documents and files\n• SharePoint: Corporate document management\n• SAP/ERP: Business process data\n• Jira: Project tracking and issues\n• Slack/Teams: Communication data for compliance"
+                      />
+                    </div>
                     <Select value={selectedType} onValueChange={setSelectedType}>
-                      <SelectTrigger>
+                      <SelectTrigger id="connector-type">
                         <SelectValue placeholder="Select connector type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="aws_s3">AWS S3</SelectItem>
+                        <SelectItem value="aws_s3">AWS S3 - Cloud Storage</SelectItem>
                         <SelectItem value="azure_blob">Azure Blob Storage</SelectItem>
-                        <SelectItem value="sharepoint">SharePoint</SelectItem>
-                        <SelectItem value="onedrive">OneDrive</SelectItem>
-                        <SelectItem value="sap">SAP / ERP</SelectItem>
-                        <SelectItem value="jira">Jira</SelectItem>
-                        <SelectItem value="slack">Slack</SelectItem>
-                        <SelectItem value="teams">Microsoft Teams</SelectItem>
-                        <SelectItem value="rss_feed">RSS Feed</SelectItem>
+                        <SelectItem value="sharepoint">SharePoint - Documents</SelectItem>
+                        <SelectItem value="onedrive">OneDrive - Personal Files</SelectItem>
+                        <SelectItem value="sap">SAP / ERP - Business Data</SelectItem>
+                        <SelectItem value="jira">Jira - Project Tracking</SelectItem>
+                        <SelectItem value="slack">Slack - Team Communication</SelectItem>
+                        <SelectItem value="teams">Microsoft Teams - Collaboration</SelectItem>
+                        <SelectItem value="rss_feed">RSS Feed - News & Updates</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -478,48 +508,80 @@ const Connectors = () => {
                   {selectedType && (
                     <>
                       <div className="space-y-2">
-                        <Label>Name</Label>
+                        <div className="flex items-center gap-1">
+                          <Label htmlFor="connector-name">Connector Name</Label>
+                          <InfoModal 
+                            title="Connector Name"
+                            description="A descriptive name to identify this connector in your dashboard. Use a name that clearly indicates the data source and purpose."
+                            example="Examples:\n• Production S3 - GDPR Docs\n• HR SharePoint - Employee Data\n• Finance SAP - Audit Records\n• Compliance Jira - Regulatory Tasks"
+                          />
+                        </div>
                         <Input
+                          id="connector-name"
                           placeholder={
-                            selectedType === 'aws_s3' ? 'Production S3 Bucket' :
-                            selectedType === 'azure_blob' ? 'Production Azure Container' :
-                            selectedType === 'sharepoint' ? 'HR SharePoint Site' :
-                            selectedType === 'onedrive' ? 'Compliance OneDrive' :
-                            selectedType === 'sap' ? 'SAP Production System' :
-                            selectedType === 'jira' ? 'Compliance Jira Project' :
-                            selectedType === 'slack' ? 'Legal Slack Channel' :
-                            selectedType === 'teams' ? 'Compliance Teams Channel' :
-                            selectedType === 'rss_feed' ? 'Regulatory News Feed' :
-                            'My Connector'
+                            selectedType === 'aws_s3' ? 'e.g., Production S3 Bucket' :
+                            selectedType === 'azure_blob' ? 'e.g., Production Azure Container' :
+                            selectedType === 'sharepoint' ? 'e.g., HR SharePoint Site' :
+                            selectedType === 'onedrive' ? 'e.g., Compliance OneDrive' :
+                            selectedType === 'sap' ? 'e.g., SAP Production System' :
+                            selectedType === 'jira' ? 'e.g., Compliance Jira Project' :
+                            selectedType === 'slack' ? 'e.g., Legal Slack Channel' :
+                            selectedType === 'teams' ? 'e.g., Compliance Teams Channel' :
+                            selectedType === 'rss_feed' ? 'e.g., Regulatory News Feed' :
+                            'e.g., My Connector'
                           }
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          maxLength={100}
+                          required
                         />
+                        <p className="text-xs text-muted-foreground">
+                          {formData.name.length}/100 characters
+                        </p>
                       </div>
 
                       <div className="space-y-2">
-                        <Label>Description</Label>
+                        <div className="flex items-center gap-1">
+                          <Label htmlFor="connector-desc">Description</Label>
+                          <InfoModal 
+                            title="Description"
+                            description="Optional: Add details about what data this connector accesses and its compliance purpose."
+                            example="Examples:\n• 'GDPR compliance documents from production environment'\n• 'Employee personal data for DSAR processing'\n• 'Financial audit trail from SAP'"
+                          />
+                        </div>
                         <Textarea
-                          placeholder="Compliance documents from production environment"
+                          id="connector-desc"
+                          placeholder="e.g., Compliance documents from production environment"
                           value={formData.description}
                           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                          maxLength={500}
                         />
+                        <p className="text-xs text-muted-foreground">
+                          {formData.description.length}/500 characters
+                        </p>
                       </div>
 
                       <div className="space-y-2">
-                        <Label>Sync Frequency</Label>
+                        <div className="flex items-center gap-1">
+                          <Label htmlFor="sync-freq">Sync Frequency</Label>
+                          <InfoModal 
+                            title="Sync Frequency"
+                            description="How often should this connector automatically sync data? Choose based on your compliance monitoring needs and data volume."
+                            example="• Hourly: Real-time compliance monitoring\n• Daily: Standard compliance checks\n• Weekly: Periodic reviews\n• Manual Only: On-demand syncing"
+                          />
+                        </div>
                         <Select 
                           value={formData.sync_frequency} 
                           onValueChange={(value) => setFormData({ ...formData, sync_frequency: value })}
                         >
-                          <SelectTrigger>
+                          <SelectTrigger id="sync-freq">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="hourly">Hourly</SelectItem>
-                            <SelectItem value="daily">Daily</SelectItem>
-                            <SelectItem value="weekly">Weekly</SelectItem>
-                            <SelectItem value="manual">Manual Only</SelectItem>
+                            <SelectItem value="hourly">Hourly - Real-time monitoring</SelectItem>
+                            <SelectItem value="daily">Daily - Standard compliance</SelectItem>
+                            <SelectItem value="weekly">Weekly - Periodic reviews</SelectItem>
+                            <SelectItem value="manual">Manual Only - On-demand</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
