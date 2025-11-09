@@ -437,7 +437,18 @@ const Connectors = () => {
                       <div className="space-y-2">
                         <Label>Name</Label>
                         <Input
-                          placeholder="Production S3 Bucket"
+                          placeholder={
+                            selectedType === 'aws_s3' ? 'Production S3 Bucket' :
+                            selectedType === 'azure_blob' ? 'Production Azure Container' :
+                            selectedType === 'sharepoint' ? 'HR SharePoint Site' :
+                            selectedType === 'onedrive' ? 'Compliance OneDrive' :
+                            selectedType === 'sap' ? 'SAP Production System' :
+                            selectedType === 'jira' ? 'Compliance Jira Project' :
+                            selectedType === 'slack' ? 'Legal Slack Channel' :
+                            selectedType === 'teams' ? 'Compliance Teams Channel' :
+                            selectedType === 'rss_feed' ? 'Regulatory News Feed' :
+                            'My Connector'
+                          }
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         />
