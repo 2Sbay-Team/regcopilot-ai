@@ -138,7 +138,7 @@ export default function SecurityPrivacy() {
             <Alert>
               <Eye className="h-4 w-4" />
               <AlertDescription>
-                <strong>Zero Cross-Tenant Access:</strong> Even Regulix administrators cannot access your organization's data without explicit audit trail logging.
+                <strong>Zero Cross-Tenant Access:</strong> Even RegSense administrators cannot access your organization's data without explicit audit trail logging.
               </AlertDescription>
             </Alert>
           </CardContent>
@@ -189,7 +189,7 @@ export default function SecurityPrivacy() {
               <div className="flex items-start gap-3">
                 <div className="h-5 w-5 flex items-center justify-center text-destructive font-bold mt-0.5 flex-shrink-0">✕</div>
                 <div>
-                  <strong className="text-destructive">Regulix Staff</strong>
+                  <strong className="text-destructive">RegSense Staff</strong>
                   <p className="text-sm text-muted-foreground">No access without explicit permission & audit trail (e.g., support ticket)</p>
                 </div>
               </div>
@@ -304,8 +304,8 @@ export default function SecurityPrivacy() {
               <Button variant="default" onClick={() => navigate("/contact-us")}>
                 Contact Security Team
               </Button>
-              <Button variant="outline" onClick={() => window.open("mailto:security@regulix.com")}>
-                security@regulix.com
+              <Button variant="outline" onClick={() => window.open("mailto:security@regsenseai.com")}>
+                security@regsenseai.com
               </Button>
             </div>
           </CardContent>

@@ -54,8 +54,8 @@ const ContactUs = () => {
             <CardTitle>{language === 'de' ? 'E-Mail' : language === 'fr' ? 'E-mail' : language === 'ar' ? 'البريد الإلكتروني' : 'Email'}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">info@regulix.com</p>
-            <p className="text-muted-foreground">support@regulix.com</p>
+            <p className="text-muted-foreground">info@regsenseai.com</p>
+            <p className="text-muted-foreground">support@regsenseai.com</p>
           </CardContent>
         </Card>
 

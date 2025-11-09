@@ -83,9 +83,9 @@ const Login = () => {
               <RoboticShieldLogo size={64} />
             </div>
           </div>
-          <CardTitle className="text-2xl">Regulix™</CardTitle>
+          <CardTitle className="text-2xl">RegSense</CardTitle>
           <CardDescription>
-            Modern Regulatory Intelligence - AI-powered for EU AI Act, GDPR & ESG
+            AI-Powered Regulatory Intelligence — Making Compliance Effortless
           </CardDescription>
         </CardHeader>
         <CardContent>

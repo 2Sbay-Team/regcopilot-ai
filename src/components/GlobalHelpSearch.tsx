@@ -34,7 +34,7 @@ const searchableContent: SearchResult[] = [
   { title: "Help Center", description: "FAQs, guides, and video tutorials", category: "Pages", type: "page", route: "/help-center", icon: FileText },
   
   // FAQs
-  { title: "What is Regulix?", description: "Platform overview and capabilities", category: "FAQs", type: "faq", route: "/help-center", icon: BookOpen },
+  { title: "What is RegSense?", description: "Platform overview and capabilities", category: "FAQs", type: "faq", route: "/help-center", icon: BookOpen },
   { title: "How to classify AI risk?", description: "EU AI Act risk assessment guide", category: "FAQs", type: "faq", route: "/help-center", icon: BookOpen },
   { title: "DSAR handling guide", description: "Fulfill data subject access requests", category: "FAQs", type: "faq", route: "/help-center", icon: BookOpen },
   { title: "ESG metrics tracking", description: "Which metrics to track for CSRD", category: "FAQs", type: "faq", route: "/help-center", icon: BookOpen },

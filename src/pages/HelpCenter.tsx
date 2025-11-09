@@ -102,7 +102,7 @@ export default function HelpCenter() {
     {
       id: "dv-001",
       title: "API Overview",
-      content: "Complete REST API reference for integrating Regulix with your applications. Includes authentication, rate limits, and example requests.",
+      content: "Complete REST API reference for integrating RegSense with your applications. Includes authentication, rate limits, and example requests.",
       category: "developer",
       tags: ["api", "integration", "rest"]
     },
@@ -167,11 +167,11 @@ export default function HelpCenter() {
 
   const faqItems = [
     {
-      question: "What is Regulix and how does it help with compliance?",
-      answer: "Regulix is a comprehensive RegTech platform that automates compliance for EU AI Act, GDPR, and ESG/CSRD. It provides AI-powered copilots for risk assessment, document scanning, and report generation—all with built-in audit trails and multi-language support."
+      question: "What is RegSense and how does it help with compliance?",
+      answer: "RegSense is a comprehensive RegTech platform that automates compliance for EU AI Act, GDPR, and ESG/CSRD. It provides AI-powered copilots for risk assessment, document scanning, and report generation—all with built-in audit trails and multi-language support."
     },
     {
-      question: "How secure is my data in Regulix?",
+      question: "How secure is my data in RegSense?",
       answer: "All data is encrypted at rest (AES-256) and in transit (TLS 1.3). We use Row-Level Security (RLS) to ensure complete tenant isolation. Each organization's data is accessible only to authorized users within that organization. We are SOC 2 Type II compliant."
     },
     {
@@ -183,7 +183,7 @@ export default function HelpCenter() {
       answer: "Audit logs: 12 months default, configurable up to 7 years. Compliance reports: Indefinite retention. User data: As per your organization's policy. Documents: 90 days in trash before permanent deletion. You can configure custom retention policies per data type."
     },
     {
-      question: "Which AI models does Regulix use?",
+      question: "Which AI models does RegSense use?",
       answer: "We support multiple AI providers: OpenAI (GPT-4, GPT-3.5), Google (Gemini Pro), Anthropic (Claude), and Mistral. Organizations can choose their preferred models or bring their own keys (BYOK) for full control over AI provider and costs."
     },
     {
@@ -250,7 +250,7 @@ export default function HelpCenter() {
         </div>
         <h1 className="text-4xl font-bold">Help Center</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Find answers, guides, and resources to help you succeed with Regulix
+          Find answers, guides, and resources to help you succeed with RegSense
         </p>
       </div>
 
