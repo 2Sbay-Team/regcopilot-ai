@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Database, GitBranch, AlertTriangle, CheckCircle, RefreshCw } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { LineageGraph } from "@/components/LineageGraph"
 
 interface LineageNode {
   id: string
@@ -237,71 +238,34 @@ const DataLineage = () => {
         </CardContent>
       </Card>
 
-      {/* Lineage Graph Visualization */}
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card className="cockpit-panel">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <GitBranch className="h-5 w-5 text-primary" />
-              Data Flow Graph
-            </CardTitle>
-            <CardDescription>Visual representation of data movement</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {graph && graph.nodes.length > 0 ? (
-              <div className="space-y-4">
-                <div className="text-sm text-muted-foreground">
-                  {graph.nodes.length} systems tracked • {graph.edges.length} data flows
-                </div>
-                
-                <div className="space-y-3">
-                  {graph.nodes.map((node) => (
-                    <div key={node.id} className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border">
-                      <div className={`h-3 w-3 rounded-full ${
-                        node.type === 'source' ? 'bg-primary' : 
-                        node.type === 'storage' ? 'bg-accent' : 'bg-muted-foreground'
-                      }`} />
-                      <div className="flex-1">
-                        <p className="font-semibold text-sm">{node.name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {node.type} • {node.jurisdiction || 'N/A'}
-                        </p>
-                      </div>
-                      <Badge variant="outline" className="text-xs">
-                        {new Date(node.timestamp).toLocaleDateString()}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="pt-4 border-t">
-                  <p className="text-sm font-semibold mb-2">Data Flows:</p>
-                  {graph.edges.map((edge, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                      <span className="font-medium">{edge.from}</span>
-                      <span>→</span>
-                      <span className="font-medium">{edge.to}</span>
-                      {edge.transformation && (
-                        <Badge variant="secondary" className="text-xs">
-                          {edge.transformation}
-                        </Badge>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                <Database className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                <p>No data flows tracked yet</p>
-                <p className="text-sm">Start by tracking your first data flow above</p>
-              </div>
+      {/* Interactive Lineage Graph */}
+      <Card className="cockpit-panel">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <GitBranch className="h-5 w-5 text-primary" />
+            Interactive Data Flow Graph
+          </CardTitle>
+          <CardDescription>
+            Drag nodes to rearrange • Zoom and pan to explore
+            {graph && graph.nodes.length > 0 && (
+              <span className="ml-2 font-medium text-foreground">
+                • {graph.nodes.length} systems • {graph.edges.length} flows
+              </span>
             )}
-          </CardContent>
-        </Card>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <LineageGraph 
+            nodes={graph?.nodes || []} 
+            edges={graph?.edges || []} 
+          />
+        </CardContent>
+      </Card>
 
-        {/* AI Insights */}
+      {/* AI Insights */}
+      <div className="grid gap-6 md:grid-cols-1">
         <Card className="cockpit-panel">
+
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               {stats?.compliance_risk === 'high' ? (
@@ -317,14 +281,18 @@ const DataLineage = () => {
             {insights ? (
               <div className="space-y-4">
                 {stats && (
-                  <div className="grid grid-cols-2 gap-3 mb-4">
-                    <div className="p-3 rounded-lg bg-primary/10">
-                      <div className="text-2xl font-bold text-foreground">{stats.total_flows}</div>
-                      <div className="text-xs text-muted-foreground">Total Flows</div>
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    <div className="p-4 rounded-lg bg-primary/10">
+                      <div className="text-3xl font-bold text-foreground">{stats.total_flows}</div>
+                      <div className="text-xs text-muted-foreground font-medium">Total Flows</div>
                     </div>
-                    <div className="p-3 rounded-lg bg-destructive/10">
-                      <div className="text-2xl font-bold text-foreground">{stats.cross_border_transfers}</div>
-                      <div className="text-xs text-muted-foreground">Cross-Border</div>
+                    <div className="p-4 rounded-lg bg-destructive/10">
+                      <div className="text-3xl font-bold text-foreground">{stats.cross_border_transfers}</div>
+                      <div className="text-xs text-muted-foreground font-medium">Cross-Border</div>
+                    </div>
+                    <div className="p-4 rounded-lg bg-accent/10">
+                      <div className="text-3xl font-bold text-foreground capitalize">{stats.compliance_risk}</div>
+                      <div className="text-xs text-muted-foreground font-medium">Risk Level</div>
                     </div>
                   </div>
                 )}
@@ -334,21 +302,22 @@ const DataLineage = () => {
                 </div>
 
                 {stats?.compliance_risk === 'high' && (
-                  <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+                  <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20">
                     <div className="flex items-start gap-2">
-                      <AlertTriangle className="h-4 w-4 text-destructive mt-0.5" />
+                      <AlertTriangle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
                       <div className="text-sm">
-                        <p className="font-semibold text-destructive">High Compliance Risk</p>
-                        <p className="text-muted-foreground">Multiple cross-border transfers detected. Review Chapter V safeguards.</p>
+                        <p className="font-semibold text-destructive mb-1">High Compliance Risk Detected</p>
+                        <p className="text-muted-foreground">Multiple cross-border transfers detected. Review GDPR Chapter V safeguards and ensure adequate transfer mechanisms are in place.</p>
                       </div>
                     </div>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                <CheckCircle className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                <p>Click "Generate Insights" to analyze data flows</p>
+              <div className="text-center py-12 text-muted-foreground">
+                <CheckCircle className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                <p className="font-medium">No insights generated yet</p>
+                <p className="text-sm">Click "Generate Insights" above to analyze your data flows with AI</p>
               </div>
             )}
           </CardContent>
