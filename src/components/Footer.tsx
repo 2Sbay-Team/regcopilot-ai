@@ -1,7 +1,7 @@
 import { useLanguage } from "@/contexts/LanguageContext"
 import { t } from "@/lib/i18n"
 import { Link } from "react-router-dom"
-import { FileText, Mail, Shield } from "lucide-react"
+import { FileText, Mail, Shield, BookOpen } from "lucide-react"
 
 export function Footer() {
   const { language } = useLanguage()
@@ -15,6 +15,13 @@ export function Footer() {
           </p>
         </div>
         <div className="flex items-center gap-4">
+          <Link
+            to="/user-guide"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
+          >
+            <BookOpen className="h-4 w-4" />
+            User Guide
+          </Link>
           <Link
             to="/privacy-policy"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"

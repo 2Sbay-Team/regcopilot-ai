@@ -49,6 +49,7 @@ import AdminHelp from "./pages/admin/Help";
 import RiskRegister from "./pages/RiskRegister";
 import DSARQueue from "./pages/DSARQueue";
 import SecurityCenter from "./pages/SecurityCenter";
+import UserGuide from "./pages/UserGuide";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -106,6 +107,7 @@ const App = () => (
             <Route path="/risk-register" element={<ProtectedRoute><AppLayout><RiskRegister /></AppLayout></ProtectedRoute>} />
             <Route path="/dsar-queue" element={<ProtectedRoute><AppLayout><DSARQueue /></AppLayout></ProtectedRoute>} />
             <Route path="/security-center" element={<ProtectedRoute><AppLayout><SecurityCenter /></AppLayout></ProtectedRoute>} />
+            <Route path="/user-guide" element={<ProtectedRoute><AppLayout><UserGuide /></AppLayout></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
