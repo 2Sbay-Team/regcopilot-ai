@@ -56,7 +56,7 @@ export function AppSidebar() {
       iconTextClass: "text-white",
     },
     { 
-      title: "Continuous Intelligence", 
+      titleKey: "nav.continuousIntelligence", 
       url: "/continuous-intelligence", 
       icon: Brain,
       iconBgClass: "bg-gradient-to-br from-violet-500 to-purple-600",
@@ -87,7 +87,7 @@ export function AppSidebar() {
 
   const toolsItems = [
     { 
-      title: "Scheduled Jobs", 
+      titleKey: "nav.scheduledJobs", 
       url: "/scheduled-jobs", 
       icon: Calendar,
       iconBgClass: "bg-gradient-to-br from-amber-500 to-orange-600",

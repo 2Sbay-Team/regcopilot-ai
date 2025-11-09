@@ -30,6 +30,8 @@ export const translations: Record<string, Record<string, string>> = {
   en: {
     // Navigation & Menu
     'nav.dashboard': 'Dashboard',
+    'nav.continuousIntelligence': 'Continuous Intelligence',
+    'nav.scheduledJobs': 'Scheduled Jobs',
     'nav.aiAct': 'AI Act Auditor',
     'nav.gdpr': 'GDPR Checker',
     'nav.esg': 'ESG Reporter',
@@ -134,6 +136,8 @@ export const translations: Record<string, Record<string, string>> = {
   fr: {
     // Navigation & Menu
     'nav.dashboard': 'Tableau de bord',
+    'nav.continuousIntelligence': 'Intelligence Continue',
+    'nav.scheduledJobs': 'Tâches Planifiées',
     'nav.aiAct': 'Auditeur AI Act',
     'nav.gdpr': 'Vérificateur RGPD',
     'nav.esg': 'Rapporteur ESG',
@@ -233,6 +237,8 @@ export const translations: Record<string, Record<string, string>> = {
   de: {
     // Navigation & Menu
     'nav.dashboard': 'Dashboard',
+    'nav.continuousIntelligence': 'Kontinuierliche Intelligenz',
+    'nav.scheduledJobs': 'Geplante Aufgaben',
     'nav.aiAct': 'AI Act Prüfer',
     'nav.gdpr': 'DSGVO-Prüfer',
     'nav.esg': 'ESG-Reporter',
@@ -332,6 +338,8 @@ export const translations: Record<string, Record<string, string>> = {
   ar: {
     // Navigation & Menu
     'nav.dashboard': 'لوحة التحكم',
+    'nav.continuousIntelligence': 'الذكاء المستمر',
+    'nav.scheduledJobs': 'المهام المجدولة',
     'nav.aiAct': 'مدقق قانون الذكاء الاصطناعي',
     'nav.gdpr': 'مدقق GDPR',
     'nav.esg': 'مُعد تقارير ESG',
