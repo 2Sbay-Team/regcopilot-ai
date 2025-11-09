@@ -9,8 +9,9 @@ import { Badge } from "@/components/ui/badge"
 import { 
   Search, Book, Users, Code, ShieldCheck, FileText, 
   HelpCircle, Lightbulb, AlertCircle, CheckCircle,
-  MessageSquare, Rocket, Settings
+  MessageSquare, Rocket, Settings, Bot
 } from "lucide-react"
+import { HelpChatAssistant } from "@/components/HelpChatAssistant"
 
 interface HelpArticle {
   id: string
@@ -250,8 +251,12 @@ export default function HelpCenter() {
         </div>
         <h1 className="text-4xl font-bold">Help Center</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Find answers, guides, and resources to help you succeed with RegSense Advisor
+          Find answers, guides, and resources - or ask our AI assistant
         </p>
+        <Badge variant="secondary" className="gap-1">
+          <Bot className="h-3 w-3" />
+          AI-Powered Help
+        </Badge>
       </div>
 
       {/* Search Bar */}
@@ -271,8 +276,12 @@ export default function HelpCenter() {
       </Card>
 
       {/* Main Content Tabs */}
-      <Tabs defaultValue="guides" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+      <Tabs defaultValue="ai-assistant" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="ai-assistant" className="flex items-center gap-2">
+            <Bot className="h-4 w-4" />
+            AI Assistant
+          </TabsTrigger>
           <TabsTrigger value="guides" className="flex items-center gap-2">
             <Book className="h-4 w-4" />
             Guides
@@ -286,6 +295,24 @@ export default function HelpCenter() {
             Troubleshooting
           </TabsTrigger>
         </TabsList>
+
+        {/* AI Assistant Tab */}
+        <TabsContent value="ai-assistant" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Bot className="h-5 w-5 text-primary" />
+                AI Help Assistant
+              </CardTitle>
+              <CardDescription>
+                Ask questions and get instant answers powered by our documentation and RAG technology
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <HelpChatAssistant />
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         {/* Guides Tab */}
         <TabsContent value="guides" className="space-y-6">
@@ -411,96 +438,81 @@ export default function HelpCenter() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertCircle className="h-5 w-5" />
-                Common Issues & Solutions
+                Troubleshooting Guide
               </CardTitle>
-              <CardDescription>Step-by-step solutions to common problems</CardDescription>
+              <CardDescription>Solutions to common issues</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {troubleshootingItems.map((item, index) => (
-                <div key={index} className="border rounded-lg p-4 space-y-2">
-                  <div className="flex items-start gap-2">
-                    <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
-                    <div className="flex-1">
-                      <h4 className="font-semibold">{item.issue}</h4>
-                      <Badge variant="outline" className="mt-1">{item.category}</Badge>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2 ml-7">
-                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <p className="text-sm text-muted-foreground">{item.solution}</p>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Lightbulb className="h-5 w-5" />
-                Still Need Help?
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-muted-foreground">
-                Can't find what you're looking for? Our support team is here to help.
-              </p>
-              <div className="flex gap-2">
-                <Button variant="outline" className="gap-2">
-                  <MessageSquare className="h-4 w-4" />
-                  Contact Support
-                </Button>
-                <Button variant="outline" className="gap-2">
-                  <FileText className="h-4 w-4" />
-                  View Documentation
-                </Button>
+            <CardContent>
+              <div className="space-y-4">
+                {troubleshootingItems.map((item, index) => (
+                  <Card key={index}>
+                    <CardHeader>
+                      <div className="flex items-start gap-3">
+                        <AlertCircle className="h-5 w-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                          <CardTitle className="text-base">{item.issue}</CardTitle>
+                          <Badge variant="outline" className="mt-2">{item.category}</Badge>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex gap-3">
+                        <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-sm text-muted-foreground">{item.solution}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
 
-      {/* Quick Start Guide */}
-      <Card className="bg-primary/5 border-primary/20">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Rocket className="h-5 w-5" />
-            Quick Start Guide
-          </CardTitle>
-          <CardDescription>Get up and running in minutes</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="space-y-2">
-              <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
-                1
-              </div>
-              <h4 className="font-semibold">Set Up Your Organization</h4>
-              <p className="text-sm text-muted-foreground">
-                Configure organization details, invite team members, and verify your domain for SSO
-              </p>
-            </div>
-            <div className="space-y-2">
-              <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
-                2
-              </div>
-              <h4 className="font-semibold">Connect Your Data</h4>
-              <p className="text-sm text-muted-foreground">
-                Configure connectors to your data sources for automated compliance monitoring
-              </p>
-            </div>
-            <div className="space-y-2">
-              <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
-                3
-              </div>
-              <h4 className="font-semibold">Run Assessments</h4>
-              <p className="text-sm text-muted-foreground">
-                Use AI Act, GDPR, and ESG copilots to generate compliance reports
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Quick Links */}
+      <div className="grid gap-4 md:grid-cols-3">
+        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Rocket className="h-5 w-5 text-primary" />
+              Getting Started
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              New to the platform? Start here with our quick-start guide and video tutorials.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Code className="h-5 w-5 text-primary" />
+              API Documentation
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Integrate with our REST API. Complete reference with examples and SDKs.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <MessageSquare className="h-5 w-5 text-primary" />
+              Contact Support
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Can't find what you need? Reach out to our support team for assistance.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

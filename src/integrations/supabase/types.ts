@@ -2654,6 +2654,120 @@ export type Database = {
         }
         Relationships: []
       }
+      help_articles: {
+        Row: {
+          category: string
+          content: string
+          created_at: string | null
+          helpful_count: number | null
+          id: string
+          language: string
+          metadata: Json | null
+          screenshot_url: string | null
+          slug: string
+          tags: string[] | null
+          title: string
+          unhelpful_count: number | null
+          updated_at: string | null
+          video_url: string | null
+          view_count: number | null
+        }
+        Insert: {
+          category: string
+          content: string
+          created_at?: string | null
+          helpful_count?: number | null
+          id?: string
+          language?: string
+          metadata?: Json | null
+          screenshot_url?: string | null
+          slug: string
+          tags?: string[] | null
+          title: string
+          unhelpful_count?: number | null
+          updated_at?: string | null
+          video_url?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string | null
+          helpful_count?: number | null
+          id?: string
+          language?: string
+          metadata?: Json | null
+          screenshot_url?: string | null
+          slug?: string
+          tags?: string[] | null
+          title?: string
+          unhelpful_count?: number | null
+          updated_at?: string | null
+          video_url?: string | null
+          view_count?: number | null
+        }
+        Relationships: []
+      }
+      help_feedback: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          doc_path: string
+          helpful: boolean
+          id: string
+          language: string | null
+          user_id: string | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          doc_path: string
+          helpful: boolean
+          id?: string
+          language?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          doc_path?: string
+          helpful?: boolean
+          id?: string
+          language?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      help_search_logs: {
+        Row: {
+          created_at: string | null
+          id: string
+          language: string | null
+          query: string
+          result_count: number | null
+          result_found: boolean
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          language?: string | null
+          query: string
+          result_count?: number | null
+          result_found: boolean
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          language?: string | null
+          query?: string
+          result_count?: number | null
+          result_found?: boolean
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       integration_audit_logs: {
         Row: {
           action: string

@@ -50,6 +50,7 @@ import MFASetup from "./pages/MFASetup";
 import ContinuousIntelligence from "./pages/ContinuousIntelligence";
 import ScheduledJobs from "./pages/ScheduledJobs";
 import FeedbackAnalytics from "./pages/FeedbackAnalytics";
+import HelpInsights from "./pages/admin/HelpInsights";
 import AdminHelp from "./pages/admin/Help";
 import AdminGuide from "./pages/admin/AdminGuide";
 import RegulationUploader from "./pages/admin/RegulationUploader";
@@ -125,6 +126,7 @@ const App = () => (
             <Route path="/scheduled-jobs" element={<ProtectedRoute><AppLayout><ScheduledJobs /></AppLayout></ProtectedRoute>} />
             <Route path="/feedback-analytics" element={<ProtectedRoute><AppLayout><FeedbackAnalytics /></AppLayout></ProtectedRoute>} />
             <Route path="/admin/help" element={<ProtectedRoute><AppLayout><AdminHelp /></AppLayout></ProtectedRoute>} />
+            <Route path="/admin/help-insights" element={<ProtectedRoute><AppLayout><HelpInsights /></AppLayout></ProtectedRoute>} />
             <Route path="/admin/guide" element={<ProtectedRoute><AppLayout><AdminGuide /></AppLayout></ProtectedRoute>} />
             <Route path="/admin/regulations" element={<ProtectedRoute><AppLayout><RegulationUploader /></AppLayout></ProtectedRoute>} />
             <Route path="/admin/upload-policies" element={<ProtectedRoute><AppLayout><UploadPolicies /></AppLayout></ProtectedRoute>} />
