@@ -1799,6 +1799,36 @@ export type Database = {
           },
         ]
       }
+      module_settings: {
+        Row: {
+          config: Json | null
+          created_at: string
+          enabled: boolean
+          id: string
+          module_name: string
+          organization_id: string
+          updated_at: string
+        }
+        Insert: {
+          config?: Json | null
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          module_name: string
+          organization_id: string
+          updated_at?: string
+        }
+        Update: {
+          config?: Json | null
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          module_name?: string
+          organization_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       nis2_assessments: {
         Row: {
           compliance_score: number | null

@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast"
 import { ArrowLeft, Shield, Users, Building, FileText, CheckCircle, AlertCircle, Rocket } from "lucide-react"
 import { AdminOnboardingWizard } from "@/components/AdminOnboardingWizard"
+import { ModuleManagement } from "@/components/ModuleManagement"
 
 const Admin = () => {
   const { user } = useAuth()
@@ -200,6 +201,9 @@ const Admin = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Module Management */}
+        <ModuleManagement />
 
         {/* Admin Tools */}
         <Card>
