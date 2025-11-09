@@ -790,6 +790,39 @@ export type Database = {
           },
         ]
       }
+      cron_job_logs: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          id: string
+          job_name: string
+          records_processed: number | null
+          started_at: string | null
+          status: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          job_name: string
+          records_processed?: number | null
+          started_at?: string | null
+          status?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          job_name?: string
+          records_processed?: number | null
+          started_at?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       data_processing_activities: {
         Row: {
           activity_name: string
@@ -2237,6 +2270,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      gdpr_delete_user_data: {
+        Args: { subject_email: string }
+        Returns: undefined
+      }
       get_daily_token_usage: {
         Args: { org_id: string; target_date?: string }
         Returns: {
@@ -2267,6 +2304,7 @@ export type Database = {
           source: string
         }[]
       }
+      purge_old_audit_logs: { Args: never; Returns: undefined }
     }
     Enums: {
       agent_task_status:
