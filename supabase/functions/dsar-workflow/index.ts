@@ -13,6 +13,22 @@ const DSARRequestSchema = z.object({
   }).optional()
 })
 
+async function getUserFromRequest(supabaseClient: any, req: Request) {
+  const { data: { user } } = await supabaseClient.auth.getUser()
+  if (user) return user
+  const auth = req.headers.get('authorization') || req.headers.get('Authorization')
+  if (auth && auth.startsWith('Bearer ')) {
+    const token = auth.substring(7)
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')))
+      if (payload?.sub) return { id: payload.sub }
+    } catch (_) {
+      // ignore
+    }
+  }
+  return null
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
@@ -25,7 +41,7 @@ Deno.serve(async (req) => {
       { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
     )
 
-    const { data: { user } } = await supabaseClient.auth.getUser()
+    const user = await getUserFromRequest(supabaseClient, req)
     if (!user) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
