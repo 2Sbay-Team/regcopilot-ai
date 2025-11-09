@@ -143,7 +143,7 @@ export default function RegSense() {
             <h1 className="text-4xl font-bold">RegSense</h1>
           </div>
           <p className="text-muted-foreground text-lg">
-            Conversational Intelligence Layer for Compliance & ESG
+            Your AI Compliance Advisor
           </p>
           <Alert className="mt-4">
             <AlertCircle className="h-4 w-4" />
