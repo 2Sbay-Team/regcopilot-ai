@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Shield, FileCheck, Leaf, Lock, Network, Database, Clock, Star } from "lucide-react"
+import { Shield, FileCheck, Leaf, Lock, Network, Database, Star } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
 const AVAILABLE_COPILOTS = [
@@ -12,7 +12,8 @@ const AVAILABLE_COPILOTS = [
     icon: Shield,
     status: 'active',
     category: 'AI Compliance',
-    features: ['Risk Assessment', 'Annex IV Documentation', 'High-Risk Validation']
+    features: ['Risk Assessment', 'Annex IV Documentation', 'High-Risk Validation'],
+    route: '/ai-act'
   },
   {
     id: 'gdpr',
@@ -21,7 +22,8 @@ const AVAILABLE_COPILOTS = [
     icon: FileCheck,
     status: 'active',
     category: 'Data Privacy',
-    features: ['Privacy Scanning', 'DSAR Automation', 'Cross-Border Transfer Checks']
+    features: ['Privacy Scanning', 'DSAR Automation', 'Cross-Border Transfer Checks'],
+    route: '/gdpr'
   },
   {
     id: 'esg',
@@ -30,11 +32,9 @@ const AVAILABLE_COPILOTS = [
     icon: Leaf,
     status: 'active',
     category: 'Sustainability',
-    features: ['Emission Tracking', 'ESRS Reporting', 'Completeness Scoring']
+    features: ['Emission Tracking', 'ESRS Reporting', 'Completeness Scoring'],
+    route: '/esg'
   },
-]
-
-const UPCOMING_COPILOTS = [
   {
     id: 'nis2',
     name: 'NIS2 Compliance',
@@ -42,7 +42,7 @@ const UPCOMING_COPILOTS = [
     icon: Lock,
     status: 'active',
     category: 'Cybersecurity',
-    eta: 'Q2 2025',
+    features: ['Incident Reporting', 'Supply Chain Risk', 'Security Measures'],
     route: '/nis2'
   },
   {
@@ -52,7 +52,7 @@ const UPCOMING_COPILOTS = [
     icon: Network,
     status: 'active',
     category: 'Financial Services',
-    eta: 'Q3 2025',
+    features: ['Resilience Testing', 'ICT Risk Management', 'Third-Party Oversight'],
     route: '/dora'
   },
   {
@@ -62,7 +62,7 @@ const UPCOMING_COPILOTS = [
     icon: Database,
     status: 'active',
     category: 'Digital Markets',
-    eta: 'Q4 2025',
+    features: ['Gatekeeper Assessment', 'Interoperability', 'Fair Competition'],
     route: '/dma'
   },
 ]
@@ -113,39 +113,6 @@ const Marketplace = () => {
                         </div>
                       ))}
                     </div>
-                    <Button variant="outline" className="w-full" disabled>
-                      Configured
-                    </Button>
-                  </CardContent>
-                </Card>
-              )
-            })}
-          </div>
-        </div>
-
-        <div>
-          <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-            <Clock className="h-6 w-6 text-muted-foreground" />
-            Coming Soon
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {UPCOMING_COPILOTS.map((copilot) => {
-              const Icon = copilot.icon
-              return (
-                <Card key={copilot.id} className="border-primary/20 hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <Icon className="h-10 w-10 text-primary mb-3" />
-                      <Badge variant="default">{copilot.eta}</Badge>
-                    </div>
-                    <CardTitle>{copilot.name}</CardTitle>
-                    <CardDescription>{copilot.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Shield className="h-4 w-4" />
-                      {copilot.category}
-                    </div>
                     <Button 
                       variant="outline" 
                       className="w-full"
@@ -159,6 +126,7 @@ const Marketplace = () => {
             })}
           </div>
         </div>
+
 
         <Card className="border-primary/20">
           <CardHeader>
