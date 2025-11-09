@@ -851,6 +851,106 @@ export type Database = {
           },
         ]
       }
+      model_usage_logs: {
+        Row: {
+          completion_tokens: number | null
+          cost_estimate: number
+          created_at: string
+          custom_endpoint: string | null
+          error_message: string | null
+          id: string
+          model: string
+          organization_id: string
+          prompt_tokens: number | null
+          request_payload: Json | null
+          response_summary: Json | null
+          status: string
+          timestamp: string
+          total_tokens: number
+        }
+        Insert: {
+          completion_tokens?: number | null
+          cost_estimate?: number
+          created_at?: string
+          custom_endpoint?: string | null
+          error_message?: string | null
+          id?: string
+          model: string
+          organization_id: string
+          prompt_tokens?: number | null
+          request_payload?: Json | null
+          response_summary?: Json | null
+          status?: string
+          timestamp?: string
+          total_tokens: number
+        }
+        Update: {
+          completion_tokens?: number | null
+          cost_estimate?: number
+          created_at?: string
+          custom_endpoint?: string | null
+          error_message?: string | null
+          id?: string
+          model?: string
+          organization_id?: string
+          prompt_tokens?: number | null
+          request_payload?: Json | null
+          response_summary?: Json | null
+          status?: string
+          timestamp?: string
+          total_tokens?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "model_usage_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_budgets: {
+        Row: {
+          created_at: string
+          custom_api_url: string | null
+          daily_cost_limit_usd: number
+          daily_token_limit: number
+          fallback_model: string
+          id: string
+          organization_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          custom_api_url?: string | null
+          daily_cost_limit_usd?: number
+          daily_token_limit?: number
+          fallback_model?: string
+          id?: string
+          organization_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          custom_api_url?: string | null
+          daily_cost_limit_usd?: number
+          daily_token_limit?: number
+          fallback_model?: string
+          id?: string
+          organization_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_budgets_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organizations: {
         Row: {
           country_code: string | null
@@ -1014,6 +1114,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_daily_token_usage: {
+        Args: { org_id: string; target_date?: string }
+        Returns: {
+          request_count: number
+          total_cost: number
+          total_tokens: number
+        }[]
+      }
       get_user_organization_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {

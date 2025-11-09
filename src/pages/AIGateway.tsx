@@ -1,0 +1,386 @@
+import { useState, useEffect } from "react"
+import { supabase } from "@/integrations/supabase/client"
+import { useAuth } from "@/contexts/AuthContext"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
+import { useToast } from "@/hooks/use-toast"
+import { Zap, DollarSign, Activity, Settings, TrendingUp, AlertCircle } from "lucide-react"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { AIGatewayTester } from "@/components/AIGatewayTester"
+
+const AIGateway = () => {
+  const { user } = useAuth()
+  const [profile, setProfile] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
+  const [budgetSettings, setBudgetSettings] = useState<any>(null)
+  const [usageLogs, setUsageLogs] = useState<any[]>([])
+  const [dailyUsage, setDailyUsage] = useState<any>(null)
+  const { toast } = useToast()
+
+  // Form state
+  const [dailyTokenLimit, setDailyTokenLimit] = useState<number>(10000)
+  const [dailyCostLimit, setDailyCostLimit] = useState<number>(10.00)
+  const [fallbackModel, setFallbackModel] = useState<string>('google/gemini-2.5-flash')
+  const [customApiUrl, setCustomApiUrl] = useState<string>('')
+
+  useEffect(() => {
+    loadProfile()
+  }, [user])
+
+  useEffect(() => {
+    if (profile?.organization_id) {
+      loadBudgetSettings()
+      loadUsageLogs()
+      loadDailyUsage()
+    }
+  }, [profile])
+
+  const loadProfile = async () => {
+    if (!user) return
+
+    const { data } = await supabase
+      .from('profiles')
+      .select('*, organizations(*)')
+      .eq('id', user.id)
+      .single()
+
+    setProfile(data)
+  }
+
+  const loadBudgetSettings = async () => {
+    const { data, error } = await supabase
+      .from('organization_budgets')
+      .select('*')
+      .eq('organization_id', profile.organization_id)
+      .maybeSingle()
+
+    if (data) {
+      setBudgetSettings(data)
+      setDailyTokenLimit(data.daily_token_limit)
+      setDailyCostLimit(Number(data.daily_cost_limit_usd))
+      setFallbackModel(data.fallback_model)
+      setCustomApiUrl(data.custom_api_url || '')
+    }
+  }
+
+  const loadUsageLogs = async () => {
+    const { data } = await supabase
+      .from('model_usage_logs')
+      .select('*')
+      .eq('organization_id', profile.organization_id)
+      .order('timestamp', { ascending: false })
+      .limit(20)
+
+    setUsageLogs(data || [])
+  }
+
+  const loadDailyUsage = async () => {
+    const { data, error } = await supabase
+      .rpc('get_daily_token_usage', { org_id: profile.organization_id.toString() })
+
+    if (data && data.length > 0) {
+      setDailyUsage(data[0])
+    }
+  }
+
+  const saveBudgetSettings = async () => {
+    setLoading(true)
+    try {
+      const settingsData = {
+        organization_id: profile.organization_id,
+        daily_token_limit: dailyTokenLimit,
+        daily_cost_limit_usd: dailyCostLimit,
+        fallback_model: fallbackModel,
+        custom_api_url: customApiUrl || null,
+      }
+
+      if (budgetSettings) {
+        // Update existing
+        const { error } = await supabase
+          .from('organization_budgets')
+          .update(settingsData)
+          .eq('id', budgetSettings.id)
+
+        if (error) throw error
+      } else {
+        // Insert new
+        const { error } = await supabase
+          .from('organization_budgets')
+          .insert(settingsData)
+
+        if (error) throw error
+      }
+
+      toast({
+        title: "Settings Saved",
+        description: "AI Gateway budget settings updated successfully"
+      })
+
+      loadBudgetSettings()
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const formatCost = (cost: number) => {
+    return `$${cost.toFixed(4)}`
+  }
+
+  const getUsagePercentage = (current: number, limit: number) => {
+    return Math.min((current / limit) * 100, 100)
+  }
+
+  return (
+    <div className="space-y-6 p-6">
+      <div>
+        <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          AI Gateway Controller
+        </h1>
+        <p className="text-muted-foreground font-medium">
+          Multi-tenant AI routing with cost control and usage tracking
+        </p>
+      </div>
+
+      {/* Daily Usage Overview */}
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card className="cockpit-panel">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Tokens Today</CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {dailyUsage?.total_tokens?.toLocaleString() || 0}
+            </div>
+            <div className="flex items-center gap-2 mt-2">
+              <div className="w-full bg-muted rounded-full h-2">
+                <div
+                  className="bg-primary h-2 rounded-full transition-all"
+                  style={{
+                    width: `${getUsagePercentage(
+                      dailyUsage?.total_tokens || 0,
+                      dailyTokenLimit
+                    )}%`
+                  }}
+                />
+              </div>
+              <span className="text-xs text-muted-foreground whitespace-nowrap">
+                {dailyTokenLimit.toLocaleString()} limit
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="cockpit-panel">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Cost Today</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {formatCost(parseFloat(dailyUsage?.total_cost || 0))}
+            </div>
+            <div className="flex items-center gap-2 mt-2">
+              <div className="w-full bg-muted rounded-full h-2">
+                <div
+                  className="bg-accent h-2 rounded-full transition-all"
+                  style={{
+                    width: `${getUsagePercentage(
+                      parseFloat(dailyUsage?.total_cost || 0),
+                      dailyCostLimit
+                    )}%`
+                  }}
+                />
+              </div>
+              <span className="text-xs text-muted-foreground whitespace-nowrap">
+                ${dailyCostLimit.toFixed(2)} limit
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="cockpit-panel">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Requests Today</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {dailyUsage?.request_count?.toLocaleString() || 0}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              API calls made today
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Budget Settings */}
+      <Card className="cockpit-panel">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Settings className="h-5 w-5 text-primary" />
+            Budget Settings
+          </CardTitle>
+          <CardDescription>Configure daily limits and fallback model</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="tokenLimit">Daily Token Limit</Label>
+                <Input
+                  id="tokenLimit"
+                  type="number"
+                  value={dailyTokenLimit}
+                  onChange={(e) => setDailyTokenLimit(parseInt(e.target.value))}
+                  placeholder="10000"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="costLimit">Daily Cost Limit (USD)</Label>
+                <Input
+                  id="costLimit"
+                  type="number"
+                  step="0.01"
+                  value={dailyCostLimit}
+                  onChange={(e) => setDailyCostLimit(parseFloat(e.target.value))}
+                  placeholder="10.00"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="fallback">Fallback Model</Label>
+                <select
+                  id="fallback"
+                  value={fallbackModel}
+                  onChange={(e) => setFallbackModel(e.target.value)}
+                  className="w-full px-3 py-2 rounded-md border border-input bg-background"
+                >
+                  <option value="google/gemini-2.5-flash">Gemini 2.5 Flash (Recommended)</option>
+                  <option value="google/gemini-2.5-flash-lite">Gemini 2.5 Flash Lite</option>
+                  <option value="google/gemini-2.5-pro">Gemini 2.5 Pro</option>
+                  <option value="openai/gpt-5-nano">GPT-5 Nano</option>
+                  <option value="openai/gpt-5-mini">GPT-5 Mini</option>
+                  <option value="openai/gpt-5">GPT-5</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="customUrl">Custom API URL (Optional)</Label>
+                <Input
+                  id="customUrl"
+                  type="url"
+                  value={customApiUrl}
+                  onChange={(e) => setCustomApiUrl(e.target.value)}
+                  placeholder="https://api.custom-provider.com/v1/completions"
+                />
+              </div>
+            </div>
+          </div>
+
+          <Button
+            onClick={saveBudgetSettings}
+            disabled={loading}
+            className="w-full mt-6"
+          >
+            <Settings className="mr-2 h-4 w-4" />
+            Save Settings
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Usage Logs */}
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Tester */}
+        {profile?.organization_id && (
+          <AIGatewayTester organizationId={profile.organization_id} />
+        )}
+
+        {/* Usage Logs */}
+        <Card className="cockpit-panel">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Zap className="h-5 w-5 text-primary" />
+            Recent Usage
+          </CardTitle>
+          <CardDescription>Last 20 AI model requests</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {usageLogs.length > 0 ? (
+            <ScrollArea className="h-[400px]">
+              <div className="space-y-3">
+                {usageLogs.map((log) => (
+                  <div
+                    key={log.id}
+                    className="flex items-start justify-between p-3 rounded-lg border border-border bg-muted/20"
+                  >
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="font-mono text-xs">
+                          {log.model}
+                        </Badge>
+                        <Badge
+                          variant={log.status === 'success' ? 'default' : 'destructive'}
+                          className="text-xs"
+                        >
+                          {log.status}
+                        </Badge>
+                        {log.custom_endpoint && (
+                          <Badge variant="secondary" className="text-xs">
+                            Custom
+                          </Badge>
+                        )}
+                      </div>
+
+                      <div className="text-xs text-muted-foreground">
+                        {new Date(log.timestamp).toLocaleString()}
+                      </div>
+
+                      {log.error_message && (
+                        <div className="flex items-start gap-1 text-xs text-destructive mt-1">
+                          <AlertCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
+                          <span>{log.error_message}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="text-right space-y-1">
+                      <div className="text-sm font-semibold">
+                        {formatCost(parseFloat(log.cost_estimate))}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {log.total_tokens.toLocaleString()} tokens
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          ) : (
+            <div className="text-center py-12 text-muted-foreground">
+              <Activity className="h-12 w-12 mx-auto mb-3 opacity-50" />
+              <p>No usage logs yet</p>
+              <p className="text-sm">Start making AI requests to see usage data</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+      </div>
+    </div>
+  )
+}
+
+export default AIGateway

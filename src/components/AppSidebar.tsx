@@ -11,7 +11,8 @@ import {
   Eye,
   GitBranch,
   Mail,
-  ShieldCheck
+  ShieldCheck,
+  Zap
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
@@ -36,6 +37,7 @@ const mainItems = [
 ]
 
 const toolsItems = [
+  { title: "AI Gateway", url: "/ai-gateway", icon: Zap },
   { title: "DataSage", url: "/data-lineage", icon: GitBranch },
   { title: "DSAR Queue", url: "/dsar", icon: Mail },
   { title: "Audit Verify", url: "/audit-verify", icon: ShieldCheck },
