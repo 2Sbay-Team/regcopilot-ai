@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/contexts/AuthContext"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,11 +12,13 @@ import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { InfoModal } from "@/components/InfoModal"
-import { Database, Plus, Trash2, CheckCircle, Clock, AlertTriangle, Info } from "lucide-react"
+import { Database, Plus, Trash2, CheckCircle, Clock, AlertTriangle, Info, FileText } from "lucide-react"
 import { format } from "date-fns"
+import { ModuleLayout } from "@/components/ModuleLayout"
 
 const ModelRegistry = () => {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [profile, setProfile] = useState<any>(null)
   const [models, setModels] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -198,24 +201,26 @@ const ModelRegistry = () => {
   }
 
   return (
-    <div className="space-y-6 p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Model Registry
-          </h1>
-          <p className="text-muted-foreground font-medium">
-            Manage AI models, track versions, and monitor compliance status
-          </p>
-        </div>
-
+    <ModuleLayout
+      title="Model Registry"
+      description="Manage AI models, track versions, and monitor compliance status"
+      quickActions={[
+        {
+          label: "Neues Modell registrieren",
+          icon: <Plus className="h-4 w-4" />,
+          onClick: () => setIsDialogOpen(true),
+          gradient: true
+        },
+        {
+          label: "Berichte",
+          icon: <FileText className="h-4 w-4" />,
+          onClick: () => navigate("/reports"),
+          variant: "outline"
+        }
+      ]}
+    >
+      <div className="space-y-6">
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Register Model
-            </Button>
-          </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>Register New AI Model</DialogTitle>
@@ -462,7 +467,8 @@ const ModelRegistry = () => {
           )}
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </ModuleLayout>
   )
 }
 

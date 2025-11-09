@@ -8,11 +8,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
-import { Shield, ArrowLeft, Loader2, HelpCircle, BookOpen } from "lucide-react"
+import { Shield, Loader2, HelpCircle, BookOpen, Plus, FileText, Download } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { t } from "@/lib/i18n"
 import { DocumentUploadSection } from "@/components/DocumentUploadSection"
+import { ModuleLayout } from "@/components/ModuleLayout"
 
 const AIActCopilot = () => {
   const [profile, setProfile] = useState<any>(null)
@@ -104,23 +105,33 @@ const AIActCopilot = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <Shield className="h-8 w-8 text-primary" />
-          <div>
-            <h1 className="text-xl font-bold">{t('aiact.title', language)}</h1>
-            <p className="text-sm text-muted-foreground">{t('aiact.subtitle', language)}</p>
-          </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <ModuleLayout
+      title={t('aiact.title', language)}
+      description={t('aiact.subtitle', language)}
+      quickActions={[
+        {
+          label: "Neue Prüfung",
+          icon: <Plus className="h-4 w-4" />,
+          onClick: () => window.location.reload(),
+          gradient: true
+        },
+        {
+          label: "Berichte ansehen",
+          icon: <FileText className="h-4 w-4" />,
+          onClick: () => navigate("/reports"),
+          variant: "outline"
+        },
+        {
+          label: "Export",
+          icon: <Download className="h-4 w-4" />,
+          onClick: () => navigate("/export-conformity"),
+          variant: "outline"
+        }
+      ]}
+    >
+      <div className="max-w-4xl space-y-6">
         {/* Help Section */}
-        <Card className="mb-6 bg-primary/5 border-primary/20">
+        <Card className="bg-primary/5 border-primary/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <BookOpen className="h-5 w-5 text-primary" />
@@ -333,7 +344,7 @@ const AIActCopilot = () => {
           </div>
         </div>
       </div>
-    </div>
+    </ModuleLayout>
   )
 }
 

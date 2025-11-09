@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { Leaf, ArrowLeft, Loader2, Upload, X, FileText, HelpCircle, BookOpen } from "lucide-react"
+import { Leaf, Loader2, Upload, X, FileText, HelpCircle, BookOpen, Plus, Download } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { ModuleLayout } from "@/components/ModuleLayout"
 
 const ESGCopilot = () => {
   const [profile, setProfile] = useState<any>(null)
@@ -122,21 +123,33 @@ const ESGCopilot = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}><ArrowLeft className="h-5 w-5" /></Button>
-          <Leaf className="h-8 w-8 text-primary" />
-          <div>
-            <h1 className="text-xl font-bold">ESG Reporter</h1>
-            <p className="text-sm text-muted-foreground">CSRD/ESRS sustainability reporting</p>
-          </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <ModuleLayout
+      title="ESG Reporter"
+      description="CSRD/ESRS sustainability reporting"
+      quickActions={[
+        {
+          label: "Neuer Bericht",
+          icon: <Plus className="h-4 w-4" />,
+          onClick: () => window.location.reload(),
+          gradient: true
+        },
+        {
+          label: "Berichte",
+          icon: <FileText className="h-4 w-4" />,
+          onClick: () => navigate("/reports"),
+          variant: "outline"
+        },
+        {
+          label: "Export",
+          icon: <Download className="h-4 w-4" />,
+          onClick: () => {/* Add export logic */},
+          variant: "outline"
+        }
+      ]}
+    >
+      <div className="max-w-4xl space-y-6">
         {/* Help Section */}
-        <Card className="mb-6 bg-primary/5 border-primary/20">
+        <Card className="bg-primary/5 border-primary/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <BookOpen className="h-5 w-5 text-primary" />
@@ -382,7 +395,7 @@ const ESGCopilot = () => {
           )}
         </div>
       </div>
-    </div>
+    </ModuleLayout>
   )
 }
 

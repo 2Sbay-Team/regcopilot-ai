@@ -8,8 +8,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
-import { FileCheck, ArrowLeft, Loader2, AlertTriangle, Upload, X, FileText, HelpCircle, BookOpen } from "lucide-react"
+import { FileCheck, Loader2, AlertTriangle, Upload, X, FileText, HelpCircle, BookOpen, Plus, Download } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { ModuleLayout } from "@/components/ModuleLayout"
 
 const GDPRCopilot = () => {
   const [profile, setProfile] = useState<any>(null)
@@ -118,21 +119,33 @@ const GDPRCopilot = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}><ArrowLeft className="h-5 w-5" /></Button>
-          <FileCheck className="h-8 w-8 text-primary" />
-          <div>
-            <h1 className="text-xl font-bold">GDPR Checker</h1>
-            <p className="text-sm text-muted-foreground">Scan for personal data & compliance issues</p>
-          </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <ModuleLayout
+      title="GDPR Checker"
+      description="Scan for personal data & compliance issues"
+      quickActions={[
+        {
+          label: "Neue Prüfung",
+          icon: <Plus className="h-4 w-4" />,
+          onClick: () => window.location.reload(),
+          gradient: true
+        },
+        {
+          label: "Berichte",
+          icon: <FileText className="h-4 w-4" />,
+          onClick: () => navigate("/reports"),
+          variant: "outline"
+        },
+        {
+          label: "Export",
+          icon: <Download className="h-4 w-4" />,
+          onClick: () => {/* Add export logic */},
+          variant: "outline"
+        }
+      ]}
+    >
+      <div className="max-w-4xl space-y-6">
         {/* Help Section */}
-        <Card className="mb-6 bg-primary/5 border-primary/20">
+        <Card className="bg-primary/5 border-primary/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <BookOpen className="h-5 w-5 text-primary" />
@@ -309,7 +322,7 @@ const GDPRCopilot = () => {
           </div>
         </div>
       </div>
-    </div>
+    </ModuleLayout>
   )
 }
 
