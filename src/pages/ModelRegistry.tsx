@@ -395,7 +395,6 @@ const ModelRegistry = () => {
             </Button>
           </DialogContent>
         </Dialog>
-      </div>
 
       <Card className="cockpit-panel">
         <CardHeader>
