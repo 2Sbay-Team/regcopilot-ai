@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { Lock, Shield, AlertCircle, HelpCircle, CheckCircle2 } from "lucide-react"
+import { ShieldAlert, Shield, AlertCircle, HelpCircle, CheckCircle2, Lock as LockIcon } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { supabase } from "@/integrations/supabase/client"
@@ -66,9 +66,12 @@ const NIS2Copilot = () => {
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-          NIS2 Compliance Copilot
-        </h1>
+        <div className="flex items-center gap-3 mb-2">
+          <ShieldAlert className="h-10 w-10 text-primary" />
+          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            NIS2 Compliance Copilot
+          </h1>
+        </div>
         <p className="text-muted-foreground font-medium">
           Cybersecurity incident reporting and supply chain risk management
         </p>
@@ -93,7 +96,7 @@ const NIS2Copilot = () => {
         
         <Card className="border-indigo-500/20">
           <CardHeader>
-            <Lock className="h-8 w-8 text-indigo-600 mb-2" />
+            <LockIcon className="h-8 w-8 text-indigo-600 mb-2" />
             <CardTitle className="text-lg">Supply Chain Security</CardTitle>
             <CardDescription>Assess third-party cyber risks</CardDescription>
           </CardHeader>

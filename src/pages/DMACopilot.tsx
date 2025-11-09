@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Database, Users, Lock, HelpCircle, CheckCircle2, Info } from "lucide-react"
+import { Scale, Users, Lock as LockIcon, HelpCircle, CheckCircle2, Info, Database } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { supabase } from "@/integrations/supabase/client"
@@ -68,9 +68,12 @@ const DMACopilot = () => {
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-          Digital Markets Act Copilot
-        </h1>
+        <div className="flex items-center gap-3 mb-2">
+          <Scale className="h-10 w-10 text-primary" />
+          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+            Digital Markets Act Copilot
+          </h1>
+        </div>
         <p className="text-muted-foreground font-medium">
           Gatekeeper compliance and fair digital market practices
         </p>
@@ -103,7 +106,7 @@ const DMACopilot = () => {
         
         <Card className="border-amber-500/20">
           <CardHeader>
-            <Lock className="h-8 w-8 text-amber-600 mb-2" />
+            <LockIcon className="h-8 w-8 text-amber-600 mb-2" />
             <CardTitle className="text-lg">Interoperability</CardTitle>
             <CardDescription>Open APIs and standards</CardDescription>
           </CardHeader>

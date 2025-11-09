@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
-import { Shield, Loader2, HelpCircle, BookOpen, Plus, FileText, Download } from "lucide-react"
+import { Brain, Loader2, HelpCircle, BookOpen, Plus, FileText, Download, Shield } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { t } from "@/lib/i18n"
@@ -108,6 +108,7 @@ const AIActCopilot = () => {
     <ModuleLayout
       title={
         <div className="flex items-center gap-2">
+          <Brain className="h-8 w-8 text-primary" />
           {t('aiact.title', language)}
           <TooltipProvider>
             <Tooltip>
@@ -116,7 +117,7 @@ const AIActCopilot = () => {
               </TooltipTrigger>
               <TooltipContent className="max-w-sm">
                 <p className="font-semibold">EU AI Act (European Union Artificial Intelligence Act)</p>
-                <p className="mt-1">Regulation (EU) 2024/1689 - The world's first comprehensive legal framework for artificial intelligence, establishing risk-based requirements for AI systems in the European Union.</p>
+                <p className="mt-1">Regulation (EU) 2024/1689 - The world&apos;s first comprehensive legal framework for artificial intelligence, establishing risk-based requirements for AI systems in the European Union.</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Network, Server, AlertTriangle, HelpCircle, CheckCircle2, Clock } from "lucide-react"
+import { ServerCog, Server, AlertTriangle, HelpCircle, CheckCircle2, Clock, Network } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { supabase } from "@/integrations/supabase/client"
@@ -69,6 +69,7 @@ const DORACopilot = () => {
     <div className="space-y-6 p-6">
       <div>
         <div className="flex items-center gap-3 mb-2">
+          <ServerCog className="h-10 w-10 text-primary" />
           <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
             DORA Compliance Copilot
           </h1>

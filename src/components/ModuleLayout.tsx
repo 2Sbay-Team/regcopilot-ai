@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
-import { Home, ChevronRight, HelpCircle, Brain, ShieldCheck, Sprout, FileText, TrendingUp, Zap, Network, Workflow } from "lucide-react"
+import { Home, ChevronRight, HelpCircle, Brain, ShieldCheck, Sprout, FileText, TrendingUp, Zap, Network, Workflow, ServerCog, ShieldAlert, Scale } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { NotificationCenter } from "@/components/NotificationCenter"
@@ -71,6 +71,9 @@ export const ModuleLayout = ({
       '/ai-act': <Brain className="h-4 w-4" />,
       '/gdpr': <ShieldCheck className="h-4 w-4" />,
       '/esg': <Sprout className="h-4 w-4" />,
+      '/dora': <ServerCog className="h-4 w-4" />,
+      '/nis2': <ShieldAlert className="h-4 w-4" />,
+      '/dma': <Scale className="h-4 w-4" />,
       '/reports': <FileText className="h-4 w-4" />,
       '/compliance-score': <TrendingUp className="h-4 w-4" />,
       '/regsense': <Brain className="h-4 w-4" />,
