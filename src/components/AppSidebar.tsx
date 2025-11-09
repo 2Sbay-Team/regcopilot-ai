@@ -23,6 +23,7 @@ import {
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
+import { ThemeToggle } from "@/components/ThemeToggle"
 import { t } from "@/lib/i18n"
 import { useLanguage } from "@/contexts/LanguageContext"
 
@@ -35,6 +36,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
   useSidebar,
 } from "@/components/ui/sidebar"
 
@@ -283,6 +285,17 @@ export function AppSidebar() {
         </SidebarGroup>
 
       </SidebarContent>
+      
+      <SidebarFooter>
+        <div className="flex items-center justify-between px-3 py-2">
+          {!isCollapsed && (
+            <span className="text-xs text-muted-foreground font-medium">
+              Theme
+            </span>
+          )}
+          <ThemeToggle />
+        </div>
+      </SidebarFooter>
     </Sidebar>
   )
 }
