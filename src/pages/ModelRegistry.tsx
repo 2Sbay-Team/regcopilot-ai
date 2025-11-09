@@ -206,12 +206,6 @@ const ModelRegistry = () => {
       description="Manage AI models, track versions, and monitor compliance status"
       quickActions={[
         {
-          label: "Neues Modell registrieren",
-          icon: <Plus className="h-4 w-4" />,
-          onClick: () => setIsDialogOpen(true),
-          gradient: true
-        },
-        {
           label: "Berichte",
           icon: <FileText className="h-4 w-4" />,
           onClick: () => navigate("/reports"),

@@ -124,12 +124,6 @@ const GDPRCopilot = () => {
       description="Scan for personal data & compliance issues"
       quickActions={[
         {
-          label: "Neue Prüfung",
-          icon: <Plus className="h-4 w-4" />,
-          onClick: () => window.location.reload(),
-          gradient: true
-        },
-        {
           label: "Berichte",
           icon: <FileText className="h-4 w-4" />,
           onClick: () => navigate("/reports"),
