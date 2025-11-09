@@ -137,7 +137,7 @@ export const TaskPanel = ({ assessmentId, assessmentType }: TaskPanelProps) => {
             </CardTitle>
             <CardDescription>Assign tasks and track progress</CardDescription>
           </div>
-          <Dialog open={isDialogOpen} onValueChange={setIsDialogOpen}>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button size="sm">
                 <Plus className="h-4 w-4 mr-1" />
