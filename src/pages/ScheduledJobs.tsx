@@ -18,9 +18,9 @@ import { t } from "@/lib/i18n";
 
 interface ScheduledJob {
   id: string;
-  name: string;
+  job_name: string;
   job_type: string;
-  schedule: string;
+  schedule_cron: string;
   enabled: boolean;
   last_run_at: string | null;
   next_run_at: string | null;
@@ -35,9 +35,9 @@ export default function ScheduledJobs() {
   const [jobs, setJobs] = useState<ScheduledJob[]>([]);
   const [showDialog, setShowDialog] = useState(false);
   const [newJob, setNewJob] = useState({
-    name: "",
+    job_name: "",
     job_type: "compliance_scan",
-    schedule: "0 0 * * *"
+    schedule_cron: "0 0 * * *"
   });
 
   useEffect(() => {
@@ -108,7 +108,7 @@ export default function ScheduledJobs() {
 
   const createJob = async () => {
     // Validate inputs
-    if (!newJob.name.trim()) {
+    if (!newJob.job_name.trim()) {
       toast({
         title: t('scheduledJobs.validationError', language),
         description: t('scheduledJobs.nameRequired', language),
@@ -117,7 +117,7 @@ export default function ScheduledJobs() {
       return;
     }
 
-    if (newJob.name.length > 100) {
+    if (newJob.job_name.length > 100) {
       toast({
         title: t('scheduledJobs.validationError', language),
         description: t('scheduledJobs.nameTooLong', language),
@@ -141,9 +141,11 @@ export default function ScheduledJobs() {
       const { error } = await supabase
         .from("scheduled_jobs" as any)
         .insert({
-          ...newJob,
+          job_name: newJob.job_name,
+          job_type: newJob.job_type,
+          schedule_cron: newJob.schedule_cron,
           organization_id: profile.organization_id,
-          created_by: user.id
+          enabled: true
         } as any);
 
       if (error) throw error;
@@ -154,7 +156,7 @@ export default function ScheduledJobs() {
       });
 
       setShowDialog(false);
-      setNewJob({ name: "", job_type: "compliance_scan", schedule: "0 0 * * *" });
+      setNewJob({ job_name: "", job_type: "compliance_scan", schedule_cron: "0 0 * * *" });
       await loadJobs();
     } catch (error: any) {
       console.error("Error creating job:", error);
@@ -218,14 +220,14 @@ export default function ScheduledJobs() {
                 </div>
                 <Input
                   id="job-name"
-                  value={newJob.name}
-                  onChange={(e) => setNewJob({ ...newJob, name: e.target.value })}
+                  value={newJob.job_name}
+                  onChange={(e) => setNewJob({ ...newJob, job_name: e.target.value })}
                   placeholder={t('scheduledJobs.jobNamePlaceholder', language)}
                   maxLength={100}
                   required
                 />
                 <p className="text-xs text-muted-foreground">
-                  {newJob.name.length}/100 {t('scheduledJobs.jobNameHint', language)}
+                  {newJob.job_name.length}/100 {t('scheduledJobs.jobNameHint', language)}
                 </p>
               </div>
 
@@ -284,8 +286,8 @@ export default function ScheduledJobs() {
                   />
                 </div>
                 <Select
-                  value={newJob.schedule}
-                  onValueChange={(value) => setNewJob({ ...newJob, schedule: value })}
+                  value={newJob.schedule_cron}
+                  onValueChange={(value) => setNewJob({ ...newJob, schedule_cron: value })}
                 >
                   <SelectTrigger id="schedule">
                     <SelectValue placeholder={t('scheduledJobs.schedulePlaceholder', language)} />
@@ -324,7 +326,7 @@ export default function ScheduledJobs() {
               <Button variant="outline" onClick={() => setShowDialog(false)}>
                 {t('scheduledJobs.cancel', language)}
               </Button>
-              <Button onClick={createJob} disabled={!newJob.name.trim()}>
+              <Button onClick={createJob} disabled={!newJob.job_name.trim()}>
                 {t('scheduledJobs.createJob', language)}
               </Button>
             </DialogFooter>
@@ -352,7 +354,7 @@ export default function ScheduledJobs() {
             <Card key={job.id}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <div>
-                  <CardTitle>{job.name}</CardTitle>
+                  <CardTitle>{job.job_name}</CardTitle>
                   <CardDescription>
                     <Badge variant="outline" className="mt-2">
                       {job.job_type.replace(/_/g, " ")}
@@ -368,7 +370,7 @@ export default function ScheduledJobs() {
                 <div className="flex items-center gap-6 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
-                    {formatSchedule(job.schedule)}
+                    {formatSchedule(job.schedule_cron)}
                   </div>
                   {job.last_run_at && (
                     <div className="flex items-center gap-2">
