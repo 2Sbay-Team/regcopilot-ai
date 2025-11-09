@@ -57,9 +57,9 @@ Deno.serve(async (req) => {
       .eq('organization_id', orgId)
       .eq('status', 'active');
 
-    const automationScore = Math.min(100, 
+    const automationScore = Math.round(Math.min(100, 
       ((scheduledJobsCount || 0) * 10) + ((connectorsCount || 0) * 15)
-    );
+    ));
 
     // Calculate coverage score (0-100)
     const { count: aiActCount } = await supabaseClient
@@ -94,7 +94,7 @@ Deno.serve(async (req) => {
 
     const totalAssessments = (aiActCount || 0) + (gdprCount || 0) + (esgCount || 0) + 
                             (nis2Count || 0) + (doraCount || 0) + (dmaCount || 0);
-    const coverageScore = Math.min(100, totalAssessments * 5);
+    const coverageScore = Math.round(Math.min(100, totalAssessments * 5));
 
     // Calculate response score (based on task completion)
     const { count: completedTasks } = await supabaseClient
@@ -122,9 +122,9 @@ Deno.serve(async (req) => {
       .from('explainability_views')
       .select('*', { count: 'exact', head: true });
 
-    const explainabilityScore = Math.min(100, 
+    const explainabilityScore = Math.round(Math.min(100, 
       ((auditCount || 0) / 10) + ((explainabilityCount || 0) * 5)
-    );
+    ));
 
     // Calculate overall score (weighted average)
     const overallScore = Math.round(
