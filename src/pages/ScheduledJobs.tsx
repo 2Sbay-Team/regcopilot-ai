@@ -13,6 +13,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { InfoModal } from "@/components/InfoModal";
 import { Calendar, Clock, Plus, Info } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { t } from "@/lib/i18n";
 
 interface ScheduledJob {
   id: string;
@@ -28,6 +30,7 @@ interface ScheduledJob {
 export default function ScheduledJobs() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { language } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [jobs, setJobs] = useState<ScheduledJob[]>([]);
   const [showDialog, setShowDialog] = useState(false);
@@ -69,8 +72,8 @@ export default function ScheduledJobs() {
     } catch (error: any) {
       console.error("Error loading jobs:", error);
       toast({
-        title: "Error",
-        description: "Failed to load scheduled jobs.",
+        title: t('scheduledJobs.error', language),
+        description: t('scheduledJobs.loadError', language),
         variant: "destructive"
       });
     } finally {
@@ -88,16 +91,16 @@ export default function ScheduledJobs() {
       if (error) throw error;
 
       toast({
-        title: "Job Updated",
-        description: `Job ${!currentState ? "enabled" : "disabled"} successfully.`
+        title: t('scheduledJobs.jobUpdated', language),
+        description: `${t('scheduledJobs.jobUpdatedDesc', language)} ${!currentState ? t('scheduledJobs.jobEnabled', language) : t('scheduledJobs.jobDisabled', language)}.`
       });
 
       await loadJobs();
     } catch (error: any) {
       console.error("Error toggling job:", error);
       toast({
-        title: "Error",
-        description: "Failed to update job status.",
+        title: t('scheduledJobs.error', language),
+        description: t('scheduledJobs.updateError', language),
         variant: "destructive"
       });
     }
@@ -107,8 +110,8 @@ export default function ScheduledJobs() {
     // Validate inputs
     if (!newJob.name.trim()) {
       toast({
-        title: "Validation Error",
-        description: "Job name is required.",
+        title: t('scheduledJobs.validationError', language),
+        description: t('scheduledJobs.nameRequired', language),
         variant: "destructive"
       });
       return;
@@ -116,8 +119,8 @@ export default function ScheduledJobs() {
 
     if (newJob.name.length > 100) {
       toast({
-        title: "Validation Error",
-        description: "Job name must be less than 100 characters.",
+        title: t('scheduledJobs.validationError', language),
+        description: t('scheduledJobs.nameTooLong', language),
         variant: "destructive"
       });
       return;
@@ -146,8 +149,8 @@ export default function ScheduledJobs() {
       if (error) throw error;
 
       toast({
-        title: "Job Created",
-        description: "Scheduled job created successfully."
+        title: t('scheduledJobs.jobCreated', language),
+        description: t('scheduledJobs.jobCreatedDesc', language)
       });
 
       setShowDialog(false);
@@ -156,8 +159,8 @@ export default function ScheduledJobs() {
     } catch (error: any) {
       console.error("Error creating job:", error);
       toast({
-        title: "Error",
-        description: "Failed to create scheduled job.",
+        title: t('scheduledJobs.error', language),
+        description: t('scheduledJobs.createError', language),
         variant: "destructive"
       });
     }
@@ -165,10 +168,10 @@ export default function ScheduledJobs() {
 
   const formatSchedule = (cron: string) => {
     const schedules: Record<string, string> = {
-      "0 0 * * *": "Daily at midnight",
-      "0 0 * * 0": "Weekly on Sunday",
-      "0 0 1 * *": "Monthly on 1st",
-      "0 */6 * * *": "Every 6 hours"
+      "0 0 * * *": t('scheduledJobs.dailyMidnight', language),
+      "0 0 * * 0": t('scheduledJobs.weeklySunday', language),
+      "0 0 1 * *": t('scheduledJobs.monthlyFirst', language),
+      "0 */6 * * *": t('scheduledJobs.every6Hours', language)
     };
     return schedules[cron] || cron;
   };
@@ -177,21 +180,21 @@ export default function ScheduledJobs() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Scheduled Jobs</h1>
-          <p className="text-muted-foreground">Automate compliance workflows and scans</p>
+          <h1 className="text-3xl font-bold">{t('scheduledJobs.title', language)}</h1>
+          <p className="text-muted-foreground">{t('scheduledJobs.subtitle', language)}</p>
         </div>
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="mr-2 h-4 w-4" />
-              New Job
+              {t('scheduledJobs.newJob', language)}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Create Scheduled Job</DialogTitle>
+              <DialogTitle>{t('scheduledJobs.createTitle', language)}</DialogTitle>
               <DialogDescription>
-                Set up automated compliance workflows
+                {t('scheduledJobs.createDesc', language)}
               </DialogDescription>
             </DialogHeader>
             
@@ -199,40 +202,40 @@ export default function ScheduledJobs() {
             <Alert className="bg-muted/50 border-border">
               <Info className="h-4 w-4" />
               <AlertDescription>
-                Scheduled jobs automate compliance tasks like scans, syncs, and reports. Choose a descriptive name, select the type of task, and set when it should run.
+                {t('scheduledJobs.helpText', language)}
               </AlertDescription>
             </Alert>
 
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <div className="flex items-center gap-1">
-                  <Label htmlFor="job-name">Job Name</Label>
+                  <Label htmlFor="job-name">{t('scheduledJobs.jobName', language)}</Label>
                   <InfoModal 
-                    title="Job Name"
-                    description="A descriptive name for your scheduled job. This helps you identify the job's purpose at a glance."
-                    example="Examples:\n• Daily GDPR Privacy Scan\n• Weekly AI Act Compliance Check\n• Monthly ESG Report Generation\n• Nightly Connector Data Sync"
+                    title={t('scheduledJobs.jobNameTitle', language)}
+                    description={t('scheduledJobs.jobNameDesc', language)}
+                    example={t('scheduledJobs.jobNameExample', language)}
                   />
                 </div>
                 <Input
                   id="job-name"
                   value={newJob.name}
                   onChange={(e) => setNewJob({ ...newJob, name: e.target.value })}
-                  placeholder="e.g., Daily GDPR Privacy Scan"
+                  placeholder={t('scheduledJobs.jobNamePlaceholder', language)}
                   maxLength={100}
                   required
                 />
                 <p className="text-xs text-muted-foreground">
-                  {newJob.name.length}/100 characters
+                  {newJob.name.length}/100 {t('scheduledJobs.jobNameHint', language)}
                 </p>
               </div>
 
               <div className="space-y-2">
                 <div className="flex items-center gap-1">
-                  <Label htmlFor="job-type">Job Type</Label>
+                  <Label htmlFor="job-type">{t('scheduledJobs.jobType', language)}</Label>
                   <InfoModal 
-                    title="Job Type"
-                    description="Select the type of automated task to perform. Each type serves a different compliance or data management purpose."
-                    example="• Compliance Scan: Automatically check AI Act, GDPR, ESG compliance\n• Connector Sync: Pull data from external sources (SAP, Jira, SharePoint)\n• Report Generation: Create scheduled compliance reports\n• Intelligence Score: Update your continuous intelligence metrics"
+                    title={t('scheduledJobs.jobTypeTitle', language)}
+                    description={t('scheduledJobs.jobTypeDesc', language)}
+                    example={t('scheduledJobs.jobTypeExample', language)}
                   />
                 </div>
                 <Select
@@ -240,31 +243,31 @@ export default function ScheduledJobs() {
                   onValueChange={(value) => setNewJob({ ...newJob, job_type: value })}
                 >
                   <SelectTrigger id="job-type">
-                    <SelectValue placeholder="Select job type" />
+                    <SelectValue placeholder={t('scheduledJobs.jobTypePlaceholder', language)} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="compliance_scan">
                       <div className="flex flex-col items-start">
-                        <span className="font-medium">Compliance Scan</span>
-                        <span className="text-xs text-muted-foreground">Check AI Act, GDPR, ESG compliance</span>
+                        <span className="font-medium">{t('scheduledJobs.complianceScan', language)}</span>
+                        <span className="text-xs text-muted-foreground">{t('scheduledJobs.complianceScanDesc', language)}</span>
                       </div>
                     </SelectItem>
                     <SelectItem value="connector_sync">
                       <div className="flex flex-col items-start">
-                        <span className="font-medium">Connector Sync</span>
-                        <span className="text-xs text-muted-foreground">Sync data from external sources</span>
+                        <span className="font-medium">{t('scheduledJobs.connectorSync', language)}</span>
+                        <span className="text-xs text-muted-foreground">{t('scheduledJobs.connectorSyncDesc', language)}</span>
                       </div>
                     </SelectItem>
                     <SelectItem value="report_generation">
                       <div className="flex flex-col items-start">
-                        <span className="font-medium">Report Generation</span>
-                        <span className="text-xs text-muted-foreground">Generate scheduled reports</span>
+                        <span className="font-medium">{t('scheduledJobs.reportGeneration', language)}</span>
+                        <span className="text-xs text-muted-foreground">{t('scheduledJobs.reportGenerationDesc', language)}</span>
                       </div>
                     </SelectItem>
                     <SelectItem value="intelligence_score">
                       <div className="flex flex-col items-start">
-                        <span className="font-medium">Intelligence Score Update</span>
-                        <span className="text-xs text-muted-foreground">Refresh continuous intelligence metrics</span>
+                        <span className="font-medium">{t('scheduledJobs.intelligenceScore', language)}</span>
+                        <span className="text-xs text-muted-foreground">{t('scheduledJobs.intelligenceScoreDesc', language)}</span>
                       </div>
                     </SelectItem>
                   </SelectContent>
@@ -273,11 +276,11 @@ export default function ScheduledJobs() {
 
               <div className="space-y-2">
                 <div className="flex items-center gap-1">
-                  <Label htmlFor="schedule">Schedule</Label>
+                  <Label htmlFor="schedule">{t('scheduledJobs.schedule', language)}</Label>
                   <InfoModal 
-                    title="Schedule"
-                    description="Define when and how often this job should run. Choose a frequency that matches your compliance requirements and data freshness needs."
-                    example="• Daily at midnight: Good for regular compliance checks\n• Weekly on Sunday: Suitable for weekly reports\n• Monthly on 1st: Perfect for monthly reporting cycles\n• Every 6 hours: Use for time-sensitive data syncing"
+                    title={t('scheduledJobs.scheduleTitle', language)}
+                    description={t('scheduledJobs.scheduleDesc', language)}
+                    example={t('scheduledJobs.scheduleExample', language)}
                   />
                 </div>
                 <Select
@@ -285,31 +288,31 @@ export default function ScheduledJobs() {
                   onValueChange={(value) => setNewJob({ ...newJob, schedule: value })}
                 >
                   <SelectTrigger id="schedule">
-                    <SelectValue placeholder="Select schedule" />
+                    <SelectValue placeholder={t('scheduledJobs.schedulePlaceholder', language)} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="0 0 * * *">
                       <div className="flex flex-col items-start">
-                        <span className="font-medium">Daily at midnight</span>
-                        <span className="text-xs text-muted-foreground">Runs every day at 00:00 UTC</span>
+                        <span className="font-medium">{t('scheduledJobs.dailyMidnight', language)}</span>
+                        <span className="text-xs text-muted-foreground">{t('scheduledJobs.dailyMidnightDesc', language)}</span>
                       </div>
                     </SelectItem>
                     <SelectItem value="0 0 * * 0">
                       <div className="flex flex-col items-start">
-                        <span className="font-medium">Weekly on Sunday</span>
-                        <span className="text-xs text-muted-foreground">Runs every Sunday at 00:00 UTC</span>
+                        <span className="font-medium">{t('scheduledJobs.weeklySunday', language)}</span>
+                        <span className="text-xs text-muted-foreground">{t('scheduledJobs.weeklySundayDesc', language)}</span>
                       </div>
                     </SelectItem>
                     <SelectItem value="0 0 1 * *">
                       <div className="flex flex-col items-start">
-                        <span className="font-medium">Monthly on 1st</span>
-                        <span className="text-xs text-muted-foreground">Runs on the 1st of each month at 00:00 UTC</span>
+                        <span className="font-medium">{t('scheduledJobs.monthlyFirst', language)}</span>
+                        <span className="text-xs text-muted-foreground">{t('scheduledJobs.monthlyFirstDesc', language)}</span>
                       </div>
                     </SelectItem>
                     <SelectItem value="0 */6 * * *">
                       <div className="flex flex-col items-start">
-                        <span className="font-medium">Every 6 hours</span>
-                        <span className="text-xs text-muted-foreground">Runs 4 times daily (00:00, 06:00, 12:00, 18:00 UTC)</span>
+                        <span className="font-medium">{t('scheduledJobs.every6Hours', language)}</span>
+                        <span className="text-xs text-muted-foreground">{t('scheduledJobs.every6HoursDesc', language)}</span>
                       </div>
                     </SelectItem>
                   </SelectContent>
@@ -319,10 +322,10 @@ export default function ScheduledJobs() {
 
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowDialog(false)}>
-                Cancel
+                {t('scheduledJobs.cancel', language)}
               </Button>
               <Button onClick={createJob} disabled={!newJob.name.trim()}>
-                Create Job
+                {t('scheduledJobs.createJob', language)}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -332,14 +335,14 @@ export default function ScheduledJobs() {
       {loading ? (
         <Card>
           <CardContent className="p-6">
-            <p className="text-center text-muted-foreground">Loading jobs...</p>
+            <p className="text-center text-muted-foreground">{t('scheduledJobs.loading', language)}</p>
           </CardContent>
         </Card>
       ) : jobs.length === 0 ? (
         <Card>
           <CardContent className="p-6">
             <p className="text-center text-muted-foreground">
-              No scheduled jobs yet. Create your first automated workflow.
+              {t('scheduledJobs.noJobs', language)}
             </p>
           </CardContent>
         </Card>
@@ -370,7 +373,7 @@ export default function ScheduledJobs() {
                   {job.last_run_at && (
                     <div className="flex items-center gap-2">
                       <Calendar className="h-4 w-4" />
-                      Last run: {new Date(job.last_run_at).toLocaleString()}
+                      {t('scheduledJobs.lastRun', language)}: {new Date(job.last_run_at).toLocaleString()}
                     </div>
                   )}
                 </div>
