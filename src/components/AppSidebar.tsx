@@ -18,6 +18,7 @@ import {
   MessageSquare,
   Activity,
   User,
+  Users,
   TrendingUp,
   Store,
   Play,
@@ -220,6 +221,11 @@ export function AppSidebar() {
       titleKey: "nav.admin",
       url: "/admin", 
       icon: Settings,
+    },
+    {
+      titleKey: "nav.teamManagement",
+      url: "/admin/team",
+      icon: Users,
     },
   ]
 

@@ -64,6 +64,8 @@ import BrandComparison from "./pages/BrandComparison";
 import Automation from "./pages/Automation";
 import AuditPortal from "./pages/AuditPortal";
 import SecurityPrivacy from "./pages/SecurityPrivacy";
+import TeamManagement from "./pages/admin/TeamManagement";
+import AcceptInvite from "./pages/AcceptInvite";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -136,6 +138,8 @@ const App = () => (
             <Route path="/automation" element={<ProtectedRoute><AppLayout><Automation /></AppLayout></ProtectedRoute>} />
             <Route path="/audit-portal" element={<ProtectedRoute><AuditPortal /></ProtectedRoute>} />
             <Route path="/security-privacy" element={<SecurityPrivacy />} />
+            <Route path="/admin/team" element={<ProtectedRoute><AppLayout><TeamManagement /></AppLayout></ProtectedRoute>} />
+            <Route path="/accept-invite" element={<AcceptInvite />} />
             <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

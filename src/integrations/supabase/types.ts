@@ -3156,6 +3156,94 @@ export type Database = {
           },
         ]
       }
+      organization_domains: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          domain: string
+          id: string
+          organization_id: string
+          verification_token: string | null
+          verified: boolean | null
+          verified_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          domain: string
+          id?: string
+          organization_id: string
+          verification_token?: string | null
+          verified?: boolean | null
+          verified_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          domain?: string
+          id?: string
+          organization_id?: string
+          verification_token?: string | null
+          verified?: boolean | null
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_domains_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_invites: {
+        Row: {
+          accepted_at: string | null
+          created_at: string | null
+          email: string
+          expires_at: string | null
+          id: string
+          invite_token: string
+          invited_by: string
+          organization_id: string
+          role: Database["public"]["Enums"]["app_role"] | null
+          status: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string | null
+          email: string
+          expires_at?: string | null
+          id?: string
+          invite_token: string
+          invited_by: string
+          organization_id: string
+          role?: Database["public"]["Enums"]["app_role"] | null
+          status?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string | null
+          email?: string
+          expires_at?: string | null
+          id?: string
+          invite_token?: string
+          invited_by?: string
+          organization_id?: string
+          role?: Database["public"]["Enums"]["app_role"] | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_invites_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organizations: {
         Row: {
           billing_model: string
@@ -4288,6 +4376,56 @@ export type Database = {
           },
         ]
       }
+      sso_connections: {
+        Row: {
+          auto_provision: boolean | null
+          client_id: string | null
+          config: Json | null
+          created_at: string | null
+          default_role: Database["public"]["Enums"]["app_role"] | null
+          enabled: boolean | null
+          id: string
+          organization_id: string
+          provider: string
+          tenant_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_provision?: boolean | null
+          client_id?: string | null
+          config?: Json | null
+          created_at?: string | null
+          default_role?: Database["public"]["Enums"]["app_role"] | null
+          enabled?: boolean | null
+          id?: string
+          organization_id: string
+          provider?: string
+          tenant_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_provision?: boolean | null
+          client_id?: string | null
+          config?: Json | null
+          created_at?: string | null
+          default_role?: Database["public"]["Enums"]["app_role"] | null
+          enabled?: boolean | null
+          id?: string
+          organization_id?: string
+          provider?: string
+          tenant_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sso_connections_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stripe_usage_events: {
         Row: {
           cost_usd: number
@@ -4702,10 +4840,15 @@ export type Database = {
       }
     }
     Functions: {
+      accept_organization_invite: {
+        Args: { p_invite_token: string; p_user_id: string }
+        Returns: Json
+      }
       check_token_quota: {
         Args: { org_id: string; requested_tokens: number }
         Returns: Json
       }
+      find_org_by_email_domain: { Args: { p_email: string }; Returns: string }
       gdpr_delete_user_data: {
         Args: { subject_email: string }
         Returns: undefined
