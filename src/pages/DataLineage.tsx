@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { Database, GitBranch, AlertTriangle, CheckCircle, RefreshCw } from "lucide-react"
+import { Database, GitBranch, AlertTriangle, CheckCircle, RefreshCw, X, Clock, MapPin, FileText } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { LineageGraph } from "@/components/LineageGraph"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface LineageNode {
   id: string
@@ -31,6 +32,9 @@ const DataLineage = () => {
   const [graph, setGraph] = useState<{ nodes: LineageNode[]; edges: LineageEdge[] } | null>(null)
   const [insights, setInsights] = useState<string>('')
   const [stats, setStats] = useState<any>(null)
+  const [selectedNode, setSelectedNode] = useState<LineageNode | null>(null)
+  const [nodeAuditLogs, setNodeAuditLogs] = useState<any[]>([])
+  const [loadingLogs, setLoadingLogs] = useState(false)
   const { toast } = useToast()
 
   // Form state for tracking new data flow
@@ -161,6 +165,36 @@ const DataLineage = () => {
     }
   }, [profile])
 
+  const handleNodeClick = async (node: LineageNode) => {
+    setSelectedNode(node)
+    setLoadingLogs(true)
+    
+    try {
+      // Fetch audit logs related to this node
+      const { data, error } = await supabase
+        .from('audit_logs')
+        .select('*')
+        .eq('organization_id', profile?.organization_id)
+        .eq('agent', 'data_lineage')
+        .or(`request_payload->>source_system.eq.${node.name},request_payload->>destination_system.eq.${node.name}`)
+        .order('timestamp', { ascending: false })
+        .limit(20)
+
+      if (error) throw error
+      
+      setNodeAuditLogs(data || [])
+    } catch (error: any) {
+      console.error('Error loading node logs:', error)
+      toast({
+        variant: "destructive",
+        title: "Error loading logs",
+        description: error.message
+      })
+    } finally {
+      setLoadingLogs(false)
+    }
+  }
+
   return (
     <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
@@ -257,10 +291,170 @@ const DataLineage = () => {
         <CardContent>
           <LineageGraph 
             nodes={graph?.nodes || []} 
-            edges={graph?.edges || []} 
+            edges={graph?.edges || []}
+            onNodeClick={handleNodeClick}
           />
         </CardContent>
       </Card>
+
+      {/* Node Details Panel */}
+      {selectedNode && (
+        <Card className="cockpit-panel border-2 border-primary">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-primary" />
+                Node Details: {selectedNode.name}
+              </CardTitle>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setSelectedNode(null)}
+                className="h-8 w-8 p-0"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <CardDescription>Full metadata and related audit logs</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-6">
+              {/* Node Metadata */}
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-3">
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Node Type</Label>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Badge variant="outline" className="capitalize">
+                        {selectedNode.type}
+                      </Badge>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                      <MapPin className="h-3 w-3" />
+                      Jurisdiction
+                    </Label>
+                    <p className="text-sm font-medium mt-1">
+                      {selectedNode.jurisdiction || 'Not specified'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      Timestamp
+                    </Label>
+                    <p className="text-sm font-medium mt-1">
+                      {new Date(selectedNode.timestamp).toLocaleString()}
+                    </p>
+                  </div>
+
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Node ID</Label>
+                    <p className="text-xs font-mono mt-1 text-muted-foreground break-all">
+                      {selectedNode.id}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Related Audit Logs */}
+              <div className="border-t pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <Label className="text-sm font-semibold">Related Audit Logs</Label>
+                  <Badge variant="secondary">{nodeAuditLogs.length} entries</Badge>
+                </div>
+
+                {loadingLogs ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <RefreshCw className="h-8 w-8 mx-auto mb-2 animate-spin" />
+                    <p className="text-sm">Loading audit logs...</p>
+                  </div>
+                ) : nodeAuditLogs.length > 0 ? (
+                  <ScrollArea className="h-[300px] rounded-md border">
+                    <div className="p-4 space-y-3">
+                      {nodeAuditLogs.map((log) => {
+                        const payload = log.request_payload as any
+                        const isCrossBorder = payload?.is_cross_border
+                        
+                        return (
+                          <div 
+                            key={log.id} 
+                            className="p-3 rounded-lg bg-muted/50 border border-border space-y-2"
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="text-xs font-medium">
+                                    {payload?.source_system || 'Unknown'} → {payload?.destination_system || 'Unknown'}
+                                  </span>
+                                  {isCrossBorder && (
+                                    <Badge variant="destructive" className="text-xs">
+                                      Cross-Border
+                                    </Badge>
+                                  )}
+                                </div>
+                                
+                                {payload?.transformation_applied && payload.transformation_applied !== 'none' && (
+                                  <div className="text-xs text-muted-foreground">
+                                    Transformation: {payload.transformation_applied}
+                                  </div>
+                                )}
+                              </div>
+                              
+                              <Badge 
+                                variant={log.status === 'success' ? 'default' : 'destructive'}
+                                className="text-xs"
+                              >
+                                {log.status}
+                              </Badge>
+                            </div>
+
+                            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                              <span className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                {new Date(log.timestamp).toLocaleString()}
+                              </span>
+                              {payload?.source_jurisdiction && (
+                                <span className="flex items-center gap-1">
+                                  <MapPin className="h-3 w-3" />
+                                  {payload.source_jurisdiction}
+                                </span>
+                              )}
+                            </div>
+
+                            {log.reasoning_chain && (
+                              <div className="text-xs bg-background/50 rounded p-2 mt-2">
+                                <span className="font-medium">Risk: </span>
+                                <span className={
+                                  (log.reasoning_chain as any)?.risk_flag === 'high' 
+                                    ? 'text-destructive font-medium' 
+                                    : 'text-accent'
+                                }>
+                                  {(log.reasoning_chain as any)?.risk_flag || 'N/A'}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </ScrollArea>
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground border rounded-lg bg-muted/20">
+                    <Database className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">No audit logs found for this node</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* AI Insights */}
       <div className="grid gap-6 md:grid-cols-1">

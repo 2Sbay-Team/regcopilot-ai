@@ -41,6 +41,7 @@ interface LineageEdge {
 interface LineageGraphProps {
   nodes: LineageNode[]
   edges: LineageEdge[]
+  onNodeClick?: (node: LineageNode) => void
 }
 
 const getNodeIcon = (type: string) => {
@@ -200,8 +201,16 @@ const applyLayout = (nodes: Node[], edges: Edge[], layout: LayoutType): Node[] =
   }
 }
 
-export const LineageGraph = ({ nodes: lineageNodes, edges: lineageEdges }: LineageGraphProps) => {
+export const LineageGraph = ({ nodes: lineageNodes, edges: lineageEdges, onNodeClick }: LineageGraphProps) => {
   const [layout, setLayout] = useState<LayoutType>('hierarchical')
+
+  // Handle node click
+  const handleNodeClick = useCallback((_event: React.MouseEvent, node: Node) => {
+    const lineageNode = lineageNodes.find(n => n.id === node.id)
+    if (lineageNode && onNodeClick) {
+      onNodeClick(lineageNode)
+    }
+  }, [lineageNodes, onNodeClick])
 
   // Transform lineage data into react-flow format
   const baseNodes: Node[] = useMemo(() => {
@@ -333,6 +342,7 @@ export const LineageGraph = ({ nodes: lineageNodes, edges: lineageEdges }: Linea
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onNodeClick={handleNodeClick}
         onInit={onInit}
         nodeTypes={nodeTypes}
         fitView
