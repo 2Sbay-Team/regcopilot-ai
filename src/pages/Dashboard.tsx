@@ -163,29 +163,7 @@ const Dashboard = () => {
             <span className="font-medium">Dashboard</span>
           </div>
 
-          {/* Right: Actions */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/help")}
-              className="hover:bg-muted"
-            >
-              <HelpCircle className="h-5 w-5" />
-            </Button>
-            <NotificationCenter />
-            <div className="flex items-center gap-3 pl-3 border-l border-border">
-              <div className="text-right">
-                <p className="text-sm font-medium leading-none">{profile?.full_name || "User"}</p>
-                <p className="text-xs text-muted-foreground">{profile?.organizations?.name || "Organization"}</p>
-              </div>
-              <Avatar className="h-9 w-9 border-2 border-primary/20">
-                <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
-                  {getUserInitials()}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-          </div>
+          
         </div>
       </div>
 

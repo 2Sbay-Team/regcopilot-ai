@@ -122,29 +122,8 @@ export const ModuleLayout = ({
               </div>
             </div>
 
-            {/* Right: Actions - Compact grouping */}
-            <div className="flex items-center gap-3">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate("/help")}
-                className="hover:bg-muted"
-              >
-                <HelpCircle className="h-5 w-5" />
-              </Button>
-              <NotificationCenter />
-              <div className="flex items-center gap-2">
-                <div className="text-right hidden md:block">
-                  <p className="text-sm font-medium leading-none">{profile?.full_name || "User"}</p>
-                  <p className="text-xs text-muted-foreground">{profile?.organizations?.name || "Organization"}</p>
-                </div>
-                <Avatar className="h-9 w-9 border-2 border-primary/20">
-                  <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
-                    {getUserInitials()}
-                  </AvatarFallback>
-                </Avatar>
-              </div>
-            </div>
+            {/* Right: Actions moved to AppLayout to avoid duplication */}
+            <div className="flex-1" />
           </div>
         </div>
       </div>
