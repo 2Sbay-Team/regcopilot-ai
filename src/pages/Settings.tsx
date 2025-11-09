@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/contexts/AuthContext"
+import { useLanguage } from "@/contexts/LanguageContext"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -12,6 +13,7 @@ import { Settings as SettingsIcon, Globe, DollarSign, User } from "lucide-react"
 
 const Settings = () => {
   const { user } = useAuth()
+  const { language: currentLanguage, updateLanguage } = useLanguage()
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [profile, setProfile] = useState<any>(null)
@@ -56,13 +58,13 @@ const Settings = () => {
 
       if (error) throw error
 
+      // Update language in context (instant UI update)
+      await updateLanguage(language)
+
       toast({
         title: t('settings.changesSaved', language),
         description: t('settings.changesSavedDesc', language),
       })
-
-      // Reload to apply language changes
-      window.location.reload()
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -75,13 +77,13 @@ const Settings = () => {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-6" dir={currentLanguage === 'ar' ? 'rtl' : 'ltr'}>
       <div>
         <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          {t('settings.title', language)}
+          {t('settings.title', currentLanguage)}
         </h1>
         <p className="text-muted-foreground font-medium">
-          {t('settings.subtitle', language)}
+          {t('settings.subtitle', currentLanguage)}
         </p>
       </div>
 
@@ -90,13 +92,13 @@ const Settings = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <User className="h-5 w-5 text-primary" />
-              {t('settings.profile', language)}
+              {t('settings.profile', currentLanguage)}
             </CardTitle>
             <CardDescription>Your account information</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="fullName">{t('settings.name', language)}</Label>
+              <Label htmlFor="fullName">{t('settings.name', currentLanguage)}</Label>
               <Input
                 id="fullName"
                 value={fullName}
@@ -105,7 +107,7 @@ const Settings = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">{t('settings.email', language)}</Label>
+              <Label htmlFor="email">{t('settings.email', currentLanguage)}</Label>
               <Input
                 id="email"
                 value={user?.email || ''}
@@ -120,7 +122,7 @@ const Settings = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <SettingsIcon className="h-5 w-5 text-primary" />
-              {t('settings.preferences', language)}
+              {t('settings.preferences', currentLanguage)}
             </CardTitle>
             <CardDescription>Customize your experience</CardDescription>
           </CardHeader>
@@ -128,7 +130,7 @@ const Settings = () => {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4 text-primary" />
-                <Label htmlFor="currency">{t('settings.currencyLabel', language)}</Label>
+                <Label htmlFor="currency">{t('settings.currencyLabel', currentLanguage)}</Label>
               </div>
               <Select value={currency} onValueChange={setCurrency}>
                 <SelectTrigger id="currency">
@@ -140,14 +142,14 @@ const Settings = () => {
                 </SelectContent>
               </Select>
               <p className="text-sm text-muted-foreground">
-                {t('settings.currencyDesc', language)}
+                {t('settings.currencyDesc', currentLanguage)}
               </p>
             </div>
 
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Globe className="h-4 w-4 text-primary" />
-                <Label htmlFor="language">{t('settings.languageLabel', language)}</Label>
+                <Label htmlFor="language">{t('settings.languageLabel', currentLanguage)}</Label>
               </div>
               <Select value={language} onValueChange={setLanguage}>
                 <SelectTrigger id="language">
@@ -161,7 +163,7 @@ const Settings = () => {
                 </SelectContent>
               </Select>
               <p className="text-sm text-muted-foreground">
-                {t('settings.languageDesc', language)}
+                {t('settings.languageDesc', currentLanguage)}
               </p>
             </div>
 
@@ -170,7 +172,7 @@ const Settings = () => {
               disabled={loading}
               className="w-full"
             >
-              {t('settings.saveChanges', language)}
+              {t('settings.saveChanges', currentLanguage)}
             </Button>
           </CardContent>
         </Card>

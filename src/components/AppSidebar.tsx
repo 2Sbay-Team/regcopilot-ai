@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react"
 import { 
   Shield, 
   FileCheck, 
@@ -24,8 +23,7 @@ import {
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
 import { t } from "@/lib/i18n"
-import { supabase } from "@/integrations/supabase/client"
-import { useAuth } from "@/contexts/AuthContext"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 import {
   Sidebar,
@@ -41,22 +39,8 @@ import {
 
 export function AppSidebar() {
   const { state } = useSidebar()
-  const { user } = useAuth()
+  const { language } = useLanguage()
   const isCollapsed = state === "collapsed"
-  const [language, setLanguage] = useState('en')
-
-  useEffect(() => {
-    const loadLanguage = async () => {
-      if (!user) return
-      const { data } = await supabase
-        .from('profiles')
-        .select('language')
-        .eq('id', user.id)
-        .single()
-      if (data?.language) setLanguage(data.language)
-    }
-    loadLanguage()
-  }, [user])
 
   const mainItems = [
     { titleKey: "nav.dashboard", url: "/dashboard", icon: LayoutDashboard },

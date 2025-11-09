@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/contexts/AuthContext"
+import { useLanguage } from "@/contexts/LanguageContext"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -25,13 +26,13 @@ const PLAN_LIMITS: Record<string, { tokens: number; models: string[]; price: num
 
 const Usage = () => {
   const { user } = useAuth()
+  const { language } = useLanguage()
   const [profile, setProfile] = useState<any>(null)
   const [subscription, setSubscription] = useState<any>(null)
   const [usageData, setUsageData] = useState<any[]>([])
   const [modelBreakdown, setModelBreakdown] = useState<any[]>([])
   const [monthlyStats, setMonthlyStats] = useState({ tokens: 0, cost: 0, requests: 0 })
   const [currency, setCurrency] = useState<string>('USD')
-  const [language, setLanguage] = useState<string>('en')
 
   useEffect(() => {
     loadProfile()
@@ -56,7 +57,6 @@ const Usage = () => {
     if (data) {
       setProfile(data)
       setCurrency(data.currency || 'USD')
-      setLanguage(data.language || 'en')
     }
   }
 

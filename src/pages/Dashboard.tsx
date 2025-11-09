@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/contexts/AuthContext"
+import { useLanguage } from "@/contexts/LanguageContext"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Shield, FileCheck, Leaf, Database, FileText, BookOpen, TrendingUp, Activity } from "lucide-react"
@@ -14,8 +15,8 @@ import { t } from "@/lib/i18n"
 
 const Dashboard = () => {
   const { user } = useAuth()
+  const { language } = useLanguage()
   const [profile, setProfile] = useState<any>(null)
-  const [language, setLanguage] = useState('en')
   const [stats, setStats] = useState({
     ai_systems: 0,
     gdpr_assessments: 0,
@@ -59,7 +60,6 @@ const Dashboard = () => {
       .single()
 
     setProfile(profileData)
-    if (profileData?.language) setLanguage(profileData.language)
 
     if (profileData?.organization_id) {
       // Get stats
