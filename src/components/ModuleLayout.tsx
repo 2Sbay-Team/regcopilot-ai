@@ -1,13 +1,7 @@
-import { ReactNode, useEffect, useState } from "react"
-import { useNavigate, useLocation } from "react-router-dom"
-import { Home, ChevronRight, HelpCircle, Brain, ShieldCheck, Sprout, FileText, TrendingUp, Zap, Network, Workflow, ServerCog, ShieldAlert, Scale } from "lucide-react"
+import { ReactNode } from "react"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { NotificationCenter } from "@/components/NotificationCenter"
 import { Footer } from "@/components/Footer"
 import { RealTimeStatusIndicator } from "@/components/RealTimeStatusIndicator"
-import { supabase } from "@/integrations/supabase/client"
-import { useAuth } from "@/contexts/AuthContext"
 import { useLanguage } from "@/contexts/LanguageContext"
 
 interface QuickAction {
@@ -33,91 +27,10 @@ export const ModuleLayout = ({
   quickActions = [],
   showStatus = true 
 }: ModuleLayoutProps) => {
-  const { user } = useAuth()
   const { language } = useLanguage()
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [profile, setProfile] = useState<any>(null)
-
-  useEffect(() => {
-    if (user) {
-      loadUserProfile()
-    }
-  }, [user])
-
-  const loadUserProfile = async () => {
-    if (!user) return
-
-    const { data: profileData } = await supabase
-      .from("profiles")
-      .select("*, organizations(*)")
-      .eq("id", user.id)
-      .single()
-
-    setProfile(profileData)
-  }
-
-  const getUserInitials = () => {
-    if (profile?.full_name) {
-      const names = profile.full_name.split(' ')
-      return names.map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
-    }
-    return user?.email?.[0]?.toUpperCase() || 'U'
-  }
-
-  const getPageIcon = () => {
-    const path = location.pathname
-    const iconMap: Record<string, JSX.Element> = {
-      '/ai-act': <Scale className="h-4 w-4" />,
-      '/gdpr': <ShieldCheck className="h-4 w-4" />,
-      '/esg': <Sprout className="h-4 w-4" />,
-      '/dora': <ServerCog className="h-4 w-4" />,
-      '/nis2': <ShieldAlert className="h-4 w-4" />,
-      '/dma': <Scale className="h-4 w-4" />,
-      '/reports': <FileText className="h-4 w-4" />,
-      '/compliance-score': <TrendingUp className="h-4 w-4" />,
-      '/regsense': <Brain className="h-4 w-4" />,
-      '/ai-gateway': <Zap className="h-4 w-4" />,
-      '/connectors': <Network className="h-4 w-4" />,
-      '/automation': <Workflow className="h-4 w-4" />,
-    }
-    return iconMap[path] || null
-  }
-
-  const getPageName = () => {
-    const path = location.pathname
-    const segments = path.split('/').filter(Boolean)
-    if (segments.length === 0) return 'Dashboard'
-    
-    // Convert path to readable name
-    const pageName = segments[segments.length - 1]
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
-    
-    return pageName
-  }
 
   return (
     <div className="min-h-screen flex flex-col" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-      {/* Enhanced Top Header - Sticky */}
-      <div className="sticky top-0 z-50 backdrop-blur-lg bg-background/80 border-b border-border/50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Left: Breadcrumb */}
-            <div className="flex items-center gap-2 text-sm flex-1">
-              <div className="flex items-center gap-2">
-                {getPageIcon()}
-                <span className="font-medium">{getPageName()}</span>
-              </div>
-            </div>
-
-            {/* Right: Actions moved to AppLayout to avoid duplication */}
-            <div className="flex-1" />
-          </div>
-        </div>
-      </div>
-
       {/* Main Content Area */}
       <div className="flex-1">
         <div className="container mx-auto px-6 py-6 space-y-6">
