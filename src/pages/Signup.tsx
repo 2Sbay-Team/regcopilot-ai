@@ -83,6 +83,24 @@ const Signup = () => {
     setLoading(true);
 
     try {
+      // Check for leaked password
+      const { data: leakCheckData, error: leakCheckError } = await supabase.functions.invoke('password-leak-check', {
+        body: { password }
+      });
+
+      if (leakCheckError) {
+        console.warn('Password leak check unavailable:', leakCheckError);
+        // Continue with signup even if check fails
+      } else if (leakCheckData?.is_leaked) {
+        toast({
+          title: "Insecure Password Detected",
+          description: `This password has been found in ${leakCheckData.breach_count} data breaches. Please choose a different password.`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
