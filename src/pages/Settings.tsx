@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/contexts/AuthContext"
 import { useLanguage } from "@/contexts/LanguageContext"
@@ -9,10 +10,11 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
 import { t } from "@/lib/i18n"
-import { Settings as SettingsIcon, Globe, DollarSign, User } from "lucide-react"
+import { Settings as SettingsIcon, Globe, DollarSign, User, Shield, ShieldCheck, ShieldOff } from "lucide-react"
 
 const Settings = () => {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const { language: currentLanguage, updateLanguage } = useLanguage()
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
@@ -20,6 +22,7 @@ const Settings = () => {
   const [currency, setCurrency] = useState<string>('USD')
   const [language, setLanguage] = useState<string>('en')
   const [fullName, setFullName] = useState<string>('')
+  const [mfaEnabled, setMfaEnabled] = useState(false)
 
   useEffect(() => {
     loadProfile()
@@ -39,6 +42,7 @@ const Settings = () => {
       setCurrency(data.currency || 'USD')
       setLanguage(data.language || 'en')
       setFullName(data.full_name || '')
+      setMfaEnabled(data.mfa_enabled || false)
     }
   }
 
@@ -73,6 +77,37 @@ const Settings = () => {
       })
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleMFAToggle = async () => {
+    if (mfaEnabled) {
+      // Disable MFA
+      setLoading(true)
+      try {
+        const { error } = await supabase.functions.invoke('mfa-setup', {
+          body: { action: 'disable' }
+        })
+
+        if (error) throw error
+
+        setMfaEnabled(false)
+        toast({
+          title: "MFA Disabled",
+          description: "Two-factor authentication has been disabled"
+        })
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message
+        })
+      } finally {
+        setLoading(false)
+      }
+    } else {
+      // Navigate to MFA setup
+      navigate('/mfa-setup')
     }
   }
 
@@ -174,6 +209,45 @@ const Settings = () => {
             >
               {t('settings.saveChanges', currentLanguage)}
             </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="cockpit-panel border-primary/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-primary" />
+              Security
+            </CardTitle>
+            <CardDescription>Manage your account security settings</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  {mfaEnabled ? (
+                    <ShieldCheck className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <ShieldOff className="h-5 w-5 text-muted-foreground" />
+                  )}
+                  <Label className="text-base font-semibold">
+                    Two-Factor Authentication
+                  </Label>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {mfaEnabled 
+                    ? "Your account is protected with 2FA" 
+                    : "Add an extra layer of security to your account"
+                  }
+                </p>
+              </div>
+              <Button
+                onClick={handleMFAToggle}
+                variant={mfaEnabled ? "outline" : "default"}
+                disabled={loading}
+              >
+                {mfaEnabled ? "Disable" : "Enable"} MFA
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
