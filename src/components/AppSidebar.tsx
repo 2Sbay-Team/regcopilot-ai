@@ -15,7 +15,8 @@ import {
   Zap,
   Bot,
   MessageSquare,
-  DollarSign
+  DollarSign,
+  User
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
@@ -53,6 +54,10 @@ const toolsItems = [
   { title: "Audit Trail", url: "/audit", icon: Database },
   { title: "Explainability", url: "/explainability", icon: Eye },
   { title: "Admin", url: "/admin", icon: Settings },
+]
+
+const accountItems = [
+  { title: "Settings", url: "/settings", icon: User },
 ]
 
 export function AppSidebar() {
@@ -104,6 +109,28 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {toolsItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink 
+                      to={item.url}
+                      className="hover:bg-accent/50 transition-colors"
+                      activeClassName="bg-accent text-accent-foreground font-medium"
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {!isCollapsed && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Account</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {accountItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 

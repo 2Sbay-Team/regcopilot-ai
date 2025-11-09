@@ -1031,23 +1031,29 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string | null
+          currency: string | null
           email: string
           full_name: string | null
           id: string
+          language: string | null
           organization_id: string
         }
         Insert: {
           created_at?: string | null
+          currency?: string | null
           email: string
           full_name?: string | null
           id: string
+          language?: string | null
           organization_id: string
         }
         Update: {
           created_at?: string | null
+          currency?: string | null
           email?: string
           full_name?: string | null
           id?: string
+          language?: string | null
           organization_id?: string
         }
         Relationships: [

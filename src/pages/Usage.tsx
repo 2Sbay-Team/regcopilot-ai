@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
 import { DollarSign, TrendingUp, Zap, CreditCard, ArrowUpRight } from "lucide-react"
 import { format, subDays, parseISO } from "date-fns"
+import { convertCurrency, formatCurrency, t } from "@/lib/i18n"
 
 const MODEL_PRICING: Record<string, number> = {
   'google/gemini-2.5-flash': 0.05,
@@ -29,6 +30,8 @@ const Usage = () => {
   const [usageData, setUsageData] = useState<any[]>([])
   const [modelBreakdown, setModelBreakdown] = useState<any[]>([])
   const [monthlyStats, setMonthlyStats] = useState({ tokens: 0, cost: 0, requests: 0 })
+  const [currency, setCurrency] = useState<string>('USD')
+  const [language, setLanguage] = useState<string>('en')
 
   useEffect(() => {
     loadProfile()
@@ -50,7 +53,11 @@ const Usage = () => {
       .eq('id', user.id)
       .single()
 
-    setProfile(data)
+    if (data) {
+      setProfile(data)
+      setCurrency(data.currency || 'USD')
+      setLanguage(data.language || 'en')
+    }
   }
 
   const loadSubscription = async () => {
@@ -123,15 +130,18 @@ const Usage = () => {
 
   const planConfig = subscription ? PLAN_LIMITS[subscription.plan] : PLAN_LIMITS.free
   const tokenUsagePercentage = (monthlyStats.tokens / planConfig.tokens) * 100
+  
+  const convertedPrice = convertCurrency(planConfig.price, 'USD', currency)
+  const convertedCost = convertCurrency(monthlyStats.cost, 'USD', currency)
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div>
         <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          Usage & Billing
+          {t('usage.title', language)}
         </h1>
         <p className="text-muted-foreground font-medium">
-          Track token usage, costs, and manage your subscription
+          {t('usage.subtitle', language)}
         </p>
       </div>
 
@@ -142,25 +152,25 @@ const Usage = () => {
             <div>
               <CardTitle className="flex items-center gap-2">
                 <CreditCard className="h-5 w-5 text-primary" />
-                Current Plan: <span className="capitalize">{subscription?.plan || 'Free'}</span>
+                {t('usage.currentPlan', language)}: <span className="capitalize">{subscription?.plan || 'Free'}</span>
               </CardTitle>
               <CardDescription>
                 {subscription?.status === 'trialing' ? 
-                  `Trial ends ${subscription.trial_end ? format(new Date(subscription.trial_end), 'MMM dd, yyyy') : 'soon'}` :
-                  `Billing cycle renews ${subscription?.renewal_date ? format(new Date(subscription.renewal_date), 'MMM dd, yyyy') : 'N/A'}`
+                  `${t('usage.trialEnds', language)} ${subscription.trial_end ? format(new Date(subscription.trial_end), 'MMM dd, yyyy') : 'soon'}` :
+                  `${t('usage.renewsOn', language)} ${subscription?.renewal_date ? format(new Date(subscription.renewal_date), 'MMM dd, yyyy') : 'N/A'}`
                 }
               </CardDescription>
             </div>
             <div className="text-right">
-              <div className="text-3xl font-bold">${planConfig.price}</div>
-              <div className="text-sm text-muted-foreground">/month</div>
+              <div className="text-3xl font-bold">{formatCurrency(convertedPrice, currency)}</div>
+              <div className="text-sm text-muted-foreground">{t('usage.month', language)}</div>
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Monthly Token Usage</span>
+              <span className="text-sm font-medium">{t('usage.monthlyTokenUsage', language)}</span>
               <span className="text-sm text-muted-foreground">
                 {monthlyStats.tokens.toLocaleString()} / {planConfig.tokens.toLocaleString()}
               </span>
@@ -180,22 +190,22 @@ const Usage = () => {
           <div className="grid grid-cols-3 gap-4 pt-4 border-t">
             <div>
               <div className="text-2xl font-bold">{monthlyStats.requests.toLocaleString()}</div>
-              <div className="text-xs text-muted-foreground">Total Requests</div>
+              <div className="text-xs text-muted-foreground">{t('usage.totalRequests', language)}</div>
             </div>
             <div>
-              <div className="text-2xl font-bold">${monthlyStats.cost.toFixed(2)}</div>
-              <div className="text-xs text-muted-foreground">Total Cost</div>
+              <div className="text-2xl font-bold">{formatCurrency(convertedCost, currency)}</div>
+              <div className="text-xs text-muted-foreground">{t('usage.totalCost', language)}</div>
             </div>
             <div>
               <div className="text-2xl font-bold">{planConfig.models.length}</div>
-              <div className="text-xs text-muted-foreground">Available Models</div>
+              <div className="text-xs text-muted-foreground">{t('usage.availableModels', language)}</div>
             </div>
           </div>
 
           {subscription?.plan !== 'enterprise' && (
             <Button className="w-full mt-4">
-              <ArrowUpRight className="mr-2 h-4 w-4" />
-              Upgrade Plan
+              <ArrowUpRight className={language === 'ar' ? 'ml-2 h-4 w-4' : 'mr-2 h-4 w-4'} />
+              {t('usage.upgradePlan', language)}
             </Button>
           )}
         </CardContent>
@@ -207,9 +217,9 @@ const Usage = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
-              Daily Token Usage
+              {t('usage.dailyTokenUsage', language)}
             </CardTitle>
-            <CardDescription>Last 30 days</CardDescription>
+            <CardDescription>{t('usage.last30Days', language)}</CardDescription>
           </CardHeader>
           <CardContent>
             {usageData.length > 0 ? (
@@ -235,7 +245,7 @@ const Usage = () => {
                 </LineChart>
               </ResponsiveContainer>
             ) : (
-              <p className="text-muted-foreground text-center py-8">No usage data yet</p>
+              <p className="text-muted-foreground text-center py-8">{t('usage.noUsageData', language)}</p>
             )}
           </CardContent>
         </Card>
@@ -244,9 +254,9 @@ const Usage = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <DollarSign className="h-5 w-5" />
-              Cost by Model
+              {t('usage.costByModel', language)}
             </CardTitle>
-            <CardDescription>Distribution breakdown</CardDescription>
+            <CardDescription>{t('usage.distributionBreakdown', language)}</CardDescription>
           </CardHeader>
           <CardContent>
             {modelBreakdown.length > 0 ? (
@@ -289,14 +299,14 @@ const Usage = () => {
                         <span className="font-medium">{item.model.split('/')[1] || item.model}</span>
                       </div>
                       <div className="text-muted-foreground">
-                        ${item.cost.toFixed(4)}
+                        {formatCurrency(convertCurrency(item.cost, 'USD', currency), currency)}
                       </div>
                     </div>
                   ))}
                 </div>
               </>
             ) : (
-              <p className="text-muted-foreground text-center py-8">No model usage data</p>
+              <p className="text-muted-foreground text-center py-8">{t('usage.noModelData', language)}</p>
             )}
           </CardContent>
         </Card>
@@ -305,8 +315,8 @@ const Usage = () => {
       {/* Plan Comparison */}
       <Card className="cockpit-panel">
         <CardHeader>
-          <CardTitle>Available Plans</CardTitle>
-          <CardDescription>Compare features and pricing</CardDescription>
+          <CardTitle>{t('usage.availablePlans', language)}</CardTitle>
+          <CardDescription>{t('usage.comparePlans', language)}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-3 gap-6">
@@ -314,27 +324,27 @@ const Usage = () => {
               <Card key={plan} className={subscription?.plan === plan ? 'border-primary' : ''}>
                 <CardHeader>
                   <CardTitle className="capitalize">{plan}</CardTitle>
-                  <div className="text-3xl font-bold">${config.price}</div>
-                  <CardDescription>/month</CardDescription>
+                  <div className="text-3xl font-bold">{formatCurrency(convertCurrency(config.price, 'USD', currency), currency)}</div>
+                  <CardDescription>{t('usage.month', language)}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
                       <Zap className="h-4 w-4 text-primary" />
-                      {config.tokens.toLocaleString()} tokens/month
+                      {config.tokens.toLocaleString()} {t('usage.tokens', language)}
                     </div>
                     <div className="flex items-center gap-2">
                       <TrendingUp className="h-4 w-4 text-primary" />
-                      {config.models.length} AI models
+                      {config.models.length} {t('usage.models', language)}
                     </div>
                   </div>
                   {subscription?.plan !== plan && (
                     <Button variant="outline" className="w-full">
-                      {PLAN_LIMITS[subscription?.plan || 'free'].price < config.price ? 'Upgrade' : 'Change Plan'}
+                      {PLAN_LIMITS[subscription?.plan || 'free'].price < config.price ? t('usage.upgrade', language) : t('usage.changePlan', language)}
                     </Button>
                   )}
                   {subscription?.plan === plan && (
-                    <Badge className="w-full justify-center">Current Plan</Badge>
+                    <Badge className="w-full justify-center">{t('usage.currentPlanBadge', language)}</Badge>
                   )}
                 </CardContent>
               </Card>
