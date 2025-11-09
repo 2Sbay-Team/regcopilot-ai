@@ -22,7 +22,7 @@ import {
   TrendingUp,
   Store,
   Play,
-  Brain,
+  Sparkles,
   Calendar,
   Search,
   ChevronRight,
@@ -85,7 +85,7 @@ export function AppSidebar() {
     { 
       titleKey: "nav.continuousIntelligence", 
       url: "/continuous-intelligence", 
-      icon: Brain,
+      icon: TrendingUp,
     },
     { 
       titleKey: "nav.aiAct", 
@@ -151,7 +151,7 @@ export function AppSidebar() {
     { 
       titleKey: "nav.regSense", 
       url: "/regsense", 
-      icon: Brain,
+      icon: Sparkles,
     },
     { 
       titleKey: "nav.scheduledJobs", 

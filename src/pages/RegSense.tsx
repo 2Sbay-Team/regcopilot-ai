@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Send, Brain, FileText, Shield, Leaf, AlertCircle, Clock, CheckCircle2, TrendingUp } from "lucide-react";
+import { Send, Sparkles, FileText, Shield, Leaf, AlertCircle, Clock, CheckCircle2, TrendingUp } from "lucide-react";
 
 type ContextScope = 'ai_act' | 'gdpr' | 'esg' | 'all';
 
@@ -118,7 +118,7 @@ export default function RegSense() {
 
   const getScopeIcon = (s: ContextScope) => {
     switch (s) {
-      case 'ai_act': return <Brain className="h-4 w-4" />;
+      case 'ai_act': return <Shield className="h-4 w-4" />;
       case 'gdpr': return <Shield className="h-4 w-4" />;
       case 'esg': return <Leaf className="h-4 w-4" />;
       case 'all': return <TrendingUp className="h-4 w-4" />;
@@ -139,7 +139,7 @@ export default function RegSense() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <Brain className="h-8 w-8 text-primary" />
+            <Sparkles className="h-8 w-8 text-primary" />
             <h1 className="text-4xl font-bold">RegSense Advisor</h1>
           </div>
           <p className="text-muted-foreground text-lg">
@@ -216,7 +216,7 @@ export default function RegSense() {
               <ScrollArea ref={scrollRef} className="flex-1 h-[calc(100%-12rem)] px-6">
                 {messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
-                    <Brain className="h-16 w-16 mb-4 opacity-20" />
+                    <Sparkles className="h-16 w-16 mb-4 opacity-20" />
                     <p className="text-lg font-medium mb-2">Welcome to RegSense Advisor</p>
                     <p className="text-sm max-w-md">
                       Ask any compliance question and get answers grounded in official regulations 
