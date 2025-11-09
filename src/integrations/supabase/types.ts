@@ -1545,6 +1545,44 @@ export type Database = {
           },
         ]
       }
+      login_attempts: {
+        Row: {
+          created_at: string | null
+          id: string
+          ip_address: unknown
+          organization_id: string | null
+          success: boolean
+          user_agent: string | null
+          user_email: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          organization_id?: string | null
+          success: boolean
+          user_agent?: string | null
+          user_email: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          organization_id?: string | null
+          success?: boolean
+          user_agent?: string | null
+          user_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "login_attempts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mcp_agents: {
         Row: {
           created_at: string | null
@@ -2018,6 +2056,27 @@ export type Database = {
         }
         Relationships: []
       }
+      password_history: {
+        Row: {
+          created_at: string | null
+          id: string
+          password_hash: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          password_hash: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          password_hash?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       password_leak_checks: {
         Row: {
           checked_at: string | null
@@ -2045,42 +2104,113 @@ export type Database = {
         }
         Relationships: []
       }
+      password_policies: {
+        Row: {
+          created_at: string | null
+          expiry_days: number | null
+          id: string
+          lockout_duration_minutes: number | null
+          max_login_attempts: number | null
+          min_length: number | null
+          organization_id: string
+          password_history_count: number | null
+          require_lowercase: boolean | null
+          require_numbers: boolean | null
+          require_special_chars: boolean | null
+          require_uppercase: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          expiry_days?: number | null
+          id?: string
+          lockout_duration_minutes?: number | null
+          max_login_attempts?: number | null
+          min_length?: number | null
+          organization_id: string
+          password_history_count?: number | null
+          require_lowercase?: boolean | null
+          require_numbers?: boolean | null
+          require_special_chars?: boolean | null
+          require_uppercase?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          expiry_days?: number | null
+          id?: string
+          lockout_duration_minutes?: number | null
+          max_login_attempts?: number | null
+          min_length?: number | null
+          organization_id?: string
+          password_history_count?: number | null
+          require_lowercase?: boolean | null
+          require_numbers?: boolean | null
+          require_special_chars?: boolean | null
+          require_uppercase?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "password_policies_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string | null
           currency: string | null
           email: string
+          force_password_change: boolean | null
           full_name: string | null
           id: string
           language: string | null
+          last_password_change_reminder: string | null
           mfa_enabled: boolean | null
           mfa_secret: string | null
           mfa_secret_temp: string | null
           organization_id: string
+          password_changed_at: string | null
+          password_expires_at: string | null
+          password_expiry_days: number | null
         }
         Insert: {
           created_at?: string | null
           currency?: string | null
           email: string
+          force_password_change?: boolean | null
           full_name?: string | null
           id: string
           language?: string | null
+          last_password_change_reminder?: string | null
           mfa_enabled?: boolean | null
           mfa_secret?: string | null
           mfa_secret_temp?: string | null
           organization_id: string
+          password_changed_at?: string | null
+          password_expires_at?: string | null
+          password_expiry_days?: number | null
         }
         Update: {
           created_at?: string | null
           currency?: string | null
           email?: string
+          force_password_change?: boolean | null
           full_name?: string | null
           id?: string
           language?: string | null
+          last_password_change_reminder?: string | null
           mfa_enabled?: boolean | null
           mfa_secret?: string | null
           mfa_secret_temp?: string | null
           organization_id?: string
+          password_changed_at?: string | null
+          password_expires_at?: string | null
+          password_expiry_days?: number | null
         }
         Relationships: [
           {
@@ -2753,6 +2883,8 @@ export type Database = {
         Args: { org_id: string; tokens_consumed: number }
         Returns: undefined
       }
+      is_account_locked: { Args: { user_email: string }; Returns: Json }
+      is_password_expired: { Args: { user_id: string }; Returns: boolean }
       match_regulatory_chunks: {
         Args: {
           match_count?: number
