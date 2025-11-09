@@ -293,9 +293,12 @@ export default function SecurityCenter() {
                             <div className="flex items-center gap-2 mb-1">
                               {getStatusIcon(test.status)}
                               <h4 className="font-medium">{test.name}</h4>
-                              <Badge variant={getSeverityColor(test.severity) as any}>
-                                {test.severity.toUpperCase()}
-                              </Badge>
+                              {/* Only show severity badge for failures and warnings */}
+                              {test.status !== 'pass' && (
+                                <Badge variant={getSeverityColor(test.severity) as any}>
+                                  {test.severity.toUpperCase()}
+                                </Badge>
+                              )}
                             </div>
                             <p className="text-sm text-muted-foreground mb-2">
                               {test.message}
