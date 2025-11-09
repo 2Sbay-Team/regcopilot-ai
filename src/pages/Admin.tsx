@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
-import { ArrowLeft, Shield, Users, Building } from "lucide-react"
+import { ArrowLeft, Shield, Users, Building, FileText, CheckCircle, AlertCircle } from "lucide-react"
 
 const Admin = () => {
   const { user } = useAuth()
@@ -241,6 +241,53 @@ const Admin = () => {
                 </TableBody>
               </Table>
             )}
+          </CardContent>
+        </Card>
+
+        {/* Automated Reports Schedule */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              Automated Report Scheduling
+            </CardTitle>
+            <CardDescription>
+              Configure automatic compliance report generation
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 rounded-lg border bg-muted/20">
+                <div className="space-y-1">
+                  <div className="font-medium">Monthly Unified Reports</div>
+                  <div className="text-sm text-muted-foreground">
+                    Automatically generate compliance reports on the 1st of every month at 9:00 AM UTC
+                  </div>
+                </div>
+                <Badge className="bg-green-500">
+                  <CheckCircle className="h-3 w-3 mr-1" />
+                  Active
+                </Badge>
+              </div>
+
+              <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 p-4 rounded-lg">
+                <div className="flex gap-3">
+                  <AlertCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div className="space-y-2 text-sm">
+                    <p className="font-medium text-blue-900 dark:text-blue-100">
+                      Automated Scheduling Enabled
+                    </p>
+                    <p className="text-blue-800 dark:text-blue-200">
+                      Pro and Enterprise plan organizations will receive automated monthly reports
+                      combining AI Act, GDPR, and ESG compliance data. Reports are stored in the Reports page.
+                    </p>
+                    <p className="text-blue-700 dark:text-blue-300 text-xs">
+                      Schedule: 1st day of each month at 9:00 AM UTC
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
