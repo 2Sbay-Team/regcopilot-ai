@@ -1,11 +1,14 @@
 import { useState } from "react"
-import { Upload, FileText, Loader2, CheckCircle2, XCircle } from "lucide-react"
+import { Upload, FileText, Loader2, CheckCircle2, XCircle, Shield, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { supabase } from "@/integrations/supabase/client"
 import { useToast } from "@/hooks/use-toast"
+import { useLanguage } from "@/contexts/LanguageContext"
+import { t } from "@/lib/i18n"
 
 interface DocumentUploadSectionProps {
   docType: 'ai_act' | 'gdpr' | 'esg'
@@ -23,6 +26,7 @@ export const DocumentUploadSection = ({
   description = "Upload a document for automatic analysis and field pre-filling"
 }: DocumentUploadSectionProps) => {
   const { toast } = useToast()
+  const { language } = useLanguage()
   const [file, setFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
   const [analyzing, setAnalyzing] = useState(false)
@@ -40,11 +44,12 @@ export const DocumentUploadSection = ({
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
     if (selectedFile) {
-      // Check file size (25MB limit)
-      if (selectedFile.size > 25 * 1024 * 1024) {
+      // Check file size (500MB limit for large documents)
+      const maxSizeBytes = 500 * 1024 * 1024 // 500MB
+      if (selectedFile.size > maxSizeBytes) {
         toast({
           title: "File too large",
-          description: "Maximum file size is 25MB",
+          description: "Maximum file size is 500MB. For larger files, please contact support.",
           variant: "destructive",
         })
         return
@@ -158,12 +163,26 @@ export const DocumentUploadSection = ({
   return (
     <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
       <div className="space-y-4">
+        {/* Privacy Notice */}
+        <Alert className="bg-primary/5 border-primary/20">
+          <Lock className="h-4 w-4 text-primary" />
+          <AlertDescription className="text-sm">
+            <strong>{t('upload.privacyTitle', language)}</strong>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {t('upload.privacyDesc', language)}
+            </p>
+          </AlertDescription>
+        </Alert>
+
         <div>
           <h3 className="text-lg font-semibold flex items-center gap-2">
             <FileText className="h-5 w-5" />
             {title}
           </h3>
           <p className="text-sm text-muted-foreground mt-1">{description}</p>
+          <p className="text-xs text-muted-foreground mt-2">
+            {t('upload.maxFileSize', language)}: 500MB • {t('upload.supportedFormats', language)}
+          </p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -192,7 +211,7 @@ export const DocumentUploadSection = ({
           {file && (
             <div className="flex-1 flex items-center justify-between">
               <span className="text-sm text-muted-foreground truncate max-w-xs">
-                {file.name}
+                {file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)
               </span>
               <Button
                 onClick={handleUploadAndAnalyze}

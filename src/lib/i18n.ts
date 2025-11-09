@@ -184,6 +184,12 @@ export const translations: Record<string, Record<string, string>> = {
     'aiact.assessmentCompleteDesc': 'AI system classified as',
     'aiact.assessmentFailed': 'Assessment Failed',
     
+    // File Upload & Privacy
+    'upload.privacyTitle': '🔒 Your Data is Secure',
+    'upload.privacyDesc': 'All uploaded documents are encrypted end-to-end. Your data is stored in secure EU-based servers with enterprise-grade encryption. Only authorized users in your organization can access these files. We never share your data with third parties.',
+    'upload.maxFileSize': 'Maximum file size',
+    'upload.supportedFormats': 'Supported formats: PDF, Word, Excel, CSV',
+    
     // Settings
     'settings.title': 'Settings',
     'settings.subtitle': 'Manage your account preferences',
@@ -353,6 +359,12 @@ export const translations: Record<string, Record<string, string>> = {
     'aiact.assessmentCompleteDesc': 'Système IA classé comme',
     'aiact.assessmentFailed': 'Échec de l\'Évaluation',
     
+    // File Upload & Privacy
+    'upload.privacyTitle': '🔒 Vos Données sont Sécurisées',
+    'upload.privacyDesc': 'Tous les documents téléchargés sont chiffrés de bout en bout. Vos données sont stockées sur des serveurs sécurisés basés dans l\'UE avec un chiffrement de niveau entreprise. Seuls les utilisateurs autorisés de votre organisation peuvent accéder à ces fichiers. Nous ne partageons jamais vos données avec des tiers.',
+    'upload.maxFileSize': 'Taille maximale du fichier',
+    'upload.supportedFormats': 'Formats supportés: PDF, Word, Excel, CSV',
+    
     'settings.title': 'Paramètres',
     'settings.subtitle': 'Gérez vos préférences de compte',
     'settings.preferences': 'Préférences',
@@ -521,6 +533,12 @@ export const translations: Record<string, Record<string, string>> = {
     'aiact.assessmentCompleteDesc': 'KI-System klassifiziert als',
     'aiact.assessmentFailed': 'Bewertung Fehlgeschlagen',
     
+    // File Upload & Privacy
+    'upload.privacyTitle': '🔒 Ihre Daten sind Sicher',
+    'upload.privacyDesc': 'Alle hochgeladenen Dokumente werden Ende-zu-Ende verschlüsselt. Ihre Daten werden auf sicheren EU-basierten Servern mit Verschlüsselung auf Unternehmensniveau gespeichert. Nur autorisierte Benutzer in Ihrer Organisation können auf diese Dateien zugreifen. Wir teilen Ihre Daten niemals mit Dritten.',
+    'upload.maxFileSize': 'Maximale Dateigröße',
+    'upload.supportedFormats': 'Unterstützte Formate: PDF, Word, Excel, CSV',
+    
     // Scheduled Jobs
     'scheduledJobs.title': 'Geplante Aufgaben',
     'scheduledJobs.subtitle': 'Compliance-Workflows und Scans automatisieren',
@@ -684,6 +702,48 @@ export const translations: Record<string, Record<string, string>> = {
     'usage.currentPlanBadge': 'الخطة الحالية',
     'usage.noUsageData': 'لا توجد بيانات استخدام',
     'usage.noModelData': 'لا توجد بيانات نموذج',
+    
+    // AI Act Copilot
+    'aiact.title': 'مدقق قانون الذكاء الاصطناعي',
+    'aiact.subtitle': 'تصنيف المخاطر الآلي والامتثال',
+    'aiact.howToUse': 'كيفية استخدام مدقق قانون الذكاء الاصطناعي',
+    'aiact.systemNameHelp': 'أدخل اسمًا وصفيًا لنظام الذكاء الاصطناعي الخاص بك',
+    'aiact.purposeHelp': 'صف ما يفعله نظام الذكاء الاصطناعي الخاص بك وحالة الاستخدام الرئيسية',
+    'aiact.sectorHelp': 'حدد الصناعة أو المجال. تشمل القطاعات عالية المخاطر: التوظيف، التعرف البيومتري، إنفاذ القانون، التعليم، البنية التحتية الحرجة',
+    'aiact.analysisInfo': 'سيقوم الذكاء الاصطناعي بتحليل نظامك وتصنيفه وفقًا لفئات مخاطر قانون الذكاء الاصطناعي للاتحاد الأوروبي',
+    'aiact.formTitle': 'معلومات نظام الذكاء الاصطناعي',
+    'aiact.formDescription': 'قدم تفاصيل حول نظام الذكاء الاصطناعي الخاص بك لتقييم المخاطر',
+    'aiact.systemName': 'اسم النظام',
+    'aiact.systemNameTooltip': 'أدخل اسمًا واضحًا ووصفيًا لنظام الذكاء الاصطناعي الخاص بك',
+    'aiact.systemNamePlaceholder': 'مثال: مساعد فحص السيرة الذاتية',
+    'aiact.purpose': 'الغرض',
+    'aiact.purposeTooltip': 'صف ما يفعله الذكاء الاصطناعي الخاص بك وكيف يتخذ القرارات والبيانات التي يعالجها',
+    'aiact.purposePlaceholder': 'مثال: يحلل طلبات الوظائف ويستخرج مؤهلات المرشحين',
+    'aiact.purposeHint': 'كن محددًا: ما البيانات التي يعالجها؟ ما القرارات التي يتخذها؟',
+    'aiact.sector': 'القطاع',
+    'aiact.sectorTooltip': 'حدد قطاع الصناعة الأساسي',
+    'aiact.sectorPlaceholder': 'مثال: التوظيف',
+    'aiact.highRiskSectors': 'القطاعات عالية المخاطر:',
+    'aiact.limitedRiskSectors': 'القطاعات ذات المخاطر المحدودة:',
+    'aiact.analyzing': 'جارٍ التحليل...',
+    'aiact.runAssessment': 'تشغيل التقييم',
+    'aiact.riskClassification': 'تصنيف المخاطر',
+    'aiact.riskLevel': 'مستوى المخاطر',
+    'aiact.complianceSummary': 'ملخص الامتثال',
+    'aiact.aiGenerated': 'تحليل تم إنشاؤه بواسطة الذكاء الاصطناعي',
+    'aiact.viewExplainability': 'عرض القابلية للتفسير',
+    'aiact.evidenceCitations': 'الأدلة والاستشهادات',
+    'aiact.completeForm': 'أكمل النموذج لتشغيل تقييم قانون الذكاء الاصطناعي',
+    'aiact.assessmentComplete': 'اكتمل التقييم',
+    'aiact.assessmentCompleteDesc': 'تم تصنيف نظام الذكاء الاصطناعي كـ',
+    'aiact.assessmentFailed': 'فشل التقييم',
+    
+    // File Upload & Privacy
+    'upload.privacyTitle': '🔒 بياناتك آمنة',
+    'upload.privacyDesc': 'جميع المستندات المرفوعة مشفرة من طرف إلى طرف. يتم تخزين بياناتك على خوادم آمنة في الاتحاد الأوروبي مع تشفير على مستوى المؤسسات. يمكن للمستخدمين المصرح لهم فقط في مؤسستك الوصول إلى هذه الملفات. نحن لا نشارك بياناتك مع أطراف ثالثة أبدًا.',
+    'upload.maxFileSize': 'الحد الأقصى لحجم الملف',
+    'upload.supportedFormats': 'الصيغ المدعومة: PDF، Word، Excel، CSV',
+    
     'settings.title': 'الإعدادات',
     'settings.subtitle': 'إدارة تفضيلات حسابك',
     'settings.preferences': 'التفضيلات',
