@@ -29,7 +29,7 @@ import {
   Wrench
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
-import { RefinedLogoMinimal } from "@/components/RefinedLogo"
+import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { t } from "@/lib/i18n"
 import { useLanguage } from "@/contexts/LanguageContext"
@@ -267,23 +267,23 @@ export function AppSidebar() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="w-8 h-8 rounded-sm flex items-center justify-center cursor-pointer">
-                      <RefinedLogoMinimal size={32} />
+                      <RoboticShieldLogo size={32} />
                     </div>
                   </TooltipTrigger>
                   <TooltipContent side="right">
                     <p className="font-semibold">Regulix</p>
-                    <p className="text-xs text-muted-foreground">Precision Regulatory Intelligence</p>
+                    <p className="text-xs text-muted-foreground">Regulatory Intelligence</p>
                   </TooltipContent>
                 </Tooltip>
               ) : (
                 <div className="flex items-center gap-3">
-                  <RefinedLogoMinimal size={32} />
+                  <RoboticShieldLogo size={32} />
                   <div>
-                    <span className="font-bold text-base block leading-tight tracking-tight" style={{ fontFamily: '"Space Grotesk", system-ui, sans-serif' }}>
-                      REGULIX
+                    <span className="font-semibold text-base block leading-tight">
+                      Regulix
                     </span>
-                    <span className="text-[10px] text-muted-foreground leading-none tracking-wider uppercase">
-                      Precision Intelligence
+                    <span className="text-xs text-muted-foreground leading-none">
+                      Regulatory Intelligence
                     </span>
                   </div>
                 </div>
