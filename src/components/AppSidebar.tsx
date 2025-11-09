@@ -12,7 +12,10 @@ import {
   GitBranch,
   Mail,
   ShieldCheck,
-  Zap
+  Zap,
+  Bot,
+  MessageSquare,
+  DollarSign
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
@@ -41,11 +44,13 @@ const toolsItems = [
   { title: "DataSage", url: "/data-lineage", icon: GitBranch },
   { title: "DSAR Queue", url: "/dsar", icon: Mail },
   { title: "Audit Verify", url: "/audit-verify", icon: ShieldCheck },
+  { title: "Model Registry", url: "/model-registry", icon: Bot },
+  { title: "Prompt Manager", url: "/prompts", icon: MessageSquare },
+  { title: "Usage & Billing", url: "/usage", icon: DollarSign },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "Reports", url: "/reports", icon: FileText },
   { title: "RAG Search", url: "/rag-search", icon: BookOpen },
   { title: "Audit Trail", url: "/audit", icon: Database },
-  { title: "Model Registry", url: "/models", icon: Settings },
   { title: "Explainability", url: "/explainability", icon: Eye },
   { title: "Admin", url: "/admin", icon: Settings },
 ]

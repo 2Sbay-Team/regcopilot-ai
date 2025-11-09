@@ -111,6 +111,59 @@ export type Database = {
           },
         ]
       }
+      ai_models: {
+        Row: {
+          compliance_status: string | null
+          created_at: string | null
+          dataset_ref: string | null
+          id: string
+          model_type: string | null
+          name: string
+          organization_id: string
+          provider: string | null
+          registered_by: string | null
+          risk_tag: string | null
+          updated_at: string | null
+          version: string | null
+        }
+        Insert: {
+          compliance_status?: string | null
+          created_at?: string | null
+          dataset_ref?: string | null
+          id?: string
+          model_type?: string | null
+          name: string
+          organization_id: string
+          provider?: string | null
+          registered_by?: string | null
+          risk_tag?: string | null
+          updated_at?: string | null
+          version?: string | null
+        }
+        Update: {
+          compliance_status?: string | null
+          created_at?: string | null
+          dataset_ref?: string | null
+          id?: string
+          model_type?: string | null
+          name?: string
+          organization_id?: string
+          provider?: string | null
+          registered_by?: string | null
+          risk_tag?: string | null
+          updated_at?: string | null
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_models_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_systems: {
         Row: {
           created_at: string | null
@@ -1088,6 +1141,86 @@ export type Database = {
           status?: string
           total_chunks?: number | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          created_at: string | null
+          id: string
+          monthly_token_limit: number | null
+          organization_id: string
+          plan: string
+          renewal_date: string | null
+          status: string
+          trial_end: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          monthly_token_limit?: number | null
+          organization_id: string
+          plan?: string
+          renewal_date?: string | null
+          status?: string
+          trial_end?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          monthly_token_limit?: number | null
+          organization_id?: string
+          plan?: string
+          renewal_date?: string | null
+          status?: string
+          trial_end?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      system_prompts: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_modified: string | null
+          modified_by: string | null
+          module: string
+          role: string
+          version: number | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_modified?: string | null
+          modified_by?: string | null
+          module: string
+          role?: string
+          version?: number | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_modified?: string | null
+          modified_by?: string | null
+          module?: string
+          role?: string
+          version?: number | null
         }
         Relationships: []
       }
