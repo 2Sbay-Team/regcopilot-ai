@@ -144,115 +144,128 @@ const AIActCopilot = () => {
         </Card>
 
         <div className="grid gap-6 md:grid-cols-2">
-          {/* Form */}
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('aiact.formTitle', language)}</CardTitle>
-              <CardDescription>
-                {t('aiact.formDescription', language)}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <TooltipProvider>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Label htmlFor="name">{t('aiact.systemName', language)} *</Label>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-xs">
-                          <p>{t('aiact.systemNameTooltip', language)}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder={t('aiact.systemNamePlaceholder', language)}
-                      required
-                      disabled={loading}
-                      maxLength={200}
-                    />
-                  </div>
+          {/* Left column: Upload + Form */}
+          <div className="space-y-6">
+            {uploadEnabled && profile?.organization_id ? (
+              <DocumentUploadSection
+                docType="ai_act"
+                organizationId={profile.organization_id}
+                onAnalysisComplete={handleDocumentAnalysis}
+                title="Upload Annex IV or System Docs"
+                description="Upload PDFs/Docs to auto-extract AI system details."
+              />
+            ) : null}
 
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Label htmlFor="purpose">{t('aiact.purpose', language)} *</Label>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-xs">
-                          <p>{t('aiact.purposeTooltip', language)}</p>
-                        </TooltipContent>
-                      </Tooltip>
+            {/* Form */}
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('aiact.formTitle', language)}</CardTitle>
+                <CardDescription>
+                  {t('aiact.formDescription', language)}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <TooltipProvider>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Label htmlFor="name">{t('aiact.systemName', language)} *</Label>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">
+                            <p>{t('aiact.systemNameTooltip', language)}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder={t('aiact.systemNamePlaceholder', language)}
+                        required
+                        disabled={loading}
+                        maxLength={200}
+                      />
                     </div>
-                    <Textarea
-                      id="purpose"
-                      value={formData.purpose}
-                      onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
-                      placeholder={t('aiact.purposePlaceholder', language)}
-                      required
-                      disabled={loading}
-                      rows={4}
-                      maxLength={1000}
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      {t('aiact.purposeHint', language)}
-                    </p>
-                  </div>
 
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Label htmlFor="sector">{t('aiact.sector', language)} *</Label>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-xs">
-                          <p>{t('aiact.sectorTooltip', language)}</p>
-                        </TooltipContent>
-                      </Tooltip>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Label htmlFor="purpose">{t('aiact.purpose', language)} *</Label>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">
+                            <p>{t('aiact.purposeTooltip', language)}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <Textarea
+                        id="purpose"
+                        value={formData.purpose}
+                        onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
+                        placeholder={t('aiact.purposePlaceholder', language)}
+                        required
+                        disabled={loading}
+                        rows={4}
+                        maxLength={1000}
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        {t('aiact.purposeHint', language)}
+                      </p>
                     </div>
-                    <Input
-                      id="sector"
-                      value={formData.sector}
-                      onChange={(e) => setFormData({ ...formData, sector: e.target.value })}
-                      placeholder={t('aiact.sectorPlaceholder', language)}
-                      required
-                      disabled={loading}
-                      maxLength={100}
-                    />
-                    <div className="bg-muted/50 p-3 rounded-md text-xs space-y-1">
-                      <p className="font-semibold text-destructive">⚠️ {t('aiact.highRiskSectors', language)}</p>
-                      <p>employment, biometric, law_enforcement, education, critical_infrastructure</p>
-                      <p className="font-semibold text-yellow-600 mt-2">⚡ {t('aiact.limitedRiskSectors', language)}</p>
-                      <p>chatbots, emotion_recognition, deepfake_generation</p>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Label htmlFor="sector">{t('aiact.sector', language)} *</Label>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">
+                            <p>{t('aiact.sectorTooltip', language)}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <Input
+                        id="sector"
+                        value={formData.sector}
+                        onChange={(e) => setFormData({ ...formData, sector: e.target.value })}
+                        placeholder={t('aiact.sectorPlaceholder', language)}
+                        required
+                        disabled={loading}
+                        maxLength={100}
+                      />
+                      <div className="bg-muted/50 p-3 rounded-md text-xs space-y-1">
+                        <p className="font-semibold text-destructive">⚠️ {t('aiact.highRiskSectors', language)}</p>
+                        <p>employment, biometric, law_enforcement, education, critical_infrastructure</p>
+                        <p className="font-semibold text-yellow-600 mt-2">⚡ {t('aiact.limitedRiskSectors', language)}</p>
+                        <p>chatbots, emotion_recognition, deepfake_generation</p>
+                      </div>
                     </div>
-                  </div>
-                </TooltipProvider>
+                  </TooltipProvider>
 
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      {t('aiact.analyzing', language)}
-                    </>
-                  ) : (
-                    <>
-                      <Shield className="mr-2 h-4 w-4" />
-                      {t('aiact.runAssessment', language)}
-                    </>
-                  )}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        {t('aiact.analyzing', language)}
+                      </>
+                    ) : (
+                      <>
+                        <Shield className="mr-2 h-4 w-4" />
+                        {t('aiact.runAssessment', language)}
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
 
-          {/* Results */}
+          {/* Right column: Results */}
           <div className="space-y-4">
             {result && (
               <>
