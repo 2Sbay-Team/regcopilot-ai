@@ -9,8 +9,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
-import { Calendar, Clock, Play, Pause, Plus } from "lucide-react";
+import { InfoModal } from "@/components/InfoModal";
+import { Calendar, Clock, Plus, Info } from "lucide-react";
 
 interface ScheduledJob {
   id: string;
@@ -102,6 +104,25 @@ export default function ScheduledJobs() {
   };
 
   const createJob = async () => {
+    // Validate inputs
+    if (!newJob.name.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Job name is required.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (newJob.name.length > 100) {
+      toast({
+        title: "Validation Error",
+        description: "Job name must be less than 100 characters.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
@@ -166,62 +187,143 @@ export default function ScheduledJobs() {
               New Job
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>Create Scheduled Job</DialogTitle>
               <DialogDescription>
                 Set up automated compliance workflows
               </DialogDescription>
             </DialogHeader>
+            
+            {/* Help Section */}
+            <Alert className="bg-muted/50 border-border">
+              <Info className="h-4 w-4" />
+              <AlertDescription>
+                Scheduled jobs automate compliance tasks like scans, syncs, and reports. Choose a descriptive name, select the type of task, and set when it should run.
+              </AlertDescription>
+            </Alert>
+
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label>Job Name</Label>
+                <div className="flex items-center gap-1">
+                  <Label htmlFor="job-name">Job Name</Label>
+                  <InfoModal 
+                    title="Job Name"
+                    description="A descriptive name for your scheduled job. This helps you identify the job's purpose at a glance."
+                    example="Examples:\n• Daily GDPR Privacy Scan\n• Weekly AI Act Compliance Check\n• Monthly ESG Report Generation\n• Nightly Connector Data Sync"
+                  />
+                </div>
                 <Input
+                  id="job-name"
                   value={newJob.name}
                   onChange={(e) => setNewJob({ ...newJob, name: e.target.value })}
-                  placeholder="Daily GDPR Scan"
+                  placeholder="e.g., Daily GDPR Privacy Scan"
+                  maxLength={100}
+                  required
                 />
+                <p className="text-xs text-muted-foreground">
+                  {newJob.name.length}/100 characters
+                </p>
               </div>
+
               <div className="space-y-2">
-                <Label>Job Type</Label>
+                <div className="flex items-center gap-1">
+                  <Label htmlFor="job-type">Job Type</Label>
+                  <InfoModal 
+                    title="Job Type"
+                    description="Select the type of automated task to perform. Each type serves a different compliance or data management purpose."
+                    example="• Compliance Scan: Automatically check AI Act, GDPR, ESG compliance\n• Connector Sync: Pull data from external sources (SAP, Jira, SharePoint)\n• Report Generation: Create scheduled compliance reports\n• Intelligence Score: Update your continuous intelligence metrics"
+                  />
+                </div>
                 <Select
                   value={newJob.job_type}
                   onValueChange={(value) => setNewJob({ ...newJob, job_type: value })}
                 >
-                  <SelectTrigger>
-                    <SelectValue />
+                  <SelectTrigger id="job-type">
+                    <SelectValue placeholder="Select job type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="compliance_scan">Compliance Scan</SelectItem>
-                    <SelectItem value="connector_sync">Connector Sync</SelectItem>
-                    <SelectItem value="report_generation">Report Generation</SelectItem>
-                    <SelectItem value="intelligence_score">Intelligence Score Update</SelectItem>
+                    <SelectItem value="compliance_scan">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">Compliance Scan</span>
+                        <span className="text-xs text-muted-foreground">Check AI Act, GDPR, ESG compliance</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="connector_sync">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">Connector Sync</span>
+                        <span className="text-xs text-muted-foreground">Sync data from external sources</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="report_generation">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">Report Generation</span>
+                        <span className="text-xs text-muted-foreground">Generate scheduled reports</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="intelligence_score">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">Intelligence Score Update</span>
+                        <span className="text-xs text-muted-foreground">Refresh continuous intelligence metrics</span>
+                      </div>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
+
               <div className="space-y-2">
-                <Label>Schedule</Label>
+                <div className="flex items-center gap-1">
+                  <Label htmlFor="schedule">Schedule</Label>
+                  <InfoModal 
+                    title="Schedule"
+                    description="Define when and how often this job should run. Choose a frequency that matches your compliance requirements and data freshness needs."
+                    example="• Daily at midnight: Good for regular compliance checks\n• Weekly on Sunday: Suitable for weekly reports\n• Monthly on 1st: Perfect for monthly reporting cycles\n• Every 6 hours: Use for time-sensitive data syncing"
+                  />
+                </div>
                 <Select
                   value={newJob.schedule}
                   onValueChange={(value) => setNewJob({ ...newJob, schedule: value })}
                 >
-                  <SelectTrigger>
-                    <SelectValue />
+                  <SelectTrigger id="schedule">
+                    <SelectValue placeholder="Select schedule" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="0 0 * * *">Daily at midnight</SelectItem>
-                    <SelectItem value="0 0 * * 0">Weekly on Sunday</SelectItem>
-                    <SelectItem value="0 0 1 * *">Monthly on 1st</SelectItem>
-                    <SelectItem value="0 */6 * * *">Every 6 hours</SelectItem>
+                    <SelectItem value="0 0 * * *">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">Daily at midnight</span>
+                        <span className="text-xs text-muted-foreground">Runs every day at 00:00 UTC</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="0 0 * * 0">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">Weekly on Sunday</span>
+                        <span className="text-xs text-muted-foreground">Runs every Sunday at 00:00 UTC</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="0 0 1 * *">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">Monthly on 1st</span>
+                        <span className="text-xs text-muted-foreground">Runs on the 1st of each month at 00:00 UTC</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="0 */6 * * *">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">Every 6 hours</span>
+                        <span className="text-xs text-muted-foreground">Runs 4 times daily (00:00, 06:00, 12:00, 18:00 UTC)</span>
+                      </div>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
+
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowDialog(false)}>
                 Cancel
               </Button>
-              <Button onClick={createJob}>Create Job</Button>
+              <Button onClick={createJob} disabled={!newJob.name.trim()}>
+                Create Job
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
