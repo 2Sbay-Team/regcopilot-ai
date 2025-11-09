@@ -1,5 +1,29 @@
 project_id = "usaygwvfanqlpruyzmhl"
 
+[functions.system-health-check]
+verify_jwt = false
+
+[functions.validate-rls-policies]
+verify_jwt = false
+
+[functions.validate-rag-accuracy]
+verify_jwt = false
+
+[functions.security-audit-scan]
+verify_jwt = false
+
+[functions.self-healing-engine]
+verify_jwt = false
+
+[functions.generate-stability-report]
+verify_jwt = false
+
+[functions.predictive-compliance-analyzer]
+verify_jwt = false
+
+[functions.federated-learning-coordinator]
+verify_jwt = false
+
 [functions.actuator-engine]
 verify_jwt = true
 

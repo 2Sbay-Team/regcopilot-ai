@@ -2552,6 +2552,39 @@ export type Database = {
         }
         Relationships: []
       }
+      federated_learning_rounds: {
+        Row: {
+          aggregated_metrics: Json | null
+          completed_at: string | null
+          id: string
+          model_version: string
+          participating_orgs: number | null
+          privacy_guarantee: string | null
+          round_number: number
+          started_at: string | null
+        }
+        Insert: {
+          aggregated_metrics?: Json | null
+          completed_at?: string | null
+          id?: string
+          model_version: string
+          participating_orgs?: number | null
+          privacy_guarantee?: string | null
+          round_number: number
+          started_at?: string | null
+        }
+        Update: {
+          aggregated_metrics?: Json | null
+          completed_at?: string | null
+          id?: string
+          model_version?: string
+          participating_orgs?: number | null
+          privacy_guarantee?: string | null
+          round_number?: number
+          started_at?: string | null
+        }
+        Relationships: []
+      }
       gdpr_assessments: {
         Row: {
           assessment_date: string | null
@@ -4179,6 +4212,63 @@ export type Database = {
           },
         ]
       }
+      predictive_compliance_scores: {
+        Row: {
+          confidence_level: number | null
+          id: string
+          organization_id: string
+          predicted_ai_act_score: number | null
+          predicted_at: string | null
+          predicted_esg_score: number | null
+          predicted_gdpr_score: number | null
+          predicted_overall_score: number | null
+          prediction_horizon_days: number
+          recommendations: Json | null
+          risk_factors: Json | null
+        }
+        Insert: {
+          confidence_level?: number | null
+          id?: string
+          organization_id: string
+          predicted_ai_act_score?: number | null
+          predicted_at?: string | null
+          predicted_esg_score?: number | null
+          predicted_gdpr_score?: number | null
+          predicted_overall_score?: number | null
+          prediction_horizon_days: number
+          recommendations?: Json | null
+          risk_factors?: Json | null
+        }
+        Update: {
+          confidence_level?: number | null
+          id?: string
+          organization_id?: string
+          predicted_ai_act_score?: number | null
+          predicted_at?: string | null
+          predicted_esg_score?: number | null
+          predicted_gdpr_score?: number | null
+          predicted_overall_score?: number | null
+          prediction_horizon_days?: number
+          recommendations?: Json | null
+          risk_factors?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "predictive_compliance_scores_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "predictive_compliance_scores_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -4259,6 +4349,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      rag_accuracy_metrics: {
+        Row: {
+          actual_relevance: number | null
+          cosine_similarity: number | null
+          embedding_model: string | null
+          expected_relevance: number | null
+          id: string
+          passed: boolean | null
+          query_text: string
+          tested_at: string | null
+        }
+        Insert: {
+          actual_relevance?: number | null
+          cosine_similarity?: number | null
+          embedding_model?: string | null
+          expected_relevance?: number | null
+          id?: string
+          passed?: boolean | null
+          query_text: string
+          tested_at?: string | null
+        }
+        Update: {
+          actual_relevance?: number | null
+          cosine_similarity?: number | null
+          embedding_model?: string | null
+          expected_relevance?: number | null
+          id?: string
+          passed?: boolean | null
+          query_text?: string
+          tested_at?: string | null
+        }
+        Relationships: []
       }
       regsense_sessions: {
         Row: {
@@ -4625,6 +4748,33 @@ export type Database = {
           },
         ]
       }
+      rls_validation_logs: {
+        Row: {
+          id: string
+          issues_found: string[] | null
+          policy_count: number | null
+          rls_enabled: boolean
+          table_name: string
+          validated_at: string | null
+        }
+        Insert: {
+          id?: string
+          issues_found?: string[] | null
+          policy_count?: number | null
+          rls_enabled: boolean
+          table_name: string
+          validated_at?: string | null
+        }
+        Update: {
+          id?: string
+          issues_found?: string[] | null
+          policy_count?: number | null
+          rls_enabled?: boolean
+          table_name?: string
+          validated_at?: string | null
+        }
+        Relationships: []
+      }
       scheduled_jobs: {
         Row: {
           config: Json | null
@@ -4757,6 +4907,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      security_audit_logs: {
+        Row: {
+          audit_type: string
+          auto_fixed: boolean | null
+          created_at: string | null
+          finding: string
+          id: string
+          remediation_status: string | null
+          resolved_at: string | null
+          severity: string
+        }
+        Insert: {
+          audit_type: string
+          auto_fixed?: boolean | null
+          created_at?: string | null
+          finding: string
+          id?: string
+          remediation_status?: string | null
+          resolved_at?: string | null
+          severity: string
+        }
+        Update: {
+          audit_type?: string
+          auto_fixed?: boolean | null
+          created_at?: string | null
+          finding?: string
+          id?: string
+          remediation_status?: string | null
+          resolved_at?: string | null
+          severity?: string
+        }
+        Relationships: []
       }
       security_events: {
         Row: {
@@ -5073,6 +5256,36 @@ export type Database = {
           },
         ]
       }
+      stability_reports: {
+        Row: {
+          auto_fixes_applied: number | null
+          generated_at: string | null
+          id: string
+          issues_found: number | null
+          metrics: Json
+          report_type: string
+          status: string
+        }
+        Insert: {
+          auto_fixes_applied?: number | null
+          generated_at?: string | null
+          id?: string
+          issues_found?: number | null
+          metrics?: Json
+          report_type: string
+          status: string
+        }
+        Update: {
+          auto_fixes_applied?: number | null
+          generated_at?: string | null
+          id?: string
+          issues_found?: number | null
+          metrics?: Json
+          report_type?: string
+          status?: string
+        }
+        Relationships: []
+      }
       stripe_usage_events: {
         Row: {
           cost_usd: number
@@ -5219,6 +5432,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      system_health_checks: {
+        Row: {
+          check_type: string
+          checked_at: string | null
+          component: string
+          error_message: string | null
+          id: string
+          latency_ms: number | null
+          metadata: Json | null
+          status: string
+        }
+        Insert: {
+          check_type: string
+          checked_at?: string | null
+          component: string
+          error_message?: string | null
+          id?: string
+          latency_ms?: number | null
+          metadata?: Json | null
+          status: string
+        }
+        Update: {
+          check_type?: string
+          checked_at?: string | null
+          component?: string
+          error_message?: string | null
+          id?: string
+          latency_ms?: number | null
+          metadata?: Json | null
+          status?: string
+        }
+        Relationships: []
       }
       system_metrics: {
         Row: {
