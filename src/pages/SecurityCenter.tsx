@@ -115,6 +115,35 @@ export default function SecurityCenter() {
     ? Math.round((summary.passed / summary.total_tests) * 100)
     : 0;
 
+  // Calculate severity breakdowns
+  const getSeverityBreakdown = () => {
+    if (!results.length) return null;
+
+    const breakdown = {
+      critical: { passed: 0, failed: 0, warnings: 0, total: 0 },
+      high: { passed: 0, failed: 0, warnings: 0, total: 0 },
+      medium: { passed: 0, failed: 0, warnings: 0, total: 0 },
+      low: { passed: 0, failed: 0, warnings: 0, total: 0 }
+    };
+
+    results.forEach(test => {
+      const severity = test.severity;
+      breakdown[severity].total++;
+      
+      if (test.status === 'pass') {
+        breakdown[severity].passed++;
+      } else if (test.status === 'fail') {
+        breakdown[severity].failed++;
+      } else if (test.status === 'warning') {
+        breakdown[severity].warnings++;
+      }
+    });
+
+    return breakdown;
+  };
+
+  const severityBreakdown = getSeverityBreakdown();
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -199,6 +228,175 @@ export default function SecurityCenter() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Severity Breakdown Cards */}
+          {severityBreakdown && (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {/* Critical Severity */}
+              <Card className="border-l-4 border-l-red-500">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-red-500" />
+                    Critical Severity
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Total Tests</span>
+                      <span className="text-sm font-medium">{severityBreakdown.critical.total}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs flex items-center gap-1">
+                        <CheckCircle className="h-3 w-3 text-green-500" />
+                        Passed
+                      </span>
+                      <span className="text-sm font-medium text-green-600">{severityBreakdown.critical.passed}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs flex items-center gap-1">
+                        <XCircle className="h-3 w-3 text-red-500" />
+                        Failed
+                      </span>
+                      <span className="text-sm font-medium text-red-600">{severityBreakdown.critical.failed}</span>
+                    </div>
+                    {severityBreakdown.critical.warnings > 0 && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs flex items-center gap-1">
+                          <AlertTriangle className="h-3 w-3 text-yellow-500" />
+                          Warnings
+                        </span>
+                        <span className="text-sm font-medium text-yellow-600">{severityBreakdown.critical.warnings}</span>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* High Severity */}
+              <Card className="border-l-4 border-l-orange-500">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-orange-500" />
+                    High Severity
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Total Tests</span>
+                      <span className="text-sm font-medium">{severityBreakdown.high.total}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs flex items-center gap-1">
+                        <CheckCircle className="h-3 w-3 text-green-500" />
+                        Passed
+                      </span>
+                      <span className="text-sm font-medium text-green-600">{severityBreakdown.high.passed}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs flex items-center gap-1">
+                        <XCircle className="h-3 w-3 text-red-500" />
+                        Failed
+                      </span>
+                      <span className="text-sm font-medium text-red-600">{severityBreakdown.high.failed}</span>
+                    </div>
+                    {severityBreakdown.high.warnings > 0 && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs flex items-center gap-1">
+                          <AlertTriangle className="h-3 w-3 text-yellow-500" />
+                          Warnings
+                        </span>
+                        <span className="text-sm font-medium text-yellow-600">{severityBreakdown.high.warnings}</span>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Medium Severity */}
+              <Card className="border-l-4 border-l-yellow-500">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-yellow-500" />
+                    Medium Severity
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Total Tests</span>
+                      <span className="text-sm font-medium">{severityBreakdown.medium.total}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs flex items-center gap-1">
+                        <CheckCircle className="h-3 w-3 text-green-500" />
+                        Passed
+                      </span>
+                      <span className="text-sm font-medium text-green-600">{severityBreakdown.medium.passed}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs flex items-center gap-1">
+                        <XCircle className="h-3 w-3 text-red-500" />
+                        Failed
+                      </span>
+                      <span className="text-sm font-medium text-red-600">{severityBreakdown.medium.failed}</span>
+                    </div>
+                    {severityBreakdown.medium.warnings > 0 && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs flex items-center gap-1">
+                          <AlertTriangle className="h-3 w-3 text-yellow-500" />
+                          Warnings
+                        </span>
+                        <span className="text-sm font-medium text-yellow-600">{severityBreakdown.medium.warnings}</span>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Low Severity */}
+              <Card className="border-l-4 border-l-blue-500">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-blue-500" />
+                    Low Severity
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Total Tests</span>
+                      <span className="text-sm font-medium">{severityBreakdown.low.total}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs flex items-center gap-1">
+                        <CheckCircle className="h-3 w-3 text-green-500" />
+                        Passed
+                      </span>
+                      <span className="text-sm font-medium text-green-600">{severityBreakdown.low.passed}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs flex items-center gap-1">
+                        <XCircle className="h-3 w-3 text-red-500" />
+                        Failed
+                      </span>
+                      <span className="text-sm font-medium text-red-600">{severityBreakdown.low.failed}</span>
+                    </div>
+                    {severityBreakdown.low.warnings > 0 && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs flex items-center gap-1">
+                          <AlertTriangle className="h-3 w-3 text-yellow-500" />
+                          Warnings
+                        </span>
+                        <span className="text-sm font-medium text-yellow-600">{severityBreakdown.low.warnings}</span>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           <Card>
             <CardHeader>
