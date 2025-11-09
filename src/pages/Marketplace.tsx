@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Shield, FileCheck, Leaf, Lock, Network, Database, Star } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import { useLanguage } from "@/contexts/LanguageContext"
+import { t } from "@/lib/i18n"
 
 const AVAILABLE_COPILOTS = [
   {
@@ -69,15 +71,16 @@ const AVAILABLE_COPILOTS = [
 
 const Marketplace = () => {
   const navigate = useNavigate()
+  const { language } = useLanguage()
 
   return (
     <div className="space-y-6 p-6">
       <div>
         <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          Compliance Marketplace
+          {t('marketplace.title', language)}
         </h1>
         <p className="text-muted-foreground font-medium">
-          Discover and activate compliance copilots for your organization
+          {t('marketplace.subtitle', language)}
         </p>
       </div>
 
@@ -85,7 +88,7 @@ const Marketplace = () => {
         <div>
           <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
             <Star className="h-6 w-6 text-primary" />
-            Active Copilots
+            {t('marketplace.activeCopilots', language)}
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {AVAILABLE_COPILOTS.map((copilot) => {
@@ -95,7 +98,7 @@ const Marketplace = () => {
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <Icon className="h-10 w-10 text-primary mb-3" />
-                      <Badge variant="default">Active</Badge>
+                      <Badge variant="default">{t('marketplace.active', language)}</Badge>
                     </div>
                     <CardTitle>{copilot.name}</CardTitle>
                     <CardDescription>{copilot.description}</CardDescription>
@@ -118,7 +121,7 @@ const Marketplace = () => {
                       className="w-full"
                       onClick={() => navigate(copilot.route)}
                     >
-                      Launch Copilot
+                      {t('marketplace.launchCopilot', language)}
                     </Button>
                   </CardContent>
                 </Card>
@@ -130,16 +133,16 @@ const Marketplace = () => {
 
         <Card className="border-primary/20">
           <CardHeader>
-            <CardTitle>Request a Custom Copilot</CardTitle>
+            <CardTitle>{t('marketplace.requestCustom', language)}</CardTitle>
             <CardDescription>
-              Need compliance support for a specific regulation not listed here?
+              {t('marketplace.requestCustomDesc', language)}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4">
-              Contact our team to discuss custom copilot development for your organization's unique compliance needs.
+              {t('marketplace.requestCustomText', language)}
             </p>
-            <Button>Contact Sales</Button>
+            <Button>{t('marketplace.contactSales', language)}</Button>
           </CardContent>
         </Card>
       </div>

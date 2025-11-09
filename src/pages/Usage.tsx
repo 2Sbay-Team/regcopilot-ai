@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { t } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -204,40 +205,40 @@ const Usage = () => {
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Usage & Billing</h1>
+        <h1 className="text-3xl font-bold">{t('usage.title', language)}</h1>
         {subscription && subscription.plan_tier !== 'free' && (
           <Button onClick={handleManageBilling} variant="outline">
             <CreditCard className="mr-2 h-4 w-4" />
-            Manage Billing
+            {t('usage.manageBilling', language)}
           </Button>
         )}
       </div>
 
       <Tabs defaultValue="usage" className="space-y-6">
         <TabsList>
-          <TabsTrigger value="usage">Usage</TabsTrigger>
-          <TabsTrigger value="billing">Billing</TabsTrigger>
-          <TabsTrigger value="plans">Plans</TabsTrigger>
+          <TabsTrigger value="usage">{t('usage.title', language).split(' & ')[0]}</TabsTrigger>
+          <TabsTrigger value="billing">{t('usage.billingHistory', language)}</TabsTrigger>
+          <TabsTrigger value="plans">{t('usage.availablePlans', language)}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="usage" className="space-y-6">
           {/* Current Plan */}
           <Card>
             <CardHeader>
-              <CardTitle>Current Plan</CardTitle>
+              <CardTitle>{t('usage.currentPlan', language)}</CardTitle>
               <CardDescription>
                 <Badge variant={subscription?.plan_tier === 'free' ? 'secondary' : 'default'}>
-                  {subscription?.plan_tier?.toUpperCase() || 'FREE'}
+                  {subscription?.plan_tier?.toUpperCase() || t('usage.free', language).toUpperCase()}
                 </Badge>
                 {subscription?.current_period_end && 
-                  ` • Renews ${new Date(subscription.current_period_end).toLocaleDateString()}`
+                  ` • ${t('usage.renews', language)} ${new Date(subscription.current_period_end).toLocaleDateString()}`
                 }
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
                 <div className="flex justify-between text-sm mb-2">
-                  <span>Token Usage</span>
+                  <span>{t('usage.tokenUsage', language)}</span>
                   <span>{monthlyStats.totalTokens.toLocaleString()} / {currentPlan.tokens.toLocaleString()}</span>
                 </div>
                 <Progress value={usagePercentage} className="h-2" />
@@ -245,11 +246,11 @@ const Usage = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Requests</p>
+                  <p className="text-sm text-muted-foreground">{t('usage.totalRequests', language)}</p>
                   <p className="text-2xl font-bold">{monthlyStats.totalRequests.toLocaleString()}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Cost</p>
+                  <p className="text-sm text-muted-foreground">{t('usage.totalCost', language)}</p>
                   <p className="text-2xl font-bold">{convertCurrency(monthlyStats.totalCost)}</p>
                 </div>
               </div>
@@ -260,8 +261,8 @@ const Usage = () => {
           <div className="grid md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Daily Token Usage</CardTitle>
-                <CardDescription>Last 30 days</CardDescription>
+                <CardTitle>{t('usage.dailyTokenUsage', language)}</CardTitle>
+                <CardDescription>{t('usage.last30Days', language)}</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -279,8 +280,8 @@ const Usage = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Cost by Model</CardTitle>
-                <CardDescription>This month</CardDescription>
+                <CardTitle>{t('usage.costByModel', language)}</CardTitle>
+                <CardDescription>{t('usage.distributionBreakdown', language)}</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -310,17 +311,17 @@ const Usage = () => {
         <TabsContent value="billing" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Billing History</CardTitle>
-              <CardDescription>Your recent invoices and payments</CardDescription>
+              <CardTitle>{t('usage.billingHistory', language)}</CardTitle>
+              <CardDescription>{t('usage.billingHistoryDesc', language)}</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>{t('usage.date', language)}</TableHead>
+                    <TableHead>{t('usage.description', language)}</TableHead>
+                    <TableHead>{t('usage.amount', language)}</TableHead>
+                    <TableHead>{t('usage.status', language)}</TableHead>
                     <TableHead></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -328,14 +329,14 @@ const Usage = () => {
                   {billingHistory.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={5} className="text-center text-muted-foreground">
-                        No billing history yet
+                        {t('usage.noBillingHistory', language)}
                       </TableCell>
                     </TableRow>
                   ) : (
                     billingHistory.map((invoice) => (
                       <TableRow key={invoice.id}>
                         <TableCell>{new Date(invoice.created_at).toLocaleDateString()}</TableCell>
-                        <TableCell>{invoice.description || 'Subscription payment'}</TableCell>
+                        <TableCell>{invoice.description || t('usage.subscriptionPayment', language)}</TableCell>
                         <TableCell>${(invoice.amount / 100).toFixed(2)}</TableCell>
                         <TableCell>
                           <Badge variant={invoice.status === 'succeeded' ? 'default' : 'secondary'}>
@@ -392,17 +393,17 @@ const Usage = () => {
                   </ul>
 
                   <div className="pt-4">
-                    {tier === subscription?.plan_tier ? (
+                  {tier === subscription?.plan_tier ? (
                       <Button className="w-full" disabled>
-                        Current Plan
+                        {t('usage.currentPlanBadge', language)}
                       </Button>
                     ) : tier === 'free' ? (
                       <Button className="w-full" variant="outline" disabled>
-                        Downgrade to Free
+                        {t('usage.downgradeToFree', language)}
                       </Button>
                     ) : tier === 'enterprise' ? (
                       <Button className="w-full" variant="outline" asChild>
-                        <a href="mailto:sales@example.com">Contact Sales</a>
+                        <a href="mailto:sales@example.com">{t('usage.contactSales', language)}</a>
                       </Button>
                     ) : (
                       <Button 
@@ -411,7 +412,7 @@ const Usage = () => {
                         disabled={isUpgrading}
                       >
                         <Zap className="mr-2 h-4 w-4" />
-                        {isUpgrading ? 'Processing...' : 'Upgrade'}
+                        {isUpgrading ? t('usage.processing', language) : t('usage.upgrade', language)}
                       </Button>
                     )}
                   </div>
