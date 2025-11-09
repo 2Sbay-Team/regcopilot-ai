@@ -463,6 +463,94 @@ export type Database = {
           },
         ]
       }
+      ai_conformity_reports: {
+        Row: {
+          ai_system_id: string | null
+          annex_iv_items: Json
+          compliance_status: string
+          created_at: string | null
+          evidence_summary: Json | null
+          expires_at: string | null
+          generated_at: string | null
+          generated_by: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          pdf_url: string | null
+          previous_version_id: string | null
+          report_type: string
+          risk_category: string
+          signature_algorithm: string | null
+          signed_hash: string | null
+          updated_at: string | null
+          version: number | null
+        }
+        Insert: {
+          ai_system_id?: string | null
+          annex_iv_items?: Json
+          compliance_status?: string
+          created_at?: string | null
+          evidence_summary?: Json | null
+          expires_at?: string | null
+          generated_at?: string | null
+          generated_by?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          pdf_url?: string | null
+          previous_version_id?: string | null
+          report_type?: string
+          risk_category: string
+          signature_algorithm?: string | null
+          signed_hash?: string | null
+          updated_at?: string | null
+          version?: number | null
+        }
+        Update: {
+          ai_system_id?: string | null
+          annex_iv_items?: Json
+          compliance_status?: string
+          created_at?: string | null
+          evidence_summary?: Json | null
+          expires_at?: string | null
+          generated_at?: string | null
+          generated_by?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          pdf_url?: string | null
+          previous_version_id?: string | null
+          report_type?: string
+          risk_category?: string
+          signature_algorithm?: string | null
+          signed_hash?: string | null
+          updated_at?: string | null
+          version?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_conformity_reports_ai_system_id_fkey"
+            columns: ["ai_system_id"]
+            isOneToOne: false
+            referencedRelation: "ai_systems"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_conformity_reports_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_conformity_reports_previous_version_id_fkey"
+            columns: ["previous_version_id"]
+            isOneToOne: false
+            referencedRelation: "ai_conformity_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_models: {
         Row: {
           compliance_status: string | null
@@ -735,6 +823,88 @@ export type Database = {
           },
         ]
       }
+      annex_iv_documents: {
+        Row: {
+          ai_system_id: string | null
+          conformity_report_id: string
+          created_at: string | null
+          development_process: Json
+          document_version: string
+          general_description: Json
+          generated_at: string | null
+          hash_signature: string | null
+          id: string
+          monitoring_logging: Json
+          organization_id: string
+          pdf_export_url: string | null
+          risk_management: Json
+          technical_documentation: Json
+          transparency_info: Json
+          updated_at: string | null
+          updates_maintenance: Json
+        }
+        Insert: {
+          ai_system_id?: string | null
+          conformity_report_id: string
+          created_at?: string | null
+          development_process?: Json
+          document_version?: string
+          general_description?: Json
+          generated_at?: string | null
+          hash_signature?: string | null
+          id?: string
+          monitoring_logging?: Json
+          organization_id: string
+          pdf_export_url?: string | null
+          risk_management?: Json
+          technical_documentation?: Json
+          transparency_info?: Json
+          updated_at?: string | null
+          updates_maintenance?: Json
+        }
+        Update: {
+          ai_system_id?: string | null
+          conformity_report_id?: string
+          created_at?: string | null
+          development_process?: Json
+          document_version?: string
+          general_description?: Json
+          generated_at?: string | null
+          hash_signature?: string | null
+          id?: string
+          monitoring_logging?: Json
+          organization_id?: string
+          pdf_export_url?: string | null
+          risk_management?: Json
+          technical_documentation?: Json
+          transparency_info?: Json
+          updated_at?: string | null
+          updates_maintenance?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "annex_iv_documents_ai_system_id_fkey"
+            columns: ["ai_system_id"]
+            isOneToOne: false
+            referencedRelation: "ai_systems"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "annex_iv_documents_conformity_report_id_fkey"
+            columns: ["conformity_report_id"]
+            isOneToOne: false
+            referencedRelation: "ai_conformity_reports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "annex_iv_documents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_tasks: {
         Row: {
           assessment_id: string
@@ -835,6 +1005,75 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      auditor_signoffs: {
+        Row: {
+          auditor_id: string
+          certification_body: string | null
+          certification_id: string | null
+          compliance_score: number | null
+          created_at: string | null
+          decision: string
+          evidence_coverage_score: number | null
+          expiry_date: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          report_id: string
+          review_notes: string | null
+          signature_timestamp: string | null
+          signed_hash: string
+        }
+        Insert: {
+          auditor_id: string
+          certification_body?: string | null
+          certification_id?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          decision: string
+          evidence_coverage_score?: number | null
+          expiry_date?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          report_id: string
+          review_notes?: string | null
+          signature_timestamp?: string | null
+          signed_hash: string
+        }
+        Update: {
+          auditor_id?: string
+          certification_body?: string | null
+          certification_id?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          decision?: string
+          evidence_coverage_score?: number | null
+          expiry_date?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          report_id?: string
+          review_notes?: string | null
+          signature_timestamp?: string | null
+          signed_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "auditor_signoffs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "auditor_signoffs_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "ai_conformity_reports"
             referencedColumns: ["id"]
           },
         ]
@@ -962,6 +1201,69 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_evidence_links: {
+        Row: {
+          audit_log_id: string | null
+          created_at: string | null
+          document_url: string | null
+          evidence_category: string | null
+          evidence_type: string
+          id: string
+          metadata: Json | null
+          report_id: string
+          requirement_code: string | null
+          verification_notes: string | null
+          verified: boolean | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          audit_log_id?: string | null
+          created_at?: string | null
+          document_url?: string | null
+          evidence_category?: string | null
+          evidence_type: string
+          id?: string
+          metadata?: Json | null
+          report_id: string
+          requirement_code?: string | null
+          verification_notes?: string | null
+          verified?: boolean | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          audit_log_id?: string | null
+          created_at?: string | null
+          document_url?: string | null
+          evidence_category?: string | null
+          evidence_type?: string
+          id?: string
+          metadata?: Json | null
+          report_id?: string
+          requirement_code?: string | null
+          verification_notes?: string | null
+          verified?: boolean | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_evidence_links_audit_log_id_fkey"
+            columns: ["audit_log_id"]
+            isOneToOne: false
+            referencedRelation: "audit_logs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_evidence_links_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "ai_conformity_reports"
             referencedColumns: ["id"]
           },
         ]
@@ -2397,17 +2699,23 @@ export type Database = {
           byok_api_key_encrypted: string | null
           byok_model: string | null
           byok_provider: string | null
+          certification_level: string | null
           country_code: string | null
           created_at: string | null
+          document_retention_years: number | null
           id: string
+          is_public_sector: boolean | null
           llm_token_quota: number
           name: string
           plan: string | null
+          public_key: string | null
           quota_reset_date: string | null
+          signing_key_id: string | null
           stripe_customer_id: string | null
           stripe_subscription_id: string | null
           subscription_plan: string | null
           subscription_status: string | null
+          tier: string | null
           tokens_used_this_month: number
           trial_end_date: string | null
         }
@@ -2416,17 +2724,23 @@ export type Database = {
           byok_api_key_encrypted?: string | null
           byok_model?: string | null
           byok_provider?: string | null
+          certification_level?: string | null
           country_code?: string | null
           created_at?: string | null
+          document_retention_years?: number | null
           id?: string
+          is_public_sector?: boolean | null
           llm_token_quota?: number
           name: string
           plan?: string | null
+          public_key?: string | null
           quota_reset_date?: string | null
+          signing_key_id?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
           subscription_plan?: string | null
           subscription_status?: string | null
+          tier?: string | null
           tokens_used_this_month?: number
           trial_end_date?: string | null
         }
@@ -2435,17 +2749,23 @@ export type Database = {
           byok_api_key_encrypted?: string | null
           byok_model?: string | null
           byok_provider?: string | null
+          certification_level?: string | null
           country_code?: string | null
           created_at?: string | null
+          document_retention_years?: number | null
           id?: string
+          is_public_sector?: boolean | null
           llm_token_quota?: number
           name?: string
           plan?: string | null
+          public_key?: string | null
           quota_reset_date?: string | null
+          signing_key_id?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
           subscription_plan?: string | null
           subscription_status?: string | null
+          tier?: string | null
           tokens_used_this_month?: number
           trial_end_date?: string | null
         }
@@ -2781,6 +3101,54 @@ export type Database = {
           valid_from?: string | null
           valid_until?: string | null
           version?: string | null
+        }
+        Relationships: []
+      }
+      regulatory_requirements: {
+        Row: {
+          annex_ref: string | null
+          article_ref: string | null
+          code: string
+          created_at: string | null
+          description: string | null
+          id: string
+          metadata: Json | null
+          regulation_type: string
+          title: string
+          updated_at: string | null
+          valid_from: string
+          valid_until: string | null
+          version: string
+        }
+        Insert: {
+          annex_ref?: string | null
+          article_ref?: string | null
+          code: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          regulation_type: string
+          title: string
+          updated_at?: string | null
+          valid_from?: string
+          valid_until?: string | null
+          version?: string
+        }
+        Update: {
+          annex_ref?: string | null
+          article_ref?: string | null
+          code?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          regulation_type?: string
+          title?: string
+          updated_at?: string | null
+          valid_from?: string
+          valid_until?: string | null
+          version?: string
         }
         Relationships: []
       }
@@ -3615,6 +3983,10 @@ export type Database = {
       gdpr_delete_user_data: {
         Args: { subject_email: string }
         Returns: undefined
+      }
+      generate_conformity_hash: {
+        Args: { p_report_id: string }
+        Returns: string
       }
       get_byok_config: { Args: { org_id: string }; Returns: Json }
       get_chunk_feedback_scores: {

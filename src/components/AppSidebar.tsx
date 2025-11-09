@@ -212,6 +212,11 @@ export function AppSidebar() {
       icon: Shield,
     },
     { 
+      titleKey: "nav.auditPortal", 
+      url: "/audit-portal", 
+      icon: ShieldCheck,
+    },
+    { 
       titleKey: "nav.admin",
       url: "/admin", 
       icon: Settings,
