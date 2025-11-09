@@ -905,6 +905,128 @@ export type Database = {
           },
         ]
       }
+      api_keys: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          environment: string
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          key_hash: string
+          key_name: string
+          key_prefix: string
+          last_used_at: string | null
+          partner_account_id: string
+          scopes: string[]
+          usage_count: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          environment?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_hash: string
+          key_name: string
+          key_prefix: string
+          last_used_at?: string | null
+          partner_account_id: string
+          scopes?: string[]
+          usage_count?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          environment?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_hash?: string
+          key_name?: string
+          key_prefix?: string
+          last_used_at?: string | null
+          partner_account_id?: string
+          scopes?: string[]
+          usage_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_keys_partner_account_id_fkey"
+            columns: ["partner_account_id"]
+            isOneToOne: false
+            referencedRelation: "partner_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      api_usage_logs: {
+        Row: {
+          api_key_id: string | null
+          endpoint: string
+          error_message: string | null
+          id: string
+          ip_address: unknown
+          metadata: Json | null
+          method: string
+          partner_account_id: string
+          request_size_bytes: number | null
+          response_size_bytes: number | null
+          response_time_ms: number | null
+          status_code: number
+          timestamp: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          api_key_id?: string | null
+          endpoint: string
+          error_message?: string | null
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          method: string
+          partner_account_id: string
+          request_size_bytes?: number | null
+          response_size_bytes?: number | null
+          response_time_ms?: number | null
+          status_code: number
+          timestamp?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          api_key_id?: string | null
+          endpoint?: string
+          error_message?: string | null
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          method?: string
+          partner_account_id?: string
+          request_size_bytes?: number | null
+          response_size_bytes?: number | null
+          response_time_ms?: number | null
+          status_code?: number
+          timestamp?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_usage_logs_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "api_usage_logs_partner_account_id_fkey"
+            columns: ["partner_account_id"]
+            isOneToOne: false
+            referencedRelation: "partner_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_tasks: {
         Row: {
           assessment_id: string
@@ -1201,6 +1323,72 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_data_exchanges: {
+        Row: {
+          data_type: string
+          exchange_type: string
+          exchanged_at: string | null
+          file_size_bytes: number | null
+          file_url: string | null
+          format: string
+          id: string
+          metadata: Json | null
+          oauth_token_used: string | null
+          organization_id: string
+          partner_account_id: string
+          record_count: number | null
+          signature_hash: string | null
+          verification_status: string | null
+        }
+        Insert: {
+          data_type: string
+          exchange_type: string
+          exchanged_at?: string | null
+          file_size_bytes?: number | null
+          file_url?: string | null
+          format: string
+          id?: string
+          metadata?: Json | null
+          oauth_token_used?: string | null
+          organization_id: string
+          partner_account_id: string
+          record_count?: number | null
+          signature_hash?: string | null
+          verification_status?: string | null
+        }
+        Update: {
+          data_type?: string
+          exchange_type?: string
+          exchanged_at?: string | null
+          file_size_bytes?: number | null
+          file_url?: string | null
+          format?: string
+          id?: string
+          metadata?: Json | null
+          oauth_token_used?: string | null
+          organization_id?: string
+          partner_account_id?: string
+          record_count?: number | null
+          signature_hash?: string | null
+          verification_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_data_exchanges_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_data_exchanges_partner_account_id_fkey"
+            columns: ["partner_account_id"]
+            isOneToOne: false
+            referencedRelation: "partner_accounts"
             referencedColumns: ["id"]
           },
         ]
@@ -1733,6 +1921,56 @@ export type Database = {
           },
         ]
       }
+      developer_submissions: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          partner_account_id: string
+          payload: Json
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reviewer_notes: string | null
+          status: string
+          submission_type: string
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          partner_account_id: string
+          payload: Json
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          status?: string
+          submission_type: string
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          partner_account_id?: string
+          payload?: Json
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          status?: string
+          submission_type?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_submissions_partner_account_id_fkey"
+            columns: ["partner_account_id"]
+            isOneToOne: false
+            referencedRelation: "partner_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dma_assessments: {
         Row: {
           advertising_practices: string | null
@@ -2148,6 +2386,127 @@ export type Database = {
           },
         ]
       }
+      growth_metrics: {
+        Row: {
+          active_organizations: number | null
+          active_partners: number | null
+          api_calls_total: number | null
+          churn_count: number | null
+          connector_usage: Json | null
+          country_distribution: Json | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          metric_date: string
+          module_usage: Json | null
+          new_signups: number | null
+          revenue_total: number | null
+          sector_distribution: Json | null
+        }
+        Insert: {
+          active_organizations?: number | null
+          active_partners?: number | null
+          api_calls_total?: number | null
+          churn_count?: number | null
+          connector_usage?: Json | null
+          country_distribution?: Json | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          metric_date: string
+          module_usage?: Json | null
+          new_signups?: number | null
+          revenue_total?: number | null
+          sector_distribution?: Json | null
+        }
+        Update: {
+          active_organizations?: number | null
+          active_partners?: number | null
+          api_calls_total?: number | null
+          churn_count?: number | null
+          connector_usage?: Json | null
+          country_distribution?: Json | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          metric_date?: string
+          module_usage?: Json | null
+          new_signups?: number | null
+          revenue_total?: number | null
+          sector_distribution?: Json | null
+        }
+        Relationships: []
+      }
+      integration_audit_logs: {
+        Row: {
+          action: string
+          auth_method: string | null
+          connector_id: string | null
+          endpoint: string | null
+          error_message: string | null
+          external_system: string
+          id: string
+          metadata: Json | null
+          organization_id: string
+          partner_account_id: string | null
+          records_processed: number | null
+          status: string
+          timestamp: string | null
+        }
+        Insert: {
+          action: string
+          auth_method?: string | null
+          connector_id?: string | null
+          endpoint?: string | null
+          error_message?: string | null
+          external_system: string
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          partner_account_id?: string | null
+          records_processed?: number | null
+          status: string
+          timestamp?: string | null
+        }
+        Update: {
+          action?: string
+          auth_method?: string | null
+          connector_id?: string | null
+          endpoint?: string | null
+          error_message?: string | null
+          external_system?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          partner_account_id?: string | null
+          records_processed?: number | null
+          status?: string
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_audit_logs_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "connectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "integration_audit_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "integration_audit_logs_partner_account_id_fkey"
+            columns: ["partner_account_id"]
+            isOneToOne: false
+            referencedRelation: "partner_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       intelligence_scores: {
         Row: {
           automation_score: number | null
@@ -2223,6 +2582,110 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_plugins: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          average_rating: number | null
+          category: string | null
+          configuration_schema: Json | null
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          developer_partner_id: string | null
+          documentation_url: string | null
+          github_url: string | null
+          homepage_url: string | null
+          icon_url: string | null
+          id: string
+          install_count: number | null
+          long_description: string | null
+          metadata: Json | null
+          plugin_name: string
+          plugin_type: string
+          price_amount: number | null
+          price_model: string
+          requires_api_key: boolean | null
+          review_count: number | null
+          status: string
+          submitted_at: string | null
+          support_email: string | null
+          tags: string[] | null
+          updated_at: string | null
+          version: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          average_rating?: number | null
+          category?: string | null
+          configuration_schema?: Json | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          developer_partner_id?: string | null
+          documentation_url?: string | null
+          github_url?: string | null
+          homepage_url?: string | null
+          icon_url?: string | null
+          id?: string
+          install_count?: number | null
+          long_description?: string | null
+          metadata?: Json | null
+          plugin_name: string
+          plugin_type: string
+          price_amount?: number | null
+          price_model?: string
+          requires_api_key?: boolean | null
+          review_count?: number | null
+          status?: string
+          submitted_at?: string | null
+          support_email?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          version?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          average_rating?: number | null
+          category?: string | null
+          configuration_schema?: Json | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          developer_partner_id?: string | null
+          documentation_url?: string | null
+          github_url?: string | null
+          homepage_url?: string | null
+          icon_url?: string | null
+          id?: string
+          install_count?: number | null
+          long_description?: string | null
+          metadata?: Json | null
+          plugin_name?: string
+          plugin_type?: string
+          price_amount?: number | null
+          price_model?: string
+          requires_api_key?: boolean | null
+          review_count?: number | null
+          status?: string
+          submitted_at?: string | null
+          support_email?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_plugins_developer_partner_id_fkey"
+            columns: ["developer_partner_id"]
+            isOneToOne: false
+            referencedRelation: "partner_accounts"
             referencedColumns: ["id"]
           },
         ]
@@ -2702,14 +3165,19 @@ export type Database = {
           certification_level: string | null
           country_code: string | null
           created_at: string | null
+          custom_domain: string | null
+          data_residency_region: string | null
           document_retention_years: number | null
           id: string
           is_public_sector: boolean | null
+          is_whitelabel: boolean | null
           llm_token_quota: number
           name: string
+          partner_id: string | null
           plan: string | null
           public_key: string | null
           quota_reset_date: string | null
+          reseller_branding: Json | null
           signing_key_id: string | null
           stripe_customer_id: string | null
           stripe_subscription_id: string | null
@@ -2727,14 +3195,19 @@ export type Database = {
           certification_level?: string | null
           country_code?: string | null
           created_at?: string | null
+          custom_domain?: string | null
+          data_residency_region?: string | null
           document_retention_years?: number | null
           id?: string
           is_public_sector?: boolean | null
+          is_whitelabel?: boolean | null
           llm_token_quota?: number
           name: string
+          partner_id?: string | null
           plan?: string | null
           public_key?: string | null
           quota_reset_date?: string | null
+          reseller_branding?: Json | null
           signing_key_id?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
@@ -2752,14 +3225,19 @@ export type Database = {
           certification_level?: string | null
           country_code?: string | null
           created_at?: string | null
+          custom_domain?: string | null
+          data_residency_region?: string | null
           document_retention_years?: number | null
           id?: string
           is_public_sector?: boolean | null
+          is_whitelabel?: boolean | null
           llm_token_quota?: number
           name?: string
+          partner_id?: string | null
           plan?: string | null
           public_key?: string | null
           quota_reset_date?: string | null
+          reseller_branding?: Json | null
           signing_key_id?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
@@ -2769,7 +3247,89 @@ export type Database = {
           tokens_used_this_month?: number
           trial_end_date?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "organizations_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partner_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_accounts: {
+        Row: {
+          api_rate_limit: number | null
+          approved_at: string | null
+          approved_by: string | null
+          company_email: string
+          company_website: string | null
+          contract_end_date: string | null
+          contract_start_date: string | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          monthly_quota: number | null
+          organization_id: string | null
+          partner_name: string
+          partner_type: string
+          revenue_share_percent: number | null
+          status: string
+          tier: string
+          updated_at: string | null
+          usage_this_month: number | null
+        }
+        Insert: {
+          api_rate_limit?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          company_email: string
+          company_website?: string | null
+          contract_end_date?: string | null
+          contract_start_date?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          monthly_quota?: number | null
+          organization_id?: string | null
+          partner_name: string
+          partner_type: string
+          revenue_share_percent?: number | null
+          status?: string
+          tier?: string
+          updated_at?: string | null
+          usage_this_month?: number | null
+        }
+        Update: {
+          api_rate_limit?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          company_email?: string
+          company_website?: string | null
+          contract_end_date?: string | null
+          contract_start_date?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          monthly_quota?: number | null
+          organization_id?: string | null
+          partner_name?: string
+          partner_type?: string
+          revenue_share_percent?: number | null
+          status?: string
+          tier?: string
+          updated_at?: string | null
+          usage_this_month?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_accounts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       password_history: {
         Row: {
@@ -2871,6 +3431,111 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: true
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plugin_installations: {
+        Row: {
+          configuration: Json | null
+          id: string
+          installed_at: string | null
+          installed_version: string
+          is_active: boolean | null
+          last_updated_at: string | null
+          organization_id: string
+          plugin_id: string
+        }
+        Insert: {
+          configuration?: Json | null
+          id?: string
+          installed_at?: string | null
+          installed_version: string
+          is_active?: boolean | null
+          last_updated_at?: string | null
+          organization_id: string
+          plugin_id: string
+        }
+        Update: {
+          configuration?: Json | null
+          id?: string
+          installed_at?: string | null
+          installed_version?: string
+          is_active?: boolean | null
+          last_updated_at?: string | null
+          organization_id?: string
+          plugin_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugin_installations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "plugin_installations_plugin_id_fkey"
+            columns: ["plugin_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_plugins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plugin_reviews: {
+        Row: {
+          created_at: string | null
+          helpful_count: number | null
+          id: string
+          is_verified_purchase: boolean | null
+          organization_id: string
+          plugin_id: string
+          rating: number
+          review_text: string | null
+          reviewer_id: string
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          helpful_count?: number | null
+          id?: string
+          is_verified_purchase?: boolean | null
+          organization_id: string
+          plugin_id: string
+          rating: number
+          review_text?: string | null
+          reviewer_id: string
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          helpful_count?: number | null
+          id?: string
+          is_verified_purchase?: boolean | null
+          organization_id?: string
+          plugin_id?: string
+          rating?: number
+          review_text?: string | null
+          reviewer_id?: string
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugin_reviews_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "plugin_reviews_plugin_id_fkey"
+            columns: ["plugin_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_plugins"
             referencedColumns: ["id"]
           },
         ]
@@ -3151,6 +3816,67 @@ export type Database = {
           version?: string
         }
         Relationships: []
+      }
+      reseller_organizations: {
+        Row: {
+          child_organization_id: string
+          created_at: string | null
+          custom_branding: Json | null
+          custom_domain: string | null
+          id: string
+          is_active: boolean | null
+          parent_organization_id: string
+          partner_account_id: string
+          revenue_share_config: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          child_organization_id: string
+          created_at?: string | null
+          custom_branding?: Json | null
+          custom_domain?: string | null
+          id?: string
+          is_active?: boolean | null
+          parent_organization_id: string
+          partner_account_id: string
+          revenue_share_config?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          child_organization_id?: string
+          created_at?: string | null
+          custom_branding?: Json | null
+          custom_domain?: string | null
+          id?: string
+          is_active?: boolean | null
+          parent_organization_id?: string
+          partner_account_id?: string
+          revenue_share_config?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reseller_organizations_child_organization_id_fkey"
+            columns: ["child_organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reseller_organizations_parent_organization_id_fkey"
+            columns: ["parent_organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reseller_organizations_partner_account_id_fkey"
+            columns: ["partner_account_id"]
+            isOneToOne: false
+            referencedRelation: "partner_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       retrieval_feedback: {
         Row: {
@@ -3984,6 +4710,15 @@ export type Database = {
         Args: { subject_email: string }
         Returns: undefined
       }
+      generate_api_key: {
+        Args: {
+          p_environment?: string
+          p_key_name: string
+          p_partner_account_id: string
+          p_scopes: string[]
+        }
+        Returns: Json
+      }
       generate_conformity_hash: {
         Args: { p_report_id: string }
         Returns: string
@@ -4038,6 +4773,7 @@ export type Database = {
       }
       purge_old_audit_logs: { Args: never; Returns: undefined }
       refresh_chunk_feedback_scores: { Args: never; Returns: undefined }
+      validate_api_key: { Args: { p_api_key: string }; Returns: Json }
     }
     Enums: {
       agent_task_status:

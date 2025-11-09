@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
 import { t } from "@/lib/i18n"
-import { Settings as SettingsIcon, Globe, DollarSign, User, Shield, ShieldCheck, ShieldOff } from "lucide-react"
+import { Settings as SettingsIcon, Globe, DollarSign, User, Shield, ShieldCheck, ShieldOff, Key, Eye, EyeOff } from "lucide-react"
+import { calculatePasswordStrength } from "@/lib/passwordValidation"
 
 const Settings = () => {
   const { user } = useAuth()
@@ -23,6 +24,11 @@ const Settings = () => {
   const [language, setLanguage] = useState<string>('en')
   const [fullName, setFullName] = useState<string>('')
   const [mfaEnabled, setMfaEnabled] = useState(false)
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([])
 
   useEffect(() => {
     loadProfile()
@@ -110,6 +116,97 @@ const Settings = () => {
       navigate('/mfa-setup')
     }
   }
+
+  const handlePasswordChange = async () => {
+    if (!newPassword || !confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please fill in all password fields"
+      })
+      return
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Passwords do not match"
+      })
+      return
+    }
+
+    const validation = calculatePasswordStrength(newPassword)
+    if (validation.score < 3) {
+      toast({
+        variant: "destructive",
+        title: "Weak Password",
+        description: "Please choose a stronger password"
+      })
+      return
+    }
+
+    setLoading(true)
+    try {
+      // Check for leaked password
+      const { data: leakCheckData, error: leakCheckError } = await supabase.functions.invoke('password-leak-check', {
+        body: { password: newPassword, user_id: user?.id }
+      })
+
+      if (leakCheckError) {
+        console.warn('Password leak check unavailable:', leakCheckError)
+      } else if (leakCheckData?.is_leaked) {
+        toast({
+          title: "Insecure Password Detected",
+          description: `This password has been found in ${leakCheckData.breach_count} data breaches. Please choose a different password.`,
+          variant: "destructive",
+        })
+        setLoading(false)
+        return
+      }
+
+      // Update password
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      })
+
+      if (error) throw error
+
+      setNewPassword('')
+      setConfirmPassword('')
+      setPasswordErrors([])
+      
+      toast({
+        title: "Password Updated",
+        description: "Your password has been changed successfully"
+      })
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (newPassword) {
+      const validation = calculatePasswordStrength(newPassword)
+      const errors: string[] = []
+      if (validation.score < 3) {
+        if (!validation.hasMinLength) errors.push("At least 8 characters")
+        if (!validation.hasUpperCase) errors.push("One uppercase letter")
+        if (!validation.hasLowerCase) errors.push("One lowercase letter")
+        if (!validation.hasNumber) errors.push("One number")
+        if (!validation.hasSpecialChar) errors.push("One special character")
+      }
+      setPasswordErrors(errors)
+    } else {
+      setPasswordErrors([])
+    }
+  }, [newPassword])
 
   return (
     <div className="space-y-6 p-6" dir={currentLanguage === 'ar' ? 'rtl' : 'ltr'}>
@@ -220,7 +317,7 @@ const Settings = () => {
             </CardTitle>
             <CardDescription>Manage your account security settings</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
             <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -247,6 +344,74 @@ const Settings = () => {
               >
                 {mfaEnabled ? "Disable" : "Enable"} MFA
               </Button>
+            </div>
+
+            <div className="space-y-4 p-4 bg-muted/50 rounded-lg border border-border">
+              <div className="flex items-center gap-2">
+                <Key className="h-5 w-5 text-primary" />
+                <Label className="text-base font-semibold">Change Password</Label>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="newPassword">New Password</Label>
+                  <div className="relative">
+                    <Input
+                      id="newPassword"
+                      type={showPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Enter new password"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-2 top-1/2 -translate-y-1/2"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                  {passwordErrors.length > 0 && (
+                    <div className="text-sm text-destructive space-y-1">
+                      {passwordErrors.map((error, i) => (
+                        <div key={i}>• {error}</div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                  <div className="relative">
+                    <Input
+                      id="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Confirm new password"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-2 top-1/2 -translate-y-1/2"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={handlePasswordChange}
+                  disabled={loading || !newPassword || !confirmPassword || passwordErrors.length > 0}
+                  className="w-full"
+                >
+                  Update Password
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
