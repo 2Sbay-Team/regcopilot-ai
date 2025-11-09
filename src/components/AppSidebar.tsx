@@ -207,7 +207,12 @@ export function AppSidebar() {
       icon: Zap,
     },
     { 
-      titleKey: "nav.admin", 
+      titleKey: "nav.securityCenter", 
+      url: "/security-center", 
+      icon: Shield,
+    },
+    { 
+      titleKey: "nav.admin",
       url: "/admin", 
       icon: Settings,
     },

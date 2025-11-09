@@ -1,323 +1,346 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Shield, Lock, Globe, Database, Users, Activity, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { useState, useEffect } from "react";
+import { Shield, AlertTriangle, CheckCircle, XCircle, RefreshCw, Download, Lock, Database, Cpu, FileCode, HardDrive } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
-interface SecurityOverview {
-  organization_id: string;
-  organization_name: string;
-  rls_enabled_tables: number;
-  total_tables: number;
-  mfa_enabled_users: number;
-  total_users: number;
-  model_region: string;
-  data_residency_strict: boolean;
-  encryption_at_rest: boolean;
-  encryption_in_transit: boolean;
-  recent_auth_events: any[];
-  total_pii_redactions: number;
-  pending_dsar_requests: number;
-  last_updated: string;
+interface SecurityTest {
+  name: string;
+  category: string;
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  status: 'pass' | 'fail' | 'warning';
+  message: string;
+  remediation?: string;
+  compliance_mapping?: string[];
 }
 
-const SecurityCenter = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const [overview, setOverview] = useState<SecurityOverview | null>(null);
-  const [loading, setLoading] = useState(true);
+interface SecuritySummary {
+  total_tests: number;
+  passed: number;
+  failed: number;
+  warnings: number;
+  critical_failures: number;
+  high_failures: number;
+}
 
-  useEffect(() => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-    fetchSecurityOverview();
-  }, [user, navigate]);
+export default function SecurityCenter() {
+  const [loading, setLoading] = useState(false);
+  const [summary, setSummary] = useState<SecuritySummary | null>(null);
+  const [results, setResults] = useState<SecurityTest[]>([]);
+  const [lastAuditTime, setLastAuditTime] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
-  const fetchSecurityOverview = async () => {
+  const runSecurityAudit = async (testType: string = 'full') => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('security_overview_vw' as any)
-        .select('*')
-        .single();
+      const { data, error } = await supabase.functions.invoke('security-audit', {
+        body: { test_type: testType }
+      });
 
       if (error) throw error;
-      setOverview(data as any);
-    } catch (error) {
-      console.error('Error fetching security overview:', error);
-      toast.error('Failed to load security center');
+
+      setSummary(data.summary);
+      setResults(data.results);
+      setLastAuditTime(data.timestamp);
+      
+      toast.success(`Security audit completed: ${data.summary.passed} passed, ${data.summary.failed} failed`);
+    } catch (error: any) {
+      console.error('Security audit error:', error);
+      toast.error(`Audit failed: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  const refreshOverview = async () => {
-    try {
-      // Refresh security overview by calling edge function or re-fetching
-      await supabase.functions.invoke('refresh-feedback-views'); // Reuse existing refresh function
-      toast.success('Security overview refreshed');
-      fetchSecurityOverview();
-    } catch (error) {
-      console.error('Error refreshing overview:', error);
-      toast.error('Failed to refresh overview');
+  const exportReport = () => {
+    const report = {
+      summary,
+      results,
+      timestamp: lastAuditTime,
+      generated_by: 'Regulix Security Center'
+    };
+
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `security-audit-${new Date().toISOString()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    toast.success('Security report exported');
+  };
+
+  const categories = ["all", "Database Security", "Injection Protection", "AI Security", "Automation Security", "Storage Security"];
+
+  const filteredResults = selectedCategory === "all" 
+    ? results 
+    : results.filter(r => r.category === selectedCategory);
+
+  const getSeverityColor = (severity: string) => {
+    switch (severity) {
+      case 'critical': return 'destructive';
+      case 'high': return 'destructive';
+      case 'medium': return 'default';
+      case 'low': return 'secondary';
+      default: return 'secondary';
     }
   };
 
-  const calculateRLSCoverage = () => {
-    if (!overview) return 0;
-    return Math.round((overview.rls_enabled_tables / overview.total_tables) * 100);
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'pass': return <CheckCircle className="h-4 w-4 text-success" />;
+      case 'fail': return <XCircle className="h-4 w-4 text-destructive" />;
+      case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      default: return null;
+    }
   };
 
-  const calculateMFAAdoption = () => {
-    if (!overview || overview.total_users === 0) return 0;
-    return Math.round((overview.mfa_enabled_users / overview.total_users) * 100);
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'Database Security': return <Database className="h-4 w-4" />;
+      case 'Injection Protection': return <Shield className="h-4 w-4" />;
+      case 'AI Security': return <Cpu className="h-4 w-4" />;
+      case 'Automation Security': return <FileCode className="h-4 w-4" />;
+      case 'Storage Security': return <HardDrive className="h-4 w-4" />;
+      default: return <Lock className="h-4 w-4" />;
+    }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Loading Security Center...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!overview) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Card className="p-6">
-          <p className="text-muted-foreground">No security data available</p>
-        </Card>
-      </div>
-    );
-  }
-
-  const rlsCoverage = calculateRLSCoverage();
-  const mfaAdoption = calculateMFAAdoption();
+  const overallScore = summary 
+    ? Math.round((summary.passed / summary.total_tests) * 100)
+    : 0;
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
-              <Shield className="h-8 w-8 text-primary" />
-              Security Center
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              GDPR, EU AI Act & Enterprise Trust Dashboard
-            </p>
-          </div>
-          <Button onClick={refreshOverview} variant="outline">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+    <div className="container mx-auto p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            <Shield className="h-8 w-8 text-primary" />
+            Security Center
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            Comprehensive security testing & compliance verification
+          </p>
+        </div>
+        <div className="flex gap-2">
+          {results.length > 0 && (
+            <Button variant="outline" onClick={exportReport}>
+              <Download className="h-4 w-4 mr-2" />
+              Export Report
+            </Button>
+          )}
+          <Button onClick={() => runSecurityAudit('full')} disabled={loading}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            {loading ? 'Running Audit...' : 'Run Full Audit'}
           </Button>
         </div>
+      </div>
 
-        {/* Security Score Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">RLS Coverage</CardTitle>
-              <Database className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{rlsCoverage}%</div>
-              <Progress value={rlsCoverage} className="mt-2" />
-              <p className="text-xs text-muted-foreground mt-2">
-                {overview.rls_enabled_tables} of {overview.total_tables} tables protected
-              </p>
-            </CardContent>
-          </Card>
+      {summary && (
+        <>
+          <div className="grid gap-4 md:grid-cols-4">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium">Security Score</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">{overallScore}%</div>
+                <Progress value={overallScore} className="mt-2" />
+                <p className="text-xs text-muted-foreground mt-2">
+                  {summary.passed} of {summary.total_tests} tests passed
+                </p>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">MFA Adoption</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{mfaAdoption}%</div>
-              <Progress value={mfaAdoption} className="mt-2" />
-              <p className="text-xs text-muted-foreground mt-2">
-                {overview.mfa_enabled_users} of {overview.total_users} users secured
-              </p>
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium">Critical Issues</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-destructive">
+                  {summary.critical_failures}
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Require immediate attention
+                </p>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Data Residency</CardTitle>
-              <Globe className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{overview.model_region}</div>
-              <Badge variant={overview.data_residency_strict ? 'default' : 'secondary'} className="mt-2">
-                {overview.data_residency_strict ? 'Strict Mode' : 'Flexible'}
-              </Badge>
-              <p className="text-xs text-muted-foreground mt-2">
-                {overview.data_residency_strict ? 'Only EU models allowed' : 'Global models enabled'}
-              </p>
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium">High Priority</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-yellow-600">
+                  {summary.high_failures}
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Should be addressed soon
+                </p>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Encryption</CardTitle>
-              <Lock className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-2 mt-2">
-                {overview.encryption_at_rest ? (
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                ) : (
-                  <XCircle className="h-5 w-5 text-destructive" />
-                )}
-                <span className="text-sm">At Rest (AES-256)</span>
-              </div>
-              <div className="flex items-center gap-2 mt-1">
-                {overview.encryption_in_transit ? (
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                ) : (
-                  <XCircle className="h-5 w-5 text-destructive" />
-                )}
-                <span className="text-sm">In Transit (TLS 1.3)</span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* GDPR Compliance Metrics */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>GDPR Metrics</CardTitle>
-              <CardDescription>Privacy compliance indicators</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">PII Redactions</span>
-                <Badge variant="outline">{overview.total_pii_redactions} instances</Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Pending DSAR Requests</span>
-                <Badge variant={overview.pending_dsar_requests > 0 ? 'destructive' : 'default'}>
-                  {overview.pending_dsar_requests} requests
-                </Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Data Retention Enforcement</span>
-                <Badge variant="default">Active</Badge>
-              </div>
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium">Warnings</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-yellow-600">
+                  {summary.warnings}
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Recommended improvements
+                </p>
+              </CardContent>
+            </Card>
+          </div>
 
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                Recent Authentication Activity
-              </CardTitle>
-              <CardDescription>Last 10 authentication events</CardDescription>
+              <CardTitle>Test Categories</CardTitle>
+              <CardDescription>
+                Run targeted security tests or view results by category
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Event</TableHead>
-                    <TableHead>IP Address</TableHead>
-                    <TableHead>Time</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {overview.recent_auth_events && overview.recent_auth_events.length > 0 ? (
-                    overview.recent_auth_events.slice(0, 5).map((event: any, idx: number) => (
-                      <TableRow key={idx}>
-                        <TableCell className="capitalize">{event.event_type?.replace('_', ' ')}</TableCell>
-                        <TableCell className="font-mono text-sm">{event.ip_address || 'N/A'}</TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {new Date(event.created_at).toLocaleString()}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={3} className="text-center text-muted-foreground">
-                        No recent activity
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
+              <div className="flex flex-wrap gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => runSecurityAudit('database')}
+                  disabled={loading}
+                >
+                  <Database className="h-4 w-4 mr-2" />
+                  Database
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => runSecurityAudit('injection')}
+                  disabled={loading}
+                >
+                  <Shield className="h-4 w-4 mr-2" />
+                  Injection
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => runSecurityAudit('ai')}
+                  disabled={loading}
+                >
+                  <Cpu className="h-4 w-4 mr-2" />
+                  AI Security
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => runSecurityAudit('automation')}
+                  disabled={loading}
+                >
+                  <FileCode className="h-4 w-4 mr-2" />
+                  Automation
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => runSecurityAudit('storage')}
+                  disabled={loading}
+                >
+                  <HardDrive className="h-4 w-4 mr-2" />
+                  Storage
+                </Button>
+              </div>
             </CardContent>
           </Card>
-        </div>
+        </>
+      )}
 
-        {/* Compliance Status */}
+      {results.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Compliance Status</CardTitle>
-            <CardDescription>EU AI Act & GDPR readiness</CardDescription>
+            <CardTitle>Test Results</CardTitle>
+            <CardDescription>
+              Detailed security test outcomes - Last run: {lastAuditTime ? new Date(lastAuditTime).toLocaleString() : 'N/A'}
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span className="font-semibold">EU AI Act</span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Limited Risk classification with full documentation
-                </p>
-              </div>
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span className="font-semibold">GDPR</span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Compliant with RLS, encryption, and DSAR automation
-                </p>
-              </div>
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span className="font-semibold">SOC 2</span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Audit trail, access controls, and monitoring in place
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            <Tabs value={selectedCategory} onValueChange={setSelectedCategory}>
+              <TabsList className="mb-4">
+                {categories.map(cat => (
+                  <TabsTrigger key={cat} value={cat}>
+                    {cat === "all" ? "All Tests" : cat}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
 
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-sm text-muted-foreground">
-              Last updated: {new Date(overview.last_updated).toLocaleString()}
-            </p>
+              <div className="space-y-3">
+                {filteredResults.map((test, idx) => (
+                  <Card key={idx} className="border-l-4" style={{
+                    borderLeftColor: test.status === 'pass' ? 'hsl(var(--success))' : 
+                                    test.status === 'fail' ? 'hsl(var(--destructive))' : 
+                                    'hsl(var(--warning))'
+                  }}>
+                    <CardContent className="pt-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-3 flex-1">
+                          {getCategoryIcon(test.category)}
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              {getStatusIcon(test.status)}
+                              <h4 className="font-medium">{test.name}</h4>
+                              <Badge variant={getSeverityColor(test.severity) as any}>
+                                {test.severity.toUpperCase()}
+                              </Badge>
+                            </div>
+                            <p className="text-sm text-muted-foreground mb-2">
+                              {test.message}
+                            </p>
+                            {test.remediation && (
+                              <div className="bg-muted p-2 rounded text-sm mt-2">
+                                <strong>Remediation:</strong> {test.remediation}
+                              </div>
+                            )}
+                            {test.compliance_mapping && test.compliance_mapping.length > 0 && (
+                              <div className="flex gap-1 mt-2 flex-wrap">
+                                {test.compliance_mapping.map((c, i) => (
+                                  <Badge key={i} variant="outline" className="text-xs">
+                                    {c}
+                                  </Badge>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </Tabs>
           </CardContent>
         </Card>
-      </div>
+      )}
+
+      {!summary && !loading && (
+        <Card className="border-dashed">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <Shield className="h-12 w-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-medium mb-2">No Audit Results Yet</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Run a security audit to assess your platform's security posture
+            </p>
+            <Button onClick={() => runSecurityAudit('full')}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Run First Audit
+            </Button>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
-};
-
-export default SecurityCenter;
+}

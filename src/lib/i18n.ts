@@ -54,6 +54,8 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.explainability': 'Explainability',
     'nav.marketplace': 'Marketplace',
     'nav.regSense': 'RegSense™',
+    'nav.automation': 'Automation',
+    'nav.securityCenter': 'Security Center',
     'nav.admin': 'Admin',
     'nav.main': 'Main',
     'nav.tools': 'Tools',
