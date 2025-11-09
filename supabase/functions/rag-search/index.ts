@@ -37,8 +37,57 @@ Deno.serve(async (req) => {
 
     console.log('RAG search query:', query)
 
-    // Generate embedding for query (placeholder - in production use OpenAI embeddings)
-    const queryEmbedding = new Array(1536).fill(0).map(() => Math.random())
+    // Generate embedding using Lovable AI Gateway (Gemini)
+    let queryEmbedding: number[]
+    
+    try {
+      const embeddingResponse = await fetch('https://ai.gateway.lovable.dev/v1/embeddings', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'text-embedding-004',
+          input: query
+        })
+      })
+
+      if (!embeddingResponse.ok) {
+        throw new Error(`Embedding API error: ${embeddingResponse.status}`)
+      }
+
+      const embeddingData = await embeddingResponse.json()
+      queryEmbedding = embeddingData.data[0].embedding
+      
+      console.log('Generated embedding, dimension:', queryEmbedding.length)
+    } catch (embeddingError) {
+      console.error('Failed to generate embedding:', embeddingError)
+      // Fallback to text search immediately
+      const { data: textResults } = await supabase
+        .from('document_chunks')
+        .select('id, content, metadata')
+        .textSearch('content', query, { type: 'websearch' })
+        .limit(top_k)
+
+      return new Response(
+        JSON.stringify({
+          success: true,
+          results: textResults?.map(r => ({
+            content: r.content,
+            section: r.metadata?.section || 'N/A',
+            source: r.metadata?.source || 'Unknown',
+            similarity: 0.5
+          })) || [],
+          fallback: true,
+          reason: 'embedding_generation_failed'
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200
+        }
+      )
+    }
 
     // Search for similar chunks
     let searchQuery = supabase

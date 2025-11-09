@@ -541,6 +541,39 @@ export type Database = {
           },
         ]
       }
+      auth_audit_logs: {
+        Row: {
+          created_at: string | null
+          event_type: string
+          id: string
+          ip_address: unknown
+          metadata: Json | null
+          success: boolean | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_type: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          success?: boolean | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          success?: boolean | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       compliance_reports: {
         Row: {
           created_at: string | null
@@ -809,6 +842,47 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "data_processing_activities_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      data_retention_policies: {
+        Row: {
+          created_at: string | null
+          enabled: boolean | null
+          id: string
+          last_cleanup_at: string | null
+          organization_id: string
+          retention_days: number
+          table_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          last_cleanup_at?: string | null
+          organization_id: string
+          retention_days?: number
+          table_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          last_cleanup_at?: string | null
+          organization_id?: string
+          retention_days?: number
+          table_name?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "data_retention_policies_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -1374,6 +1448,30 @@ export type Database = {
         }
         Relationships: []
       }
+      mfa_backup_codes: {
+        Row: {
+          code_hash: string
+          created_at: string | null
+          id: string
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          code_hash: string
+          created_at?: string | null
+          id?: string
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          code_hash?: string
+          created_at?: string | null
+          id?: string
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       ml_models: {
         Row: {
           bias_documentation: string | null
@@ -1701,6 +1799,33 @@ export type Database = {
         }
         Relationships: []
       }
+      password_leak_checks: {
+        Row: {
+          checked_at: string | null
+          hash_prefix: string
+          id: string
+          is_leaked: boolean
+          metadata: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          checked_at?: string | null
+          hash_prefix: string
+          id?: string
+          is_leaked: boolean
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          checked_at?: string | null
+          hash_prefix?: string
+          id?: string
+          is_leaked?: boolean
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -1795,6 +1920,59 @@ export type Database = {
           version?: string | null
         }
         Relationships: []
+      }
+      scheduled_jobs: {
+        Row: {
+          config: Json | null
+          created_at: string | null
+          enabled: boolean | null
+          id: string
+          job_name: string
+          job_type: string
+          last_run_at: string | null
+          last_status: string | null
+          next_run_at: string | null
+          organization_id: string | null
+          schedule_cron: string
+          updated_at: string | null
+        }
+        Insert: {
+          config?: Json | null
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          job_name: string
+          job_type: string
+          last_run_at?: string | null
+          last_status?: string | null
+          next_run_at?: string | null
+          organization_id?: string | null
+          schedule_cron: string
+          updated_at?: string | null
+        }
+        Update: {
+          config?: Json | null
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          job_name?: string
+          job_type?: string
+          last_run_at?: string | null
+          last_status?: string | null
+          next_run_at?: string | null
+          organization_id?: string | null
+          schedule_cron?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_jobs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       seeding_progress: {
         Row: {
