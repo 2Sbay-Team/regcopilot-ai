@@ -29,7 +29,7 @@ import {
   Wrench
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
-import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
+import { RefinedLogoMinimal } from "@/components/RefinedLogo"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { t } from "@/lib/i18n"
 import { useLanguage } from "@/contexts/LanguageContext"
@@ -266,21 +266,25 @@ export function AppSidebar() {
               {isCollapsed ? (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center cursor-pointer">
-                      <span className="text-primary-foreground font-bold text-sm">RE</span>
+                    <div className="w-8 h-8 rounded-sm flex items-center justify-center cursor-pointer">
+                      <RefinedLogoMinimal size={32} />
                     </div>
                   </TooltipTrigger>
                   <TooltipContent side="right">
                     <p className="font-semibold">Regulix</p>
-                    <p className="text-xs text-muted-foreground">Regulatory Intelligence</p>
+                    <p className="text-xs text-muted-foreground">Precision Regulatory Intelligence</p>
                   </TooltipContent>
                 </Tooltip>
               ) : (
-                <div className="flex items-center gap-2">
-                  <RoboticShieldLogo size={28} />
+                <div className="flex items-center gap-3">
+                  <RefinedLogoMinimal size={32} />
                   <div>
-                    <span className="font-semibold text-base block leading-tight">Regulix</span>
-                    <span className="text-[10px] text-muted-foreground leading-none">Regulatory Intelligence</span>
+                    <span className="font-bold text-base block leading-tight tracking-tight" style={{ fontFamily: '"Space Grotesk", system-ui, sans-serif' }}>
+                      REGULIX
+                    </span>
+                    <span className="text-[10px] text-muted-foreground leading-none tracking-wider uppercase">
+                      Precision Intelligence
+                    </span>
                   </div>
                 </div>
               )}
