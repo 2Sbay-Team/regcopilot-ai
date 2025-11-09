@@ -13,6 +13,8 @@ import { Bot, Plus, TrendingUp, DollarSign, Zap, Search, Filter, ArrowUpDown, Tr
 import { Checkbox } from "@/components/ui/checkbox"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { MODEL_PROVIDERS, getProviderModels, type ModelInfo } from "@/lib/modelProviders"
+import { ModelInfoCard } from "@/components/ModelInfoCard"
 
 const AVAILABLE_MODELS = [
   { name: 'google/gemini-2.5-pro', provider: 'Google', price: 0.30 },
@@ -41,12 +43,14 @@ const ModelManagement = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   
   const [newModel, setNewModel] = useState({
-    model_name: '',
     provider: '',
+    model_name: '',
     base_url: '',
     api_key_ref: '',
     price_per_1k_tokens: 0,
   })
+  const [availableModels, setAvailableModels] = useState<ModelInfo[]>([])
+  const [selectedModelInfo, setSelectedModelInfo] = useState<ModelInfo | null>(null)
 
   useEffect(() => {
     loadProfile()
@@ -74,18 +78,46 @@ const ModelManagement = () => {
     setModels(data || [])
   }
 
+  const handleProviderChange = (providerId: string) => {
+    setNewModel({ ...newModel, provider: providerId, model_name: '' })
+    setSelectedModelInfo(null)
+    const models = getProviderModels(providerId)
+    setAvailableModels(models)
+  }
+
+  const handleModelChange = (modelId: string) => {
+    const modelInfo = availableModels.find(m => m.id === modelId)
+    if (modelInfo) {
+      setNewModel({
+        ...newModel,
+        model_name: modelInfo.id,
+        price_per_1k_tokens: (modelInfo.inputPricePerMillion + modelInfo.outputPricePerMillion) / 2 / 1000,
+      })
+      setSelectedModelInfo(modelInfo)
+    }
+  }
+
   const addModel = async () => {
+    if (!newModel.provider || !newModel.model_name) {
+      toast({ 
+        variant: "destructive", 
+        title: "Missing Information", 
+        description: "Please select both provider and model" 
+      })
+      return
+    }
+
     setLoading(true)
     try {
-      const selectedModel = AVAILABLE_MODELS.find(m => m.name === newModel.model_name)
+      const provider = MODEL_PROVIDERS.find(p => p.id === newModel.provider)
       
       const { error } = await supabase.from('model_configs').insert({
         organization_id: profile.organization_id,
         model_name: newModel.model_name,
-        provider: selectedModel?.provider || newModel.provider,
-        base_url: newModel.base_url || null,
+        provider: provider?.name || newModel.provider,
+        base_url: provider?.apiEndpoint || newModel.base_url || null,
         api_key_ref: newModel.api_key_ref || null,
-        price_per_1k_tokens: selectedModel?.price || newModel.price_per_1k_tokens,
+        price_per_1k_tokens: newModel.price_per_1k_tokens,
         active: true,
       })
 
@@ -93,7 +125,9 @@ const ModelManagement = () => {
 
       toast({ title: "Model Added", description: "Model configuration saved successfully" })
       setIsDialogOpen(false)
-      setNewModel({ model_name: '', provider: '', base_url: '', api_key_ref: '', price_per_1k_tokens: 0 })
+      setNewModel({ provider: '', model_name: '', base_url: '', api_key_ref: '', price_per_1k_tokens: 0 })
+      setSelectedModelInfo(null)
+      setAvailableModels([])
       loadModels()
     } catch (error: any) {
       toast({ variant: "destructive", title: "Error", description: error.message })
@@ -234,47 +268,107 @@ const ModelManagement = () => {
               Add Model
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Add AI Model</DialogTitle>
-              <DialogDescription>Configure a new AI model for your organization</DialogDescription>
+              <DialogDescription>Select a provider and model to configure for your organization</DialogDescription>
             </DialogHeader>
-            <div className="space-y-4 py-4">
+            <div className="space-y-6 py-4">
+              {/* Provider Selection */}
               <div className="space-y-2">
-                <Label>Model</Label>
-                <Select value={newModel.model_name} onValueChange={(val) => setNewModel({ ...newModel, model_name: val })}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a model" />
+                <Label>Provider</Label>
+                <Select value={newModel.provider} onValueChange={handleProviderChange}>
+                  <SelectTrigger className="bg-background">
+                    <SelectValue placeholder="Select a provider" />
                   </SelectTrigger>
-                  <SelectContent>
-                    {AVAILABLE_MODELS.map(m => (
-                      <SelectItem key={m.name} value={m.name}>
-                        {m.name} - ${m.price}/1K tokens
+                  <SelectContent className="bg-popover">
+                    {MODEL_PROVIDERS.map((provider) => (
+                      <SelectItem key={provider.id} value={provider.id}>
+                        <div className="flex items-center gap-2">
+                          <img src={provider.logo} alt={provider.name} className="w-4 h-4" />
+                          <span>{provider.name}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {provider.flag} {provider.headquarters}
+                          </span>
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label>Custom Endpoint (Optional)</Label>
-                <Input
-                  placeholder="https://api.example.com/v1"
-                  value={newModel.base_url}
-                  onChange={(e) => setNewModel({ ...newModel, base_url: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>API Key Reference (Optional)</Label>
-                <Input
-                  placeholder="e.g., CUSTOM_API_KEY"
-                  value={newModel.api_key_ref}
-                  onChange={(e) => setNewModel({ ...newModel, api_key_ref: e.target.value })}
-                />
-              </div>
+
+              {/* Model Selection */}
+              {availableModels.length > 0 && (
+                <div className="space-y-2">
+                  <Label>Model</Label>
+                  <Select value={newModel.model_name} onValueChange={handleModelChange}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue placeholder="Select a model" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-popover">
+                      {availableModels.map((model) => (
+                        <SelectItem key={model.id} value={model.id}>
+                          <div className="flex items-center justify-between w-full">
+                            <span>{model.name}</span>
+                            <span className="text-xs text-muted-foreground ml-4">
+                              {model.releaseDate}
+                            </span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              {/* Model Info Card */}
+              {selectedModelInfo && (
+                <ModelInfoCard model={selectedModelInfo} />
+              )}
+
+              {/* Optional Configuration */}
+              {newModel.model_name && (
+                <>
+                  <div className="space-y-2">
+                    <Label>Custom Endpoint (Optional)</Label>
+                    <Input
+                      placeholder="https://api.example.com/v1"
+                      value={newModel.base_url}
+                      onChange={(e) => setNewModel({ ...newModel, base_url: e.target.value })}
+                      className="bg-background"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Leave empty to use default endpoint
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>API Key Reference (Optional)</Label>
+                    <Input
+                      placeholder="e.g., OPENAI_API_KEY"
+                      value={newModel.api_key_ref}
+                      onChange={(e) => setNewModel({ ...newModel, api_key_ref: e.target.value })}
+                      className="bg-background"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Environment variable name for the API key
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-              <Button onClick={addModel} disabled={loading || !newModel.model_name}>
+              <Button variant="outline" onClick={() => {
+                setIsDialogOpen(false)
+                setNewModel({ provider: '', model_name: '', base_url: '', api_key_ref: '', price_per_1k_tokens: 0 })
+                setSelectedModelInfo(null)
+                setAvailableModels([])
+              }}>
+                Cancel
+              </Button>
+              <Button 
+                onClick={addModel} 
+                disabled={loading || !newModel.provider || !newModel.model_name}
+              >
                 Add Model
               </Button>
             </div>
