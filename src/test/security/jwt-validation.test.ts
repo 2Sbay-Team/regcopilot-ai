@@ -191,7 +191,7 @@ describe('JWT Token Validation', () => {
       expect(currentUrl).not.toMatch(/refresh_token=/);
     });
 
-    it('should use secure token storage', () => {
+    it('should use secure token storage', async () => {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (session) {
