@@ -21,6 +21,9 @@ const Explainability = () => {
   useEffect(() => {
     if (assessmentId && assessmentType) {
       loadData()
+    } else {
+      // No assessment selected, stop loading
+      setLoading(false)
     }
   }, [assessmentId, assessmentType])
 
@@ -73,6 +76,23 @@ const Explainability = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="text-muted-foreground">Loading...</p>
+      </div>
+    )
+  }
+
+  if (!assessmentId || !assessmentType) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Brain className="h-16 w-16 text-muted-foreground mx-auto" />
+          <div>
+            <h2 className="text-xl font-semibold mb-2">No Assessment Selected</h2>
+            <p className="text-muted-foreground mb-4">
+              Please select an assessment from your dashboard to view explainability details.
+            </p>
+          </div>
+          <Button onClick={() => navigate("/dashboard")}>Go to Dashboard</Button>
+        </div>
       </div>
     )
   }
