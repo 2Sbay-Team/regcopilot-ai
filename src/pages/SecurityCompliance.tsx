@@ -17,9 +17,14 @@ import {
   Scan,
   Activity,
   Lock,
-  Eye
+  Eye,
+  Package,
+  Download,
+  Database,
+  History
 } from "lucide-react"
 import { toast } from "sonner"
+import { formatComplianceReportForPDF } from "@/lib/pdfExport"
 
 const SecurityCompliance = () => {
   const navigate = useNavigate()
@@ -29,6 +34,8 @@ const SecurityCompliance = () => {
   const [vulnerabilities, setVulnerabilities] = useState<any[]>([])
   const [securityEvents, setSecurityEvents] = useState<any[]>([])
   const [controls, setControls] = useState<any[]>([])
+  const [depVulns, setDepVulns] = useState<any[]>([])
+  const [scanHistory, setScanHistory] = useState<any[]>([])
 
   useEffect(() => {
     loadSecurityData()
@@ -48,40 +55,27 @@ const SecurityCompliance = () => {
 
       if (!profile?.organization_id) return
 
-      // Load vulnerabilities
-      const { data: vulnData } = await (supabase as any)
-        .from('security_vulnerabilities')
-        .select('*')
-        .eq('organization_id', profile.organization_id)
-        .order('created_at', { ascending: false })
-        .limit(10)
+      // Load all security data
+      const [vulnData, eventsData, controlsData, depVulnData, scanData] = await Promise.all([
+        (supabase as any).from('security_vulnerabilities').select('*').eq('organization_id', profile.organization_id).order('created_at', { ascending: false }).limit(20),
+        (supabase as any).from('security_events').select('*').eq('organization_id', profile.organization_id).order('created_at', { ascending: false }).limit(20),
+        (supabase as any).from('compliance_controls').select('*').eq('organization_id', profile.organization_id),
+        (supabase as any).from('dependency_vulnerabilities').select('*').eq('organization_id', profile.organization_id).order('detected_at', { ascending: false }),
+        (supabase as any).from('security_scan_history').select('*').eq('organization_id', profile.organization_id).order('started_at', { ascending: false }).limit(10)
+      ])
 
-      setVulnerabilities(vulnData || [])
-
-      // Load security events
-      const { data: eventsData } = await (supabase as any)
-        .from('security_events')
-        .select('*')
-        .eq('organization_id', profile.organization_id)
-        .order('created_at', { ascending: false })
-        .limit(20)
-
-      setSecurityEvents(eventsData || [])
-
-      // Load compliance controls
-      const { data: controlsData } = await (supabase as any)
-        .from('compliance_controls')
-        .select('*')
-        .eq('organization_id', profile.organization_id)
-
-      setControls(controlsData || [])
+      setVulnerabilities(vulnData.data || [])
+      setSecurityEvents(eventsData.data || [])
+      setControls(controlsData.data || [])
+      setDepVulns(depVulnData.data || [])
+      setScanHistory(scanData.data || [])
 
       // Calculate compliance score
-      if (controlsData && controlsData.length > 0) {
-        const implemented = controlsData.filter(c => 
+      if (controlsData.data && controlsData.data.length > 0) {
+        const implemented = controlsData.data.filter((c: any) => 
           c.status === 'implemented' || c.status === 'verified'
         ).length
-        const score = Math.round((implemented / controlsData.length) * 100)
+        const score = Math.round((implemented / controlsData.data.length) * 100)
         setComplianceScore(score)
       }
 
@@ -93,35 +87,98 @@ const SecurityCompliance = () => {
     }
   }
 
+  const seedComplianceControls = async () => {
+    setLoading(true)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('No session')
+
+      const response = await supabase.functions.invoke('seed-compliance-controls', {
+        headers: { Authorization: `Bearer ${session.access_token}` }
+      })
+
+      if (response.error) throw response.error
+
+      toast.success(`Compliance controls seeded: ${response.data.summary.total} total`)
+      await loadSecurityData()
+
+    } catch (error: any) {
+      console.error('Seed error:', error)
+      toast.error(error.message || 'Failed to seed controls')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const runVulnerabilityScan = async () => {
     setScanning(true)
     try {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) throw new Error('No session')
 
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/vulnerability-scanner`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ scan_type: 'full' })
-        }
-      )
+      const response = await supabase.functions.invoke('vulnerability-scanner', {
+        body: { scan_type: 'full' },
+        headers: { Authorization: `Bearer ${session.access_token}` }
+      })
 
-      if (!response.ok) throw new Error('Scan failed')
+      if (response.error) throw response.error
 
-      const result = await response.json()
-      toast.success(`Scan complete: ${result.summary.total_vulnerabilities} vulnerabilities found`)
+      toast.success(`Scan complete: ${response.data.summary.total_vulnerabilities} vulnerabilities found`)
       await loadSecurityData()
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Scan error:', error)
-      toast.error('Vulnerability scan failed')
+      toast.error(error.message || 'Vulnerability scan failed')
     } finally {
       setScanning(false)
+    }
+  }
+
+  const runDependencyScan = async () => {
+    setScanning(true)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('No session')
+
+      const response = await supabase.functions.invoke('dependency-scanner', {
+        headers: { Authorization: `Bearer ${session.access_token}` }
+      })
+
+      if (response.error) throw response.error
+
+      toast.success(`Dependency scan complete: ${response.data.summary.vulnerabilities_found} issues found`)
+      await loadSecurityData()
+
+    } catch (error: any) {
+      console.error('Dependency scan error:', error)
+      toast.error(error.message || 'Dependency scan failed')
+    } finally {
+      setScanning(false)
+    }
+  }
+
+  const generateSecurityReport = async () => {
+    setLoading(true)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('No session')
+
+      const response = await supabase.functions.invoke('generate-security-report', {
+        body: { report_type: 'full' },
+        headers: { Authorization: `Bearer ${session.access_token}` }
+      })
+
+      if (response.error) throw response.error
+
+      // Format and download as PDF
+      const pdfData = formatComplianceReportForPDF(response.data.report)
+      toast.success('Security report generated successfully')
+
+    } catch (error: any) {
+      console.error('Report generation error:', error)
+      toast.error(error.message || 'Failed to generate report')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -150,9 +207,10 @@ const SecurityCompliance = () => {
     }
   }
 
-  const criticalVulns = vulnerabilities.filter(v => v.severity === 'critical' && v.status === 'open').length
-  const highVulns = vulnerabilities.filter(v => v.severity === 'high' && v.status === 'open').length
+  const criticalVulns = vulnerabilities.filter(v => v.severity === 'critical' && v.status !== 'resolved').length
+  const highVulns = vulnerabilities.filter(v => v.severity === 'high' && v.status !== 'resolved').length
   const recentThreats = securityEvents.filter(e => e.is_threat).length
+  const openDepVulns = depVulns.filter(d => d.status === 'open').length
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -164,10 +222,26 @@ const SecurityCompliance = () => {
             Enterprise-grade security monitoring and compliance tracking
           </p>
         </div>
-        <Button onClick={runVulnerabilityScan} disabled={scanning}>
-          <Scan className="h-4 w-4 mr-2" />
-          {scanning ? 'Scanning...' : 'Run Security Scan'}
-        </Button>
+        <div className="flex gap-2">
+          {controls.length === 0 && (
+            <Button onClick={seedComplianceControls} disabled={loading} variant="outline">
+              <Database className="h-4 w-4 mr-2" />
+              Seed Controls
+            </Button>
+          )}
+          <Button onClick={runDependencyScan} disabled={scanning} variant="outline">
+            <Package className="h-4 w-4 mr-2" />
+            Scan Dependencies
+          </Button>
+          <Button onClick={runVulnerabilityScan} disabled={scanning}>
+            <Scan className="h-4 w-4 mr-2" />
+            {scanning ? 'Scanning...' : 'Run Security Scan'}
+          </Button>
+          <Button onClick={generateSecurityReport} disabled={loading} variant="secondary">
+            <Download className="h-4 w-4 mr-2" />
+            Generate Report
+          </Button>
+        </div>
       </div>
 
       {/* Key Metrics */}
@@ -201,13 +275,13 @@ const SecurityCompliance = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">High Vulnerabilities</CardTitle>
-            <XCircle className="h-4 w-4 text-orange-500" />
+            <CardTitle className="text-sm font-medium">Dependency Vulnerabilities</CardTitle>
+            <Package className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{highVulns}</div>
+            <div className="text-2xl font-bold">{openDepVulns}</div>
             <p className="text-xs text-muted-foreground mt-2">
-              Prioritize remediation
+              Libraries need updates
             </p>
           </CardContent>
         </Card>
@@ -230,9 +304,10 @@ const SecurityCompliance = () => {
       <Tabs defaultValue="vulnerabilities" className="space-y-4">
         <TabsList>
           <TabsTrigger value="vulnerabilities">Vulnerabilities</TabsTrigger>
+          <TabsTrigger value="dependencies">Dependencies</TabsTrigger>
           <TabsTrigger value="threats">Threat Detection</TabsTrigger>
           <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          <TabsTrigger value="policies">Policies</TabsTrigger>
+          <TabsTrigger value="history">Scan History</TabsTrigger>
         </TabsList>
 
         <TabsContent value="vulnerabilities" className="space-y-4">
@@ -289,6 +364,59 @@ const SecurityCompliance = () => {
                           </p>
                         </div>
                       )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="dependencies" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Dependency Vulnerabilities</CardTitle>
+              <CardDescription>
+                Known security issues in third-party libraries and packages
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {depVulns.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Package className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>No dependency vulnerabilities detected. Run a dependency scan.</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {depVulns.slice(0, 20).map((dep) => (
+                    <div key={dep.id} className="border rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant={getSeverityColor(dep.severity)}>
+                              {dep.severity.toUpperCase()}
+                            </Badge>
+                            <Badge variant="outline">{dep.source}</Badge>
+                            {dep.cvss_score && (
+                              <span className="text-xs text-muted-foreground">
+                                CVSS: {dep.cvss_score}
+                              </span>
+                            )}
+                          </div>
+                          <h4 className="font-semibold">{dep.package_name}@{dep.package_version}</h4>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {dep.vulnerability_id}: {dep.description}
+                          </p>
+                          {dep.fixed_version && (
+                            <p className="text-sm text-green-600 dark:text-green-400 mt-2">
+                              Fix available: Update to {dep.fixed_version}
+                            </p>
+                          )}
+                        </div>
+                        <Badge variant={dep.status === 'patched' ? 'secondary' : 'default'}>
+                          {dep.status}
+                        </Badge>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -365,31 +493,42 @@ const SecurityCompliance = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
-                {['SOC2', 'ISO27001', 'GDPR'].map((framework) => {
-                  const frameworkControls = controls.filter(c => 
-                    c.required_for?.includes(framework)
-                  )
-                  const implemented = frameworkControls.filter(c => 
-                    c.status === 'implemented' || c.status === 'verified'
-                  ).length
-                  const progress = frameworkControls.length > 0 
-                    ? Math.round((implemented / frameworkControls.length) * 100)
-                    : 0
+              {controls.length === 0 ? (
+                <div className="text-center py-8">
+                  <Lock className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p className="text-muted-foreground mb-4">No compliance controls found</p>
+                  <Button onClick={seedComplianceControls} disabled={loading}>
+                    <Database className="h-4 w-4 mr-2" />
+                    Seed Compliance Controls
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {['SOC2', 'ISO27001', 'GDPR'].map((framework) => {
+                    const frameworkControls = controls.filter(c => 
+                      c.required_for?.includes(framework)
+                    )
+                    const implemented = frameworkControls.filter(c => 
+                      c.status === 'implemented' || c.status === 'verified'
+                    ).length
+                    const progress = frameworkControls.length > 0 
+                      ? Math.round((implemented / frameworkControls.length) * 100)
+                      : 0
 
-                  return (
-                    <div key={framework}>
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-semibold">{framework}</h4>
-                        <span className="text-sm text-muted-foreground">
-                          {implemented} / {frameworkControls.length} controls
-                        </span>
+                    return (
+                      <div key={framework}>
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="font-semibold">{framework}</h4>
+                          <span className="text-sm text-muted-foreground">
+                            {implemented} / {frameworkControls.length} controls
+                          </span>
+                        </div>
+                        <Progress value={progress} className="h-2" />
                       </div>
-                      <Progress value={progress} className="h-2" />
-                    </div>
-                  )
-                })}
-              </div>
+                    )
+                  })}
+                </div>
+              )}
 
               <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
                 <div className="flex items-start gap-3">
@@ -409,22 +548,59 @@ const SecurityCompliance = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="policies" className="space-y-4">
+        <TabsContent value="history" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Security Policies</CardTitle>
+              <CardTitle>Scan History</CardTitle>
               <CardDescription>
-                Manage your security and compliance documentation
+                Historical record of all security scans performed
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
-                <Lock className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p className="mb-4">Policy management system coming soon</p>
-                <Button onClick={() => navigate('/admin/upload-policies')}>
-                  Upload Policies
-                </Button>
-              </div>
+              {scanHistory.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <History className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>No scan history available yet</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {scanHistory.map((scan) => (
+                    <div key={scan.id} className="border rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <Badge variant="outline">{scan.scan_type.toUpperCase()}</Badge>
+                          <span className="ml-2 text-sm font-medium">{scan.status}</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground">
+                          {new Date(scan.started_at).toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-5 gap-2 mt-2 text-sm">
+                        <div className="text-center">
+                          <div className="font-bold text-destructive">{scan.critical_count || 0}</div>
+                          <div className="text-xs text-muted-foreground">Critical</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="font-bold text-orange-500">{scan.high_count || 0}</div>
+                          <div className="text-xs text-muted-foreground">High</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="font-bold">{scan.medium_count || 0}</div>
+                          <div className="text-xs text-muted-foreground">Medium</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="font-bold">{scan.low_count || 0}</div>
+                          <div className="text-xs text-muted-foreground">Low</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="font-bold">{scan.vulnerabilities_found || 0}</div>
+                          <div className="text-xs text-muted-foreground">Total</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

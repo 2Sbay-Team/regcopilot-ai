@@ -1160,6 +1160,59 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_evidence: {
+        Row: {
+          control_id: string | null
+          description: string | null
+          evidence_type: string
+          file_url: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          title: string
+          uploaded_at: string | null
+          uploaded_by: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          control_id?: string | null
+          description?: string | null
+          evidence_type: string
+          file_url?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          title: string
+          uploaded_at?: string | null
+          uploaded_by?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          control_id?: string | null
+          description?: string | null
+          evidence_type?: string
+          file_url?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          title?: string
+          uploaded_at?: string | null
+          uploaded_by?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_evidence_control_id_fkey"
+            columns: ["control_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_controls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string
@@ -1438,6 +1491,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      compliance_controls: {
+        Row: {
+          category: string | null
+          control_id: string
+          created_at: string | null
+          description: string | null
+          evidence_url: string | null
+          framework: string
+          id: string
+          implementation_notes: string | null
+          last_reviewed_at: string | null
+          organization_id: string
+          owner: string | null
+          priority: string | null
+          required_for: string[] | null
+          status: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          control_id: string
+          created_at?: string | null
+          description?: string | null
+          evidence_url?: string | null
+          framework: string
+          id?: string
+          implementation_notes?: string | null
+          last_reviewed_at?: string | null
+          organization_id: string
+          owner?: string | null
+          priority?: string | null
+          required_for?: string[] | null
+          status?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          control_id?: string
+          created_at?: string | null
+          description?: string | null
+          evidence_url?: string | null
+          framework?: string
+          id?: string
+          implementation_notes?: string | null
+          last_reviewed_at?: string | null
+          organization_id?: string
+          owner?: string | null
+          priority?: string | null
+          required_for?: string[] | null
+          status?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       compliance_data_exchanges: {
         Row: {
@@ -2095,6 +2205,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      dependency_vulnerabilities: {
+        Row: {
+          created_at: string | null
+          cvss_score: number | null
+          description: string | null
+          detected_at: string | null
+          fixed_version: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          package_name: string
+          package_version: string
+          resolved_at: string | null
+          severity: string
+          source: string | null
+          status: string | null
+          vulnerability_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          cvss_score?: number | null
+          description?: string | null
+          detected_at?: string | null
+          fixed_version?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          package_name: string
+          package_version: string
+          resolved_at?: string | null
+          severity: string
+          source?: string | null
+          status?: string | null
+          vulnerability_id: string
+        }
+        Update: {
+          created_at?: string | null
+          cvss_score?: number | null
+          description?: string | null
+          detected_at?: string | null
+          fixed_version?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          package_name?: string
+          package_version?: string
+          resolved_at?: string | null
+          severity?: string
+          source?: string | null
+          status?: string | null
+          vulnerability_id?: string
+        }
+        Relationships: []
       }
       developer_submissions: {
         Row: {
@@ -5012,6 +5176,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      security_scan_history: {
+        Row: {
+          completed_at: string | null
+          critical_count: number | null
+          dependencies_scanned: number | null
+          high_count: number | null
+          id: string
+          low_count: number | null
+          medium_count: number | null
+          organization_id: string
+          scan_metadata: Json | null
+          scan_type: string
+          started_at: string | null
+          status: string
+          vulnerabilities_found: number | null
+        }
+        Insert: {
+          completed_at?: string | null
+          critical_count?: number | null
+          dependencies_scanned?: number | null
+          high_count?: number | null
+          id?: string
+          low_count?: number | null
+          medium_count?: number | null
+          organization_id: string
+          scan_metadata?: Json | null
+          scan_type: string
+          started_at?: string | null
+          status?: string
+          vulnerabilities_found?: number | null
+        }
+        Update: {
+          completed_at?: string | null
+          critical_count?: number | null
+          dependencies_scanned?: number | null
+          high_count?: number | null
+          id?: string
+          low_count?: number | null
+          medium_count?: number | null
+          organization_id?: string
+          scan_metadata?: Json | null
+          scan_type?: string
+          started_at?: string | null
+          status?: string
+          vulnerabilities_found?: number | null
+        }
+        Relationships: []
       }
       seeding_progress: {
         Row: {

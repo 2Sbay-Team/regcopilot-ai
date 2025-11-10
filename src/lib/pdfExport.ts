@@ -242,6 +242,58 @@ export const formatGDPRAssessmentForPDF = (
   }
 }
 
+// Helper function to format compliance report for PDF
+export const formatComplianceReportForPDF = (report: any): ComplianceReport => {
+  return {
+    title: report.title || 'Security & Compliance Report',
+    organization: report.organization || 'Your Organization',
+    reportType: report.report_type || 'SECURITY_REPORT',
+    date: new Date(report.generated_at || Date.now()).toLocaleString(),
+    metadata: {
+      generatedBy: report.generated_by || 'System',
+      version: '1.0',
+      status: 'Complete'
+    },
+    sections: [
+      {
+        title: 'Executive Summary',
+        content: [
+          `Total Vulnerabilities: ${report.executive_summary?.total_vulnerabilities || 0}`,
+          `Critical: ${report.executive_summary?.critical_vulnerabilities || 0}`,
+          `High: ${report.executive_summary?.high_vulnerabilities || 0}`,
+          `Dependency Vulnerabilities: ${report.executive_summary?.dependency_vulnerabilities || 0}`,
+          `Threats Detected: ${report.executive_summary?.threats_detected || 0}`,
+          `Compliance Score: ${report.executive_summary?.compliance_score || 0}%`
+        ]
+      },
+      {
+        title: 'Compliance Status',
+        content: [
+          `SOC 2: ${report.compliance?.soc2?.percentage || 0}% (${report.compliance?.soc2?.implemented || 0}/${report.compliance?.soc2?.total || 0})`,
+          `ISO 27001: ${report.compliance?.iso27001?.percentage || 0}% (${report.compliance?.iso27001?.implemented || 0}/${report.compliance?.iso27001?.total || 0})`,
+          `GDPR: ${report.compliance?.gdpr?.percentage || 0}% (${report.compliance?.gdpr?.implemented || 0}/${report.compliance?.gdpr?.total || 0})`
+        ]
+      },
+      {
+        title: 'Top Vulnerabilities',
+        content: report.vulnerabilities?.details?.slice(0, 10).map((v: any) => 
+          `[${v.severity.toUpperCase()}] ${v.title}`
+        ) || ['No vulnerabilities found']
+      },
+      {
+        title: 'Dependency Security',
+        content: report.dependencies?.critical_packages?.map((d: any) => 
+          `${d.package_name}@${d.package_version} - ${d.vulnerability_id}`
+        ) || ['No critical dependencies']
+      },
+      {
+        title: 'Recommendations',
+        content: report.recommendations || ['Continue regular security monitoring']
+      }
+    ]
+  }
+}
+
 // Helper function to format ESG report for PDF
 export const formatESGReportForPDF = (
   report: any,
