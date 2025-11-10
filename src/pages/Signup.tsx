@@ -278,6 +278,21 @@ const Signup = () => {
                 </Button>
               </div>
               <PasswordStrengthMeter password={password} showFeedback={true} />
+              
+              {/* Show validation errors inline */}
+              {password && passwordErrors.length > 0 && (
+                <Alert variant="destructive" className="mt-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription className="text-xs">
+                    <strong>Password requirements not met:</strong>
+                    <ul className="list-disc list-inside mt-1 space-y-0.5">
+                      {passwordErrors.map((error, idx) => (
+                        <li key={idx}>{error}</li>
+                      ))}
+                    </ul>
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
 
             <div className="space-y-2">
