@@ -16,7 +16,7 @@ const PrivacyPolicy = () => {
       {
         title: "Data Collection",
         icon: Eye,
-        content: "We collect personal data that you provide to us voluntarily when using our services, including name, email address, and organization information."
+        content: "We collect only essential data: your email and password for account login and authentication. Additional information like name and organization details are optional and used solely to personalize your experience. We never collect unnecessary data or share it with third parties."
       },
       {
         title: "Purpose of Processing",
@@ -48,7 +48,7 @@ const PrivacyPolicy = () => {
       {
         title: "Datenerhebung",
         icon: Eye,
-        content: "Wir erheben personenbezogene Daten, die Sie uns freiwillig bei der Nutzung unserer Dienste zur Verfügung stellen, einschließlich Name, E-Mail-Adresse und Organisationsinformationen."
+        content: "Wir erheben nur wesentliche Daten: Ihre E-Mail und Ihr Passwort für Kontoanmeldung und Authentifizierung. Zusätzliche Informationen wie Name und Organisationsdetails sind optional und werden ausschließlich zur Personalisierung Ihrer Erfahrung verwendet. Wir erheben niemals unnötige Daten oder teilen diese mit Dritten."
       },
       {
         title: "Verarbeitungszweck",
@@ -80,7 +80,7 @@ const PrivacyPolicy = () => {
       {
         title: "Collecte de données",
         icon: Eye,
-        content: "Nous collectons les données personnelles que vous nous fournissez volontairement lors de l'utilisation de nos services, notamment le nom, l'adresse e-mail et les informations sur l'organisation."
+        content: "Nous collectons uniquement les données essentielles : votre e-mail et mot de passe pour la connexion et l'authentification au compte. Les informations supplémentaires comme le nom et les détails de l'organisation sont facultatives et utilisées uniquement pour personnaliser votre expérience. Nous ne collectons jamais de données inutiles ni ne les partageons avec des tiers."
       },
       {
         title: "Finalité du traitement",
@@ -112,7 +112,7 @@ const PrivacyPolicy = () => {
       {
         title: "جمع البيانات",
         icon: Eye,
-        content: "نقوم بجمع البيانات الشخصية التي تقدمها لنا طواعية عند استخدام خدماتنا، بما في ذلك الاسم وعنوان البريد الإلكتروني ومعلومات المؤسسة."
+        content: "نجمع البيانات الأساسية فقط: بريدك الإلكتروني وكلمة المرور لتسجيل الدخول والمصادقة على الحساب. المعلومات الإضافية مثل الاسم وتفاصيل المؤسسة اختيارية وتُستخدم فقط لتخصيص تجربتك. نحن لا نجمع أبدًا بيانات غير ضرورية أو نشاركها مع أطراف ثالثة."
       },
       {
         title: "الغرض من المعالجة",
