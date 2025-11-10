@@ -20,28 +20,7 @@ export function Footer() {
   return (
     <footer className="border-t bg-muted/50 mt-auto">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid gap-8 md:grid-cols-4">
-          {/* Company Info */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Shield className="h-6 w-6 text-primary" />
-              <span className="font-bold text-lg">{t('landing.hero.title', language)}</span>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              {t('footer.description', language)}
-            </p>
-            <div className="text-xs text-muted-foreground space-y-1">
-              <p className="font-semibold">{t('footer.dpo', language)}</p>
-              <a href="mailto:privacy@regsense.dev" className="hover:text-primary flex items-center gap-1">
-                <Mail className="h-3 w-3" />
-                privacy@regsense.dev
-              </a>
-              <p className="pt-2">{t('footer.address', language)}</p>
-              <p className="text-primary font-medium pt-2">✓ {t('footer.gdprCompliant', language)}</p>
-              <p className="text-muted-foreground">🇪🇺 {t('footer.euHosted', language)}</p>
-            </div>
-          </div>
-
+        <div className="grid gap-8 md:grid-cols-3">
           {/* Products */}
           <div>
             <h3 className="font-semibold mb-4">{t('footer.products', language)}</h3>
@@ -140,10 +119,10 @@ export function Footer() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="en">🇬🇧 English</SelectItem>
-                  <SelectItem value="fr">🇫🇷 Français</SelectItem>
-                  <SelectItem value="de">🇩🇪 Deutsch</SelectItem>
-                  <SelectItem value="ar">🇸🇦 العربية</SelectItem>
+                  <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="fr">Français</SelectItem>
+                  <SelectItem value="de">Deutsch</SelectItem>
+                  <SelectItem value="ar">العربية</SelectItem>
                 </SelectContent>
               </Select>
             </div>
