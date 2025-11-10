@@ -11,6 +11,7 @@ import { GlobalHelpSearch } from "@/components/GlobalHelpSearch";
 import { GuidedTour } from "@/components/GuidedTour";
 import Index from "./pages/Index";
 import Products from "./pages/Products";
+import About from "./pages/About";
 import Terms from "./pages/Terms";
 import Cookies from "./pages/Cookies";
 import DPA from "./pages/DPA";
@@ -89,11 +90,17 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/products" element={<Products />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/cookies" element={<Cookies />} />
-              <Route path="/dpa" element={<DPA />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/contact" element={<ContactUs />} />
+              
+              {/* Protected Legal & Compliance Pages */}
+              <Route path="/about" element={<ProtectedRoute><AppLayout><About /></AppLayout></ProtectedRoute>} />
+              <Route path="/privacy-policy" element={<ProtectedRoute><AppLayout><PrivacyPolicy /></AppLayout></ProtectedRoute>} />
+              <Route path="/terms" element={<ProtectedRoute><AppLayout><Terms /></AppLayout></ProtectedRoute>} />
+              <Route path="/cookies" element={<ProtectedRoute><AppLayout><Cookies /></AppLayout></ProtectedRoute>} />
+              <Route path="/security-privacy" element={<ProtectedRoute><AppLayout><SecurityPrivacy /></AppLayout></ProtectedRoute>} />
+              <Route path="/dpa" element={<ProtectedRoute><AppLayout><DPA /></AppLayout></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
             <Route path="/ai-act" element={<ProtectedRoute><AppLayout><AIActCopilot /></AppLayout></ProtectedRoute>} />
             <Route path="/gdpr" element={<ProtectedRoute><AppLayout><GDPRCopilot /></AppLayout></ProtectedRoute>} />

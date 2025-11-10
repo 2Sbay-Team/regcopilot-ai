@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
 import { Footer } from "@/components/Footer"
+import { CookieConsent } from "@/components/CookieConsent"
 import { Shield, FileCheck, Leaf, Lock, Database, Zap } from "lucide-react"
 import { useEffect } from "react"
 
@@ -22,6 +23,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
+      <CookieConsent />
+      
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">

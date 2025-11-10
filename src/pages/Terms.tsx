@@ -1,35 +1,17 @@
 import { useLanguage } from "@/contexts/LanguageContext"
 import { t } from "@/lib/i18n"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Footer } from "@/components/Footer"
-import { useNavigate } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { Shield } from "lucide-react"
 
 const Terms = () => {
   const { language } = useLanguage()
-  const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b bg-background/95 backdrop-blur">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-            <Shield className="h-6 w-6 text-primary" />
-            <span className="font-bold text-xl">RegSense Advisor</span>
-          </div>
-          <Button variant="outline" onClick={() => navigate("/login")}>
-            {t('landing.hero.signIn', language)}
-          </Button>
-        </div>
-      </header>
-
-      <main className="flex-1 container mx-auto px-4 py-12">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-3xl">Terms of Service</CardTitle>
-            <p className="text-sm text-muted-foreground">Last updated: {new Date().toLocaleDateString()}</p>
-          </CardHeader>
+    <div className="container mx-auto px-4 py-8">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-3xl">Terms of Service</CardTitle>
+          <p className="text-sm text-muted-foreground">Last updated: {new Date().toLocaleDateString()}</p>
+        </CardHeader>
           <CardContent className="prose prose-sm max-w-none space-y-6">
             <section>
               <h2 className="text-2xl font-semibold mb-3">1. Acceptance of Terms</h2>
@@ -146,11 +128,8 @@ const Terms = () => {
             </section>
           </CardContent>
         </Card>
-      </main>
-
-      <Footer />
-    </div>
-  )
-}
+      </div>
+    )
+  }
 
 export default Terms
