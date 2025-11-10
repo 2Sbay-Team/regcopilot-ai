@@ -5,13 +5,14 @@ import { useLanguage } from "@/contexts/LanguageContext"
 import { Button } from "@/components/ui/button"
 import { SidebarProvider, SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
-import { LogOut, User, Settings, HelpCircle } from "lucide-react"
+import { LogOut, User, Settings, HelpCircle, Search } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { t } from "@/lib/i18n"
 import { Footer } from "@/components/Footer"
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts"
 import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog"
 import { LanguageSelector } from "@/components/LanguageSelector"
+import { ThemeToggle } from "@/components/ThemeToggle"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -123,8 +124,17 @@ function AppLayoutInner({ children }: AppLayoutProps) {
               <Button
                 variant="ghost"
                 size="icon"
+                className="h-9 w-9 rounded-full hover:bg-muted/50"
+              >
+                <Search className="h-5 w-5" />
+                <span className="sr-only">Search</span>
+              </Button>
+              <ThemeToggle />
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => navigate("/help")}
-                className="hover:bg-accent/50"
+                className="h-9 w-9 rounded-full hover:bg-muted/50"
               >
                 <HelpCircle className="h-5 w-5" />
               </Button>

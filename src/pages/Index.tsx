@@ -1,21 +1,21 @@
-import { useNavigate } from "react-router-dom"
-import { useAuth } from "@/contexts/AuthContext"
-import { useLanguage } from "@/contexts/LanguageContext"
-import { t } from "@/lib/i18n"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
+import { ArrowRight, Shield, FileCheck, Leaf, Database, Lock, Zap, Search } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import { useTranslation } from "@/i18n/useTranslation"
 import { Footer } from "@/components/Footer"
-import { CookieConsent } from "@/components/CookieConsent"
+import { ThemeToggle } from "@/components/ThemeToggle"
 import { LanguageSelector } from "@/components/LanguageSelector"
-import { Shield, FileCheck, Leaf, Lock, Database, Zap } from "lucide-react"
-import { useEffect } from "react"
+import { CookieConsent } from "@/components/CookieConsent"
+import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
 import { analytics } from "@/lib/analytics"
+import { useAuth } from "@/contexts/AuthContext"
+import { useEffect } from "react"
 
 const Index = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { language } = useLanguage()
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (user) {
@@ -64,13 +64,26 @@ const Index = () => {
               <RoboticShieldLogo size={32} />
               <span className="font-semibold text-lg">RegSense Advisor</span>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="h-9 w-9 rounded-full hover:bg-muted/50"
+              >
+                <Search className="h-5 w-5" />
+                <span className="sr-only">Search</span>
+              </Button>
+              <ThemeToggle />
               <LanguageSelector variant="ghost" />
-              <Button variant="ghost" onClick={handleSignIn}>
-                {t('landing.hero.signIn', language)}
+              <Button 
+                variant="ghost" 
+                onClick={handleSignIn}
+                className="hidden sm:inline-flex"
+              >
+                {String(t('landing.hero.signIn'))}
               </Button>
               <Button onClick={handleGetStarted}>
-                {t('landing.hero.getStarted', language)}
+                {String(t('landing.hero.getStarted'))}
               </Button>
             </div>
           </div>
@@ -91,7 +104,7 @@ const Index = () => {
               "legalName": "RegSense Labs AB",
               "url": window.location.origin,
               "logo": `${window.location.origin}/favicon.png`,
-              "description": t('landing.hero.tagline', language),
+              "description": String(t('landing.hero.tagline')),
               "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "Box 220",
@@ -107,13 +120,13 @@ const Index = () => {
             })}
           </script>
           <h1 className="text-5xl font-bold mb-2 animate-in">
-            {t('landing.hero.title', language)}
+            {String(t('landing.hero.title'))}
           </h1>
           <p className="text-lg text-primary font-medium mb-4 animate-in" style={{ animationDelay: "0.1s" }}>
-            {t('landing.hero.subtitle', language)}
+            {String(t('landing.hero.subtitle'))}
           </p>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-in" style={{ animationDelay: "0.2s" }}>
-            {t('landing.hero.tagline', language)}
+            {String(t('landing.hero.tagline'))}
           </p>
           <div className="flex gap-4 justify-center">
             <Button 
@@ -121,7 +134,7 @@ const Index = () => {
               onClick={handleGetStarted}
               data-testid="get-started-button"
             >
-              {t('landing.hero.getStarted', language)}
+              {String(t('landing.hero.getStarted'))}
             </Button>
             <Button 
               size="lg" 
@@ -129,7 +142,7 @@ const Index = () => {
               onClick={handleSignIn}
               data-testid="sign-in-button"
             >
-              {t('landing.hero.signIn', language)}
+              {String(t('landing.hero.signIn'))}
             </Button>
           </div>
         </div>
@@ -139,9 +152,9 @@ const Index = () => {
           <Card className="cockpit-panel">
             <CardHeader>
               <Shield className="h-10 w-10 text-primary mb-2" />
-              <CardTitle>{t('products.aiact.title', language)}</CardTitle>
+              <CardTitle>{String(t('products.aiact.title'))}</CardTitle>
               <CardDescription>
-                {t('products.aiact.desc', language)}
+                {String(t('products.aiact.desc'))}
               </CardDescription>
             </CardHeader>
           </Card>
@@ -149,9 +162,9 @@ const Index = () => {
           <Card className="cockpit-panel">
             <CardHeader>
               <FileCheck className="h-10 w-10 text-primary mb-2" />
-              <CardTitle>{t('products.gdpr.title', language)}</CardTitle>
+              <CardTitle>{String(t('products.gdpr.title'))}</CardTitle>
               <CardDescription>
-                {t('products.gdpr.desc', language)}
+                {String(t('products.gdpr.desc'))}
               </CardDescription>
             </CardHeader>
           </Card>
@@ -159,9 +172,9 @@ const Index = () => {
           <Card className="cockpit-panel">
             <CardHeader>
               <Leaf className="h-10 w-10 text-primary mb-2" />
-              <CardTitle>{t('products.esg.title', language)}</CardTitle>
+              <CardTitle>{String(t('products.esg.title'))}</CardTitle>
               <CardDescription>
-                {t('products.esg.desc', language)}
+                {String(t('products.esg.desc'))}
               </CardDescription>
             </CardHeader>
           </Card>
@@ -169,29 +182,29 @@ const Index = () => {
 
         {/* Key Features */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-8">{t('landing.features.title', language)}</h2>
+          <h2 className="text-3xl font-bold mb-8">{String(t('landing.features.title'))}</h2>
           <div className="grid gap-6 md:grid-cols-3">
             <div className="flex flex-col items-center">
               <Database className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-2">{t('products.rag.title', language)}</h3>
+              <h3 className="text-xl font-semibold mb-2">{String(t('products.rag.title'))}</h3>
               <p className="text-muted-foreground">
-                {t('products.rag.desc', language)}
+                {String(t('products.rag.desc'))}
               </p>
             </div>
 
             <div className="flex flex-col items-center">
               <Lock className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-2">{t('products.audit.title', language)}</h3>
+              <h3 className="text-xl font-semibold mb-2">{String(t('products.audit.title'))}</h3>
               <p className="text-muted-foreground">
-                {t('products.audit.desc', language)}
+                {String(t('products.audit.desc'))}
               </p>
             </div>
 
             <div className="flex flex-col items-center">
               <Zap className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-2">{t('products.copilots.title', language)}</h3>
+              <h3 className="text-xl font-semibold mb-2">{String(t('products.copilots.title'))}</h3>
               <p className="text-muted-foreground">
-                {t('products.copilots.desc', language)}
+                {String(t('products.copilots.desc'))}
               </p>
             </div>
           </div>
@@ -200,9 +213,9 @@ const Index = () => {
         {/* CTA */}
         <Card className="bg-primary text-primary-foreground">
           <CardContent className="py-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">{t('landing.cta.title', language)}</h2>
+            <h2 className="text-3xl font-bold mb-4">{String(t('landing.cta.title'))}</h2>
             <p className="text-lg mb-6 opacity-90">
-              {t('landing.cta.subtitle', language)}
+              {String(t('landing.cta.subtitle'))}
             </p>
             <Button 
               size="lg" 
@@ -210,7 +223,7 @@ const Index = () => {
               onClick={handleStartTrial}
               data-testid="start-trial-button"
             >
-              {t('landing.hero.freeTrial', language)}
+              {String(t('landing.hero.freeTrial'))}
             </Button>
           </CardContent>
         </Card>
