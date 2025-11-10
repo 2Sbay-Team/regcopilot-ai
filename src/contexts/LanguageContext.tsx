@@ -16,18 +16,38 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const loadLanguage = async () => {
-      if (!user) return
+      // Check localStorage first
+      const savedLang = localStorage.getItem('preferred_language')
       
-      const { data } = await supabase
-        .from('profiles')
-        .select('language')
-        .eq('id', user.id)
-        .single()
+      if (!user && savedLang) {
+        setLanguageState(savedLang)
+        document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr'
+        return
+      }
       
-      if (data?.language) {
-        setLanguageState(data.language)
-        // Set document direction for RTL languages
-        document.documentElement.dir = data.language === 'ar' ? 'rtl' : 'ltr'
+      if (!user && !savedLang) {
+        // Auto-detect browser language
+        const browserLang = navigator.language.split('-')[0]
+        const supportedLangs = ['en', 'fr', 'de', 'ar']
+        const detectedLang = supportedLangs.includes(browserLang) ? browserLang : 'en'
+        setLanguageState(detectedLang)
+        localStorage.setItem('preferred_language', detectedLang)
+        document.documentElement.dir = detectedLang === 'ar' ? 'rtl' : 'ltr'
+        return
+      }
+      
+      if (user) {
+        const { data } = await supabase
+          .from('profiles')
+          .select('language')
+          .eq('id', user.id)
+          .single()
+        
+        if (data?.language) {
+          setLanguageState(data.language)
+          localStorage.setItem('preferred_language', data.language)
+          document.documentElement.dir = data.language === 'ar' ? 'rtl' : 'ltr'
+        }
       }
     }
     
@@ -52,6 +72,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
   const setLanguage = (lang: string) => {
     setLanguageState(lang)
+    localStorage.setItem('preferred_language', lang)
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
   }
 

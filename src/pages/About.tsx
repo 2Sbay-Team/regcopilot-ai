@@ -9,9 +9,9 @@ const About = () => {
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-4">About RegSense Advisor</h1>
+        <h1 className="text-4xl font-bold mb-4">{t('about.title', language)}</h1>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Making Compliance Effortless through AI-Powered Regulatory Intelligence
+          {t('about.subtitle', language)}
         </p>
       </div>
 
@@ -20,18 +20,15 @@ const About = () => {
         <CardHeader>
           <div className="flex items-center gap-3">
             <Shield className="h-8 w-8 text-primary" />
-            <CardTitle className="text-2xl">Our Mission</CardTitle>
+            <CardTitle className="text-2xl">{t('about.mission', language)}</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-muted-foreground">
-            RegSense Advisor was founded with a clear mission: to transform regulatory compliance from a 
-            burden into a strategic advantage through artificial intelligence and automation.
+            {t('about.missionText1', language)}
           </p>
           <p className="text-muted-foreground">
-            We believe that organizations should spend their time innovating, not drowning in compliance 
-            paperwork. Our AI-powered platform automates the complex, time-consuming aspects of regulatory 
-            compliance while maintaining the highest standards of accuracy and security.
+            {t('about.missionText2', language)}
           </p>
         </CardContent>
       </Card>
