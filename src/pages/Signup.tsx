@@ -53,8 +53,8 @@ const Signup = () => {
 
     if (!emailValidation.success) {
       toast({
-        title: "Invalid Email",
-        description: emailValidation.error.errors[0].message,
+        title: "❌ Invalid Email Address",
+        description: "Please enter a valid email address (e.g., you@company.com)",
         variant: "destructive",
       });
       return;
@@ -64,8 +64,8 @@ const Signup = () => {
     const passwordValidation = validatePassword(password, DEFAULT_PASSWORD_POLICY);
     if (!passwordValidation.valid) {
       toast({
-        title: "Weak Password",
-        description: "Please fix all password requirements before continuing.",
+        title: "🔒 Password Too Weak",
+        description: `Your password doesn't meet security requirements: ${passwordValidation.errors.join(', ')}`,
         variant: "destructive",
       });
       return;
@@ -73,8 +73,8 @@ const Signup = () => {
 
     if (password !== confirmPassword) {
       toast({
-        title: "Error",
-        description: "Passwords do not match",
+        title: "⚠️ Passwords Don't Match",
+        description: "The passwords you entered don't match. Please check and try again.",
         variant: "destructive",
       });
       return;
@@ -93,8 +93,8 @@ const Signup = () => {
         // Continue with signup even if check fails
       } else if (leakCheckData?.is_leaked) {
         toast({
-          title: "Insecure Password Detected",
-          description: `This password has been found in ${leakCheckData.breach_count} data breaches. Please choose a different password.`,
+          title: "🚨 Insecure Password Detected",
+          description: `This password appears in ${leakCheckData.breach_count} known data breaches. Please choose a unique password for your security.`,
           variant: "destructive",
         });
         setLoading(false);
@@ -113,25 +113,85 @@ const Signup = () => {
       });
 
       if (error) {
-        // Handle specific error cases
-        if (error.message.includes('already registered')) {
-          throw new Error('This email is already registered. Please login instead.');
+        // Handle specific error cases with detailed messages
+        if (error.message.includes('already registered') || error.message.includes('User already registered')) {
+          toast({
+            title: "📧 Email Already Registered",
+            description: "An account with this email already exists. Please sign in or use a different email.",
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
         }
-        throw error;
+        
+        if (error.message.includes('Invalid email')) {
+          toast({
+            title: "❌ Invalid Email Format",
+            description: "Please check your email address and try again.",
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
+
+        if (error.message.includes('Password should be')) {
+          toast({
+            title: "🔒 Password Requirements Not Met",
+            description: error.message,
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
+
+        if (error.message.includes('network') || error.message.includes('fetch')) {
+          toast({
+            title: "🌐 Connection Error",
+            description: "Unable to connect to the server. Please check your internet connection and try again.",
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
+
+        // Generic error fallback
+        toast({
+          title: "⚠️ Signup Failed",
+          description: error.message || "An unexpected error occurred. Please try again or contact support.",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
       }
 
+      // Success message
       toast({
-        title: "Account created!",
-        description: "Welcome to RegSense Advisor. Your password will expire in 90 days.",
+        title: "✅ Account Created Successfully!",
+        description: "Welcome to RegSense Advisor. Redirecting to your dashboard...",
       });
 
       navigate("/dashboard");
     } catch (error: any) {
       console.error('Signup error:', error);
+      
+      // Enhanced error handling for caught exceptions
+      let errorTitle = "⚠️ Signup Failed";
+      let errorDescription = "An unexpected error occurred during signup.";
+
+      if (error.message.includes('network') || error.message.includes('Failed to fetch')) {
+        errorTitle = "🌐 Network Error";
+        errorDescription = "Cannot reach the server. Please check your internet connection and try again.";
+      } else if (error.message.includes('timeout')) {
+        errorTitle = "⏱️ Request Timeout";
+        errorDescription = "The server took too long to respond. Please try again.";
+      } else if (error.message) {
+        errorDescription = error.message;
+      }
+
       toast({
         variant: "destructive",
-        title: "Signup failed",
-        description: error.message || "An error occurred during signup",
+        title: errorTitle,
+        description: errorDescription,
       });
     } finally {
       setLoading(false);
