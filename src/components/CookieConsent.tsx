@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { useLanguage } from "@/contexts/LanguageContext"
-import { t } from "@/lib/i18n"
-import { Shield, X } from "lucide-react"
+import { useTranslation } from "@/i18n/useTranslation"
+import { Shield, X, User, Monitor, ChevronDown } from "lucide-react"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 
 interface CookiePreferences {
   essential: boolean
@@ -14,9 +14,10 @@ interface CookiePreferences {
 }
 
 export function CookieConsent() {
-  const { language } = useLanguage()
+  const { t } = useTranslation()
   const [isVisible, setIsVisible] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
+  const [learnMoreOpen, setLearnMoreOpen] = useState(false)
   const [preferences, setPreferences] = useState<CookiePreferences>({
     essential: true, // Always true, cannot be disabled
     functional: false,
@@ -76,14 +77,13 @@ export function CookieConsent() {
   return (
     <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
       <Card className="w-full max-w-2xl shadow-2xl animate-in slide-in-from-bottom-4">
-        <CardHeader className="relative">
+        <CardHeader className="relative pb-3">
           <div className="flex items-start gap-3">
             <Shield className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
             <div className="flex-1">
-              <CardTitle className="text-xl">Cookie Preferences</CardTitle>
-              <CardDescription className="mt-2">
-                We use cookies to enhance your experience, analyze site traffic, and provide personalized content. 
-                All data is processed in accordance with GDPR and stored in EU-based servers.
+              <CardTitle className="text-xl">{String(t('cookies.title'))}</CardTitle>
+              <CardDescription className="mt-2 text-sm">
+                {String(t('cookies.subtitle'))}
               </CardDescription>
             </div>
             <Button
@@ -98,23 +98,46 @@ export function CookieConsent() {
         </CardHeader>
         
         <CardContent className="space-y-4">
+          <div className="space-y-3">
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
+              <User className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <p className="text-sm">{String(t('cookies.personalizedAds'))}</p>
+            </div>
+            
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
+              <Monitor className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <p className="text-sm">{String(t('cookies.storeAccess'))}</p>
+            </div>
+
+            <Collapsible open={learnMoreOpen} onOpenChange={setLearnMoreOpen}>
+              <CollapsibleTrigger className="flex items-center gap-2 text-sm text-primary hover:underline">
+                <ChevronDown className={`h-4 w-4 transition-transform ${learnMoreOpen ? 'rotate-180' : ''}`} />
+                {String(t('cookies.learnMore'))}
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-3 space-y-2 text-xs text-muted-foreground">
+                <p>{String(t('cookies.dataProcessing'))}</p>
+                <p>{String(t('cookies.vendorInfo'))}</p>
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
+
           {showDetails && (
-            <div className="space-y-4 border-t pt-4">
-              <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+            <div className="space-y-3 border-t pt-4">
+              <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                 <div className="space-y-1 flex-1">
-                  <Label className="text-base font-semibold">Essential Cookies</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Required for authentication, security, and core functionality. Cannot be disabled.
+                  <Label className="text-sm font-semibold">{String(t('cookies.essential'))}</Label>
+                  <p className="text-xs text-muted-foreground">
+                    {String(t('cookies.essentialDesc'))}
                   </p>
                 </div>
                 <Switch checked={true} disabled />
               </div>
 
-              <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                 <div className="space-y-1 flex-1">
-                  <Label htmlFor="functional" className="text-base font-semibold">Functional Cookies</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Remember your preferences (language, theme, sidebar state). Enhance user experience.
+                  <Label htmlFor="functional" className="text-sm font-semibold">{String(t('cookies.functional'))}</Label>
+                  <p className="text-xs text-muted-foreground">
+                    {String(t('cookies.functionalDesc'))}
                   </p>
                 </div>
                 <Switch
@@ -124,11 +147,11 @@ export function CookieConsent() {
                 />
               </div>
 
-              <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                 <div className="space-y-1 flex-1">
-                  <Label htmlFor="analytics" className="text-base font-semibold">Analytics Cookies</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Help us understand how you use the service to improve it. No personal data is shared with third parties.
+                  <Label htmlFor="analytics" className="text-sm font-semibold">{String(t('cookies.analytics'))}</Label>
+                  <p className="text-xs text-muted-foreground">
+                    {String(t('cookies.analyticsDesc'))}
                   </p>
                 </div>
                 <Switch
@@ -140,45 +163,38 @@ export function CookieConsent() {
             </div>
           )}
 
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row gap-2 pt-2">
             <Button
               variant="outline"
               onClick={() => setShowDetails(!showDetails)}
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto order-1 sm:order-1"
             >
-              {showDetails ? "Hide Details" : "Customize"}
+              {showDetails ? String(t('cookies.hideDetails')) : String(t('cookies.manageOptions'))}
             </Button>
-            <div className="flex gap-3 flex-1">
-              <Button
-                variant="outline"
-                onClick={rejectAll}
-                className="flex-1"
-              >
-                Reject All
-              </Button>
+            <div className="flex gap-2 flex-1 order-2">
               {showDetails && (
                 <Button
                   onClick={acceptSelected}
-                  className="flex-1"
+                  className="flex-1 bg-primary hover:bg-primary/90"
                 >
-                  Save Preferences
+                  {String(t('cookies.savePreferences'))}
                 </Button>
               )}
               {!showDetails && (
                 <Button
                   onClick={acceptAll}
-                  className="flex-1"
+                  className="flex-1 bg-primary hover:bg-primary/90"
                 >
-                  Accept All
+                  {String(t('cookies.consent'))}
                 </Button>
               )}
             </div>
           </div>
 
           <p className="text-xs text-muted-foreground text-center">
-            By continuing, you agree to our{" "}
+            {String(t('cookies.footer')).split('Cookie Policy')[0]}
             <a href="/cookies" className="underline hover:text-primary">Cookie Policy</a>
-            {" and "}
+            {String(t('cookies.footer')).split('Cookie Policy')[1]?.split('Privacy Policy')[0]}
             <a href="/privacy-policy" className="underline hover:text-primary">Privacy Policy</a>
           </p>
         </CardContent>

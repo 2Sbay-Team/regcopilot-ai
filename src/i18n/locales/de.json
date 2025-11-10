@@ -171,5 +171,27 @@
     "passwordTooShort": "Passwort muss mindestens 8 Zeichen lang sein",
     "passwordMismatch": "Passwörter stimmen nicht überein",
     "invalidFormat": "Ungültiges Format"
+  },
+  "cookies": {
+    "title": "Cookie-Einstellungen",
+    "subtitle": "Wir verwenden Cookies, um Ihr Erlebnis zu verbessern",
+    "description": "Wir verwenden Cookies, um Ihr Erlebnis zu verbessern, den Website-Traffic zu analysieren und personalisierte Inhalte bereitzustellen. Alle Daten werden gemäß DSGVO verarbeitet und auf EU-Servern gespeichert.",
+    "personalizedAds": "Personalisierte Werbung und Inhalte, Werbe- und Inhaltsmessung, Zielgruppenforschung und Serviceentwicklung",
+    "storeAccess": "Informationen auf einem Gerät speichern und/oder darauf zugreifen",
+    "learnMore": "Mehr erfahren",
+    "dataProcessing": "Ihre personenbezogenen Daten werden verarbeitet und Informationen von Ihrem Gerät (Cookies, eindeutige Kennungen und andere Gerätedaten) können von Drittanbietern gespeichert, abgerufen und weitergegeben werden oder speziell von dieser Website oder App verwendet werden.",
+    "vendorInfo": "Einige Anbieter können Ihre personenbezogenen Daten auf der Grundlage berechtigter Interessen verarbeiten, denen Sie widersprechen können, indem Sie Ihre Optionen unten verwalten. Suchen Sie nach einem Link am Ende dieser Seite oder im Site-Menü, um die Einwilligung in den Datenschutz- und Cookie-Einstellungen zu verwalten oder zu widerrufen.",
+    "manageOptions": "Anpassen",
+    "consent": "Alle akzeptieren",
+    "rejectAll": "Alle ablehnen",
+    "savePreferences": "Einstellungen speichern",
+    "hideDetails": "Details ausblenden",
+    "essential": "Notwendige Cookies",
+    "essentialDesc": "Erforderlich für Authentifizierung, Sicherheit und Kernfunktionalität. Kann nicht deaktiviert werden.",
+    "functional": "Funktionale Cookies",
+    "functionalDesc": "Merken Sie sich Ihre Präferenzen (Sprache, Design, Seitenleistenstatus). Verbessern Sie die Benutzererfahrung.",
+    "analytics": "Analyse-Cookies",
+    "analyticsDesc": "Helfen Sie uns zu verstehen, wie Sie den Service nutzen, um ihn zu verbessern. Keine persönlichen Daten werden an Dritte weitergegeben.",
+    "footer": "Durch Fortfahren stimmen Sie unserer Cookie Policy und Privacy Policy zu"
   }
 }

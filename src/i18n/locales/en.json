@@ -171,5 +171,27 @@
     "passwordTooShort": "Password must be at least 8 characters",
     "passwordMismatch": "Passwords do not match",
     "invalidFormat": "Invalid format"
+  },
+  "cookies": {
+    "title": "Cookie Preferences",
+    "subtitle": "We use cookies to enhance your experience",
+    "description": "We use cookies to enhance your experience, analyze site traffic, and provide personalized content. All data is processed in accordance with GDPR and stored in EU-based servers.",
+    "personalizedAds": "Personalised advertising and content, advertising and content measurement, audience research and services development",
+    "storeAccess": "Store and/or access information on a device",
+    "learnMore": "Learn more",
+    "dataProcessing": "Your personal data will be processed and information from your device (cookies, unique identifiers, and other device data) may be stored by, accessed by and shared with third party vendors, or used specifically by this site or app.",
+    "vendorInfo": "Some vendors may process your personal data on the basis of legitimate interest, which you can object to by managing your options below. Look for a link at the bottom of this page or in the site menu to manage or withdraw consent in privacy and cookie settings.",
+    "manageOptions": "Customize",
+    "consent": "Accept All",
+    "rejectAll": "Reject All",
+    "savePreferences": "Save Preferences",
+    "hideDetails": "Hide Details",
+    "essential": "Essential Cookies",
+    "essentialDesc": "Required for authentication, security, and core functionality. Cannot be disabled.",
+    "functional": "Functional Cookies",
+    "functionalDesc": "Remember your preferences (language, theme, sidebar state). Enhance user experience.",
+    "analytics": "Analytics Cookies",
+    "analyticsDesc": "Help us understand how you use the service to improve it. No personal data is shared with third parties.",
+    "footer": "By continuing, you agree to our Cookie Policy and Privacy Policy"
   }
 }
