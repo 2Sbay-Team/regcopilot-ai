@@ -13,14 +13,14 @@ export function ThemeToggle() {
 
   return (
     <div className="flex items-center gap-3">
-      <Sun className="h-4 w-4 text-foreground" />
+      <Sun className="h-4 w-4 text-yellow-500 dark:text-yellow-400" />
       <Switch
         checked={isDark}
         onCheckedChange={toggleTheme}
         aria-label="Toggle dark mode"
         className="data-[state=checked]:bg-green-500"
       />
-      <Moon className="h-4 w-4 text-foreground" />
+      <Moon className="h-4 w-4 text-slate-600 dark:text-slate-300" />
     </div>
   )
 }
