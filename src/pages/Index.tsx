@@ -120,23 +120,6 @@ const Index = () => {
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-in" style={{ animationDelay: "0.2s" }}>
             {String(t('landing.hero.tagline'))}
           </p>
-          <div className="flex gap-4 justify-center">
-            <Button 
-              size="lg" 
-              onClick={handleGetStarted}
-              data-testid="get-started-button"
-            >
-              {String(t('landing.hero.getStarted'))}
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              onClick={handleSignIn}
-              data-testid="sign-in-button"
-            >
-              {String(t('landing.hero.signIn'))}
-            </Button>
-          </div>
         </div>
 
         {/* Features Grid */}
