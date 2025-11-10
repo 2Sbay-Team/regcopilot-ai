@@ -12,10 +12,10 @@ const TrustCenter = () => {
   const { language } = useLanguage()
 
   const certifications = [
-    { name: 'SOC 2 Type II', status: 'Certified', year: '2024', icon: Award },
-    { name: 'ISO 27001:2022', status: 'Certified', year: '2024', icon: Shield },
-    { name: 'GDPR Compliant', status: 'Active', year: 'Ongoing', icon: CheckCircle },
-    { name: 'EU AI Act Ready', status: 'Compliant', year: '2024', icon: CheckCircle }
+    { name: 'SOC 2 Type II', status: 'In Progress', year: 'Roadmap 2025', icon: Award },
+    { name: 'ISO 27001:2022', status: 'Planned', year: 'Roadmap 2025', icon: Shield },
+    { name: 'GDPR Standards', status: 'Implemented', year: 'Ongoing', icon: CheckCircle },
+    { name: 'EU AI Act Framework', status: 'Supported', year: '2024', icon: CheckCircle }
   ]
 
   const securityMeasures = [
@@ -106,7 +106,7 @@ const TrustCenter = () => {
               <Award className="h-6 w-6 text-primary" />
               <CardTitle className="text-2xl">Certifications & Compliance</CardTitle>
             </div>
-            <CardDescription>Industry-recognized security and compliance standards</CardDescription>
+            <CardDescription>Our security and compliance roadmap</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
@@ -118,7 +118,11 @@ const TrustCenter = () => {
                     <div className="flex-1">
                       <h3 className="font-semibold">{cert.name}</h3>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs bg-green-500/10 text-green-600 px-2 py-1 rounded">
+                        <span className={`text-xs px-2 py-1 rounded ${
+                          cert.status === 'Implemented' || cert.status === 'Supported' 
+                            ? 'bg-green-500/10 text-green-600' 
+                            : 'bg-blue-500/10 text-blue-600'
+                        }`}>
                           {cert.status}
                         </span>
                         <span className="text-xs text-muted-foreground">{cert.year}</span>
@@ -253,7 +257,7 @@ const TrustCenter = () => {
             </div>
 
             <p className="text-xs text-muted-foreground mt-4">
-              For SOC 2 or ISO 27001 audit reports, please contact: <a href="mailto:compliance@regsense.dev" className="text-primary hover:underline">compliance@regsense.dev</a>
+              For compliance inquiries or security questions, please contact: <a href="mailto:compliance@regsense.dev" className="text-primary hover:underline">compliance@regsense.dev</a>
             </p>
           </CardContent>
         </Card>
