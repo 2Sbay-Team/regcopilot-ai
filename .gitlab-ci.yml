@@ -1,0 +1,76 @@
+stages:
+  - security
+  - report
+
+variables:
+  SUPABASE_URL: $SUPABASE_URL
+  SUPABASE_SERVICE_ROLE_KEY: $SUPABASE_SERVICE_ROLE_KEY
+
+dependency-scan:
+  stage: security
+  image: node:20-alpine
+  script:
+    - npm ci
+    - npm audit --json > audit-results.json || true
+    - |
+      curl -X POST "$SUPABASE_URL/functions/v1/dependency-scanner" \
+        -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+        -H "Content-Type: application/json" \
+        -d "{\"source\":\"gitlab_ci\",\"commit\":\"$CI_COMMIT_SHA\"}"
+  artifacts:
+    paths:
+      - audit-results.json
+    expire_in: 1 week
+  only:
+    - main
+    - develop
+    - merge_requests
+
+vulnerability-scan:
+  stage: security
+  image: curlimages/curl:latest
+  script:
+    - |
+      RESPONSE=$(curl -X POST "$SUPABASE_URL/functions/v1/vulnerability-scanner" \
+        -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+        -H "Content-Type: application/json" \
+        -d "{\"scan_type\":\"full\",\"source\":\"gitlab_ci\",\"commit\":\"$CI_COMMIT_SHA\"}")
+      
+      echo "Scan response: $RESPONSE"
+      
+      CRITICAL_COUNT=$(echo $RESPONSE | jq -r '.summary.by_severity.critical // 0')
+      if [ "$CRITICAL_COUNT" -gt 0 ]; then
+        echo "Found $CRITICAL_COUNT critical vulnerabilities"
+        exit 1
+      fi
+  only:
+    - main
+    - develop
+    - merge_requests
+
+security-report:
+  stage: report
+  image: curlimages/curl:latest
+  script:
+    - |
+      curl -X POST "$SUPABASE_URL/functions/v1/generate-security-report" \
+        -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+        -H "Content-Type: application/json" \
+        -d "{\"report_type\":\"full\",\"source\":\"gitlab_ci\"}"
+  only:
+    - main
+  dependencies:
+    - dependency-scan
+    - vulnerability-scan
+
+scheduled-scan:
+  stage: security
+  image: curlimages/curl:latest
+  script:
+    - |
+      curl -X POST "$SUPABASE_URL/functions/v1/vulnerability-scanner" \
+        -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+        -H "Content-Type: application/json" \
+        -d "{\"scan_type\":\"full\",\"source\":\"scheduled\"}"
+  only:
+    - schedules

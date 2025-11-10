@@ -78,6 +78,7 @@ import OrgBilling from "./pages/OrgBilling";
 import OrganizationSettings from "./pages/OrganizationSettings";
 import NotFound from "./pages/NotFound";
 import SecurityCompliance from "./pages/SecurityCompliance";
+import CICDSetup from "./pages/CICDSetup";
 
 const queryClient = new QueryClient();
 
@@ -159,6 +160,7 @@ const App = () => (
             <Route path="/dsar-queue" element={<ProtectedRoute><AppLayout><DSARQueue /></AppLayout></ProtectedRoute>} />
             <Route path="/security-center" element={<ProtectedRoute><AppLayout><SecurityCenter /></AppLayout></ProtectedRoute>} />
             <Route path="/security-compliance" element={<ProtectedRoute><AppLayout><SecurityCompliance /></AppLayout></ProtectedRoute>} />
+            <Route path="/cicd-setup" element={<ProtectedRoute><AppLayout><CICDSetup /></AppLayout></ProtectedRoute>} />
             <Route path="/user-guide" element={<ProtectedRoute><AppLayout><UserGuide /></AppLayout></ProtectedRoute>} />
             <Route path="/help-center" element={<ProtectedRoute><AppLayout><HelpCenter /></AppLayout></ProtectedRoute>} />
             <Route path="/regsense" element={<ProtectedRoute><AppLayout><RegSense /></AppLayout></ProtectedRoute>} />

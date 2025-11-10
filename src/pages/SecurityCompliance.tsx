@@ -21,7 +21,8 @@ import {
   Package,
   Download,
   Database,
-  History
+  History,
+  Settings
 } from "lucide-react"
 import { toast } from "sonner"
 import { formatComplianceReportForPDF } from "@/lib/pdfExport"
@@ -223,6 +224,10 @@ const SecurityCompliance = () => {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button onClick={() => navigate('/cicd-setup')} variant="outline">
+            <Settings className="h-4 w-4 mr-2" />
+            CI/CD Setup
+          </Button>
           {controls.length === 0 && (
             <Button onClick={seedComplianceControls} disabled={loading} variant="outline">
               <Database className="h-4 w-4 mr-2" />
