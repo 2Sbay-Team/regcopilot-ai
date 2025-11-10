@@ -76,14 +76,9 @@ export function AppLayout({ children }: AppLayoutProps) {
               <NotificationCenter />
 
               <div className="flex items-center gap-3 pl-3 border-l border-border">
-                <div className="text-right hidden md:block">
-                  <p className="text-sm font-medium leading-none">{userName || t('nav.account', language)}</p>
-                  <p className="text-xs leading-none text-muted-foreground">{orgName || 'Organization'}</p>
-                </div>
-
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                    <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-accent/50">
                       <Avatar className="h-10 w-10">
                         <AvatarFallback className="bg-primary text-primary-foreground">
                           {userInitials}
@@ -91,24 +86,93 @@ export function AppLayout({ children }: AppLayoutProps) {
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56 bg-popover" align="end" forceMount>
-                    <DropdownMenuLabel className="font-normal">
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{userName || t('nav.account', language)}</p>
-                        <p className="text-xs leading-none text-muted-foreground">
-                          {user?.email}
-                        </p>
+                  <DropdownMenuContent className="w-72 bg-popover border shadow-lg z-50" align="end" forceMount>
+                    <div className="px-3 py-2">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <User className="h-4 w-4" />
+                        <span className="truncate">{user?.email}</span>
                       </div>
-                    </DropdownMenuLabel>
+                    </div>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => navigate('/settings')}>
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>{t('nav.settings', language)}</span>
+                    
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/dashboard')}
+                      className="cursor-pointer py-3 px-3 hover:bg-accent/50"
+                    >
+                      <div className="flex items-center gap-3 w-full">
+                        <Avatar className="h-8 w-8">
+                          <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                            {userInitials}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="flex-1 font-medium">Personal account</span>
+                        <span className="text-primary">✓</span>
+                      </div>
                     </DropdownMenuItem>
+
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>{t('nav.logout', language)}</span>
+                    
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/billing')}
+                      className="cursor-pointer py-2.5 px-3 hover:bg-accent/50"
+                    >
+                      <div className="flex items-center gap-3 w-full">
+                        <div className="h-5 w-5 flex items-center justify-center">
+                          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                          </svg>
+                        </div>
+                        <span>Upgrade plan</span>
+                      </div>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/settings')}
+                      className="cursor-pointer py-2.5 px-3 hover:bg-accent/50"
+                    >
+                      <div className="flex items-center gap-3 w-full">
+                        <div className="h-5 w-5 flex items-center justify-center">
+                          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                          </svg>
+                        </div>
+                        <span>Personalization</span>
+                      </div>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/settings')}
+                      className="cursor-pointer py-2.5 px-3 hover:bg-accent/50"
+                    >
+                      <div className="flex items-center gap-3 w-full">
+                        <Settings className="h-5 w-5" />
+                        <span>Settings</span>
+                      </div>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/help-center')}
+                      className="cursor-pointer py-2.5 px-3 hover:bg-accent/50"
+                    >
+                      <div className="flex items-center gap-3 w-full">
+                        <HelpCircle className="h-5 w-5" />
+                        <span>Help</span>
+                        <span className="ml-auto text-muted-foreground">→</span>
+                      </div>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator />
+                    
+                    <DropdownMenuItem 
+                      onClick={handleLogout}
+                      className="cursor-pointer py-2.5 px-3 hover:bg-accent/50"
+                    >
+                      <div className="flex items-center gap-3 w-full">
+                        <LogOut className="h-5 w-5" />
+                        <span>Log out</span>
+                      </div>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

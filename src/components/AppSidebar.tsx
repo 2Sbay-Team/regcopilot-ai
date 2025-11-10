@@ -344,31 +344,31 @@ export function AppSidebar() {
         <SidebarContent className="pt-3">
           <SidebarGroup>
             <div className={`px-3 mb-4 ${isCollapsed ? 'flex justify-center' : ''}`}>
-              {isCollapsed ? (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className="w-8 h-8 rounded-sm flex items-center justify-center cursor-pointer">
-                      <RoboticShieldLogo size={32} />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className={`flex items-center gap-3 ${isCollapsed ? 'w-10 h-10 justify-center' : ''}`}>
+                    <div className="shrink-0">
+                      <RoboticShieldLogo size={isCollapsed ? 28 : 32} />
                     </div>
-                  </TooltipTrigger>
+                    {!isCollapsed && (
+                      <div>
+                        <span className="font-semibold text-base block leading-tight">
+                          RegSense Advisor
+                        </span>
+                        <span className="text-xs text-muted-foreground leading-none">
+                          AI-Powered Regulatory Intelligence
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </TooltipTrigger>
+                {isCollapsed && (
                   <TooltipContent side="right">
                     <p className="font-semibold">RegSense Advisor</p>
                     <p className="text-xs text-muted-foreground">AI-Powered Regulatory Intelligence</p>
                   </TooltipContent>
-                </Tooltip>
-              ) : (
-                <div className="flex items-center gap-3">
-                  <RoboticShieldLogo size={32} />
-                  <div>
-                    <span className="font-semibold text-base block leading-tight">
-                      RegSense Advisor
-                    </span>
-                    <span className="text-xs text-muted-foreground leading-none">
-                      AI-Powered Regulatory Intelligence
-                    </span>
-                  </div>
-                </div>
-              )}
+                )}
+              </Tooltip>
             </div>
           </SidebarGroup>
 
@@ -392,7 +392,7 @@ export function AppSidebar() {
 
           {/* Compliance Section */}
           <Collapsible
-            open={openSections.compliance}
+            open={isCollapsed || openSections.compliance}
             onOpenChange={(open) => setOpenSections({ ...openSections, compliance: open })}
           >
             <SidebarGroup>
@@ -420,7 +420,7 @@ export function AppSidebar() {
 
           {/* Management Section */}
           <Collapsible
-            open={openSections.management}
+            open={isCollapsed || openSections.management}
             onOpenChange={(open) => setOpenSections({ ...openSections, management: open })}
           >
             <SidebarGroup>
@@ -448,7 +448,7 @@ export function AppSidebar() {
 
           {/* Tools Section */}
           <Collapsible
-            open={openSections.tools}
+            open={isCollapsed || openSections.tools}
             onOpenChange={(open) => setOpenSections({ ...openSections, tools: open })}
           >
             <SidebarGroup>
