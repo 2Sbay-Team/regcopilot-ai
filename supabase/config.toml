@@ -142,7 +142,7 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.rag-search]
-verify_jwt = false
+verify_jwt = true
 
 [functions.refresh-feedback-views]
 verify_jwt = true
@@ -199,7 +199,7 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.update-regulations]
-verify_jwt = false
+verify_jwt = true
 
 [functions.update-rms-status]
 verify_jwt = true
@@ -223,4 +223,4 @@ verify_jwt = false
 verify_jwt = true
 
 [functions.run-regression-tests]
-verify_jwt = false
+verify_jwt = true
