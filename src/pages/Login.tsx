@@ -299,9 +299,9 @@ const Login = () => {
 
           <form onSubmit={handleLogin} className="space-y-5">
             {isLocked && lockoutTime && (
-              <Alert variant="destructive">
+              <Alert className="border-destructive/50 bg-destructive/10 text-destructive">
                 <ShieldAlert className="h-4 w-4" />
-                <AlertDescription>
+                <AlertDescription className="text-sm font-medium ml-2">
                   Account temporarily locked due to multiple failed login attempts. 
                   Try again in {Math.ceil((lockoutTime - Date.now()) / 1000 / 60)} minutes.
                 </AlertDescription>
@@ -309,9 +309,9 @@ const Login = () => {
             )}
 
             {showCaptcha && !isLocked && (
-              <Alert>
-                <ShieldAlert className="h-4 w-4" />
-                <AlertDescription>
+              <Alert className="border-amber-500/50 bg-amber-500/10 text-amber-900 dark:text-amber-100">
+                <ShieldAlert className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                <AlertDescription className="text-sm font-medium ml-2">
                   Multiple failed login attempts detected. Please complete CAPTCHA verification.
                 </AlertDescription>
               </Alert>
