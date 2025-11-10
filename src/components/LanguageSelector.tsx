@@ -1,6 +1,7 @@
 import { useLanguage } from "@/contexts/LanguageContext"
 import { languages, Language } from "@/i18n/config"
-import { Earth, ChevronDown } from "lucide-react"
+import { ChevronDown } from "lucide-react"
+import globeIcon from "@/assets/globe-icon.png"
 import { Button } from "@/components/ui/button"
 import {
   Popover,
@@ -33,7 +34,7 @@ export function LanguageSelector({
           variant={variant} 
           className="gap-2 text-foreground hover:text-foreground/80 font-normal"
         >
-          <Earth className="h-4 w-4" />
+          <img src={globeIcon} alt="Language" className="h-4 w-4" />
           {showLabel && <span>{languageNames[language]}</span>}
           <ChevronDown className="h-4 w-4" />
         </Button>
