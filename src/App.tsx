@@ -91,20 +91,24 @@ const App = () => (
             <GlobalHelpSearch />
             <GuidedTour />
             <Routes>
+            {/* Public Pages - No Authentication Required */}
               <Route path="/" element={<Index />} />
               <Route path="/products" element={<Products />} />
               <Route path="/trust-center" element={<TrustCenter />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<ContactUs />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/contact" element={<ContactUs />} />
               
-              {/* Protected Legal & Compliance Pages */}
-              <Route path="/about" element={<ProtectedRoute><AppLayout><About /></AppLayout></ProtectedRoute>} />
-              <Route path="/privacy-policy" element={<ProtectedRoute><AppLayout><PrivacyPolicy /></AppLayout></ProtectedRoute>} />
-              <Route path="/terms" element={<ProtectedRoute><AppLayout><Terms /></AppLayout></ProtectedRoute>} />
-              <Route path="/cookies" element={<ProtectedRoute><AppLayout><Cookies /></AppLayout></ProtectedRoute>} />
-              <Route path="/security-privacy" element={<ProtectedRoute><AppLayout><SecurityPrivacy /></AppLayout></ProtectedRoute>} />
-              <Route path="/dpa" element={<ProtectedRoute><AppLayout><DPA /></AppLayout></ProtectedRoute>} />
+              {/* Public Legal Pages */}
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/cookies" element={<Cookies />} />
+              <Route path="/security-privacy" element={<SecurityPrivacy />} />
+              <Route path="/dpa" element={<DPA />} />
+              <Route path="/impressum" element={<Impressum />} />
+              
+              {/* Protected Product & Dashboard Pages */}
             <Route path="/dashboard" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
             <Route path="/ai-act" element={<ProtectedRoute><AppLayout><AIActCopilot /></AppLayout></ProtectedRoute>} />
             <Route path="/gdpr" element={<ProtectedRoute><AppLayout><GDPRCopilot /></AppLayout></ProtectedRoute>} />
@@ -132,9 +136,6 @@ const App = () => (
             <Route path="/model-management" element={<ProtectedRoute><AppLayout><ModelManagement /></AppLayout></ProtectedRoute>} />
             <Route path="/compliance-score" element={<ProtectedRoute><AppLayout><ComplianceScore /></AppLayout></ProtectedRoute>} />
             <Route path="/marketplace" element={<ProtectedRoute><AppLayout><Marketplace /></AppLayout></ProtectedRoute>} />
-            <Route path="/impressum" element={<ProtectedRoute><AppLayout><Impressum /></AppLayout></ProtectedRoute>} />
-            <Route path="/contact" element={<ProtectedRoute><AppLayout><ContactUs /></AppLayout></ProtectedRoute>} />
-            <Route path="/privacy-policy" element={<ProtectedRoute><AppLayout><PrivacyPolicy /></AppLayout></ProtectedRoute>} />
             <Route path="/nis2" element={<ProtectedRoute><AppLayout><NIS2Copilot /></AppLayout></ProtectedRoute>} />
             <Route path="/dora" element={<ProtectedRoute><AppLayout><DORACopilot /></AppLayout></ProtectedRoute>} />
             <Route path="/dora-copilot" element={<ProtectedRoute><AppLayout><DORACopilot /></AppLayout></ProtectedRoute>} />
@@ -162,7 +163,6 @@ const App = () => (
             <Route path="/brand-comparison" element={<ProtectedRoute><BrandComparison /></ProtectedRoute>} />
             <Route path="/automation" element={<ProtectedRoute><AppLayout><Automation /></AppLayout></ProtectedRoute>} />
             <Route path="/audit-portal" element={<ProtectedRoute><AuditPortal /></ProtectedRoute>} />
-            <Route path="/security-privacy" element={<SecurityPrivacy />} />
             <Route path="/admin/team" element={<ProtectedRoute><AppLayout><TeamManagement /></AppLayout></ProtectedRoute>} />
             <Route path="/organization" element={<ProtectedRoute><OrganizationSettings /></ProtectedRoute>} />
             <Route path="/accept-invite" element={<AcceptInvite />} />
