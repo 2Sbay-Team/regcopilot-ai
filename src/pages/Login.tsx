@@ -12,6 +12,7 @@ import { Eye, EyeOff, ShieldAlert } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import ReCAPTCHA from "react-google-recaptcha"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { analytics } from "@/lib/analytics"
 
 const Login = () => {
   const { user } = useAuth()
@@ -36,6 +37,11 @@ const Login = () => {
       navigate("/dashboard")
     }
   }, [user, navigate])
+
+  useEffect(() => {
+    // Track login page view
+    analytics.trackPageView('login')
+  }, [])
 
   // Check for account lockout
   useEffect(() => {
@@ -164,6 +170,9 @@ const Login = () => {
         const newFailedAttempts = failedAttempts + 1
         setFailedAttempts(newFailedAttempts)
 
+        // Track failed login
+        analytics.trackLogin({ method: 'email', success: false })
+
         // Log failed attempt
         await supabase.from('login_attempts').insert({
           user_email: email,
@@ -197,6 +206,8 @@ const Login = () => {
       }
 
       // Success - log and reset
+      analytics.trackLogin({ method: 'email', success: true })
+      
       await supabase.from('login_attempts').insert({
         user_email: email,
         ip_address: 'client',

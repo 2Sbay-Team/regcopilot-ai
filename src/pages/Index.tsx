@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer"
 import { CookieConsent } from "@/components/CookieConsent"
 import { Shield, FileCheck, Leaf, Lock, Database, Zap } from "lucide-react"
 import { useEffect } from "react"
+import { analytics } from "@/lib/analytics"
 
 const Index = () => {
   const navigate = useNavigate()
@@ -20,6 +21,35 @@ const Index = () => {
       navigate("/dashboard")
     }
   }, [user, navigate])
+
+  useEffect(() => {
+    // Track landing page view
+    analytics.trackPageView('landing')
+  }, [])
+
+  const handleGetStarted = () => {
+    analytics.trackButtonClick({ 
+      button: 'get_started', 
+      source: 'hero_section' 
+    })
+    navigate("/signup")
+  }
+
+  const handleSignIn = () => {
+    analytics.trackButtonClick({ 
+      button: 'sign_in', 
+      source: 'hero_section' 
+    })
+    navigate("/login")
+  }
+
+  const handleStartTrial = () => {
+    analytics.trackButtonClick({ 
+      button: 'start_trial', 
+      source: 'cta_section' 
+    })
+    navigate("/signup?trial=true")
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
@@ -64,10 +94,19 @@ const Index = () => {
             {t('landing.hero.tagline', language)}
           </p>
           <div className="flex gap-4 justify-center">
-            <Button size="lg" onClick={() => navigate("/signup")}>
+            <Button 
+              size="lg" 
+              onClick={handleGetStarted}
+              data-testid="get-started-button"
+            >
               {t('landing.hero.getStarted', language)}
             </Button>
-            <Button size="lg" variant="outline" onClick={() => navigate("/login")}>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              onClick={handleSignIn}
+              data-testid="sign-in-button"
+            >
               {t('landing.hero.signIn', language)}
             </Button>
           </div>
@@ -143,7 +182,12 @@ const Index = () => {
             <p className="text-lg mb-6 opacity-90">
               {t('landing.cta.subtitle', language)}
             </p>
-            <Button size="lg" variant="secondary" onClick={() => navigate("/signup")}>
+            <Button 
+              size="lg" 
+              variant="secondary" 
+              onClick={handleStartTrial}
+              data-testid="start-trial-button"
+            >
               {t('landing.hero.freeTrial', language)}
             </Button>
           </CardContent>

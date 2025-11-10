@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,15 @@ import { RoboticShieldLogo } from "@/components/RoboticShieldLogo";
 import { PasswordStrengthMeter } from "@/components/PasswordStrengthMeter";
 import { validatePassword, DEFAULT_PASSWORD_POLICY } from "@/lib/passwordValidation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, ShieldCheck, Eye, EyeOff } from "lucide-react";
+import { AlertCircle, ShieldCheck, Eye, EyeOff, Sparkles } from "lucide-react";
 import { z } from "zod";
 import { Separator } from "@/components/ui/separator";
+import { analytics } from "@/lib/analytics";
 
 const Signup = () => {
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const isTrial = searchParams.get('trial') === 'true';
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -33,6 +36,11 @@ const Signup = () => {
       navigate("/dashboard");
     }
   }, [user, navigate]);
+
+  useEffect(() => {
+    // Track signup page view
+    analytics.trackPageView(isTrial ? 'signup_trial' : 'signup')
+  }, [isTrial])
 
   // Validate password on change
   useEffect(() => {
@@ -165,9 +173,16 @@ const Signup = () => {
       }
 
       // Success message
+      analytics.trackSignup({ 
+        method: 'email', 
+        trial: isTrial 
+      })
+      
       toast({
         title: "✅ Account Created Successfully!",
-        description: "Welcome to RegSense Advisor. Redirecting to your dashboard...",
+        description: isTrial 
+          ? "Welcome to your 14-day free trial! Redirecting to your dashboard..." 
+          : "Welcome to RegSense Advisor. Redirecting to your dashboard...",
       });
 
       navigate("/dashboard");
@@ -227,9 +242,19 @@ const Signup = () => {
               <RoboticShieldLogo size={68} />
             </div>
           </div>
+          {isTrial && (
+            <div className="flex items-center justify-center gap-2 px-3 py-1.5 bg-gradient-to-r from-primary to-accent rounded-full mx-auto w-fit">
+              <Sparkles className="h-4 w-4 text-primary-foreground" />
+              <span className="text-sm font-semibold text-primary-foreground">
+                14-Day Free Trial
+              </span>
+            </div>
+          )}
           <CardTitle className="text-2xl font-bold tracking-tight">Join RegSense Advisor</CardTitle>
           <CardDescription className="text-sm leading-relaxed px-2">
-            AI-Powered Regulatory Intelligence — Effortless Compliance
+            {isTrial 
+              ? "Start your free trial — No credit card required" 
+              : "AI-Powered Regulatory Intelligence — Effortless Compliance"}
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-2">
