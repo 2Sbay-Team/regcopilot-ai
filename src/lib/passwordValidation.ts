@@ -118,8 +118,8 @@ export function validatePassword(
     { pattern: /^[0-9]+$/, message: 'Cannot be only numbers' },
     { pattern: /^[A-Za-z]+$/, message: 'Cannot be only letters' },
     { pattern: /(.)\1{2,}/, message: 'Cannot have repeated characters (aaa, 111)' },
-    { pattern: /^(password|admin|user|test|1234)/i, message: 'Cannot contain common words' },
-    { pattern: /(123|abc|qwerty|password)/i, message: 'Cannot contain common sequences' }
+    { pattern: /^(password|admin|user|test|1234)$/i, message: 'Cannot be a common word' },
+    { pattern: /^.*(123456|qwerty|abc123).*$/i, message: 'Cannot contain obvious sequences' }
   ];
 
   for (const { pattern, message } of weakPatterns) {
