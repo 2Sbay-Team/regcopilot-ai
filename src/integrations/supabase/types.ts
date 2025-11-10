@@ -4812,6 +4812,89 @@ export type Database = {
           },
         ]
       }
+      qa_test_results: {
+        Row: {
+          actual_output: string | null
+          created_at: string | null
+          expected_output: string | null
+          id: string
+          latency_ms: number | null
+          message: string | null
+          module: string
+          output_hash: string | null
+          run_id: string | null
+          status: string
+        }
+        Insert: {
+          actual_output?: string | null
+          created_at?: string | null
+          expected_output?: string | null
+          id?: string
+          latency_ms?: number | null
+          message?: string | null
+          module: string
+          output_hash?: string | null
+          run_id?: string | null
+          status: string
+        }
+        Update: {
+          actual_output?: string | null
+          created_at?: string | null
+          expected_output?: string | null
+          id?: string
+          latency_ms?: number | null
+          message?: string | null
+          module?: string
+          output_hash?: string | null
+          run_id?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "qa_test_results_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "qa_test_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      qa_test_runs: {
+        Row: {
+          avg_latency_ms: number | null
+          failed: number | null
+          finished_at: string | null
+          id: string
+          notes: string | null
+          passed: number | null
+          started_at: string | null
+          total_tests: number | null
+          triggered_by: string | null
+        }
+        Insert: {
+          avg_latency_ms?: number | null
+          failed?: number | null
+          finished_at?: string | null
+          id?: string
+          notes?: string | null
+          passed?: number | null
+          started_at?: string | null
+          total_tests?: number | null
+          triggered_by?: string | null
+        }
+        Update: {
+          avg_latency_ms?: number | null
+          failed?: number | null
+          finished_at?: string | null
+          id?: string
+          notes?: string | null
+          passed?: number | null
+          started_at?: string | null
+          total_tests?: number | null
+          triggered_by?: string | null
+        }
+        Relationships: []
+      }
       rag_accuracy_metrics: {
         Row: {
           actual_relevance: number | null
@@ -4920,6 +5003,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      regulation_sync_logs: {
+        Row: {
+          checksum: string | null
+          chunks_created: number | null
+          completed_at: string | null
+          error_message: string | null
+          id: string
+          regulation_type: string
+          source_url: string
+          started_at: string | null
+          status: string | null
+        }
+        Insert: {
+          checksum?: string | null
+          chunks_created?: number | null
+          completed_at?: string | null
+          error_message?: string | null
+          id?: string
+          regulation_type: string
+          source_url: string
+          started_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          checksum?: string | null
+          chunks_created?: number | null
+          completed_at?: string | null
+          error_message?: string | null
+          id?: string
+          regulation_type?: string
+          source_url?: string
+          started_at?: string | null
+          status?: string | null
+        }
+        Relationships: []
       }
       regulation_versions: {
         Row: {

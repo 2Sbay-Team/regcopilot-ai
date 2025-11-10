@@ -83,6 +83,8 @@ import SecurityCompliance from "./pages/SecurityCompliance";
 import CICDSetup from "./pages/CICDSetup";
 import SystemHealth from "./pages/SystemHealth";
 import ModuleManagement from "./pages/ModuleManagement";
+import QADashboard from "./pages/QADashboard";
+import RoleGuard from "./components/RoleGuard";
 
 const queryClient = new QueryClient();
 
@@ -168,6 +170,7 @@ const App = () => (
             <Route path="/cicd-setup" element={<ProtectedRoute><AppLayout><CICDSetup /></AppLayout></ProtectedRoute>} />
             <Route path="/system-health" element={<ProtectedRoute><AppLayout><SystemHealth /></AppLayout></ProtectedRoute>} />
             <Route path="/module-management" element={<ProtectedRoute><AppLayout><ModuleManagement /></AppLayout></ProtectedRoute>} />
+            <Route path="/qa-dashboard" element={<ProtectedRoute><RoleGuard requiredRole="admin"><AppLayout><QADashboard /></AppLayout></RoleGuard></ProtectedRoute>} />
             <Route path="/user-guide" element={<ProtectedRoute><AppLayout><UserGuide /></AppLayout></ProtectedRoute>} />
             <Route path="/help-center" element={<ProtectedRoute><AppLayout><HelpCenter /></AppLayout></ProtectedRoute>} />
             <Route path="/regsense" element={<ProtectedRoute><AppLayout><RegSense /></AppLayout></ProtectedRoute>} />
