@@ -10,6 +10,10 @@ import { AppLayout } from "@/components/AppLayout";
 import { GlobalHelpSearch } from "@/components/GlobalHelpSearch";
 import { GuidedTour } from "@/components/GuidedTour";
 import Index from "./pages/Index";
+import Products from "./pages/Products";
+import Terms from "./pages/Terms";
+import Cookies from "./pages/Cookies";
+import DPA from "./pages/DPA";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
@@ -83,9 +87,13 @@ const App = () => (
             <GlobalHelpSearch />
             <GuidedTour />
             <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
+              <Route path="/" element={<Index />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/cookies" element={<Cookies />} />
+              <Route path="/dpa" element={<DPA />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
             <Route path="/ai-act" element={<ProtectedRoute><AppLayout><AIActCopilot /></AppLayout></ProtectedRoute>} />
             <Route path="/gdpr" element={<ProtectedRoute><AppLayout><GDPRCopilot /></AppLayout></ProtectedRoute>} />

@@ -1,14 +1,18 @@
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/contexts/AuthContext"
+import { useLanguage } from "@/contexts/LanguageContext"
+import { t } from "@/lib/i18n"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
-import { Shield, FileCheck, Leaf, Lock, Database, Zap, Twitter, Linkedin, Github, Mail } from "lucide-react"
+import { Footer } from "@/components/Footer"
+import { Shield, FileCheck, Leaf, Lock, Database, Zap } from "lucide-react"
 import { useEffect } from "react"
 
 const Index = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { language } = useLanguage()
 
   useEffect(() => {
     if (user) {
@@ -24,18 +28,21 @@ const Index = () => {
           <div className="inline-flex p-8 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl mb-6 hover:shadow-2xl transition-all duration-300">
             <RoboticShieldLogo size={96} />
           </div>
-          <h1 className="text-5xl font-bold mb-2 animate-in">RegSense Advisor</h1>
-          <p className="text-lg text-primary font-medium mb-4 animate-in" style={{ animationDelay: "0.1s" }}>AI-Powered Regulatory Intelligence</p>
+          <h1 className="text-5xl font-bold mb-2 animate-in">
+            {t('landing.hero.title', language)}
+          </h1>
+          <p className="text-lg text-primary font-medium mb-4 animate-in" style={{ animationDelay: "0.1s" }}>
+            {t('landing.hero.subtitle', language)}
+          </p>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-in" style={{ animationDelay: "0.2s" }}>
-            RegSense Advisor — Making Compliance Effortless.
-            The AI Copilot for Smarter Compliance across EU AI Act, GDPR & ESG reporting.
+            {t('landing.hero.tagline', language)}
           </p>
           <div className="flex gap-4 justify-center">
             <Button size="lg" onClick={() => navigate("/signup")}>
-              Get Started
+              {t('landing.hero.getStarted', language)}
             </Button>
             <Button size="lg" variant="outline" onClick={() => navigate("/login")}>
-              Sign In
+              {t('landing.hero.signIn', language)}
             </Button>
           </div>
         </div>
@@ -45,9 +52,9 @@ const Index = () => {
           <Card className="cockpit-panel">
             <CardHeader>
               <Shield className="h-10 w-10 text-primary mb-2" />
-              <CardTitle>AI Act Compliance</CardTitle>
+              <CardTitle>{t('products.aiact.title', language)}</CardTitle>
               <CardDescription>
-                Classify AI systems, assess risk levels, and generate Annex IV documentation automatically
+                {t('products.aiact.desc', language)}
               </CardDescription>
             </CardHeader>
           </Card>
@@ -55,9 +62,9 @@ const Index = () => {
           <Card className="cockpit-panel">
             <CardHeader>
               <FileCheck className="h-10 w-10 text-primary mb-2" />
-              <CardTitle>GDPR Checker</CardTitle>
+              <CardTitle>{t('products.gdpr.title', language)}</CardTitle>
               <CardDescription>
-                Scan for personal data, identify compliance gaps, and manage DSAR requests efficiently
+                {t('products.gdpr.desc', language)}
               </CardDescription>
             </CardHeader>
           </Card>
@@ -65,9 +72,9 @@ const Index = () => {
           <Card className="cockpit-panel">
             <CardHeader>
               <Leaf className="h-10 w-10 text-primary mb-2" />
-              <CardTitle>ESG Reporting</CardTitle>
+              <CardTitle>{t('products.esg.title', language)}</CardTitle>
               <CardDescription>
-                Generate CSRD/ESRS sustainability reports with AI-powered insights and metrics
+                {t('products.esg.desc', language)}
               </CardDescription>
             </CardHeader>
           </Card>
@@ -75,29 +82,29 @@ const Index = () => {
 
         {/* Key Features */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-8">Enterprise-Grade Features</h2>
+          <h2 className="text-3xl font-bold mb-8">{t('landing.features.title', language)}</h2>
           <div className="grid gap-6 md:grid-cols-3">
             <div className="flex flex-col items-center">
               <Database className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-2">RAG-Powered Analysis</h3>
+              <h3 className="text-xl font-semibold mb-2">{t('products.rag.title', language)}</h3>
               <p className="text-muted-foreground">
-                Vector database with regulatory knowledge for accurate compliance guidance
+                {t('products.rag.desc', language)}
               </p>
             </div>
 
             <div className="flex flex-col items-center">
               <Lock className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Audit Trail</h3>
+              <h3 className="text-xl font-semibold mb-2">{t('products.audit.title', language)}</h3>
               <p className="text-muted-foreground">
-                Hash-chained audit logs ensure complete transparency and accountability
+                {t('products.audit.desc', language)}
               </p>
             </div>
 
             <div className="flex flex-col items-center">
               <Zap className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-2">AI Copilots</h3>
+              <h3 className="text-xl font-semibold mb-2">{t('products.copilots.title', language)}</h3>
               <p className="text-muted-foreground">
-                Multiple specialized agents for different compliance domains
+                {t('products.copilots.desc', language)}
               </p>
             </div>
           </div>
@@ -106,138 +113,18 @@ const Index = () => {
         {/* CTA */}
         <Card className="bg-primary text-primary-foreground">
           <CardContent className="py-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready for AI-powered regulatory intelligence?</h2>
+            <h2 className="text-3xl font-bold mb-4">{t('landing.cta.title', language)}</h2>
             <p className="text-lg mb-6 opacity-90">
-              Join organizations using RegSense Advisor for effortless compliance solutions
+              {t('landing.cta.subtitle', language)}
             </p>
             <Button size="lg" variant="secondary" onClick={() => navigate("/signup")}>
-              Start Free Trial
+              {t('landing.hero.freeTrial', language)}
             </Button>
           </CardContent>
         </Card>
       </div>
 
-      {/* Footer */}
-      <footer className="border-t border-border bg-muted/50">
-        <div className="container mx-auto px-4 py-12">
-          <div className="grid gap-8 md:grid-cols-4">
-            {/* Company Info */}
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Shield className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <span className="font-bold text-lg block leading-tight">RegSense Advisor</span>
-                  <span className="text-xs text-muted-foreground">AI-Powered Regulatory Intelligence</span>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground mb-4">
-                RegSense Advisor — Making Compliance Effortless. AI-powered regulatory intelligence for modern enterprises.
-              </p>
-              <div className="flex gap-3">
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                  <Twitter className="h-5 w-5" />
-                </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                  <Linkedin className="h-5 w-5" />
-                </a>
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                  <Github className="h-5 w-5" />
-                </a>
-                <a href="mailto:hello@regsenseai.com" className="text-muted-foreground hover:text-primary transition-colors">
-                  <Mail className="h-5 w-5" />
-                </a>
-              </div>
-            </div>
-
-            {/* Products */}
-            <div>
-              <h3 className="font-semibold mb-4">Products</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
-                    AI Act Compliance
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
-                    GDPR Checker
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
-                    ESG Reporting
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
-                    Audit Trail
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            {/* Company */}
-            <div>
-              <h3 className="font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
-                    About Us
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
-                    Careers
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
-                    Blog
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => navigate("/contact")} className="hover:text-primary transition-colors">
-                    Contact
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            {/* Legal */}
-            <div>
-              <h3 className="font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <button onClick={() => navigate("/privacy-policy")} className="hover:text-primary transition-colors">
-                    Privacy Policy
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
-                    Terms of Service
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => navigate("/signup")} className="hover:text-primary transition-colors">
-                    Cookie Policy
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => navigate("/security-privacy")} className="hover:text-primary transition-colors">
-                    Security & Data Protection
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>© {new Date().getFullYear()} RegSense Advisor. All rights reserved. AI-Powered Regulatory Intelligence.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
