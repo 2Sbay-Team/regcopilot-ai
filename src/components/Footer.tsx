@@ -1,22 +1,10 @@
 import { useLanguage } from "@/contexts/LanguageContext"
-import { Language } from "@/i18n/config"
 import { t } from "@/lib/i18n"
 import { Link } from "react-router-dom"
-import { Shield, Mail } from "lucide-react"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { LanguageSelector } from "@/components/LanguageSelector"
 
 export function Footer() {
-  const { language, updateLanguage } = useLanguage()
-
-  const handleLanguageChange = (newLang: string) => {
-    updateLanguage(newLang as Language)
-  }
+  const { language } = useLanguage()
 
   return (
     <footer className="border-t bg-muted/50 mt-auto">
@@ -114,18 +102,8 @@ export function Footer() {
 
             {/* Language Selector */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">{t('footer.languageSelector', language)}</label>
-              <Select value={language} onValueChange={handleLanguageChange}>
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="fr">Français</SelectItem>
-                  <SelectItem value="de">Deutsch</SelectItem>
-                  <SelectItem value="ar">العربية</SelectItem>
-                </SelectContent>
-              </Select>
+              <label className="text-sm font-medium">{t('common.selectLanguage', language)}</label>
+              <LanguageSelector />
             </div>
           </div>
         </div>

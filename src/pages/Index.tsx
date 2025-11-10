@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
 import { Footer } from "@/components/Footer"
 import { CookieConsent } from "@/components/CookieConsent"
+import { LanguageSelector } from "@/components/LanguageSelector"
 import { Shield, FileCheck, Leaf, Lock, Database, Zap } from "lucide-react"
 import { useEffect } from "react"
 import { analytics } from "@/lib/analytics"
@@ -54,6 +55,27 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
       <CookieConsent />
+      
+      {/* Top Navigation */}
+      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <RoboticShieldLogo size={32} />
+              <span className="font-semibold text-lg">RegSense Advisor</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <LanguageSelector variant="ghost" />
+              <Button variant="ghost" onClick={handleSignIn}>
+                {t('landing.hero.signIn', language)}
+              </Button>
+              <Button onClick={handleGetStarted}>
+                {t('landing.hero.getStarted', language)}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
       
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
