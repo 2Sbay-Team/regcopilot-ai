@@ -3807,12 +3807,14 @@ export type Database = {
           byok_model: string | null
           byok_provider: string | null
           certification_level: string | null
+          company_size: string | null
           country_code: string | null
           created_at: string | null
           custom_domain: string | null
           data_residency_region: string | null
           document_retention_years: number | null
           id: string
+          industry: string | null
           is_public_sector: boolean | null
           is_whitelabel: boolean | null
           llm_token_quota: number
@@ -3837,12 +3839,14 @@ export type Database = {
           byok_model?: string | null
           byok_provider?: string | null
           certification_level?: string | null
+          company_size?: string | null
           country_code?: string | null
           created_at?: string | null
           custom_domain?: string | null
           data_residency_region?: string | null
           document_retention_years?: number | null
           id?: string
+          industry?: string | null
           is_public_sector?: boolean | null
           is_whitelabel?: boolean | null
           llm_token_quota?: number
@@ -3867,12 +3871,14 @@ export type Database = {
           byok_model?: string | null
           byok_provider?: string | null
           certification_level?: string | null
+          company_size?: string | null
           country_code?: string | null
           created_at?: string | null
           custom_domain?: string | null
           data_residency_region?: string | null
           document_retention_years?: number | null
           id?: string
+          industry?: string | null
           is_public_sector?: boolean | null
           is_whitelabel?: boolean | null
           llm_token_quota?: number

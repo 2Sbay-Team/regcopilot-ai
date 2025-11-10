@@ -75,6 +75,7 @@ import SecurityPrivacy from "./pages/SecurityPrivacy";
 import TeamManagement from "./pages/admin/TeamManagement";
 import AcceptInvite from "./pages/AcceptInvite";
 import OrgBilling from "./pages/OrgBilling";
+import OrganizationSettings from "./pages/OrganizationSettings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -163,6 +164,7 @@ const App = () => (
             <Route path="/audit-portal" element={<ProtectedRoute><AuditPortal /></ProtectedRoute>} />
             <Route path="/security-privacy" element={<SecurityPrivacy />} />
             <Route path="/admin/team" element={<ProtectedRoute><AppLayout><TeamManagement /></AppLayout></ProtectedRoute>} />
+            <Route path="/organization" element={<ProtectedRoute><OrganizationSettings /></ProtectedRoute>} />
             <Route path="/accept-invite" element={<AcceptInvite />} />
             <Route path="*" element={<NotFound />} />
             </Routes>

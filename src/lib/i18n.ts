@@ -109,6 +109,7 @@ export const translations: Record<string, Record<string, string>> = {
     'nav.auditPortal': 'Audit Portal',
     'nav.admin': 'Admin',
     'nav.teamManagement': 'Team Management',
+    'nav.organization': 'Organization',
     'nav.main': 'Main',
     'nav.tools': 'Tools',
     'nav.account': 'Account',

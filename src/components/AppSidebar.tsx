@@ -29,7 +29,8 @@ import {
   HelpCircle,
   Wrench,
   Info,
-  CreditCard
+  CreditCard,
+  Building2
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
@@ -238,6 +239,11 @@ export function AppSidebar() {
       titleKey: "nav.teamManagement",
       url: "/admin/team",
       icon: Users,
+    },
+    {
+      titleKey: "nav.organization",
+      url: "/organization",
+      icon: Building2,
     },
   ]
 
