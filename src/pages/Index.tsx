@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight, Shield, FileCheck, Leaf, Database, Lock, Zap, Search } from "lucide-react"
+import { ArrowRight, Shield, FileCheck, Leaf, Database, Lock, Zap } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "@/i18n/useTranslation"
 import { Footer } from "@/components/Footer"
@@ -65,14 +65,6 @@ const Index = () => {
               <span className="font-semibold text-lg">RegSense Advisor</span>
             </div>
             <div className="flex items-center gap-2">
-              <Button 
-                variant="ghost" 
-                size="icon"
-                className="h-9 w-9 rounded-full hover:bg-muted/50"
-              >
-                <Search className="h-5 w-5" />
-                <span className="sr-only">Search</span>
-              </Button>
               <ThemeToggle />
               <LanguageSelector variant="ghost" />
               <Button 
