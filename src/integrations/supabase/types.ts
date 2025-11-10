@@ -600,6 +600,69 @@ export type Database = {
           },
         ]
       }
+      ai_feedback_detailed: {
+        Row: {
+          comment: string | null
+          context: Json | null
+          created_at: string | null
+          feedback_score: number | null
+          feedback_type: string
+          id: string
+          interaction_id: string | null
+          model_version: string | null
+          module_name: string
+          organization_id: string
+          prompt_hash: string | null
+          response_hash: string | null
+          user_id: string | null
+        }
+        Insert: {
+          comment?: string | null
+          context?: Json | null
+          created_at?: string | null
+          feedback_score?: number | null
+          feedback_type: string
+          id?: string
+          interaction_id?: string | null
+          model_version?: string | null
+          module_name: string
+          organization_id: string
+          prompt_hash?: string | null
+          response_hash?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          comment?: string | null
+          context?: Json | null
+          created_at?: string | null
+          feedback_score?: number | null
+          feedback_type?: string
+          id?: string
+          interaction_id?: string | null
+          model_version?: string | null
+          module_name?: string
+          organization_id?: string
+          prompt_hash?: string | null
+          response_hash?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_feedback_detailed_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "ai_feedback_detailed_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_models: {
         Row: {
           compliance_status: string | null
@@ -1790,6 +1853,76 @@ export type Database = {
           },
         ]
       }
+      connector_sync_history: {
+        Row: {
+          connector_id: string
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          records_created: number | null
+          records_failed: number | null
+          records_processed: number | null
+          records_updated: number | null
+          status: string
+          sync_completed_at: string | null
+          sync_started_at: string | null
+          throughput_mb: number | null
+        }
+        Insert: {
+          connector_id: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          records_created?: number | null
+          records_failed?: number | null
+          records_processed?: number | null
+          records_updated?: number | null
+          status: string
+          sync_completed_at?: string | null
+          sync_started_at?: string | null
+          throughput_mb?: number | null
+        }
+        Update: {
+          connector_id?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          records_created?: number | null
+          records_failed?: number | null
+          records_processed?: number | null
+          records_updated?: number | null
+          status?: string
+          sync_completed_at?: string | null
+          sync_started_at?: string | null
+          throughput_mb?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connector_sync_history_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "data_connectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "connector_sync_history_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "connector_sync_history_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       connector_sync_logs: {
         Row: {
           completed_at: string | null
@@ -1961,6 +2094,75 @@ export type Database = {
           status?: string
         }
         Relationships: []
+      }
+      data_connectors: {
+        Row: {
+          connection_config: Json
+          connector_name: string
+          connector_type: string
+          created_at: string | null
+          created_by: string | null
+          error_count: number | null
+          id: string
+          is_active: boolean | null
+          last_error: string | null
+          last_sync_at: string | null
+          organization_id: string
+          sync_frequency: string | null
+          sync_status: string | null
+          throughput_mb: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          connection_config?: Json
+          connector_name: string
+          connector_type: string
+          created_at?: string | null
+          created_by?: string | null
+          error_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_error?: string | null
+          last_sync_at?: string | null
+          organization_id: string
+          sync_frequency?: string | null
+          sync_status?: string | null
+          throughput_mb?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          connection_config?: Json
+          connector_name?: string
+          connector_type?: string
+          created_at?: string | null
+          created_by?: string | null
+          error_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_error?: string | null
+          last_sync_at?: string | null
+          organization_id?: string
+          sync_frequency?: string | null
+          sync_status?: string | null
+          throughput_mb?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "data_connectors_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "data_connectors_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       data_processing_activities: {
         Row: {
@@ -3410,6 +3612,81 @@ export type Database = {
           },
         ]
       }
+      model_cards: {
+        Row: {
+          accuracy_metrics: Json | null
+          bias_assessment: Json | null
+          carbon_footprint_kg: number | null
+          created_at: string | null
+          created_by: string | null
+          ethical_considerations: string | null
+          id: string
+          intended_use: string | null
+          last_evaluated_at: string | null
+          limitations: string | null
+          model_name: string
+          model_type: string
+          organization_id: string
+          provider: string
+          training_data_description: string | null
+          updated_at: string | null
+          version: string
+        }
+        Insert: {
+          accuracy_metrics?: Json | null
+          bias_assessment?: Json | null
+          carbon_footprint_kg?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          ethical_considerations?: string | null
+          id?: string
+          intended_use?: string | null
+          last_evaluated_at?: string | null
+          limitations?: string | null
+          model_name: string
+          model_type: string
+          organization_id: string
+          provider: string
+          training_data_description?: string | null
+          updated_at?: string | null
+          version: string
+        }
+        Update: {
+          accuracy_metrics?: Json | null
+          bias_assessment?: Json | null
+          carbon_footprint_kg?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          ethical_considerations?: string | null
+          id?: string
+          intended_use?: string | null
+          last_evaluated_at?: string | null
+          limitations?: string | null
+          model_name?: string
+          model_type?: string
+          organization_id?: string
+          provider?: string
+          training_data_description?: string | null
+          updated_at?: string | null
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "model_cards_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "model_cards_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       model_configs: {
         Row: {
           active: boolean | null
@@ -4441,9 +4718,12 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
+          bio: string | null
           created_at: string | null
           currency: string | null
           data_region: string | null
+          display_name: string | null
           email: string
           force_password_change: boolean | null
           full_name: string | null
@@ -4461,11 +4741,15 @@ export type Database = {
           password_changed_at: string | null
           password_expires_at: string | null
           password_expiry_days: number | null
+          preferences: Json | null
         }
         Insert: {
+          avatar_url?: string | null
+          bio?: string | null
           created_at?: string | null
           currency?: string | null
           data_region?: string | null
+          display_name?: string | null
           email: string
           force_password_change?: boolean | null
           full_name?: string | null
@@ -4483,11 +4767,15 @@ export type Database = {
           password_changed_at?: string | null
           password_expires_at?: string | null
           password_expiry_days?: number | null
+          preferences?: Json | null
         }
         Update: {
+          avatar_url?: string | null
+          bio?: string | null
           created_at?: string | null
           currency?: string | null
           data_region?: string | null
+          display_name?: string | null
           email?: string
           force_password_change?: boolean | null
           full_name?: string | null
@@ -4505,6 +4793,7 @@ export type Database = {
           password_changed_at?: string | null
           password_expires_at?: string | null
           password_expiry_days?: number | null
+          preferences?: Json | null
         }
         Relationships: [
           {
@@ -5224,6 +5513,72 @@ export type Database = {
           vulnerabilities_found?: number | null
         }
         Relationships: []
+      }
+      security_scan_results: {
+        Row: {
+          affected_component: string | null
+          cve_id: string | null
+          detected_at: string | null
+          finding_description: string | null
+          finding_title: string
+          id: string
+          organization_id: string
+          remediation_steps: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          scan_metadata: Json | null
+          scan_type: string
+          severity: string
+          status: string | null
+        }
+        Insert: {
+          affected_component?: string | null
+          cve_id?: string | null
+          detected_at?: string | null
+          finding_description?: string | null
+          finding_title: string
+          id?: string
+          organization_id: string
+          remediation_steps?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          scan_metadata?: Json | null
+          scan_type: string
+          severity: string
+          status?: string | null
+        }
+        Update: {
+          affected_component?: string | null
+          cve_id?: string | null
+          detected_at?: string | null
+          finding_description?: string | null
+          finding_title?: string
+          id?: string
+          organization_id?: string
+          remediation_steps?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          scan_metadata?: Json | null
+          scan_type?: string
+          severity?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_scan_results_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "security_scan_results_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       seeding_progress: {
         Row: {
@@ -5961,6 +6316,42 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      verification_metrics: {
+        Row: {
+          details: Json | null
+          id: string
+          measured_at: string | null
+          metric_category: string
+          metric_name: string
+          metric_value: number
+          status: string
+          target_value: number
+          unit: string | null
+        }
+        Insert: {
+          details?: Json | null
+          id?: string
+          measured_at?: string | null
+          metric_category: string
+          metric_name: string
+          metric_value: number
+          status: string
+          target_value: number
+          unit?: string | null
+        }
+        Update: {
+          details?: Json | null
+          id?: string
+          measured_at?: string | null
+          metric_category?: string
+          metric_name?: string
+          metric_value?: number
+          status?: string
+          target_value?: number
+          unit?: string | null
         }
         Relationships: []
       }

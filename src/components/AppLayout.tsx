@@ -17,7 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { NotificationCenter } from "@/components/NotificationCenter"
 
 interface AppLayoutProps {
@@ -29,6 +29,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const { language } = useLanguage()
   const navigate = useNavigate()
   const [userName, setUserName] = useState<string>('')
+  const [avatarUrl, setAvatarUrl] = useState<string>('')
   const [orgName, setOrgName] = useState<string>('')
 
   useEffect(() => {
@@ -36,10 +37,12 @@ export function AppLayout({ children }: AppLayoutProps) {
       if (!user) return
       const { data } = await supabase
         .from('profiles')
-        .select('full_name, organizations(name)')
+        .select('full_name, avatar_url, display_name, organizations(name)')
         .eq('id', user.id)
         .single()
-      if (data?.full_name) setUserName(data.full_name)
+      if (data?.display_name) setUserName(data.display_name)
+      else if (data?.full_name) setUserName(data.full_name)
+      if (data?.avatar_url) setAvatarUrl(data.avatar_url)
       if (data?.organizations?.name) setOrgName(data.organizations.name)
     }
     loadProfile()
@@ -80,6 +83,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-accent/50">
                       <Avatar className="h-10 w-10">
+                        <AvatarImage src={avatarUrl || undefined} />
                         <AvatarFallback className="bg-primary text-primary-foreground">
                           {userInitials}
                         </AvatarFallback>
@@ -101,6 +105,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                     >
                       <div className="flex items-center gap-3 w-full">
                         <Avatar className="h-8 w-8">
+                          <AvatarImage src={avatarUrl || undefined} />
                           <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                             {userInitials}
                           </AvatarFallback>
@@ -127,16 +132,12 @@ export function AppLayout({ children }: AppLayoutProps) {
                     </DropdownMenuItem>
 
                     <DropdownMenuItem 
-                      onClick={() => navigate('/settings')}
+                      onClick={() => navigate('/profile')}
                       className="cursor-pointer py-2.5 px-3 hover:bg-accent/50"
                     >
                       <div className="flex items-center gap-3 w-full">
-                        <div className="h-5 w-5 flex items-center justify-center">
-                          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                          </svg>
-                        </div>
-                        <span>Personalization</span>
+                        <User className="h-5 w-5" />
+                        <span>Profile</span>
                       </div>
                     </DropdownMenuItem>
 

@@ -40,6 +40,7 @@ import LLMSettings from "./pages/LLMSettings";
 import ModelGovernance from "./pages/ModelGovernance";
 import LLMAnalytics from "./pages/LLMAnalytics";
 import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
 import ModelManagement from "./pages/ModelManagement";
 import ComplianceScore from "./pages/ComplianceScore";
 import Marketplace from "./pages/Marketplace";
@@ -134,6 +135,7 @@ const App = () => (
             <Route path="/billing" element={<ProtectedRoute><AppLayout><OrgBilling /></AppLayout></ProtectedRoute>} />
             <Route path="/prompts" element={<ProtectedRoute><AppLayout><Prompts /></AppLayout></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><AppLayout><Settings /></AppLayout></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><AppLayout><Profile /></AppLayout></ProtectedRoute>} />
             <Route path="/settings/llm" element={<ProtectedRoute><AppLayout><LLMSettings /></AppLayout></ProtectedRoute>} />
             <Route path="/model-governance" element={<ProtectedRoute><AppLayout><ModelGovernance /></AppLayout></ProtectedRoute>} />
             <Route path="/llm-analytics" element={<ProtectedRoute><AppLayout><LLMAnalytics /></AppLayout></ProtectedRoute>} />
