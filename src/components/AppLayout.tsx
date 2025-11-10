@@ -5,7 +5,7 @@ import { useLanguage } from "@/contexts/LanguageContext"
 import { Button } from "@/components/ui/button"
 import { SidebarProvider, SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
-import { LogOut, User, Settings, HelpCircle, Search } from "lucide-react"
+import { LogOut, User, Settings, HelpCircle } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { t } from "@/lib/i18n"
 import { Footer } from "@/components/Footer"
@@ -121,14 +121,6 @@ function AppLayoutInner({ children }: AppLayoutProps) {
 
               <div className="flex-1" />
 
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 rounded-full hover:bg-muted/50"
-              >
-                <Search className="h-5 w-5" />
-                <span className="sr-only">Search</span>
-              </Button>
               <ThemeToggle />
               <Button
                 variant="ghost"
