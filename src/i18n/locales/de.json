@@ -1,0 +1,175 @@
+{
+  "common": {
+    "loading": "Wird geladen...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Vorherige",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "export": "Exportieren",
+    "import": "Importieren",
+    "download": "Herunterladen",
+    "upload": "Hochladen",
+    "selectLanguage": "Sprache auswählen"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "compliance": "Compliance",
+    "aiAct": "KI-Verordnung",
+    "gdpr": "DSGVO",
+    "esg": "ESG",
+    "nis2": "NIS2",
+    "dora": "DORA",
+    "dma": "DMA",
+    "management": "Verwaltung",
+    "models": "Modelle",
+    "auditTrail": "Prüfpfad",
+    "reports": "Berichte",
+    "tools": "Werkzeuge",
+    "settings": "Einstellungen",
+    "help": "Hilfe",
+    "logout": "Abmelden"
+  },
+  "landing": {
+    "hero": {
+      "title": "RegSense Advisor",
+      "subtitle": "KI-gestützte Regulierungsintelligenz",
+      "tagline": "Automatisieren Sie die Compliance für KI-Verordnung, DSGVO und ESG mit erklärbaren, prüfungssicheren KI-Copiloten",
+      "getStarted": "Jetzt starten",
+      "signIn": "Anmelden",
+      "freeTrial": "Kostenlose Testversion starten"
+    },
+    "features": {
+      "title": "Hauptmerkmale",
+      "ragTitle": "RAG-gestützte Intelligenz",
+      "ragDesc": "Regulierungsaktualisierungen in Echtzeit mit semantischer Suche",
+      "auditTitle": "Audit-Kette",
+      "auditDesc": "Manipulationssichere Compliance-Nachweise mit Blockchain-Verifizierung",
+      "copilotsTitle": "KI-Copiloten",
+      "copilotsDesc": "Automatisierte Bewertungen mit erklärbarer Begründung"
+    },
+    "cta": {
+      "title": "Bereit, Compliance zu vereinfachen?",
+      "subtitle": "Schließen Sie sich führenden Organisationen an, die KI-native Compliance-Lösungen verwenden"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Willkommen zurück",
+      "subtitle": "Melden Sie sich bei Ihrem RegSense-Konto an",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "rememberMe": "Angemeldet bleiben",
+      "forgotPassword": "Passwort vergessen?",
+      "signIn": "Anmelden",
+      "noAccount": "Noch kein Konto?",
+      "signUp": "Registrieren",
+      "accountLocked": "Konto gesperrt",
+      "captchaRequired": "CAPTCHA erforderlich"
+    },
+    "signup": {
+      "title": "RegSense Advisor beitreten",
+      "subtitle": "KI-gestützte Regulierungsintelligenz — Mühelose Compliance",
+      "trialSubtitle": "Starten Sie Ihre kostenlose Testversion — Keine Kreditkarte erforderlich",
+      "trialBadge": "14 Tage kostenlose Testversion",
+      "fullName": "Vollständiger Name",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "confirmPassword": "Passwort bestätigen",
+      "createAccount": "Konto erstellen",
+      "haveAccount": "Bereits ein Konto?",
+      "signIn": "Anmelden",
+      "continueWith": "Oder fortfahren mit"
+    }
+  },
+  "dashboard": {
+    "welcome": "Willkommen bei RegSense Advisor",
+    "overview": "Compliance-Übersicht",
+    "recentActivity": "Letzte Aktivitäten",
+    "quickActions": "Schnellaktionen",
+    "aiActScore": "KI-Verordnung Compliance",
+    "gdprScore": "DSGVO-Compliance",
+    "esgScore": "ESG-Score"
+  },
+  "profile": {
+    "title": "Profileinstellungen",
+    "subtitle": "Verwalten Sie Ihre Profilinformationen und Einstellungen",
+    "avatar": "Profilbild",
+    "avatarDesc": "Klicken Sie auf das Kamerasymbol, um einen neuen Avatar hochzuladen",
+    "personalInfo": "Persönliche Informationen",
+    "email": "E-Mail",
+    "emailDesc": "Ihre E-Mail-Adresse kann nicht geändert werden",
+    "displayName": "Anzeigename",
+    "bio": "Bio",
+    "bioPlaceholder": "Erzählen Sie uns über sich",
+    "preferences": "Einstellungen",
+    "emailNotifications": "E-Mail-Benachrichtigungen",
+    "emailNotificationsDesc": "E-Mail-Benachrichtigungen für wichtige Updates erhalten",
+    "darkMode": "Dunkler Modus",
+    "darkModeDesc": "Aktivieren Sie den dunklen Modus für bessere Lesbarkeit",
+    "saveChanges": "Änderungen speichern"
+  },
+  "footer": {
+    "product": "Produkt",
+    "products": "Produkte",
+    "pricing": "Preise",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "legal": "Rechtliches",
+    "privacy": "Datenschutzerklärung",
+    "terms": "Nutzungsbedingungen",
+    "cookies": "Cookie-Richtlinie",
+    "dpa": "Datenverarbeitungsvereinbarung",
+    "security": "Sicherheit & Datenschutz",
+    "trust": "Vertrauenszentrum",
+    "copyright": "© 2025 RegSense Labs AB. Alle Rechte vorbehalten.",
+    "address": "Stockholm, Schweden"
+  },
+  "products": {
+    "aiact": {
+      "title": "KI-Verordnung Prüfer",
+      "desc": "Automatisierte Risikobewertung und Annex IV Dokumentation"
+    },
+    "gdpr": {
+      "title": "DSGVO-Prüfer",
+      "desc": "Datenschutz-Compliance-Scan und DSAR-Verwaltung"
+    },
+    "esg": {
+      "title": "ESG-Berichterstatter",
+      "desc": "Nachhaltigkeitsmetriken und CSRD/ESRS-Berichterstattung"
+    },
+    "rag": {
+      "title": "RAG-gestützte Intelligenz",
+      "desc": "Regulierungsaktualisierungen in Echtzeit mit semantischer Suche"
+    },
+    "audit": {
+      "title": "Audit-Kette",
+      "desc": "Manipulationssichere Compliance-Nachweise"
+    },
+    "copilots": {
+      "title": "KI-Copiloten",
+      "desc": "Automatisierte Bewertungen mit erklärbarer Begründung"
+    }
+  },
+  "errors": {
+    "general": "Ein Fehler ist aufgetreten",
+    "networkError": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.",
+    "unauthorized": "Unbefugter Zugriff",
+    "notFound": "Seite nicht gefunden",
+    "serverError": "Serverfehler. Bitte versuchen Sie es später erneut."
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich",
+    "invalidEmail": "Ungültige E-Mail-Adresse",
+    "passwordTooShort": "Passwort muss mindestens 8 Zeichen lang sein",
+    "passwordMismatch": "Passwörter stimmen nicht überein",
+    "invalidFormat": "Ungültiges Format"
+  }
+}

@@ -1,38 +1,36 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/integrations/supabase/client'
 import { useAuth } from './AuthContext'
+import { Language, languages } from '@/i18n/config'
 
 interface LanguageContextType {
-  language: string
-  setLanguage: (lang: string) => void
-  updateLanguage: (lang: string) => Promise<void>
+  language: Language
+  setLanguage: (lang: Language) => void
+  updateLanguage: (lang: Language) => Promise<void>
+  t: (key: string, options?: any) => string
+  isRTL: boolean
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth()
-  const [language, setLanguageState] = useState('en')
+  const { i18n, t: translate } = useTranslation()
+  const [isRTL, setIsRTL] = useState(false)
 
   useEffect(() => {
     const loadLanguage = async () => {
       // Check localStorage first
-      const savedLang = localStorage.getItem('preferred_language')
+      const savedLang = localStorage.getItem('i18nextLng')
       
       if (!user && savedLang) {
-        setLanguageState(savedLang)
-        document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr'
+        i18n.changeLanguage(savedLang)
         return
       }
       
       if (!user && !savedLang) {
-        // Auto-detect browser language
-        const browserLang = navigator.language.split('-')[0]
-        const supportedLangs = ['en', 'fr', 'de', 'ar']
-        const detectedLang = supportedLangs.includes(browserLang) ? browserLang : 'en'
-        setLanguageState(detectedLang)
-        localStorage.setItem('preferred_language', detectedLang)
-        document.documentElement.dir = detectedLang === 'ar' ? 'rtl' : 'ltr'
+        // i18next will auto-detect browser language
         return
       }
       
@@ -44,40 +42,63 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
           .single()
         
         if (data?.language) {
-          setLanguageState(data.language)
-          localStorage.setItem('preferred_language', data.language)
-          document.documentElement.dir = data.language === 'ar' ? 'rtl' : 'ltr'
+          i18n.changeLanguage(data.language)
         }
       }
     }
     
     loadLanguage()
-  }, [user])
+  }, [user, i18n])
 
-  const updateLanguage = async (lang: string) => {
-    if (!user) return
+  useEffect(() => {
+    // Update RTL state when language changes
+    const updateDirection = () => {
+      const currentLang = i18n.language as Language
+      const langConfig = languages[currentLang]
+      const rtl = langConfig?.dir === 'rtl'
+      setIsRTL(rtl)
+      document.documentElement.dir = rtl ? 'rtl' : 'ltr'
+      document.documentElement.lang = currentLang
+    }
+
+    updateDirection()
+    i18n.on('languageChanged', updateDirection)
+
+    return () => {
+      i18n.off('languageChanged', updateDirection)
+    }
+  }, [i18n])
+
+  const updateLanguage = async (lang: Language) => {
+    // Update i18next
+    await i18n.changeLanguage(lang)
     
-    // Update in database
-    await supabase
-      .from('profiles')
-      .update({ language: lang })
-      .eq('id', user.id)
-    
-    // Update state immediately
-    setLanguageState(lang)
-    
-    // Update document direction
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
+    // Update in database if user is logged in
+    if (user) {
+      await supabase
+        .from('profiles')
+        .update({ language: lang })
+        .eq('id', user.id)
+    }
   }
 
-  const setLanguage = (lang: string) => {
-    setLanguageState(lang)
-    localStorage.setItem('preferred_language', lang)
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
+  const setLanguage = (lang: Language) => {
+    i18n.changeLanguage(lang)
+  }
+
+  const t = (key: string, options?: any): string => {
+    const result = translate(key, options)
+    return typeof result === 'string' ? result : String(result)
   }
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, updateLanguage }}>
+    <LanguageContext.Provider value={{ 
+      language: i18n.language as Language, 
+      setLanguage, 
+      updateLanguage,
+      t,
+      isRTL 
+    }}>
       {children}
     </LanguageContext.Provider>
   )

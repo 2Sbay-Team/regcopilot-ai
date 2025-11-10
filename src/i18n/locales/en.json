@@ -1,0 +1,175 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "download": "Download",
+    "upload": "Upload",
+    "selectLanguage": "Select Language"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "compliance": "Compliance",
+    "aiAct": "AI Act",
+    "gdpr": "GDPR",
+    "esg": "ESG",
+    "nis2": "NIS2",
+    "dora": "DORA",
+    "dma": "DMA",
+    "management": "Management",
+    "models": "Models",
+    "auditTrail": "Audit Trail",
+    "reports": "Reports",
+    "tools": "Tools",
+    "settings": "Settings",
+    "help": "Help",
+    "logout": "Log Out"
+  },
+  "landing": {
+    "hero": {
+      "title": "RegSense Advisor",
+      "subtitle": "AI-Powered Regulatory Intelligence",
+      "tagline": "Automate compliance for AI Act, GDPR, and ESG with explainable, audit-ready AI copilots",
+      "getStarted": "Get Started",
+      "signIn": "Sign In",
+      "freeTrial": "Start Free Trial"
+    },
+    "features": {
+      "title": "Key Features",
+      "ragTitle": "RAG-Powered Intelligence",
+      "ragDesc": "Real-time regulatory updates with semantic search",
+      "auditTitle": "Audit Chain",
+      "auditDesc": "Tamper-proof compliance evidence with blockchain-grade verification",
+      "copilotsTitle": "AI Copilots",
+      "copilotsDesc": "Automated assessments with explainable reasoning"
+    },
+    "cta": {
+      "title": "Ready to Simplify Compliance?",
+      "subtitle": "Join leading organizations using AI-native compliance solutions"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your RegSense account",
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "signIn": "Sign In",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "accountLocked": "Account Locked",
+      "captchaRequired": "CAPTCHA Required"
+    },
+    "signup": {
+      "title": "Join RegSense Advisor",
+      "subtitle": "AI-Powered Regulatory Intelligence — Effortless Compliance",
+      "trialSubtitle": "Start your free trial — No credit card required",
+      "trialBadge": "14-Day Free Trial",
+      "fullName": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "createAccount": "Create Account",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "continueWith": "Or continue with"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome to RegSense Advisor",
+    "overview": "Compliance Overview",
+    "recentActivity": "Recent Activity",
+    "quickActions": "Quick Actions",
+    "aiActScore": "AI Act Compliance",
+    "gdprScore": "GDPR Compliance",
+    "esgScore": "ESG Score"
+  },
+  "profile": {
+    "title": "Profile Settings",
+    "subtitle": "Manage your profile information and preferences",
+    "avatar": "Profile Picture",
+    "avatarDesc": "Click the camera icon to upload a new avatar",
+    "personalInfo": "Personal Information",
+    "email": "Email",
+    "emailDesc": "Your email cannot be changed",
+    "displayName": "Display Name",
+    "bio": "Bio",
+    "bioPlaceholder": "Tell us about yourself",
+    "preferences": "Preferences",
+    "emailNotifications": "Email Notifications",
+    "emailNotificationsDesc": "Receive email notifications for important updates",
+    "darkMode": "Dark Mode",
+    "darkModeDesc": "Enable dark mode for better readability",
+    "saveChanges": "Save Changes"
+  },
+  "footer": {
+    "product": "Product",
+    "products": "Products",
+    "pricing": "Pricing",
+    "about": "About",
+    "contact": "Contact",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookies": "Cookie Policy",
+    "dpa": "Data Processing Agreement",
+    "security": "Security & Privacy",
+    "trust": "Trust Center",
+    "copyright": "© 2025 RegSense Labs AB. All rights reserved.",
+    "address": "Stockholm, Sweden"
+  },
+  "products": {
+    "aiact": {
+      "title": "AI Act Auditor",
+      "desc": "Automated risk classification and Annex IV documentation"
+    },
+    "gdpr": {
+      "title": "GDPR Checker",
+      "desc": "Privacy compliance scanning and DSAR management"
+    },
+    "esg": {
+      "title": "ESG Reporter",
+      "desc": "Sustainability metrics and CSRD/ESRS reporting"
+    },
+    "rag": {
+      "title": "RAG-Powered Intelligence",
+      "desc": "Real-time regulatory updates with semantic search"
+    },
+    "audit": {
+      "title": "Audit Chain",
+      "desc": "Tamper-proof compliance evidence"
+    },
+    "copilots": {
+      "title": "AI Copilots",
+      "desc": "Automated assessments with explainable reasoning"
+    }
+  },
+  "errors": {
+    "general": "An error occurred",
+    "networkError": "Network error. Please check your connection.",
+    "unauthorized": "Unauthorized access",
+    "notFound": "Page not found",
+    "serverError": "Server error. Please try again later."
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "passwordMismatch": "Passwords do not match",
+    "invalidFormat": "Invalid format"
+  }
+}

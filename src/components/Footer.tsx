@@ -1,4 +1,5 @@
 import { useLanguage } from "@/contexts/LanguageContext"
+import { Language } from "@/i18n/config"
 import { t } from "@/lib/i18n"
 import { Link } from "react-router-dom"
 import { Shield, Mail } from "lucide-react"
@@ -14,7 +15,7 @@ export function Footer() {
   const { language, updateLanguage } = useLanguage()
 
   const handleLanguageChange = (newLang: string) => {
-    updateLanguage(newLang)
+    updateLanguage(newLang as Language)
   }
 
   return (

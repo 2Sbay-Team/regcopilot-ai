@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/contexts/AuthContext"
 import { useLanguage } from "@/contexts/LanguageContext"
+import { Language } from "@/i18n/config"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -70,7 +71,7 @@ const Settings = () => {
       if (error) throw error
 
       // Update language in context (instant UI update)
-      await updateLanguage(language)
+      await updateLanguage(language as Language)
 
       toast({
         title: t('settings.changesSaved', language),

@@ -1,0 +1,175 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "export": "Exporter",
+    "import": "Importer",
+    "download": "Télécharger",
+    "upload": "Téléverser",
+    "selectLanguage": "Sélectionner la langue"
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "compliance": "Conformité",
+    "aiAct": "Loi sur l'IA",
+    "gdpr": "RGPD",
+    "esg": "ESG",
+    "nis2": "NIS2",
+    "dora": "DORA",
+    "dma": "DMA",
+    "management": "Gestion",
+    "models": "Modèles",
+    "auditTrail": "Piste d'audit",
+    "reports": "Rapports",
+    "tools": "Outils",
+    "settings": "Paramètres",
+    "help": "Aide",
+    "logout": "Se déconnecter"
+  },
+  "landing": {
+    "hero": {
+      "title": "RegSense Advisor",
+      "subtitle": "Intelligence réglementaire alimentée par l'IA",
+      "tagline": "Automatisez la conformité pour la loi sur l'IA, le RGPD et l'ESG avec des copilotes IA explicables et prêts pour l'audit",
+      "getStarted": "Commencer",
+      "signIn": "Se connecter",
+      "freeTrial": "Démarrer l'essai gratuit"
+    },
+    "features": {
+      "title": "Fonctionnalités principales",
+      "ragTitle": "Intelligence RAG",
+      "ragDesc": "Mises à jour réglementaires en temps réel avec recherche sémantique",
+      "auditTitle": "Chaîne d'audit",
+      "auditDesc": "Preuves de conformité inviolables avec vérification de niveau blockchain",
+      "copilotsTitle": "Copilotes IA",
+      "copilotsDesc": "Évaluations automatisées avec raisonnement explicable"
+    },
+    "cta": {
+      "title": "Prêt à simplifier la conformité ?",
+      "subtitle": "Rejoignez les organisations leaders utilisant des solutions de conformité natives IA"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenue",
+      "subtitle": "Connectez-vous à votre compte RegSense",
+      "email": "Email",
+      "password": "Mot de passe",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oublié ?",
+      "signIn": "Se connecter",
+      "noAccount": "Pas encore de compte ?",
+      "signUp": "S'inscrire",
+      "accountLocked": "Compte verrouillé",
+      "captchaRequired": "CAPTCHA requis"
+    },
+    "signup": {
+      "title": "Rejoindre RegSense Advisor",
+      "subtitle": "Intelligence réglementaire alimentée par l'IA — Conformité sans effort",
+      "trialSubtitle": "Commencez votre essai gratuit — Aucune carte de crédit requise",
+      "trialBadge": "Essai gratuit de 14 jours",
+      "fullName": "Nom complet",
+      "email": "Email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "createAccount": "Créer un compte",
+      "haveAccount": "Vous avez déjà un compte ?",
+      "signIn": "Se connecter",
+      "continueWith": "Ou continuer avec"
+    }
+  },
+  "dashboard": {
+    "welcome": "Bienvenue sur RegSense Advisor",
+    "overview": "Aperçu de la conformité",
+    "recentActivity": "Activité récente",
+    "quickActions": "Actions rapides",
+    "aiActScore": "Conformité loi IA",
+    "gdprScore": "Conformité RGPD",
+    "esgScore": "Score ESG"
+  },
+  "profile": {
+    "title": "Paramètres du profil",
+    "subtitle": "Gérez vos informations de profil et préférences",
+    "avatar": "Photo de profil",
+    "avatarDesc": "Cliquez sur l'icône de caméra pour télécharger un nouvel avatar",
+    "personalInfo": "Informations personnelles",
+    "email": "Email",
+    "emailDesc": "Votre email ne peut pas être modifié",
+    "displayName": "Nom d'affichage",
+    "bio": "Bio",
+    "bioPlaceholder": "Parlez-nous de vous",
+    "preferences": "Préférences",
+    "emailNotifications": "Notifications par email",
+    "emailNotificationsDesc": "Recevoir des notifications par email pour les mises à jour importantes",
+    "darkMode": "Mode sombre",
+    "darkModeDesc": "Activer le mode sombre pour une meilleure lisibilité",
+    "saveChanges": "Enregistrer les modifications"
+  },
+  "footer": {
+    "product": "Produit",
+    "products": "Produits",
+    "pricing": "Tarifs",
+    "about": "À propos",
+    "contact": "Contact",
+    "legal": "Légal",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "cookies": "Politique des cookies",
+    "dpa": "Accord de traitement des données",
+    "security": "Sécurité et confidentialité",
+    "trust": "Centre de confiance",
+    "copyright": "© 2025 RegSense Labs AB. Tous droits réservés.",
+    "address": "Stockholm, Suède"
+  },
+  "products": {
+    "aiact": {
+      "title": "Auditeur loi IA",
+      "desc": "Classification automatique des risques et documentation Annexe IV"
+    },
+    "gdpr": {
+      "title": "Vérificateur RGPD",
+      "desc": "Analyse de conformité à la vie privée et gestion DSAR"
+    },
+    "esg": {
+      "title": "Rapporteur ESG",
+      "desc": "Métriques de durabilité et reporting CSRD/ESRS"
+    },
+    "rag": {
+      "title": "Intelligence RAG",
+      "desc": "Mises à jour réglementaires en temps réel avec recherche sémantique"
+    },
+    "audit": {
+      "title": "Chaîne d'audit",
+      "desc": "Preuves de conformité inviolables"
+    },
+    "copilots": {
+      "title": "Copilotes IA",
+      "desc": "Évaluations automatisées avec raisonnement explicable"
+    }
+  },
+  "errors": {
+    "general": "Une erreur s'est produite",
+    "networkError": "Erreur réseau. Veuillez vérifier votre connexion.",
+    "unauthorized": "Accès non autorisé",
+    "notFound": "Page non trouvée",
+    "serverError": "Erreur serveur. Veuillez réessayer plus tard."
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire",
+    "invalidEmail": "Adresse email invalide",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "invalidFormat": "Format invalide"
+  }
+}

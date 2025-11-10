@@ -9,6 +9,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { AppLayout } from "@/components/AppLayout";
 import { GlobalHelpSearch } from "@/components/GlobalHelpSearch";
 import { GuidedTour } from "@/components/GuidedTour";
+import '@/i18n/config' // Import i18n configuration
 import Index from "./pages/Index";
 import Products from "./pages/Products";
 import TrustCenter from "./pages/TrustCenter";
