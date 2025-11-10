@@ -74,6 +74,7 @@ import AuditPortal from "./pages/AuditPortal";
 import SecurityPrivacy from "./pages/SecurityPrivacy";
 import TeamManagement from "./pages/admin/TeamManagement";
 import AcceptInvite from "./pages/AcceptInvite";
+import OrgBilling from "./pages/OrgBilling";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -121,6 +122,7 @@ const App = () => (
             <Route path="/ai-gateway" element={<ProtectedRoute><AppLayout><AIGateway /></AppLayout></ProtectedRoute>} />
             <Route path="/model-registry" element={<ProtectedRoute><AppLayout><ModelRegistry /></AppLayout></ProtectedRoute>} />
             <Route path="/usage" element={<ProtectedRoute><AppLayout><Usage /></AppLayout></ProtectedRoute>} />
+            <Route path="/billing" element={<ProtectedRoute><AppLayout><OrgBilling /></AppLayout></ProtectedRoute>} />
             <Route path="/prompts" element={<ProtectedRoute><AppLayout><Prompts /></AppLayout></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><AppLayout><Settings /></AppLayout></ProtectedRoute>} />
             <Route path="/settings/llm" element={<ProtectedRoute><AppLayout><LLMSettings /></AppLayout></ProtectedRoute>} />

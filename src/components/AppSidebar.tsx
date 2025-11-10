@@ -28,7 +28,8 @@ import {
   ChevronRight,
   HelpCircle,
   Wrench,
-  Info
+  Info,
+  CreditCard
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
 import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
@@ -187,6 +188,11 @@ export function AppSidebar() {
       titleKey: "nav.usage", 
       url: "/usage", 
       icon: Activity,
+    },
+    { 
+      titleKey: "nav.billing", 
+      url: "/billing", 
+      icon: CreditCard,
     },
     { 
       titleKey: "nav.analytics", 
