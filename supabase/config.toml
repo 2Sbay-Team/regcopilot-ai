@@ -27,6 +27,15 @@ verify_jwt = false
 [functions.actuator-engine]
 verify_jwt = true
 
+[functions.schema-detector]
+verify_jwt = true
+
+[functions.job-scheduler]
+verify_jwt = false
+
+[functions.system-health-monitor]
+verify_jwt = true
+
 [functions.ai-actuator-agent]
 verify_jwt = true
 
