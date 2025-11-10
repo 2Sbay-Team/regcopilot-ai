@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/contexts/AuthContext"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { Button } from "@/components/ui/button"
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarProvider, SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
 import { LogOut, User, Settings, HelpCircle } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { t } from "@/lib/i18n"
 import { Footer } from "@/components/Footer"
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts"
+import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,13 +26,16 @@ interface AppLayoutProps {
   children: ReactNode
 }
 
-export function AppLayout({ children }: AppLayoutProps) {
+function AppLayoutInner({ children }: AppLayoutProps) {
   const { user } = useAuth()
   const { language } = useLanguage()
   const navigate = useNavigate()
+  const { toggleSidebar } = useSidebar()
   const [userName, setUserName] = useState<string>('')
   const [avatarUrl, setAvatarUrl] = useState<string>('')
   const [orgName, setOrgName] = useState<string>('')
+  const [showShortcuts, setShowShortcuts] = useState(false)
+  const [showSearch, setShowSearch] = useState(false)
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -55,8 +60,54 @@ export function AppLayout({ children }: AppLayoutProps) {
 
   const userInitials = userName ? userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : user?.email?.charAt(0).toUpperCase() || "U"
 
+  // Keyboard shortcuts
+  useKeyboardShortcuts([
+    {
+      key: 'b',
+      ctrlOrCmd: true,
+      handler: () => toggleSidebar(),
+      description: 'Toggle sidebar'
+    },
+    {
+      key: '/',
+      ctrlOrCmd: true,
+      handler: () => setShowShortcuts(true),
+      description: 'Show keyboard shortcuts'
+    },
+    {
+      key: '.',
+      ctrlOrCmd: true,
+      handler: () => navigate('/settings'),
+      description: 'Open settings'
+    },
+    {
+      key: '1',
+      ctrlOrCmd: true,
+      handler: () => navigate('/dashboard'),
+      description: 'Go to dashboard'
+    },
+    {
+      key: '2',
+      ctrlOrCmd: true,
+      handler: () => navigate('/ai-act'),
+      description: 'Go to AI Act Copilot'
+    },
+    {
+      key: '3',
+      ctrlOrCmd: true,
+      handler: () => navigate('/gdpr'),
+      description: 'Go to GDPR Copilot'
+    },
+    {
+      key: '4',
+      ctrlOrCmd: true,
+      handler: () => navigate('/esg'),
+      description: 'Go to ESG Copilot'
+    }
+  ])
+
   return (
-    <SidebarProvider>
+    <>
       <div className="flex min-h-screen w-full bg-background">
         <AppSidebar />
         
@@ -186,10 +237,23 @@ export function AppLayout({ children }: AppLayoutProps) {
             {children}
           </main>
 
-          {/* Footer */}
           <Footer />
         </div>
+
+        <KeyboardShortcutsDialog 
+          open={showShortcuts} 
+          onOpenChange={setShowShortcuts} 
+        />
       </div>
+    </>
+  )
+}
+
+export function AppLayout({ children }: AppLayoutProps) {
+  return (
+    <SidebarProvider>
+      <AppLayoutInner>{children}</AppLayoutInner>
     </SidebarProvider>
   )
 }
+
