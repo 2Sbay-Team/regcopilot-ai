@@ -79,6 +79,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/trust-center" className="hover:text-primary transition-colors">
+                  Trust Center
+                </Link>
+              </li>
+              <li>
                 <Link to="/signup" className="hover:text-primary transition-colors">
                   {t('footer.careers', language)}
                 </Link>
@@ -145,9 +150,9 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} {t('footer.copyright', language)}</p>
-        </div>
+          <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
+            <p>© {new Date().getFullYear()} {t('footer.copyright', language)} | <a href="/trust-center" className="hover:text-primary">Trust Center</a></p>
+          </div>
       </div>
     </footer>
   )

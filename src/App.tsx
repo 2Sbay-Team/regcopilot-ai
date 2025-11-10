@@ -11,6 +11,7 @@ import { GlobalHelpSearch } from "@/components/GlobalHelpSearch";
 import { GuidedTour } from "@/components/GuidedTour";
 import Index from "./pages/Index";
 import Products from "./pages/Products";
+import TrustCenter from "./pages/TrustCenter";
 import About from "./pages/About";
 import Terms from "./pages/Terms";
 import Cookies from "./pages/Cookies";
@@ -90,6 +91,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/products" element={<Products />} />
+              <Route path="/trust-center" element={<TrustCenter />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/contact" element={<ContactUs />} />

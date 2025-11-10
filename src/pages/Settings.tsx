@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
 import { t } from "@/lib/i18n"
+import { RegionSelector } from "@/components/RegionSelector"
 import { Settings as SettingsIcon, Globe, DollarSign, User, Shield, ShieldCheck, ShieldOff, Key, Eye, EyeOff } from "lucide-react"
 import { calculatePasswordStrength } from "@/lib/passwordValidation"
 
@@ -300,6 +301,8 @@ const Settings = () => {
             </Button>
           </CardContent>
         </Card>
+
+        <RegionSelector />
 
         <Card className="cockpit-panel border-primary/20">
           <CardHeader>

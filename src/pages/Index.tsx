@@ -31,6 +31,29 @@ const Index = () => {
           <div className="inline-flex p-8 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl mb-6 hover:shadow-2xl transition-all duration-300">
             <RoboticShieldLogo size={96} />
           </div>
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "RegSense Advisor",
+              "legalName": "RegSense Labs AB",
+              "url": window.location.origin,
+              "logo": `${window.location.origin}/favicon.png`,
+              "description": t('landing.hero.tagline', language),
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Box 220",
+                "postalCode": "101 23",
+                "addressLocality": "Stockholm",
+                "addressCountry": "SE"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "Data Protection Officer",
+                "email": "privacy@regsense.dev"
+              }
+            })}
+          </script>
           <h1 className="text-5xl font-bold mb-2 animate-in">
             {t('landing.hero.title', language)}
           </h1>
