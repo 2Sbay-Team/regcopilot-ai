@@ -225,6 +225,18 @@ verify_jwt = false
 [functions.verify-recaptcha]
 verify_jwt = false
 
+[functions.demo-seed-ingestion]
+verify_jwt = true
+
+[functions.mapping-suggest]
+verify_jwt = true
+
+[functions.run-mapping]
+verify_jwt = true
+
+[functions.kpi-evaluate]
+verify_jwt = true
+
 [functions.vulnerability-scanner]
 verify_jwt = true
 
