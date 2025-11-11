@@ -87,6 +87,7 @@ import QADashboard from "./pages/QADashboard";
 import RoleGuard from "./components/RoleGuard";
 import ESGDataSources from "@/pages/ESGDataSources";
 import ESGDataLineage from "@/pages/ESGDataLineage";
+import ESGReports from "@/pages/ESGReports";
 
 const queryClient = new QueryClient();
 
@@ -123,6 +124,7 @@ const App = () => (
             <Route path="/ai-act" element={<ProtectedRoute><AppLayout><AIActCopilot /></AppLayout></ProtectedRoute>} />
             <Route path="/gdpr" element={<ProtectedRoute><AppLayout><GDPRCopilot /></AppLayout></ProtectedRoute>} />
             <Route path="/esg" element={<ProtectedRoute><AppLayout><ESGCopilot /></AppLayout></ProtectedRoute>} />
+            <Route path="/esg-reports" element={<ProtectedRoute><AppLayout><ESGReports /></AppLayout></ProtectedRoute>} />
             <Route path="/esg-data-sources" element={<ProtectedRoute><AppLayout><ESGDataSources /></AppLayout></ProtectedRoute>} />
             <Route path="/esg-data-lineage" element={<ProtectedRoute><AppLayout><ESGDataLineage /></AppLayout></ProtectedRoute>} />
             <Route path="/audit" element={<ProtectedRoute><AppLayout><AuditTrail /></AppLayout></ProtectedRoute>} />
