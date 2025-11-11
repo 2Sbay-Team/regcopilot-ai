@@ -2848,6 +2848,8 @@ export type Database = {
           metric_name: string
           normalized_value: Json
           organization_id: string
+          processed_at: string | null
+          processing_metadata: Json | null
           quality_score: number | null
           raw_value: Json
           reporting_period_end: string
@@ -2875,6 +2877,8 @@ export type Database = {
           metric_name: string
           normalized_value: Json
           organization_id: string
+          processed_at?: string | null
+          processing_metadata?: Json | null
           quality_score?: number | null
           raw_value: Json
           reporting_period_end: string
@@ -2902,6 +2906,8 @@ export type Database = {
           metric_name?: string
           normalized_value?: Json
           organization_id?: string
+          processed_at?: string | null
+          processing_metadata?: Json | null
           quality_score?: number | null
           raw_value?: Json
           reporting_period_end?: string
@@ -2936,6 +2942,74 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      esg_data_lineage: {
+        Row: {
+          connector_id: string | null
+          created_at: string | null
+          id: string
+          input_data: Json | null
+          lineage_metadata: Json | null
+          organization_id: string
+          output_data: Json | null
+          quality_score: number | null
+          source_id: string | null
+          transformation_type: string | null
+        }
+        Insert: {
+          connector_id?: string | null
+          created_at?: string | null
+          id?: string
+          input_data?: Json | null
+          lineage_metadata?: Json | null
+          organization_id: string
+          output_data?: Json | null
+          quality_score?: number | null
+          source_id?: string | null
+          transformation_type?: string | null
+        }
+        Update: {
+          connector_id?: string | null
+          created_at?: string | null
+          id?: string
+          input_data?: Json | null
+          lineage_metadata?: Json | null
+          organization_id?: string
+          output_data?: Json | null
+          quality_score?: number | null
+          source_id?: string | null
+          transformation_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "esg_data_lineage_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "esg_connectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "esg_data_lineage_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "esg_data_lineage_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "esg_data_lineage_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "esg_data_lake"
             referencedColumns: ["id"]
           },
         ]
@@ -3007,6 +3081,120 @@ export type Database = {
           },
         ]
       }
+      esg_data_quality_rules: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          id: string
+          organization_id: string
+          rule_definition: Json | null
+          rule_name: string
+          rule_type: string | null
+          severity: string | null
+          target_metric: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          id?: string
+          organization_id: string
+          rule_definition?: Json | null
+          rule_name: string
+          rule_type?: string | null
+          severity?: string | null
+          target_metric?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          id?: string
+          organization_id?: string
+          rule_definition?: Json | null
+          rule_name?: string
+          rule_type?: string | null
+          severity?: string | null
+          target_metric?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "esg_data_quality_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "esg_data_quality_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      esg_kpis: {
+        Row: {
+          calculation_method: string | null
+          confidence_score: number | null
+          data_sources: string[] | null
+          esrs_module: string
+          extracted_at: string | null
+          fiscal_year: number | null
+          id: string
+          kpi_name: string
+          kpi_unit: string | null
+          kpi_value: number | null
+          metadata: Json | null
+          organization_id: string
+          validated: boolean | null
+        }
+        Insert: {
+          calculation_method?: string | null
+          confidence_score?: number | null
+          data_sources?: string[] | null
+          esrs_module: string
+          extracted_at?: string | null
+          fiscal_year?: number | null
+          id?: string
+          kpi_name: string
+          kpi_unit?: string | null
+          kpi_value?: number | null
+          metadata?: Json | null
+          organization_id: string
+          validated?: boolean | null
+        }
+        Update: {
+          calculation_method?: string | null
+          confidence_score?: number | null
+          data_sources?: string[] | null
+          esrs_module?: string
+          extracted_at?: string | null
+          fiscal_year?: number | null
+          id?: string
+          kpi_name?: string
+          kpi_unit?: string | null
+          kpi_value?: number | null
+          metadata?: Json | null
+          organization_id?: string
+          validated?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "esg_kpis_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "esg_kpis_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       esg_metrics: {
         Row: {
           created_at: string | null
@@ -3066,6 +3254,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      esg_regulation_updates: {
+        Row: {
+          detected_at: string | null
+          effective_date: string | null
+          id: string
+          impact_assessment: string | null
+          metadata: Json | null
+          regulation_name: string
+          regulation_type: string | null
+          summary: string | null
+          version: string | null
+        }
+        Insert: {
+          detected_at?: string | null
+          effective_date?: string | null
+          id?: string
+          impact_assessment?: string | null
+          metadata?: Json | null
+          regulation_name: string
+          regulation_type?: string | null
+          summary?: string | null
+          version?: string | null
+        }
+        Update: {
+          detected_at?: string | null
+          effective_date?: string | null
+          id?: string
+          impact_assessment?: string | null
+          metadata?: Json | null
+          regulation_name?: string
+          regulation_type?: string | null
+          summary?: string | null
+          version?: string | null
+        }
+        Relationships: []
       }
       esg_reports: {
         Row: {

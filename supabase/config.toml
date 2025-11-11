@@ -230,3 +230,18 @@ verify_jwt = true
 
 [functions.run-regression-tests]
 verify_jwt = true
+
+[functions.test-esg-connector]
+verify_jwt = true
+
+[functions.sync-esg-connector]
+verify_jwt = true
+
+[functions.clean-esg-data]
+verify_jwt = true
+
+[functions.extract-esg-kpis]
+verify_jwt = true
+
+[functions.monitor-regulations]
+verify_jwt = true
