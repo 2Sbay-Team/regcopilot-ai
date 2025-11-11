@@ -85,6 +85,7 @@ import SystemHealth from "./pages/SystemHealth";
 import ModuleManagement from "./pages/ModuleManagement";
 import QADashboard from "./pages/QADashboard";
 import RoleGuard from "./components/RoleGuard";
+import ESGDataSources from "./pages/ESGDataSources";
 
 const queryClient = new QueryClient();
 
@@ -121,6 +122,7 @@ const App = () => (
             <Route path="/ai-act" element={<ProtectedRoute><AppLayout><AIActCopilot /></AppLayout></ProtectedRoute>} />
             <Route path="/gdpr" element={<ProtectedRoute><AppLayout><GDPRCopilot /></AppLayout></ProtectedRoute>} />
             <Route path="/esg" element={<ProtectedRoute><AppLayout><ESGCopilot /></AppLayout></ProtectedRoute>} />
+            <Route path="/esg-data-sources" element={<ProtectedRoute><AppLayout><ESGDataSources /></AppLayout></ProtectedRoute>} />
             <Route path="/audit" element={<ProtectedRoute><AppLayout><AuditTrail /></AppLayout></ProtectedRoute>} />
             <Route path="/models" element={<ProtectedRoute><AppLayout><ModelRegistry /></AppLayout></ProtectedRoute>} />
             <Route path="/explainability" element={<ProtectedRoute><AppLayout><Explainability /></AppLayout></ProtectedRoute>} />

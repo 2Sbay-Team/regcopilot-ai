@@ -2774,6 +2774,239 @@ export type Database = {
           },
         ]
       }
+      esg_connectors: {
+        Row: {
+          connection_config: Json
+          connector_name: string
+          connector_type: string
+          created_at: string
+          created_by: string | null
+          id: string
+          last_sync_at: string | null
+          next_sync_at: string | null
+          organization_id: string
+          status: string
+          sync_schedule: string | null
+          updated_at: string
+        }
+        Insert: {
+          connection_config?: Json
+          connector_name: string
+          connector_type: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          last_sync_at?: string | null
+          next_sync_at?: string | null
+          organization_id: string
+          status?: string
+          sync_schedule?: string | null
+          updated_at?: string
+        }
+        Update: {
+          connection_config?: Json
+          connector_name?: string
+          connector_type?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          last_sync_at?: string | null
+          next_sync_at?: string | null
+          organization_id?: string
+          status?: string
+          sync_schedule?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "esg_connectors_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "esg_connectors_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      esg_data_lake: {
+        Row: {
+          anomaly_flags: Json | null
+          audit_notes: string | null
+          connector_id: string | null
+          correction_history: Json | null
+          created_at: string
+          esrs_module: string
+          id: string
+          ingestion_timestamp: string
+          metric_category: string
+          metric_name: string
+          normalized_value: Json
+          organization_id: string
+          quality_score: number | null
+          raw_value: Json
+          reporting_period_end: string
+          reporting_period_start: string
+          source_file: string | null
+          source_system: string
+          source_timestamp: string
+          unit: string | null
+          validated_at: string | null
+          validated_by: string | null
+          validation_rules_applied: Json | null
+          validation_status: string
+          version: number
+        }
+        Insert: {
+          anomaly_flags?: Json | null
+          audit_notes?: string | null
+          connector_id?: string | null
+          correction_history?: Json | null
+          created_at?: string
+          esrs_module: string
+          id?: string
+          ingestion_timestamp?: string
+          metric_category: string
+          metric_name: string
+          normalized_value: Json
+          organization_id: string
+          quality_score?: number | null
+          raw_value: Json
+          reporting_period_end: string
+          reporting_period_start: string
+          source_file?: string | null
+          source_system: string
+          source_timestamp: string
+          unit?: string | null
+          validated_at?: string | null
+          validated_by?: string | null
+          validation_rules_applied?: Json | null
+          validation_status?: string
+          version?: number
+        }
+        Update: {
+          anomaly_flags?: Json | null
+          audit_notes?: string | null
+          connector_id?: string | null
+          correction_history?: Json | null
+          created_at?: string
+          esrs_module?: string
+          id?: string
+          ingestion_timestamp?: string
+          metric_category?: string
+          metric_name?: string
+          normalized_value?: Json
+          organization_id?: string
+          quality_score?: number | null
+          raw_value?: Json
+          reporting_period_end?: string
+          reporting_period_start?: string
+          source_file?: string | null
+          source_system?: string
+          source_timestamp?: string
+          unit?: string | null
+          validated_at?: string | null
+          validated_by?: string | null
+          validation_rules_applied?: Json | null
+          validation_status?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "esg_data_lake_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "esg_connectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "esg_data_lake_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "esg_data_lake_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      esg_data_mappings: {
+        Row: {
+          connector_id: string
+          created_at: string
+          expected_data_type: string | null
+          id: string
+          organization_id: string
+          required: boolean | null
+          source_field: string
+          target_esrs_module: string
+          target_metric: string
+          transformation_rules: Json | null
+          updated_at: string
+          validation_rules: Json | null
+        }
+        Insert: {
+          connector_id: string
+          created_at?: string
+          expected_data_type?: string | null
+          id?: string
+          organization_id: string
+          required?: boolean | null
+          source_field: string
+          target_esrs_module: string
+          target_metric: string
+          transformation_rules?: Json | null
+          updated_at?: string
+          validation_rules?: Json | null
+        }
+        Update: {
+          connector_id?: string
+          created_at?: string
+          expected_data_type?: string | null
+          id?: string
+          organization_id?: string
+          required?: boolean | null
+          source_field?: string
+          target_esrs_module?: string
+          target_metric?: string
+          transformation_rules?: Json | null
+          updated_at?: string
+          validation_rules?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "esg_data_mappings_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "esg_connectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "esg_data_mappings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "esg_data_mappings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       esg_metrics: {
         Row: {
           created_at: string | null
@@ -2887,6 +3120,112 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      esg_sync_logs: {
+        Row: {
+          connector_id: string
+          created_at: string
+          error_details: Json | null
+          execution_log: string | null
+          id: string
+          organization_id: string
+          records_failed: number | null
+          records_processed: number | null
+          records_validated: number | null
+          status: string
+          sync_completed_at: string | null
+          sync_started_at: string
+        }
+        Insert: {
+          connector_id: string
+          created_at?: string
+          error_details?: Json | null
+          execution_log?: string | null
+          id?: string
+          organization_id: string
+          records_failed?: number | null
+          records_processed?: number | null
+          records_validated?: number | null
+          status: string
+          sync_completed_at?: string | null
+          sync_started_at?: string
+        }
+        Update: {
+          connector_id?: string
+          created_at?: string
+          error_details?: Json | null
+          execution_log?: string | null
+          id?: string
+          organization_id?: string
+          records_failed?: number | null
+          records_processed?: number | null
+          records_validated?: number | null
+          status?: string
+          sync_completed_at?: string | null
+          sync_started_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "esg_sync_logs_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "esg_connectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "esg_sync_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "engagement_metrics"
+            referencedColumns: ["organization_id"]
+          },
+          {
+            foreignKeyName: "esg_sync_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      esrs_modules: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          materiality_assessment_required: boolean | null
+          module_category: string
+          module_code: string
+          module_name: string
+          regulatory_reference: string | null
+          required_disclosures: Json
+          required_kpis: Json
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          materiality_assessment_required?: boolean | null
+          module_category: string
+          module_code: string
+          module_name: string
+          regulatory_reference?: string | null
+          required_disclosures?: Json
+          required_kpis?: Json
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          materiality_assessment_required?: boolean | null
+          module_category?: string
+          module_code?: string
+          module_name?: string
+          regulatory_reference?: string | null
+          required_disclosures?: Json
+          required_kpis?: Json
+        }
+        Relationships: []
       }
       explainability_views: {
         Row: {

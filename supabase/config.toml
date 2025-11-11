@@ -192,10 +192,16 @@ verify_jwt = false
 [functions.sync-scope3-emissions]
 verify_jwt = true
 
+[functions.sync-esg-connector]
+verify_jwt = true
+
 [functions.system-health-check]
 verify_jwt = true
 
 [functions.system-health-monitor]
+verify_jwt = true
+
+[functions.test-esg-connector]
 verify_jwt = true
 
 [functions.update-regulations]
