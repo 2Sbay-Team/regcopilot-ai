@@ -7,7 +7,7 @@ import { Footer } from "@/components/Footer"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { LanguageSelector } from "@/components/LanguageSelector"
 import { CookieConsent } from "@/components/CookieConsent"
-import laterneXLogo from "@/assets/laternex-logo.png"
+import { LaterneXLogo } from "@/components/LaterneXLogo"
 import { analytics } from "@/lib/analytics"
 import { useAuth } from "@/contexts/AuthContext"
 import { useEffect } from "react"
@@ -61,7 +61,7 @@ const Index = () => {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <img src={laterneXLogo} alt="LaterneX" className="h-8 w-8" />
+              <LaterneXLogo size={32} />
               <span className="font-semibold text-lg">LaterneX</span>
             </div>
             <div className="flex items-center gap-2">
@@ -86,7 +86,7 @@ const Index = () => {
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <div className="inline-flex p-8 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl mb-6 hover:shadow-2xl transition-all duration-300">
-            <img src={laterneXLogo} alt="LaterneX" className="h-24 w-24" />
+            <LaterneXLogo size={96} />
           </div>
           <script type="application/ld+json">
             {JSON.stringify({
