@@ -24,7 +24,7 @@ const Cookies = () => {
             <section>
               <h2 className="text-2xl font-semibold mb-3">2. How We Use Cookies</h2>
               <p className="text-muted-foreground mb-2">
-                RegSense Advisor uses cookies for the following purposes:
+                LaterneX uses cookies for the following purposes:
               </p>
               <ul className="list-disc pl-6 text-muted-foreground space-y-1">
                 <li><strong>Essential Cookies:</strong> Required for the Service to function properly (authentication, security)</li>
@@ -143,8 +143,8 @@ const Cookies = () => {
                 If you have questions about our use of cookies, please contact:
               </p>
               <div className="text-muted-foreground mt-2">
-                <p>Data Protection Officer: privacy@regsense.dev</p>
-                <p>Address: RegSense Labs AB, Box 220, 101 23 Stockholm, Sweden</p>
+                <p>Data Protection Officer: privacy@laternex.com</p>
+                <p>Address: LaterneX Labs AB, Box 220, 101 23 Stockholm, Sweden</p>
               </div>
             </section>
           </CardContent>

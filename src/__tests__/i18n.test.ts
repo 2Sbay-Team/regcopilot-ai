@@ -107,11 +107,11 @@ describe('i18n Configuration', () => {
     })
 
     it('should translate signup page', async () => {
-      expect(i18n.t('auth.signup.title')).toBe('Join RegSense Advisor')
+      expect(i18n.t('auth.signup.title')).toBe('Join LaterneX')
       expect(i18n.t('auth.signup.trialBadge')).toBe('14-Day Free Trial')
       
       await i18n.changeLanguage('fr')
-      expect(i18n.t('auth.signup.title')).toBe('Rejoindre RegSense Advisor')
+      expect(i18n.t('auth.signup.title')).toBe('Rejoindre LaterneX')
       expect(i18n.t('auth.signup.trialBadge')).toBe('Essai gratuit de 14 jours')
     })
   })

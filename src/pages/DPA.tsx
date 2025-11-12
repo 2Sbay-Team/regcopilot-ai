@@ -225,8 +225,8 @@ const DPA = () => {
                 For DPA-related inquiries, please contact:
               </p>
               <div className="text-muted-foreground mt-2">
-                <p><strong>Data Protection Officer:</strong> privacy@regsense.dev</p>
-                <p><strong>Address:</strong> RegSense Labs AB, Box 220, 101 23 Stockholm, Sweden</p>
+                <p><strong>Data Protection Officer:</strong> privacy@laternex.com</p>
+                <p><strong>Address:</strong> LaterneX Labs AB, Box 220, 101 23 Stockholm, Sweden</p>
                 <p><strong>EU Representative:</strong> As required under GDPR Article 27</p>
               </div>
             </section>

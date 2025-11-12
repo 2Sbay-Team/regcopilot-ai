@@ -194,7 +194,7 @@ const TrustCenter = () => {
                 <h3 className="font-semibold mb-2">🔒 GDPR Compliance</h3>
                 <p className="text-sm text-muted-foreground">
                   Full compliance with EU GDPR. Data Processing Agreement available. 
-                  Data Protection Officer on staff: privacy@regsense.dev
+                  Data Protection Officer on staff: privacy@laternex.com
                 </p>
               </div>
               <div className="border-l-4 border-primary pl-4">

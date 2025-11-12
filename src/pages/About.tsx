@@ -43,7 +43,7 @@ const About = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-muted-foreground">
-            <strong>RegSense Labs AB</strong> is headquartered in Stockholm, Sweden, at the heart of 
+            <strong>LaterneX Labs AB</strong> is headquartered in Stockholm, Sweden, at the heart of 
             Europe's innovation ecosystem. Our EU base ensures:
           </p>
           <ul className="list-disc pl-6 text-muted-foreground space-y-2">
@@ -54,7 +54,7 @@ const About = () => {
           </ul>
           <div className="bg-muted p-4 rounded-lg mt-4">
             <p className="text-sm font-semibold mb-2">Legal Entity</p>
-            <p className="text-sm text-muted-foreground">RegSense Labs AB</p>
+            <p className="text-sm text-muted-foreground">LaterneX Labs AB</p>
             <p className="text-sm text-muted-foreground">Box 220, 101 23 Stockholm, Sweden</p>
             <p className="text-sm text-muted-foreground mt-2">Organization Number: [SE-ORG-NUMBER]</p>
             <p className="text-sm text-muted-foreground">VAT: SE[VAT-NUMBER]</p>
@@ -93,7 +93,7 @@ const About = () => {
             <div className="space-y-2">
               <h3 className="text-lg font-semibold">Data Protection Officer (DPO)</h3>
               <p className="text-muted-foreground">
-                Contact: <a href="mailto:privacy@regsense.dev" className="text-primary hover:underline">privacy@regsense.dev</a>
+                Contact: <a href="mailto:privacy@laternex.com" className="text-primary hover:underline">privacy@laternex.com</a>
               </p>
             </div>
           </div>
