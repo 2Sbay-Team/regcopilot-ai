@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { RoboticShieldLogo } from "@/components/RoboticShieldLogo";
+import laterneXLogo from "@/assets/laternex-logo.png"
 import { PasswordStrengthMeter } from "@/components/PasswordStrengthMeter";
 import { validatePassword, DEFAULT_PASSWORD_POLICY } from "@/lib/passwordValidation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -237,10 +237,13 @@ const Signup = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4 sm:p-6">
       <Card className="w-full max-w-md cockpit-panel shadow-xl border-primary/10">
         <CardHeader className="space-y-3 text-center pb-6">
-          <div className="flex justify-center mb-2">
-            <div className="p-5 bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 rounded-2xl hover:shadow-xl hover:scale-105 transition-all duration-300">
-              <RoboticShieldLogo size={68} />
-            </div>
+          <div className="flex justify-center items-center gap-3 mb-2">
+            <img 
+              src={laterneXLogo} 
+              alt="LaterneX" 
+              className="h-16 w-16 hover:scale-105 transition-transform duration-300"
+            />
+            <span className="text-3xl font-bold tracking-tight">LaterneX</span>
           </div>
           {isTrial && (
             <div className="flex items-center justify-center gap-2 px-3 py-1.5 bg-gradient-to-r from-primary to-accent rounded-full mx-auto w-fit">
@@ -250,7 +253,7 @@ const Signup = () => {
               </span>
             </div>
           )}
-          <CardTitle className="text-2xl font-bold tracking-tight">Join RegSense Advisor</CardTitle>
+          <CardTitle className="text-2xl font-bold tracking-tight">Join LaterneX</CardTitle>
           <CardDescription className="text-sm leading-relaxed px-2">
             {isTrial 
               ? "Start your free trial — No credit card required" 
