@@ -33,7 +33,7 @@ import {
   Building2
 } from "lucide-react"
 import { NavLink } from "@/components/NavLink"
-import { RoboticShieldLogo } from "@/components/RoboticShieldLogo"
+import laterneXLogo from "@/assets/laternex-logo.png"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { t } from "@/lib/i18n"
 import { useLanguage } from "@/contexts/LanguageContext"
@@ -343,7 +343,11 @@ export function AppSidebar() {
                 <TooltipTrigger asChild>
                   <div className={`flex items-center gap-3 ${isCollapsed ? 'w-10 h-10 justify-center' : ''}`}>
                     <div className="shrink-0">
-                      <RoboticShieldLogo size={isCollapsed ? 28 : 32} />
+                      <img 
+                        src={laterneXLogo} 
+                        alt="LaterneX" 
+                        className={isCollapsed ? "h-7 w-7" : "h-8 w-8"}
+                      />
                     </div>
                     {!isCollapsed && (
                       <div>
