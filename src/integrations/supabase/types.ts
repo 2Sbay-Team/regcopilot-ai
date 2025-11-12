@@ -1990,6 +1990,33 @@ export type Database = {
           },
         ]
       }
+      connector_sync_state: {
+        Row: {
+          connector_id: string
+          last_cursor: string | null
+          last_row_id: number | null
+          last_window_end: string | null
+          last_window_start: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          connector_id: string
+          last_cursor?: string | null
+          last_row_id?: number | null
+          last_window_end?: string | null
+          last_window_start?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          connector_id?: string
+          last_cursor?: string | null
+          last_row_id?: number | null
+          last_window_end?: string | null
+          last_window_start?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       connectors: {
         Row: {
           config: Json
@@ -2163,6 +2190,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      data_lineage_edges: {
+        Row: {
+          created_at: string | null
+          from_reference: string
+          id: string
+          metadata: Json | null
+          organization_id: string
+          relation_type: string
+          to_reference: string
+        }
+        Insert: {
+          created_at?: string | null
+          from_reference: string
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          relation_type: string
+          to_reference: string
+        }
+        Update: {
+          created_at?: string | null
+          from_reference?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          relation_type?: string
+          to_reference?: string
+        }
+        Relationships: []
       }
       data_processing_activities: {
         Row: {
@@ -3132,6 +3189,114 @@ export type Database = {
           },
         ]
       }
+      esg_ingestion_audit: {
+        Row: {
+          event_type: string
+          id: string
+          input_hash: string
+          metadata: Json | null
+          occurred_at: string | null
+          organization_id: string
+          output_hash: string
+          prev_hash: string | null
+        }
+        Insert: {
+          event_type: string
+          id?: string
+          input_hash: string
+          metadata?: Json | null
+          occurred_at?: string | null
+          organization_id: string
+          output_hash: string
+          prev_hash?: string | null
+        }
+        Update: {
+          event_type?: string
+          id?: string
+          input_hash?: string
+          metadata?: Json | null
+          occurred_at?: string | null
+          organization_id?: string
+          output_hash?: string
+          prev_hash?: string | null
+        }
+        Relationships: []
+      }
+      esg_kpi_results: {
+        Row: {
+          computed_at: string | null
+          id: string
+          lineage: Json | null
+          metric_code: string
+          organization_id: string
+          period: string
+          quality_score: number | null
+          source_profile_id: string | null
+          unit: string | null
+          value: number
+        }
+        Insert: {
+          computed_at?: string | null
+          id?: string
+          lineage?: Json | null
+          metric_code: string
+          organization_id: string
+          period: string
+          quality_score?: number | null
+          source_profile_id?: string | null
+          unit?: string | null
+          value: number
+        }
+        Update: {
+          computed_at?: string | null
+          id?: string
+          lineage?: Json | null
+          metric_code?: string
+          organization_id?: string
+          period?: string
+          quality_score?: number | null
+          source_profile_id?: string | null
+          unit?: string | null
+          value?: number
+        }
+        Relationships: []
+      }
+      esg_kpi_rules: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          esrs_reference: string | null
+          formula: Json
+          id: string
+          metric_code: string
+          organization_id: string
+          unit: string | null
+          version: number | null
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          esrs_reference?: string | null
+          formula: Json
+          id?: string
+          metric_code: string
+          organization_id: string
+          unit?: string | null
+          version?: number | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          esrs_reference?: string | null
+          formula?: Json
+          id?: string
+          metric_code?: string
+          organization_id?: string
+          unit?: string | null
+          version?: number | null
+        }
+        Relationships: []
+      }
       esg_kpis: {
         Row: {
           calculation_method: string | null
@@ -3899,6 +4064,135 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mapping_fields: {
+        Row: {
+          created_at: string | null
+          id: string
+          notes: string | null
+          profile_id: string
+          source_column: string
+          source_table: string
+          target_metric_code: string
+          transform: Json | null
+          unit: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          profile_id: string
+          source_column: string
+          source_table: string
+          target_metric_code: string
+          transform?: Json | null
+          unit?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          profile_id?: string
+          source_column?: string
+          source_table?: string
+          target_metric_code?: string
+          transform?: Json | null
+          unit?: string | null
+        }
+        Relationships: []
+      }
+      mapping_joins: {
+        Row: {
+          confidence_score: number | null
+          created_at: string | null
+          id: string
+          join_type: string
+          left_key: string
+          left_table: string
+          profile_id: string
+          right_key: string
+          right_table: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          join_type?: string
+          left_key: string
+          left_table: string
+          profile_id: string
+          right_key: string
+          right_table: string
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          join_type?: string
+          left_key?: string
+          left_table?: string
+          profile_id?: string
+          right_key?: string
+          right_table?: string
+        }
+        Relationships: []
+      }
+      mapping_profiles: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          organization_id: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          organization_id: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          organization_id?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      mapping_tables: {
+        Row: {
+          connector_id: string | null
+          created_at: string | null
+          id: string
+          profile_id: string
+          source_table: string
+          table_alias: string | null
+        }
+        Insert: {
+          connector_id?: string | null
+          created_at?: string | null
+          id?: string
+          profile_id: string
+          source_table: string
+          table_alias?: string | null
+        }
+        Update: {
+          connector_id?: string | null
+          created_at?: string | null
+          id?: string
+          profile_id?: string
+          source_table?: string
+          table_alias?: string | null
+        }
+        Relationships: []
       }
       marketing_events: {
         Row: {
@@ -6457,6 +6751,51 @@ export type Database = {
           },
         ]
       }
+      source_schema_cache: {
+        Row: {
+          captured_at: string | null
+          column_name: string
+          connector_id: string
+          data_type: string | null
+          fk_target_column: string | null
+          fk_target_table: string | null
+          id: string
+          is_foreign_key: boolean | null
+          is_primary_key: boolean | null
+          sample_preview: Json | null
+          sampled: boolean | null
+          table_name: string
+        }
+        Insert: {
+          captured_at?: string | null
+          column_name: string
+          connector_id: string
+          data_type?: string | null
+          fk_target_column?: string | null
+          fk_target_table?: string | null
+          id?: string
+          is_foreign_key?: boolean | null
+          is_primary_key?: boolean | null
+          sample_preview?: Json | null
+          sampled?: boolean | null
+          table_name: string
+        }
+        Update: {
+          captured_at?: string | null
+          column_name?: string
+          connector_id?: string
+          data_type?: string | null
+          fk_target_column?: string | null
+          fk_target_table?: string | null
+          id?: string
+          is_foreign_key?: boolean | null
+          is_primary_key?: boolean | null
+          sample_preview?: Json | null
+          sampled?: boolean | null
+          table_name?: string
+        }
+        Relationships: []
+      }
       sso_connections: {
         Row: {
           auto_provision: boolean | null
@@ -6541,6 +6880,36 @@ export type Database = {
           metrics?: Json
           report_type?: string
           status?: string
+        }
+        Relationships: []
+      }
+      staging_rows: {
+        Row: {
+          arrived_at: string | null
+          connector_id: string
+          id: number
+          payload: Json
+          period: string | null
+          source_hash: string
+          source_table: string
+        }
+        Insert: {
+          arrived_at?: string | null
+          connector_id: string
+          id?: number
+          payload: Json
+          period?: string | null
+          source_hash: string
+          source_table: string
+        }
+        Update: {
+          arrived_at?: string | null
+          connector_id?: string
+          id?: number
+          payload?: Json
+          period?: string | null
+          source_hash?: string
+          source_table?: string
         }
         Relationships: []
       }
