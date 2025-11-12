@@ -22,7 +22,7 @@ Deno.serve(async (req) => {
         messages: [
           {
             role: "user",
-            content: "Generate a modern, sleek robotic shield logo for a compliance and security platform. The shield should have: futuristic metallic appearance with blue and green accent colors, geometric patterns suggesting AI/technology, clean lines suitable for a professional SaaS application, white/light background, minimalist design. The shield should convey trust, protection, and advanced technology. High quality, vector-style appearance."
+            content: "Design a circular Azure-blue logo for LaterneX on a white background. Symbolize: EU AI Act, GDPR, ESG, Ethics, and Data Ingestion. Use four subtle sectors orbiting a glowing center 'L', with fine network lines and a dashed ingestion arc. Minimalist, vector, professional."
           }
         ],
         modalities: ["image", "text"]

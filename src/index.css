@@ -46,6 +46,13 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 210 24% 16%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 180 82% 45%;
+
+    /* Brand tokens */
+    --brand-azure: 206 100% 41%; /* Azure primary (#0078D4 approx) */
+    --brand-azure-light: 206 92% 58%; /* Lighter Azure */
+    --brand-emerald: 156 60% 52%; /* ESG green */
+    --brand-cyan: 193 90% 60%; /* Innovation cyan */
+    --brand-silver: 210 20% 70%; /* GDPR silver */
   }
 
   .dark {
@@ -86,6 +93,13 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 215 25% 27%;
     --sidebar-ring: 180 82% 45%;
+
+    /* Brand tokens (dark mode) */
+    --brand-azure: 206 100% 41%;
+    --brand-azure-light: 206 92% 58%;
+    --brand-emerald: 156 60% 52%;
+    --brand-cyan: 193 90% 60%;
+    --brand-silver: 210 20% 70%;
   }
 }
 
