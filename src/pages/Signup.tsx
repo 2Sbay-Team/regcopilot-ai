@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import laterneXLogo from "@/assets/laternex-logo.png"
+import { LaterneXLogo } from "@/components/LaterneXLogo"
 import { PasswordStrengthMeter } from "@/components/PasswordStrengthMeter";
 import { validatePassword, DEFAULT_PASSWORD_POLICY } from "@/lib/passwordValidation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -238,11 +238,7 @@ const Signup = () => {
       <Card className="w-full max-w-md cockpit-panel shadow-xl border-primary/10">
         <CardHeader className="space-y-3 text-center pb-6">
           <div className="flex justify-center items-center gap-3 mb-2">
-            <img 
-              src={laterneXLogo} 
-              alt="LaterneX" 
-              className="h-16 w-16 hover:scale-105 transition-transform duration-300"
-            />
+            <LaterneXLogo size={64} className="hover:scale-105 transition-transform duration-300" />
             <span className="text-3xl font-bold tracking-tight">LaterneX</span>
           </div>
           {isTrial && (
