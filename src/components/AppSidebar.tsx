@@ -151,12 +151,7 @@ export function AppSidebar() {
 
   const toolsItems = [
     { 
-      titleKey: "nav.regSense", 
-      url: "/regsense", 
-      icon: Sparkles,
-    },
-    { 
-      titleKey: "nav.scheduledJobs", 
+      titleKey: "nav.scheduledJobs",
       url: "/scheduled-jobs", 
       icon: Calendar,
     },
@@ -353,7 +348,7 @@ export function AppSidebar() {
                     {!isCollapsed && (
                       <div>
                         <span className="font-semibold text-base block leading-tight">
-                          RegSense Advisor
+                          LaterneX
                         </span>
                         <span className="text-xs text-muted-foreground leading-none">
                           AI-Powered Regulatory Intelligence
@@ -364,7 +359,7 @@ export function AppSidebar() {
                 </TooltipTrigger>
                 {isCollapsed && (
                   <TooltipContent side="right">
-                    <p className="font-semibold">RegSense Advisor</p>
+                    <p className="font-semibold">LaterneX</p>
                     <p className="text-xs text-muted-foreground">AI-Powered Regulatory Intelligence</p>
                   </TooltipContent>
                 )}

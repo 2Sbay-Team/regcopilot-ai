@@ -69,7 +69,6 @@ import DSARQueue from "./pages/DSARQueue";
 import SecurityCenter from "./pages/SecurityCenter";
 import UserGuide from "./pages/UserGuide";
 import HelpCenter from "./pages/HelpCenter";
-import RegSense from "./pages/RegSense";
 import BrandComparison from "./pages/BrandComparison";
 import Automation from "./pages/Automation";
 import AuditPortal from "./pages/AuditPortal";
@@ -179,7 +178,6 @@ const App = () => (
             <Route path="/qa-dashboard" element={<ProtectedRoute><RoleGuard requiredRole="admin"><AppLayout><QADashboard /></AppLayout></RoleGuard></ProtectedRoute>} />
             <Route path="/user-guide" element={<ProtectedRoute><AppLayout><UserGuide /></AppLayout></ProtectedRoute>} />
             <Route path="/help-center" element={<ProtectedRoute><AppLayout><HelpCenter /></AppLayout></ProtectedRoute>} />
-            <Route path="/regsense" element={<ProtectedRoute><AppLayout><RegSense /></AppLayout></ProtectedRoute>} />
             <Route path="/brand-comparison" element={<ProtectedRoute><BrandComparison /></ProtectedRoute>} />
             <Route path="/automation" element={<ProtectedRoute><AppLayout><Automation /></AppLayout></ProtectedRoute>} />
             <Route path="/audit-portal" element={<ProtectedRoute><AuditPortal /></ProtectedRoute>} />

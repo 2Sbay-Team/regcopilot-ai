@@ -39,7 +39,7 @@
   },
   "landing": {
     "hero": {
-      "title": "RegSense Advisor",
+      "title": "LaterneX",
       "subtitle": "AI-Powered Regulatory Intelligence",
       "tagline": "Automate compliance for AI Act, GDPR, and ESG with explainable, audit-ready AI copilots",
       "getStarted": "Get Started",
@@ -63,7 +63,7 @@
   "auth": {
     "login": {
       "title": "Welcome Back",
-      "subtitle": "Sign in to your RegSense account",
+      "subtitle": "Sign in to your LaterneX account",
       "email": "Email",
       "password": "Password",
       "rememberMe": "Remember me",
@@ -75,7 +75,7 @@
       "captchaRequired": "CAPTCHA Required"
     },
     "signup": {
-      "title": "Join RegSense Advisor",
+      "title": "Join LaterneX",
       "subtitle": "AI-Powered Regulatory Intelligence — Effortless Compliance",
       "trialSubtitle": "Start your free trial — No credit card required",
       "trialBadge": "14-Day Free Trial",
@@ -90,7 +90,7 @@
     }
   },
   "dashboard": {
-    "welcome": "Welcome to RegSense Advisor",
+    "welcome": "Welcome to LaterneX",
     "overview": "Compliance Overview",
     "recentActivity": "Recent Activity",
     "quickActions": "Quick Actions",
@@ -129,7 +129,7 @@
     "dpa": "Data Processing Agreement",
     "security": "Security & Privacy",
     "trust": "Trust Center",
-    "copyright": "© 2025 RegSense Labs AB. All rights reserved.",
+    "copyright": "© 2025 LaterneX. All rights reserved.",
     "address": "Stockholm, Sweden"
   },
   "products": {

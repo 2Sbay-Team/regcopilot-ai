@@ -39,7 +39,7 @@
   },
   "landing": {
     "hero": {
-      "title": "RegSense Advisor",
+      "title": "LaterneX",
       "subtitle": "ذكاء تنظيمي مدعوم بالذكاء الاصطناعي",
       "tagline": "أتمتة الامتثال لقانون الذكاء الاصطناعي واللائحة العامة لحماية البيانات ومعايير ESG مع مساعدين ذكاء اصطناعي قابلين للتفسير وجاهزين للتدقيق",
       "getStarted": "ابدأ الآن",
@@ -63,7 +63,7 @@
   "auth": {
     "login": {
       "title": "مرحبًا بعودتك",
-      "subtitle": "قم بتسجيل الدخول إلى حساب RegSense الخاص بك",
+      "subtitle": "قم بتسجيل الدخول إلى حساب LaterneX الخاص بك",
       "email": "البريد الإلكتروني",
       "password": "كلمة المرور",
       "rememberMe": "تذكرني",
@@ -75,7 +75,7 @@
       "captchaRequired": "مطلوب CAPTCHA"
     },
     "signup": {
-      "title": "انضم إلى RegSense Advisor",
+      "title": "انضم إلى LaterneX",
       "subtitle": "ذكاء تنظيمي مدعوم بالذكاء الاصطناعي — امتثال سهل",
       "trialSubtitle": "ابدأ فترتك التجريبية المجانية — لا حاجة لبطاقة ائتمان",
       "trialBadge": "فترة تجريبية مجانية لمدة 14 يومًا",
@@ -90,7 +90,7 @@
     }
   },
   "dashboard": {
-    "welcome": "مرحبًا بك في RegSense Advisor",
+    "welcome": "مرحبًا بك في LaterneX",
     "overview": "نظرة عامة على الامتثال",
     "recentActivity": "النشاط الأخير",
     "quickActions": "إجراءات سريعة",
@@ -129,7 +129,7 @@
     "dpa": "اتفاقية معالجة البيانات",
     "security": "الأمان والخصوصية",
     "trust": "مركز الثقة",
-    "copyright": "© 2025 RegSense Labs AB. جميع الحقوق محفوظة.",
+    "copyright": "© 2025 LaterneX. جميع الحقوق محفوظة.",
     "address": "ستوكهولم، السويد"
   },
   "products": {

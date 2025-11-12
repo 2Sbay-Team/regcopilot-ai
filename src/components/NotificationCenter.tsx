@@ -70,7 +70,7 @@ export const NotificationCenter = () => {
     mockNotifications.push({
       id: '2',
       type: 'info',
-      title: 'Welcome to RegSense Advisor',
+      title: 'Welcome to LaterneX',
       message: 'Start by running your first compliance assessment',
       timestamp: new Date().toISOString(),
       read: false

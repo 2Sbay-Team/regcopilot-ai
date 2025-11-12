@@ -39,7 +39,7 @@
   },
   "landing": {
     "hero": {
-      "title": "RegSense Advisor",
+      "title": "LaterneX",
       "subtitle": "Intelligence réglementaire alimentée par l'IA",
       "tagline": "Automatisez la conformité pour la loi sur l'IA, le RGPD et l'ESG avec des copilotes IA explicables et prêts pour l'audit",
       "getStarted": "Commencer",
@@ -63,7 +63,7 @@
   "auth": {
     "login": {
       "title": "Bienvenue",
-      "subtitle": "Connectez-vous à votre compte RegSense",
+      "subtitle": "Connectez-vous à votre compte LaterneX",
       "email": "Email",
       "password": "Mot de passe",
       "rememberMe": "Se souvenir de moi",
@@ -75,7 +75,7 @@
       "captchaRequired": "CAPTCHA requis"
     },
     "signup": {
-      "title": "Rejoindre RegSense Advisor",
+      "title": "Rejoindre LaterneX",
       "subtitle": "Intelligence réglementaire alimentée par l'IA — Conformité sans effort",
       "trialSubtitle": "Commencez votre essai gratuit — Aucune carte de crédit requise",
       "trialBadge": "Essai gratuit de 14 jours",
@@ -90,7 +90,7 @@
     }
   },
   "dashboard": {
-    "welcome": "Bienvenue sur RegSense Advisor",
+    "welcome": "Bienvenue sur LaterneX",
     "overview": "Aperçu de la conformité",
     "recentActivity": "Activité récente",
     "quickActions": "Actions rapides",
@@ -129,7 +129,7 @@
     "dpa": "Accord de traitement des données",
     "security": "Sécurité et confidentialité",
     "trust": "Centre de confiance",
-    "copyright": "© 2025 RegSense Labs AB. Tous droits réservés.",
+    "copyright": "© 2025 LaterneX. Tous droits réservés.",
     "address": "Stockholm, Suède"
   },
   "products": {

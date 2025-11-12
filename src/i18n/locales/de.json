@@ -39,7 +39,7 @@
   },
   "landing": {
     "hero": {
-      "title": "RegSense Advisor",
+      "title": "LaterneX",
       "subtitle": "KI-gestützte Regulierungsintelligenz",
       "tagline": "Automatisieren Sie die Compliance für KI-Verordnung, DSGVO und ESG mit erklärbaren, prüfungssicheren KI-Copiloten",
       "getStarted": "Jetzt starten",
@@ -63,7 +63,7 @@
   "auth": {
     "login": {
       "title": "Willkommen zurück",
-      "subtitle": "Melden Sie sich bei Ihrem RegSense-Konto an",
+      "subtitle": "Melden Sie sich bei Ihrem LaterneX-Konto an",
       "email": "E-Mail",
       "password": "Passwort",
       "rememberMe": "Angemeldet bleiben",
@@ -75,7 +75,7 @@
       "captchaRequired": "CAPTCHA erforderlich"
     },
     "signup": {
-      "title": "RegSense Advisor beitreten",
+      "title": "LaterneX beitreten",
       "subtitle": "KI-gestützte Regulierungsintelligenz — Mühelose Compliance",
       "trialSubtitle": "Starten Sie Ihre kostenlose Testversion — Keine Kreditkarte erforderlich",
       "trialBadge": "14 Tage kostenlose Testversion",
@@ -90,7 +90,7 @@
     }
   },
   "dashboard": {
-    "welcome": "Willkommen bei RegSense Advisor",
+    "welcome": "Willkommen bei LaterneX",
     "overview": "Compliance-Übersicht",
     "recentActivity": "Letzte Aktivitäten",
     "quickActions": "Schnellaktionen",
@@ -129,7 +129,7 @@
     "dpa": "Datenverarbeitungsvereinbarung",
     "security": "Sicherheit & Datenschutz",
     "trust": "Vertrauenszentrum",
-    "copyright": "© 2025 RegSense Labs AB. Alle Rechte vorbehalten.",
+    "copyright": "© 2025 LaterneX. Alle Rechte vorbehalten.",
     "address": "Stockholm, Schweden"
   },
   "products": {
