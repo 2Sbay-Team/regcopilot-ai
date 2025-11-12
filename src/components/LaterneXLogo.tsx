@@ -5,8 +5,7 @@ interface LaterneXLogoProps {
   size?: number
 }
 
-// Vector LaterneX mark: Unified ESG + AI + GDPR + Ethics symbol
-// Circular sectors with glowing center "L" representing transparency and interconnected compliance
+// Modern LaterneX logo: Clean circular design representing EU AI Act, ESG, GDPR, Ethics, and Data Ingestion
 export function LaterneXLogo({ className, size = 40 }: LaterneXLogoProps) {
   const uniqueId = `lx-${Math.random().toString(36).substr(2, 9)}`
   
@@ -21,160 +20,146 @@ export function LaterneXLogo({ className, size = 40 }: LaterneXLogoProps) {
       >
         <title id={`${uniqueId}-title`}>LaterneX - Intelligence for a Transparent Future</title>
         <defs>
-          {/* Center glow - transparency & light (Azure) */}
-          <radialGradient id={`${uniqueId}-glow`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-            <stop offset="30%" stopColor={`hsl(var(--brand-azure))`} stopOpacity="0.5" />
-            <stop offset="70%" stopColor={`hsl(var(--brand-azure))`} stopOpacity="0.1" />
-            <stop offset="100%" stopColor={`hsl(var(--brand-azure))`} stopOpacity="0" />
+          {/* Blue gradient for main circle */}
+          <linearGradient id={`${uniqueId}-blue-gradient`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#2563eb" />
+            <stop offset="100%" stopColor="#1e40af" />
+          </linearGradient>
+          
+          {/* Light blue for accents */}
+          <linearGradient id={`${uniqueId}-light-blue`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#60a5fa" />
+            <stop offset="100%" stopColor="#3b82f6" />
+          </linearGradient>
+          
+          {/* Center glow */}
+          <radialGradient id={`${uniqueId}-center-glow`} cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#1e40af" stopOpacity="0" />
           </radialGradient>
           
-          {/* AI sector gradient - Azure innovation */}
-          <linearGradient id={`${uniqueId}-ai`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={`hsl(var(--brand-azure-light))`} stopOpacity="0.9" />
-            <stop offset="100%" stopColor={`hsl(var(--brand-azure))`} stopOpacity="0.95" />
-          </linearGradient>
-          
-          {/* ESG sector gradient - Emerald sustainability */}
-          <linearGradient id={`${uniqueId}-esg`} x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={`hsl(var(--brand-emerald))`} stopOpacity="0.85" />
-            <stop offset="100%" stopColor={`hsl(var(--brand-emerald))`} stopOpacity="0.95" />
-          </linearGradient>
-          
-          {/* GDPR sector gradient - Silver governance */}
-          <linearGradient id={`${uniqueId}-gdpr`} x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor={`hsl(var(--brand-silver))`} stopOpacity="0.85" />
-            <stop offset="100%" stopColor={`hsl(var(--brand-silver))`} stopOpacity="0.95" />
-          </linearGradient>
-          
-          {/* Ethics sector gradient - Azure balance */}
-          <linearGradient id={`${uniqueId}-ethics`} x1="100%" y1="100%" x2="0%" y2="0%">
-            <stop offset="0%" stopColor={`hsl(var(--brand-azure))`} stopOpacity="0.85" />
-            <stop offset="100%" stopColor={`hsl(var(--brand-azure-light))`} stopOpacity="0.95" />
-          </linearGradient>
-          
           {/* Soft shadow */}
-          <filter id={`${uniqueId}-shadow`} x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" />
+          <filter id={`${uniqueId}-shadow`}>
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
             <feOffset dx="0" dy="2" result="offsetblur" />
             <feComponentTransfer>
-              <feFuncA type="linear" slope="0.28" />
+              <feFuncA type="linear" slope="0.2" />
             </feComponentTransfer>
             <feMerge>
               <feMergeNode />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          
-          {/* Glow filter for center */}
-          <filter id={`${uniqueId}-center-glow`}>
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
         </defs>
 
-        {/* Base circle - white background */}
+        {/* Outer circle - main structure */}
         <circle 
           cx="50" 
           cy="50" 
-          r="45" 
-          fill="hsl(var(--background))"
-          stroke={`hsl(var(--brand-azure) / 0.25)`}
-          strokeWidth="0.5"
+          r="46" 
+          fill="url(#${uniqueId}-blue-gradient)"
           filter={`url(#${uniqueId}-shadow)`}
         />
         
-        {/* Four sectors representing domains */}
-        {/* AI Sector (top-right) */}
-        <path
-          d="M 50 50 L 50 8 A 42 42 0 0 1 79.7 20.3 Z"
-          fill={`url(#${uniqueId}-ai)`}
-          opacity="0.4"
-        />
-        
-        {/* ESG Sector (bottom-right) */}
-        <path
-          d="M 50 50 L 79.7 79.7 A 42 42 0 0 1 50 92 Z"
-          fill={`url(#${uniqueId}-esg)`}
-          opacity="0.4"
-        />
-        
-        {/* GDPR Sector (bottom-left) */}
-        <path
-          d="M 50 50 L 20.3 79.7 A 42 42 0 0 1 8 50 Z"
-          fill={`url(#${uniqueId}-gdpr)`}
-          opacity="0.4"
-        />
-        
-        {/* Ethics Sector (top-left) */}
-        <path
-          d="M 50 50 L 20.3 20.3 A 42 42 0 0 1 50 8 Z"
-          fill={`url(#${uniqueId}-ethics)`}
-          opacity="0.4"
-        />
-
-        {/* Interconnecting data lines - subtle neural network pattern */}
-        <line x1="50" y1="8" x2="50" y2="20" stroke={`hsl(var(--brand-azure))`} strokeWidth="0.5" opacity="0.5" />
-        <line x1="79.7" y1="20.3" x2="70" y2="30" stroke={`hsl(var(--brand-azure))`} strokeWidth="0.5" opacity="0.5" />
-        <line x1="79.7" y1="79.7" x2="70" y2="70" stroke={`hsl(var(--brand-emerald))`} strokeWidth="0.5" opacity="0.5" />
-        <line x1="50" y1="92" x2="50" y2="80" stroke={`hsl(var(--brand-emerald))`} strokeWidth="0.5" opacity="0.5" />
-        <line x1="20.3" y1="79.7" x2="30" y2="70" stroke={`hsl(var(--brand-silver))`} strokeWidth="0.5" opacity="0.5" />
-        <line x1="8" y1="50" x2="20" y2="50" stroke={`hsl(var(--brand-silver))`} strokeWidth="0.5" opacity="0.5" />
-        <line x1="20.3" y1="20.3" x2="30" y2="30" stroke={`hsl(var(--brand-azure))`} strokeWidth="0.5" opacity="0.5" />
-        <line x1="92" y1="50" x2="80" y2="50" stroke={`hsl(var(--brand-azure))`} strokeWidth="0.5" opacity="0.5" />
-        
-        {/* Outer ring - unity & continuous improvement */}
+        {/* Inner white circle for contrast */}
         <circle 
           cx="50" 
           cy="50" 
-          r="42" 
-          fill="none" 
-          stroke={`hsl(var(--brand-azure))`} 
-          strokeWidth="0.8" 
-          opacity="0.3"
+          r="38" 
+          fill="white"
         />
         
-        {/* Center glow circle - transparency core */}
-        <circle 
-          cx="50" 
-          cy="50" 
-          r="22" 
-          fill={`url(#${uniqueId}-glow)`}
-          filter={`url(#${uniqueId}-center-glow)`}
-        />
-        
-        {/* Bold "L" lettermark - the lantern */}
+        {/* Five segments representing domains */}
+        {/* AI Act - top */}
         <path
-          d="M 42 35 L 42 62 L 58 62"
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          opacity="0.95"
-        />
-        
-        {/* Accent dot - precision & focus */}
-        <circle
-          cx="61"
-          cy="62"
-          r="2"
-          fill={`hsl(var(--brand-azure))`}
+          d="M 50 12 L 50 28 A 22 22 0 0 1 64 32.5 L 71.5 20.3 A 39 39 0 0 0 50 12 Z"
+          fill="#3b82f6"
           opacity="0.9"
         />
         
-        {/* Inner nodes - data points and ingestion arc */}
-        <circle cx="50" cy="25" r="1.5" fill={`hsl(var(--brand-azure))`} opacity="0.6" />
-        <circle cx="65" cy="35" r="1.5" fill={`hsl(var(--brand-azure))`} opacity="0.6" />
-        <circle cx="65" cy="65" r="1.5" fill={`hsl(var(--brand-emerald))`} opacity="0.6" />
-        <circle cx="50" cy="75" r="1.5" fill={`hsl(var(--brand-emerald))`} opacity="0.6" />
-        <circle cx="35" cy="65" r="1.5" fill={`hsl(var(--brand-silver))`} opacity="0.6" />
-        <circle cx="35" cy="35" r="1.5" fill={`hsl(var(--brand-azure-light))`} opacity="0.6" />
-        {/* Data ingestion arc */}
-        <path d="M 62 80 A 30 30 0 0 1 20 58" fill="none" stroke={`hsl(var(--brand-azure))`} strokeWidth="0.8" opacity="0.25" strokeDasharray="2 3" />
+        {/* GDPR - top right */}
+        <path
+          d="M 71.5 20.3 L 64 32.5 A 22 22 0 0 1 67.5 46 L 82 43.5 A 39 39 0 0 0 71.5 20.3 Z"
+          fill="#2563eb"
+          opacity="0.85"
+        />
+        
+        {/* ESG - bottom right */}
+        <path
+          d="M 82 43.5 L 67.5 46 A 22 22 0 0 1 60 61 L 74 68.5 A 39 39 0 0 0 82 43.5 Z"
+          fill="#1d4ed8"
+          opacity="0.9"
+        />
+        
+        {/* Ethics - bottom left */}
+        <path
+          d="M 74 68.5 L 60 61 A 22 22 0 0 1 40 61 L 26 68.5 A 39 39 0 0 0 74 68.5 Z"
+          fill="#1e40af"
+          opacity="0.85"
+        />
+        
+        {/* Data Ingestion - left */}
+        <path
+          d="M 26 68.5 L 40 61 A 22 22 0 0 1 32.5 46 L 18 48.5 A 39 39 0 0 0 26 68.5 Z"
+          fill="#2563eb"
+          opacity="0.9"
+        />
+        
+        {/* Complete the circle - top left */}
+        <path
+          d="M 18 48.5 L 32.5 46 A 22 22 0 0 1 36 32.5 L 28.5 20.3 A 39 39 0 0 0 18 48.5 Z"
+          fill="#3b82f6"
+          opacity="0.85"
+        />
+        
+        <path
+          d="M 28.5 20.3 L 36 32.5 A 22 22 0 0 1 50 28 L 50 12 A 39 39 0 0 0 28.5 20.3 Z"
+          fill="#60a5fa"
+          opacity="0.9"
+        />
+
+        {/* Center circle with glow effect */}
+        <circle 
+          cx="50" 
+          cy="50" 
+          r="18" 
+          fill="url(#${uniqueId}-center-glow)"
+        />
+        
+        <circle 
+          cx="50" 
+          cy="50" 
+          r="16" 
+          fill="url(#${uniqueId}-blue-gradient)"
+        />
+        
+        {/* White "L" lettermark */}
+        <path
+          d="M 43 38 L 43 60 L 57 60"
+          fill="none"
+          stroke="white"
+          strokeWidth="4.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        
+        {/* Accent dot */}
+        <circle
+          cx="59"
+          cy="60"
+          r="1.8"
+          fill="white"
+        />
+        
+        {/* Subtle connection lines */}
+        <circle cx="50" cy="20" r="1.2" fill="#60a5fa" opacity="0.8" />
+        <circle cx="68" cy="30" r="1.2" fill="#60a5fa" opacity="0.8" />
+        <circle cx="75" cy="50" r="1.2" fill="#3b82f6" opacity="0.8" />
+        <circle cx="67" cy="70" r="1.2" fill="#2563eb" opacity="0.8" />
+        <circle cx="50" cy="75" r="1.2" fill="#1e40af" opacity="0.8" />
+        <circle cx="33" cy="70" r="1.2" fill="#2563eb" opacity="0.8" />
+        <circle cx="25" cy="50" r="1.2" fill="#3b82f6" opacity="0.8" />
+        <circle cx="32" cy="30" r="1.2" fill="#60a5fa" opacity="0.8" />
       </svg>
     </div>
   )
