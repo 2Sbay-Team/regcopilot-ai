@@ -148,8 +148,8 @@ Deno.test("ESG Workflow - Step 7: Verify Audit Chain", async () => {
 
   // Verify hash chain integrity
   for (let i = 0; i < data.length - 1; i++) {
-    const current = data[i];
-    const previous = data[i + 1];
+    const current: any = data[i];
+    const previous: any = data[i + 1];
     
     assertExists(current.input_hash, "Should have input_hash");
     assertExists(current.output_hash, "Should have output_hash");
