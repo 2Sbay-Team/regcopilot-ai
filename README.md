@@ -58,4 +58,3 @@ Click **Publish** in Lovable to deploy instantly.
 
 ---
 
-Built with [Lovable](https://lovable.dev) 💜
