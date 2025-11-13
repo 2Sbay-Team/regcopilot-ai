@@ -92,6 +92,7 @@ const FileUpload = ({ bucket, organizationId, onUploadComplete, accept, maxFiles
                 size="icon"
                 onClick={() => removeFile(index)}
                 disabled={uploading}
+                aria-label="Remove file"
               >
                 <X className="h-4 w-4" />
               </Button>

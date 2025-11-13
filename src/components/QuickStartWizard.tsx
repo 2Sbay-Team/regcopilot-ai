@@ -174,7 +174,7 @@ export const QuickStartWizard = ({ open, onOpenChange }: QuickStartWizardProps) 
               <Icon className={`h-6 w-6 ${step.color || "text-primary"}`} />
               {step.title}
             </DialogTitle>
-            <Button variant="ghost" size="icon" onClick={handleSkip}>
+            <Button variant="ghost" size="icon" onClick={handleSkip} aria-label="Close guide">
               <X className="h-4 w-4" />
             </Button>
           </div>

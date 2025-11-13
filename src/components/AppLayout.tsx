@@ -127,6 +127,7 @@ function AppLayoutInner({ children }: AppLayoutProps) {
                 size="icon"
                 onClick={() => navigate("/help")}
                 className="h-9 w-9 rounded-full hover:bg-muted/50"
+                aria-label="Help"
               >
                 <HelpCircle className="h-5 w-5" />
               </Button>
