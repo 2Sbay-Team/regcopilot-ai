@@ -54,7 +54,7 @@ See `ARCHITECTURE.md` for complete technical details.
 
 ## 🚢 Deployment
 
-Click **Publish** in Lovable to deploy instantly.
+Click **Publish** in ### to deploy instantly.
 
 ---
 
