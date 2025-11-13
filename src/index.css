@@ -412,3 +412,13 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground) / 0.5);
 }
+
+/* Accessibility: Increase Lovable badge close button touch target size to meet WCAG 2.2 AA (min 24x24px) */
+#lovable-badge-close {
+  min-width: 24px !important;
+  min-height: 24px !important;
+  padding: 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
