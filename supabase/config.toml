@@ -7,7 +7,7 @@ verify_jwt = false
 verify_jwt = true
 
 [functions.ai-act-auditor]
-verify_jwt = false
+verify_jwt = true
 
 [functions.ai-actuator-agent]
 verify_jwt = true
@@ -52,10 +52,10 @@ verify_jwt = false
 verify_jwt = true
 
 [functions.dma-assessor]
-verify_jwt = false
+verify_jwt = true
 
 [functions.dora-assessor]
-verify_jwt = false
+verify_jwt = true
 
 [functions.dsar-workflow]
 verify_jwt = true
@@ -67,7 +67,7 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.esg-reporter]
-verify_jwt = false
+verify_jwt = true
 
 [functions.explainability]
 verify_jwt = false
@@ -85,7 +85,7 @@ verify_jwt = true
 verify_jwt = false
 
 [functions.gdpr-checker]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-annex-iv-report]
 verify_jwt = true
@@ -124,7 +124,7 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.nis2-assessor]
-verify_jwt = false
+verify_jwt = true
 
 [functions.password-leak-check]
 verify_jwt = false
