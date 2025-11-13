@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
       const response1 = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/demo-seed-ingestion`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`,
+          'Authorization': authHeader,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({}),
