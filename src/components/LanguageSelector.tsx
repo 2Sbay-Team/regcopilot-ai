@@ -33,6 +33,7 @@ export function LanguageSelector({
         <Button 
           variant={variant} 
           className="gap-2 text-foreground hover:text-foreground/80 font-normal"
+          aria-label={showLabel ? undefined : "Select language"}
         >
           <img src={globeIcon} alt="Language" className="h-4 w-4" />
           {showLabel && <span>{languageNames[language]}</span>}

@@ -306,6 +306,7 @@ export function AppSidebar() {
               size="icon"
               className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
               onClick={(e) => handleOpenHelp(item.url, e)}
+              aria-label="Help for this section"
             >
               <Info className="h-4 w-4" />
             </Button>

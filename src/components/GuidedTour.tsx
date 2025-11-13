@@ -180,6 +180,7 @@ export function GuidedTour({ tourId = "platform", onComplete, onSkip }: GuidedTo
             size="icon"
             className="absolute right-4 top-4"
             onClick={handleSkip}
+            aria-label="Skip tour"
           >
             <X className="h-4 w-4" />
           </Button>

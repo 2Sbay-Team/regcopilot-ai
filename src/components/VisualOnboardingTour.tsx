@@ -105,6 +105,7 @@ export function VisualOnboardingTour({ onComplete, onSkip }: VisualOnboardingTou
               size="icon"
               onClick={handleSkipTour}
               className="h-8 w-8"
+              aria-label="Skip onboarding tour"
             >
               <X className="h-4 w-4" />
             </Button>

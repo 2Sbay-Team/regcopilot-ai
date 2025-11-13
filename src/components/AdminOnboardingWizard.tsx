@@ -111,7 +111,7 @@ export const AdminOnboardingWizard = ({ open, onClose }: AdminOnboardingWizardPr
               <Sparkles className="h-6 w-6 text-primary" />
               <DialogTitle className="text-2xl">Admin Quick Start Guide</DialogTitle>
             </div>
-            <Button variant="ghost" size="icon" onClick={handleSkipWizard}>
+            <Button variant="ghost" size="icon" onClick={handleSkipWizard} aria-label="Close wizard">
               <X className="h-4 w-4" />
             </Button>
           </div>
@@ -162,7 +162,7 @@ export const AdminOnboardingWizard = ({ open, onClose }: AdminOnboardingWizardPr
                           <h3 className="font-semibold text-lg">{step.title}</h3>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-6 w-6">
+                              <Button variant="ghost" size="icon" className="h-6 w-6" aria-label="View tip">
                                 <Sparkles className="h-4 w-4 text-primary" />
                               </Button>
                             </TooltipTrigger>

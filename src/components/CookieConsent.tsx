@@ -91,6 +91,7 @@ export function CookieConsent() {
               size="icon"
               className="absolute top-4 right-4"
               onClick={rejectAll}
+              aria-label="Close cookie banner"
             >
               <X className="h-4 w-4" />
             </Button>
