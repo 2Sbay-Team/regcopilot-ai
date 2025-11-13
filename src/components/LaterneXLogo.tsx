@@ -18,42 +18,93 @@ export function LaterneXLogo({ className, size = 40 }: LaterneXLogoProps) {
       aria-label="LaterneX logo"
     >
       <defs>
-        {/* Modern gradient - blue to purple */}
-        <linearGradient id="modernGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="hsl(220, 90%, 56%)" />
-          <stop offset="100%" stopColor="hsl(260, 90%, 60%)" />
+        {/* Professional gradient - Azure blue to teal */}
+        <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="hsl(214, 100%, 58%)" />
+          <stop offset="50%" stopColor="hsl(197, 100%, 55%)" />
+          <stop offset="100%" stopColor="hsl(180, 100%, 45%)" />
         </linearGradient>
         
-        {/* Subtle glow effect */}
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+        {/* Glow effect for premium look */}
+        <filter id="professionalGlow">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
           <feMerge>
             <feMergeNode in="coloredBlur"/>
             <feMergeNode in="SourceGraphic"/>
           </feMerge>
         </filter>
+        
+        {/* Radial gradient for depth */}
+        <radialGradient id="centerGlow">
+          <stop offset="0%" stopColor="hsl(180, 100%, 60%)" stopOpacity="0.8"/>
+          <stop offset="100%" stopColor="hsl(214, 100%, 58%)" stopOpacity="0"/>
+        </radialGradient>
       </defs>
       
-      {/* Circular background with gradient */}
-      <circle cx="60" cy="60" r="54" fill="url(#modernGrad)" opacity="0.08"/>
-      <circle cx="60" cy="60" r="50" fill="none" stroke="url(#modernGrad)" strokeWidth="2" opacity="0.2"/>
+      {/* Outer circle with gradient border */}
+      <circle cx="60" cy="60" r="54" fill="none" stroke="url(#brandGrad)" strokeWidth="3" opacity="0.15"/>
+      <circle cx="60" cy="60" r="48" fill="none" stroke="url(#brandGrad)" strokeWidth="2" opacity="0.3"/>
       
-      {/* Modern "L" lettermark - bold and geometric */}
-      <path
-        d="M 38 32 L 50 32 L 50 78 L 78 78 L 78 88 L 38 88 Z"
-        fill="url(#modernGrad)"
-        filter="url(#glow)"
-      />
+      {/* Central glow effect */}
+      <circle cx="60" cy="60" r="35" fill="url(#centerGlow)" opacity="0.2"/>
       
-      {/* Abstract data flow nodes */}
-      <circle cx="72" cy="40" r="4" fill="hsl(220, 90%, 56%)" opacity="0.7"/>
-      <circle cx="82" cy="52" r="4" fill="hsl(240, 90%, 58%)" opacity="0.7"/>
-      <circle cx="82" cy="68" r="4" fill="hsl(260, 90%, 60%)" opacity="0.7"/>
+      {/* AI Neural Network Symbol (top) */}
+      <g opacity="0.9" filter="url(#professionalGlow)">
+        {/* Neural nodes */}
+        <circle cx="45" cy="35" r="3" fill="hsl(214, 100%, 58%)"/>
+        <circle cx="60" cy="30" r="3" fill="hsl(197, 100%, 55%)"/>
+        <circle cx="75" cy="35" r="3" fill="hsl(180, 100%, 45%)"/>
+        
+        {/* Neural connections */}
+        <line x1="45" y1="35" x2="60" y2="30" stroke="url(#brandGrad)" strokeWidth="1.5" opacity="0.6"/>
+        <line x1="60" y1="30" x2="75" y2="35" stroke="url(#brandGrad)" strokeWidth="1.5" opacity="0.6"/>
+        <line x1="45" y1="35" x2="60" y2="50" stroke="url(#brandGrad)" strokeWidth="1.5" opacity="0.6"/>
+        <line x1="75" y1="35" x2="60" y2="50" stroke="url(#brandGrad)" strokeWidth="1.5" opacity="0.6"/>
+      </g>
       
-      {/* Connection lines representing data ingestion */}
-      <line x1="50" y1="42" x2="72" y2="40" stroke="hsl(220, 90%, 56%)" strokeWidth="1.5" opacity="0.3"/>
-      <line x1="50" y1="58" x2="82" y2="52" stroke="hsl(240, 90%, 58%)" strokeWidth="1.5" opacity="0.3"/>
-      <line x1="50" y1="74" x2="82" y2="68" stroke="hsl(260, 90%, 60%)" strokeWidth="1.5" opacity="0.3"/>
+      {/* Ethics Balance/Scale Symbol (center) - representing fairness */}
+      <g filter="url(#professionalGlow)">
+        {/* Scale beam */}
+        <line x1="45" y1="55" x2="75" y2="55" stroke="url(#brandGrad)" strokeWidth="2.5" strokeLinecap="round"/>
+        {/* Center pivot */}
+        <circle cx="60" cy="55" r="4" fill="url(#brandGrad)"/>
+        {/* Left pan */}
+        <path d="M 42 55 L 38 60 L 46 60 Z" fill="hsl(214, 100%, 58%)" opacity="0.8"/>
+        {/* Right pan */}
+        <path d="M 78 55 L 74 60 L 82 60 Z" fill="hsl(180, 100%, 45%)" opacity="0.8"/>
+      </g>
+      
+      {/* ESG Leaf/Sustainability Symbol (bottom) */}
+      <g filter="url(#professionalGlow)">
+        {/* Leaf shape */}
+        <path 
+          d="M 60 65 Q 50 75, 52 85 Q 55 88, 60 85 Q 65 88, 68 85 Q 70 75, 60 65 Z" 
+          fill="hsl(140, 65%, 45%)" 
+          opacity="0.85"
+        />
+        {/* Leaf vein */}
+        <path 
+          d="M 60 65 Q 60 75, 60 85" 
+          stroke="hsl(140, 70%, 35%)" 
+          strokeWidth="1.5" 
+          fill="none"
+          opacity="0.6"
+        />
+        {/* Side veins */}
+        <path d="M 60 72 Q 54 75, 52 78" stroke="hsl(140, 70%, 35%)" strokeWidth="1" fill="none" opacity="0.5"/>
+        <path d="M 60 72 Q 66 75, 68 78" stroke="hsl(140, 70%, 35%)" strokeWidth="1" fill="none" opacity="0.5"/>
+      </g>
+      
+      {/* Data flow orbits - representing ingestion */}
+      <g opacity="0.25">
+        <circle cx="60" cy="60" r="40" fill="none" stroke="url(#brandGrad)" strokeWidth="1" strokeDasharray="2,3"/>
+        <circle cx="60" cy="60" r="32" fill="none" stroke="url(#brandGrad)" strokeWidth="1" strokeDasharray="2,3"/>
+      </g>
+      
+      {/* Corner accent dots - data points */}
+      <circle cx="85" cy="45" r="2" fill="hsl(214, 100%, 58%)" opacity="0.6"/>
+      <circle cx="35" cy="75" r="2" fill="hsl(180, 100%, 45%)" opacity="0.6"/>
+      <circle cx="85" cy="75" r="2" fill="hsl(197, 100%, 55%)" opacity="0.6"/>
     </svg>
   )
 }
