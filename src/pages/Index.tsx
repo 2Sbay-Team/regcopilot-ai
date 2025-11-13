@@ -189,7 +189,7 @@ const Index = () => {
         <Card className="bg-primary text-primary-foreground">
           <CardContent className="py-12 text-center">
             <h2 className="text-3xl font-bold mb-4">{String(t('landing.cta.title'))}</h2>
-            <p className="text-lg mb-6 opacity-90">
+            <p className="text-lg mb-6">
               {String(t('landing.cta.subtitle'))}
             </p>
             <Button 
