@@ -122,6 +122,11 @@ const Index = () => {
           </p>
         </div>
 
+        {/* Compliance Solutions Section */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold">Compliance Solutions</h2>
+        </div>
+
         {/* Features Grid */}
         <div className="grid gap-6 md:grid-cols-3 mb-16">
           <Card className="cockpit-panel">
