@@ -10,85 +10,95 @@ import { AppLayout } from "@/components/AppLayout";
 import { GlobalHelpSearch } from "@/components/GlobalHelpSearch";
 import { GuidedTour } from "@/components/GuidedTour";
 import '@/i18n/config' // Import i18n configuration
-import Index from "./pages/Index";
-import Products from "./pages/Products";
-import TrustCenter from "./pages/TrustCenter";
-import About from "./pages/About";
-import Terms from "./pages/Terms";
-import Cookies from "./pages/Cookies";
-import DPA from "./pages/DPA";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Dashboard from "./pages/Dashboard";
-import AIActCopilot from "./pages/AIActCopilot";
-import GDPRCopilot from "./pages/GDPRCopilot";
-import ESGCopilot from "./pages/ESGCopilot";
-import AuditTrail from "./pages/AuditTrail";
-import ModelRegistry from "./pages/ModelRegistry";
-import Explainability from "./pages/Explainability";
-import Admin from "./pages/Admin";
-import Analytics from "./pages/Analytics";
-import Reports from "./pages/Reports";
-import RAGSearch from "./pages/RAGSearch";
-import SystemSetup from "./pages/SystemSetup";
-import DataLineage from "./pages/DataLineage";
-import DSARManagement from "./pages/DSARManagement";
-import AuditChainVerify from "./pages/AuditChainVerify";
-import AIGateway from "./pages/AIGateway";
-import Usage from "./pages/Usage";
-import Prompts from "./pages/Prompts";
-import LLMSettings from "./pages/LLMSettings";
-import ModelGovernance from "./pages/ModelGovernance";
-import LLMAnalytics from "./pages/LLMAnalytics";
-import Settings from "./pages/Settings";
-import Profile from "./pages/Profile";
-import ModelManagement from "./pages/ModelManagement";
-import ComplianceScore from "./pages/ComplianceScore";
-import Marketplace from "./pages/Marketplace";
-import Impressum from "./pages/Impressum";
-import ContactUs from "./pages/ContactUs";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import NIS2Copilot from "./pages/NIS2Copilot";
-import DORACopilot from "./pages/DORACopilot";
-import DMACopilot from "./pages/DMACopilot";
-import AgentTasks from "./pages/AgentTasks";
-import Connectors from "./pages/Connectors";
-import SocialSentiment from "./pages/SocialSentiment";
-import MFASetup from "./pages/MFASetup";
-import ContinuousIntelligence from "./pages/ContinuousIntelligence";
-import ScheduledJobs from "./pages/ScheduledJobs";
-import FeedbackAnalytics from "./pages/FeedbackAnalytics";
-import HelpInsights from "./pages/admin/HelpInsights";
-import DocumentationTools from "./pages/admin/DocumentationTools";
-import AdminHelp from "./pages/admin/Help";
-import AdminGuide from "./pages/admin/AdminGuide";
-import RegulationUploader from "./pages/admin/RegulationUploader";
-import UploadPolicies from "./pages/admin/UploadPolicies";
-import RiskRegister from "./pages/RiskRegister";
-import DSARQueue from "./pages/DSARQueue";
-import SecurityCenter from "./pages/SecurityCenter";
-import UserGuide from "./pages/UserGuide";
-import HelpCenter from "./pages/HelpCenter";
-import BrandComparison from "./pages/BrandComparison";
-import Automation from "./pages/Automation";
-import AuditPortal from "./pages/AuditPortal";
-import SecurityPrivacy from "./pages/SecurityPrivacy";
-import TeamManagement from "./pages/admin/TeamManagement";
-import AcceptInvite from "./pages/AcceptInvite";
-import OrgBilling from "./pages/OrgBilling";
-import OrganizationSettings from "./pages/OrganizationSettings";
-import NotFound from "./pages/NotFound";
-import SecurityCompliance from "./pages/SecurityCompliance";
-import CICDSetup from "./pages/CICDSetup";
-import SystemHealth from "./pages/SystemHealth";
-import ModuleManagement from "./pages/ModuleManagement";
-import QADashboard from "./pages/QADashboard";
-import RoleGuard from "./components/RoleGuard";
-import ESGDataSources from "@/pages/ESGDataSources";
-import ESGDataLineage from "@/pages/ESGDataLineage";
-import ESGReports from "@/pages/ESGReports";
+import { lazy, Suspense } from "react";
+
+// Lazy load all page components for code splitting
+const Index = lazy(() => import("./pages/Index"));
+const Products = lazy(() => import("./pages/Products"));
+const TrustCenter = lazy(() => import("./pages/TrustCenter"));
+const About = lazy(() => import("./pages/About"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Cookies = lazy(() => import("./pages/Cookies"));
+const DPA = lazy(() => import("./pages/DPA"));
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const AIActCopilot = lazy(() => import("./pages/AIActCopilot"));
+const GDPRCopilot = lazy(() => import("./pages/GDPRCopilot"));
+const ESGCopilot = lazy(() => import("./pages/ESGCopilot"));
+const AuditTrail = lazy(() => import("./pages/AuditTrail"));
+const ModelRegistry = lazy(() => import("./pages/ModelRegistry"));
+const Explainability = lazy(() => import("./pages/Explainability"));
+const Admin = lazy(() => import("./pages/Admin"));
+const Analytics = lazy(() => import("./pages/Analytics"));
+const Reports = lazy(() => import("./pages/Reports"));
+const RAGSearch = lazy(() => import("./pages/RAGSearch"));
+const SystemSetup = lazy(() => import("./pages/SystemSetup"));
+const DataLineage = lazy(() => import("./pages/DataLineage"));
+const DSARManagement = lazy(() => import("./pages/DSARManagement"));
+const AuditChainVerify = lazy(() => import("./pages/AuditChainVerify"));
+const AIGateway = lazy(() => import("./pages/AIGateway"));
+const Usage = lazy(() => import("./pages/Usage"));
+const Prompts = lazy(() => import("./pages/Prompts"));
+const LLMSettings = lazy(() => import("./pages/LLMSettings"));
+const ModelGovernance = lazy(() => import("./pages/ModelGovernance"));
+const LLMAnalytics = lazy(() => import("./pages/LLMAnalytics"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Profile = lazy(() => import("./pages/Profile"));
+const ModelManagement = lazy(() => import("./pages/ModelManagement"));
+const ComplianceScore = lazy(() => import("./pages/ComplianceScore"));
+const Marketplace = lazy(() => import("./pages/Marketplace"));
+const Impressum = lazy(() => import("./pages/Impressum"));
+const ContactUs = lazy(() => import("./pages/ContactUs"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const NIS2Copilot = lazy(() => import("./pages/NIS2Copilot"));
+const DORACopilot = lazy(() => import("./pages/DORACopilot"));
+const DMACopilot = lazy(() => import("./pages/DMACopilot"));
+const AgentTasks = lazy(() => import("./pages/AgentTasks"));
+const Connectors = lazy(() => import("./pages/Connectors"));
+const SocialSentiment = lazy(() => import("./pages/SocialSentiment"));
+const MFASetup = lazy(() => import("./pages/MFASetup"));
+const ContinuousIntelligence = lazy(() => import("./pages/ContinuousIntelligence"));
+const ScheduledJobs = lazy(() => import("./pages/ScheduledJobs"));
+const FeedbackAnalytics = lazy(() => import("./pages/FeedbackAnalytics"));
+const HelpInsights = lazy(() => import("./pages/admin/HelpInsights"));
+const DocumentationTools = lazy(() => import("./pages/admin/DocumentationTools"));
+const AdminHelp = lazy(() => import("./pages/admin/Help"));
+const AdminGuide = lazy(() => import("./pages/admin/AdminGuide"));
+const RegulationUploader = lazy(() => import("./pages/admin/RegulationUploader"));
+const UploadPolicies = lazy(() => import("./pages/admin/UploadPolicies"));
+const RiskRegister = lazy(() => import("./pages/RiskRegister"));
+const DSARQueue = lazy(() => import("./pages/DSARQueue"));
+const SecurityCenter = lazy(() => import("./pages/SecurityCenter"));
+const UserGuide = lazy(() => import("./pages/UserGuide"));
+const HelpCenter = lazy(() => import("./pages/HelpCenter"));
+const BrandComparison = lazy(() => import("./pages/BrandComparison"));
+const Automation = lazy(() => import("./pages/Automation"));
+const AuditPortal = lazy(() => import("./pages/AuditPortal"));
+const SecurityPrivacy = lazy(() => import("./pages/SecurityPrivacy"));
+const TeamManagement = lazy(() => import("./pages/admin/TeamManagement"));
+const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
+const OrgBilling = lazy(() => import("./pages/OrgBilling"));
+const OrganizationSettings = lazy(() => import("./pages/OrganizationSettings"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const SecurityCompliance = lazy(() => import("./pages/SecurityCompliance"));
+const CICDSetup = lazy(() => import("./pages/CICDSetup"));
+const SystemHealth = lazy(() => import("./pages/SystemHealth"));
+const ModuleManagement = lazy(() => import("./pages/ModuleManagement"));
+const QADashboard = lazy(() => import("./pages/QADashboard"));
+const RoleGuard = lazy(() => import("./components/RoleGuard"));
+const ESGDataSources = lazy(() => import("@/pages/ESGDataSources"));
+const ESGDataLineage = lazy(() => import("@/pages/ESGDataLineage"));
+const ESGReports = lazy(() => import("@/pages/ESGReports"));
 
 const queryClient = new QueryClient();
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+  </div>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -100,7 +110,8 @@ const App = () => (
           <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <GlobalHelpSearch />
             <GuidedTour />
-            <Routes>
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
             {/* Public Pages - No Authentication Required */}
               <Route path="/" element={<Index />} />
               <Route path="/products" element={<Products />} />
@@ -183,9 +194,10 @@ const App = () => (
             <Route path="/audit-portal" element={<ProtectedRoute><AuditPortal /></ProtectedRoute>} />
             <Route path="/admin/team" element={<ProtectedRoute><AppLayout><TeamManagement /></AppLayout></ProtectedRoute>} />
             <Route path="/organization" element={<ProtectedRoute><OrganizationSettings /></ProtectedRoute>} />
-            <Route path="/accept-invite" element={<AcceptInvite />} />
-            <Route path="*" element={<NotFound />} />
-            </Routes>
+              <Route path="/accept-invite" element={<AcceptInvite />} />
+              <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </BrowserRouter>
         </TooltipProvider>
       </LanguageProvider>
