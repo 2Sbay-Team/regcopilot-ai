@@ -131,7 +131,7 @@ Deno.serve(async (req) => {
       const response3 = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/run-mapping`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`,
+          'Authorization': authHeader,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ profile_id: profileId }),
@@ -168,7 +168,7 @@ Deno.serve(async (req) => {
       const response4 = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/kpi-evaluate`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`,
+          'Authorization': authHeader,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({}),
@@ -205,7 +205,7 @@ Deno.serve(async (req) => {
       const response5 = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/esg-validate-data`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`,
+          'Authorization': authHeader,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({}),
@@ -244,7 +244,7 @@ Deno.serve(async (req) => {
       const response6 = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/esg-generate-report`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`,
+          'Authorization': authHeader,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
