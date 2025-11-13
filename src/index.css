@@ -9,97 +9,97 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 210 24% 16%;
+    --foreground: 220 15% 20%;
     --card: 0 0% 100%;
-    --card-foreground: 210 24% 16%;
+    --card-foreground: 220 15% 20%;
     --popover: 0 0% 100%;
-    --popover-foreground: 210 24% 16%;
-    --primary: 180 82% 45%; /* Teal from logo */
+    --popover-foreground: 220 15% 20%;
+    --primary: 220 90% 56%; /* Modern blue */
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 210 24% 16%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 193 95% 68%; /* Light blue from logo */
-    --accent-foreground: 210 24% 16%;
-    --destructive: 0 84.2% 60.2%;
+    --secondary: 220 15% 96%;
+    --secondary-foreground: 220 15% 20%;
+    --muted: 220 15% 96%;
+    --muted-foreground: 220 10% 46%;
+    --accent: 260 90% 60%; /* Modern purple */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 180 82% 45%;
-    --chart-1: 180 82% 45%;
-    --chart-2: 193 95% 68%;
-    --chart-3: 167 85% 35%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 210 70% 50%;
-    --radius: 0.5rem;
+    --border: 220 15% 91%;
+    --input: 220 15% 91%;
+    --ring: 220 90% 56%;
+    --chart-1: 220 90% 56%;
+    --chart-2: 260 90% 60%;
+    --chart-3: 200 95% 50%;
+    --chart-4: 280 85% 65%;
+    --chart-5: 160 60% 50%;
+    --radius: 0.75rem;
     
-    /* Heading dual-tone colors - optimized for readability */
-    --heading-primary: 180 82% 45%; /* LaterneX teal */
-    --heading-secondary: 215 25% 35%; /* Mid-gray for light mode - WCAG compliant */
+    /* Heading dual-tone colors */
+    --heading-primary: 220 90% 56%;
+    --heading-secondary: 220 15% 35%;
     
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 210 24% 16%;
-    --sidebar-primary: 180 82% 45%;
+    --sidebar-background: 0 0% 99%;
+    --sidebar-foreground: 220 15% 20%;
+    --sidebar-primary: 220 90% 56%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 40% 96%;
-    --sidebar-accent-foreground: 210 24% 16%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 180 82% 45%;
+    --sidebar-accent: 220 15% 96%;
+    --sidebar-accent-foreground: 220 15% 20%;
+    --sidebar-border: 220 15% 93%;
+    --sidebar-ring: 220 90% 56%;
 
     /* Brand tokens */
-    --brand-azure: 206 100% 41%; /* Azure primary (#0078D4 approx) */
-    --brand-azure-light: 206 92% 58%; /* Lighter Azure */
-    --brand-emerald: 156 60% 52%; /* ESG green */
-    --brand-cyan: 193 90% 60%; /* Innovation cyan */
-    --brand-silver: 210 20% 70%; /* GDPR silver */
+    --brand-azure: 220 90% 56%;
+    --brand-azure-light: 220 85% 65%;
+    --brand-emerald: 156 60% 52%;
+    --brand-cyan: 200 95% 50%;
+    --brand-silver: 220 10% 70%;
   }
 
   .dark {
-    --background: 215 28% 17%; /* Dark navy */
+    --background: 220 20% 10%;
     --foreground: 0 0% 98%;
-    --card: 215 28% 17%;
+    --card: 220 18% 14%;
     --card-foreground: 0 0% 98%;
-    --popover: 215 28% 17%;
+    --popover: 220 18% 14%;
     --popover-foreground: 0 0% 98%;
-    --primary: 180 82% 45%; /* Teal */
+    --primary: 220 90% 56%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 215 25% 27%;
+    --secondary: 220 15% 20%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 215 25% 27%;
-    --muted-foreground: 217 10% 65%;
-    --accent: 193 95% 68%; /* Light blue */
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 215 25% 27%;
-    --input: 215 25% 27%;
-    --ring: 180 82% 45%;
-    --chart-1: 180 82% 45%;
-    --chart-2: 193 95% 68%;
-    --chart-3: 167 85% 35%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 210 70% 50%;
+    --muted: 220 15% 20%;
+    --muted-foreground: 220 10% 65%;
+    --accent: 260 90% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 63% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 220 90% 56%;
+    --chart-1: 220 90% 56%;
+    --chart-2: 260 90% 60%;
+    --chart-3: 200 95% 50%;
+    --chart-4: 280 85% 65%;
+    --chart-5: 160 60% 50%;
     
-    /* Heading dual-tone colors - optimized for readability in dark mode */
-    --heading-primary: 193 95% 68%; /* Lighter blue for dark mode */
-    --heading-secondary: 215 20% 75%; /* Light gray for dark mode - WCAG compliant */
+    /* Heading dual-tone colors */
+    --heading-primary: 220 85% 70%;
+    --heading-secondary: 220 10% 75%;
     
-    --sidebar-background: 215 30% 14%;
+    --sidebar-background: 220 20% 12%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 180 82% 45%;
+    --sidebar-primary: 220 90% 56%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 25% 27%;
+    --sidebar-accent: 220 15% 20%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 215 25% 27%;
-    --sidebar-ring: 180 82% 45%;
+    --sidebar-border: 220 15% 20%;
+    --sidebar-ring: 220 90% 56%;
 
     /* Brand tokens (dark mode) */
-    --brand-azure: 206 100% 41%;
-    --brand-azure-light: 206 92% 58%;
+    --brand-azure: 220 90% 56%;
+    --brand-azure-light: 220 85% 65%;
     --brand-emerald: 156 60% 52%;
-    --brand-cyan: 193 90% 60%;
-    --brand-silver: 210 20% 70%;
+    --brand-cyan: 200 95% 50%;
+    --brand-silver: 220 10% 70%;
   }
 }
 
