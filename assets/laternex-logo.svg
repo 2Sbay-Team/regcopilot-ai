@@ -1,0 +1,19 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Lantern Body -->
+  <ellipse cx="60" cy="70" rx="28" ry="38" fill="#EEF6FB" stroke="#1DA1F2" stroke-width="4"/>
+  <!-- Lantern Top -->
+  <rect x="52" y="28" width="16" height="12" rx="4" fill="#1DA1F2"/>
+  <!-- Handle -->
+  <path d="M44,40 Q60,20 76,40" stroke="#FFD700" stroke-width="3" fill="none"/>
+  <!-- "X" Beam / Light -->
+  <path d="M40,85 Q60,90 80,85" stroke="#FFD700" stroke-width="4" fill="none"/>
+  <path d="M60,45 L60,110" stroke="#FFD700" stroke-width="2" stroke-dasharray="3,3" />
+  <!-- Data Dots (ingestion) -->
+  <circle cx="24" cy="65" r="3" fill="#34C759"/>
+  <circle cx="31" cy="50" r="2" fill="#34C759"/>
+  <circle cx="96" cy="60" r="3" fill="#1DA1F2"/>
+  <!-- Shield/Compliance indicator (optional) -->
+  <path d="M90,98 Q100,110 60,115 Q20,110 30,98" stroke="#B5BBC4" stroke-width="3" fill="none"/>
+  <!-- Text (for mockup only, use better font in real logo) -->
+  <text x="60" y="118" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#23384E" text-anchor="middle" letter-spacing="2">LaterneX</text>
+</svg>
