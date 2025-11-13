@@ -19,8 +19,8 @@ const DPA = () => {
                 This Data Processing Agreement ("DPA") forms part of the Terms of Service between:
               </p>
               <ul className="list-disc pl-6 text-muted-foreground space-y-1">
-                <li><strong>Data Controller:</strong> The Customer organization using RegSense Advisor</li>
-                <li><strong>Data Processor:</strong> RegSense Labs AB (the Service provider)</li>
+                <li><strong>Data Controller:</strong> The Customer organization using LaterneX</li>
+                <li><strong>Data Processor:</strong> LaterneX Labs AB (the Service provider)</li>
                 <li><strong>Personal Data:</strong> Any information relating to an identified or identifiable natural person</li>
                 <li><strong>Processing:</strong> Any operation performed on Personal Data</li>
                 <li><strong>GDPR:</strong> General Data Protection Regulation (EU) 2016/679</li>
@@ -30,7 +30,7 @@ const DPA = () => {
             <section>
               <h2 className="text-2xl font-semibold mb-3">2. Scope and Purpose of Processing</h2>
               <p className="text-muted-foreground mb-2">
-                RegSense Labs AB processes Personal Data on behalf of the Customer solely for the purpose of:
+                LaterneX Labs AB processes Personal Data on behalf of the Customer solely for the purpose of:
               </p>
               <ul className="list-disc pl-6 text-muted-foreground space-y-1">
                 <li>Providing AI-powered regulatory compliance services</li>
@@ -71,7 +71,7 @@ const DPA = () => {
             <section>
               <h2 className="text-2xl font-semibold mb-3">5. Data Processor Obligations</h2>
               <p className="text-muted-foreground mb-2">
-                RegSense Labs AB undertakes to:
+                LaterneX Labs AB undertakes to:
               </p>
               <ul className="list-disc pl-6 text-muted-foreground space-y-1">
                 <li>Process Personal Data only on documented instructions from the Controller</li>
@@ -149,7 +149,7 @@ const DPA = () => {
             <section>
               <h2 className="text-2xl font-semibold mb-3">9. Data Subject Rights</h2>
               <p className="text-muted-foreground mb-2">
-                RegSense Labs AB will assist the Controller in fulfilling data subject rights requests:
+                LaterneX Labs AB will assist the Controller in fulfilling data subject rights requests:
               </p>
               <ul className="list-disc pl-6 text-muted-foreground space-y-1">
                 <li>Right of access and data portability</li>
@@ -164,7 +164,7 @@ const DPA = () => {
             <section>
               <h2 className="text-2xl font-semibold mb-3">10. Data Breach Notification</h2>
               <p className="text-muted-foreground">
-                In the event of a Personal Data breach, RegSense Labs AB will notify the Controller without undue delay 
+                In the event of a Personal Data breach, LaterneX Labs AB will notify the Controller without undue delay 
                 and within 24 hours of becoming aware of the breach. The notification will include:
               </p>
               <ul className="list-disc pl-6 text-muted-foreground space-y-1 mt-2">

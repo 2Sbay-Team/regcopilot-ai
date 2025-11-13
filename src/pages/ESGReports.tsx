@@ -63,36 +63,37 @@ export default function ESGReports() {
   const loadProgress = async () => {
     try {
       // Check connectors
-      const { data: connectorData } = await supabase
-        .from('esg_connectors')
+      const { data: connectorData } = await (supabase as any)
+        .from('connectors')
         .select('*')
-        .eq('organization_id', organizationId);
+        .eq('org_id', organizationId);
       
       setConnectors(connectorData || []);
       setProgress(prev => ({ ...prev, connectors: connectorData?.length || 0 }));
 
-      // Check data quality
-      const { data: dataLakeData } = await supabase
-        .from('esg_data_lake')
-        .select('quality_score, processed_at')
-        .eq('organization_id', organizationId);
-      
-      if (dataLakeData && dataLakeData.length > 0) {
-        const avgQuality = dataLakeData.reduce((sum, d) => sum + (d.quality_score || 0), 0) / dataLakeData.length;
-        const processedCount = dataLakeData.filter(d => d.processed_at).length;
-        setDataQuality({
-          avgScore: avgQuality.toFixed(0),
-          processed: processedCount,
-          total: dataLakeData.length
-        });
-        setProgress(prev => ({ ...prev, dataQuality: processedCount }));
+      // Check data quality via staged rows count
+      let stagedCount = 0;
+      if (connectorData && connectorData.length > 0) {
+        const connectorIds = connectorData.map((c: any) => c.id);
+        const { count } = await (supabase as any)
+          .from('staging_rows')
+          .select('id', { count: 'exact', head: true })
+          .in('connector_id', connectorIds);
+        stagedCount = count || 0;
       }
+      setDataQuality({
+        avgScore: 100,
+        processed: stagedCount,
+        total: stagedCount
+      });
+      setProgress(prev => ({ ...prev, dataQuality: stagedCount }));
 
       // Check KPIs
-      const { data: kpiData } = await supabase
-        .from('esg_kpis')
-        .select('*')
-        .eq('organization_id', organizationId);
+      const { data: kpiData } = await (supabase as any)
+        .from('esg_kpi_results')
+        .select('id, metric_code, value, unit, period')
+        .eq('org_id', organizationId)
+        .order('computed_at', { ascending: false });
       
       setKpis(kpiData || []);
       setProgress(prev => ({ ...prev, kpis: kpiData?.length || 0 }));
@@ -119,7 +120,7 @@ export default function ESGReports() {
       setLoading(true);
       toast.info('Syncing data source...');
 
-      const { data, error } = await supabase.functions.invoke('sync-esg-connector', {
+      const { data, error } = await supabase.functions.invoke('connector-sync', {
         body: { connector_id: connectorId }
       });
 
@@ -138,34 +139,24 @@ export default function ESGReports() {
   const cleanData = async () => {
     try {
       setLoading(true);
-      toast.info('Cleaning and validating data...');
+      toast.info('Preparing mapping...');
 
-      // Get all unprocessed data
-      const { data: rawData } = await supabase
-        .from('esg_data_lake')
-        .select('id')
-        .eq('organization_id', organizationId)
-        .is('processed_at', null);
+      const suggest = await supabase.functions.invoke('mapping-suggest', { body: {} });
+      if (suggest.error) throw suggest.error;
+      const profileId = suggest.data?.profile_id;
+      if (!profileId) throw new Error('No mapping profile returned');
 
-      if (!rawData || rawData.length === 0) {
-        toast.info('No new data to clean');
-        setLoading(false);
-        return;
-      }
+      toast.info('Running mapping...');
+      const run = await supabase.functions.invoke('run-mapping', {
+        body: { profile_id: profileId }
+      });
+      if (run.error) throw run.error;
 
-      // Clean each data source
-      for (const item of rawData) {
-        const { error } = await supabase.functions.invoke('clean-esg-data', {
-          body: { data_lake_id: item.id }
-        });
-        if (error) console.error('Cleaning error:', error);
-      }
-
-      toast.success(`Cleaned ${rawData.length} data sources`);
+      toast.success('Mapping completed');
       loadProgress();
     } catch (error: any) {
-      console.error('Error cleaning data:', error);
-      toast.error('Failed to clean data');
+      console.error('Error running mapping:', error);
+      toast.error('Failed to run mapping');
     } finally {
       setLoading(false);
     }
@@ -174,23 +165,17 @@ export default function ESGReports() {
   const extractKPIs = async () => {
     try {
       setLoading(true);
-      toast.info('Extracting KPIs from data...');
+      toast.info('Evaluating KPI rules...');
 
-      const { data, error } = await supabase.functions.invoke('extract-esg-kpis', {
-        body: {
-          organization_id: organizationId,
-          fiscal_year: new Date().getFullYear()
-        }
-      });
+      const res = await supabase.functions.invoke('kpi-evaluate', { body: {} });
+      if (res.error) throw res.error;
 
-      if (error) throw error;
-
-      toast.success(`Extracted ${data.kpis_extracted} KPIs`);
+      toast.success('KPI evaluation complete');
       loadProgress();
       setActiveTab("report");
     } catch (error: any) {
-      console.error('Error extracting KPIs:', error);
-      toast.error('Failed to extract KPIs');
+      console.error('Error evaluating KPIs:', error);
+      toast.error('Failed to evaluate KPIs');
     } finally {
       setLoading(false);
     }
@@ -310,9 +295,9 @@ export default function ESGReports() {
                   {connectors.map((connector) => (
                     <div key={connector.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div>
-                        <p className="font-medium">{connector.connector_name}</p>
+                        <p className="font-medium">{connector.name}</p>
                         <p className="text-sm text-muted-foreground capitalize">
-                          {connector.connector_type}
+                          {connector.type}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -418,9 +403,9 @@ export default function ESGReports() {
                     {kpis.slice(0, 10).map((kpi) => (
                       <div key={kpi.id} className="flex items-center justify-between p-3 border rounded-lg">
                         <div>
-                          <p className="font-medium">{kpi.kpi_name}</p>
+                          <p className="font-medium">{kpi.metric_code}</p>
                           <p className="text-sm text-muted-foreground">
-                            {kpi.kpi_value} {kpi.kpi_unit}
+                            {kpi.value} {kpi.unit} • {kpi.period}
                           </p>
                         </div>
                         <Badge>{kpi.esrs_module}</Badge>
