@@ -105,6 +105,11 @@ export function AppSidebar() {
       icon: Leaf,
     },
     { 
+      titleKey: "ESG Reports", 
+      url: "/esg-reports", 
+      icon: FileText,
+    },
+    { 
       titleKey: "nav.complianceScore", 
       url: "/compliance-score", 
       icon: TrendingUp,
