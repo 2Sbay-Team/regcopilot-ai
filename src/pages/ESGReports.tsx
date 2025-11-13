@@ -115,6 +115,40 @@ export default function ESGReports() {
     }
   };
 
+  const runDemoWorkflow = async () => {
+    try {
+      setLoading(true);
+      toast.info('Starting ESG demo workflow...');
+
+      const { data, error } = await supabase.functions.invoke('esg-workflow-demo', {
+        body: {}
+      });
+
+      if (error) {
+        console.error('Workflow error:', error);
+        toast.error(`Workflow failed: ${error.message}`);
+        return;
+      }
+
+      if (data.success) {
+        toast.success('Demo workflow completed successfully!');
+        await loadProgress();
+        
+        // Show summary
+        const workflow = data.workflow;
+        const successSteps = workflow.steps.filter((s: any) => s.status === 'success').length;
+        toast.info(`Completed ${successSteps}/${workflow.steps.length} steps in ${workflow.total_duration_ms}ms`);
+      } else {
+        toast.warning('Workflow completed with errors');
+      }
+    } catch (error: any) {
+      console.error('Unexpected workflow error:', error);
+      toast.error('Workflow failed unexpectedly');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const syncConnector = async (connectorId: string) => {
     try {
       setLoading(true);
@@ -226,6 +260,39 @@ export default function ESGReports() {
           Complete workflow: Connect Data → Clean → Extract KPIs → Generate Report
         </p>
       </div>
+
+      {/* Progress Overview */}
+      <Card className="bg-primary/5 border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <PlayCircle className="w-5 h-5" />
+            Quick Start Demo
+          </CardTitle>
+          <CardDescription>
+            Run complete ESG workflow: Seed data → Map → Evaluate KPIs → Validate → Generate Report
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button 
+            onClick={runDemoWorkflow} 
+            disabled={loading}
+            size="lg"
+            className="w-full"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Running Workflow...
+              </>
+            ) : (
+              <>
+                <PlayCircle className="mr-2 h-4 w-4" />
+                Run Demo Workflow
+              </>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
 
       {/* Progress Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
